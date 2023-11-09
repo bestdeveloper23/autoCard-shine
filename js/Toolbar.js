@@ -117,6 +117,7 @@ function Toolbar( editor ) {
 	} );
 
 	signals.booleanEventChanged.add( function (booleanType) {
+		console.log("booleanEvent is changed!", booleanType)
 		merge.dom.classList.remove( 'selected' );
 		subtract.dom.classList.remove( 'selected' );
 		exclude.dom.classList.remove( 'selected' );
