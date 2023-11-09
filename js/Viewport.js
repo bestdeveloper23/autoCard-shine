@@ -115,7 +115,7 @@ function Viewport( editor ) {
 		if ( object !== undefined ) {
 
 			switch ( transformControls.getMode() ) {
-
+			
 				case 'translate':
 
 					if ( ! objectPositionOnDown.equals( object.position ) ) {
@@ -309,7 +309,7 @@ function Viewport( editor ) {
 	} );
 
 	signals.transformModeChanged.add( function ( mode ) {
-
+		console.log("mode chaned to ", mode);
 		transformControls.setMode( mode );
 
 	} );

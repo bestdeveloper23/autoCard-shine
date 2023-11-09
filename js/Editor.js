@@ -40,6 +40,7 @@ function Editor() {
 		savingFinished: new Signal(),
 
 		transformModeChanged: new Signal(),
+		booleanEventChanged: new Signal(),
 		snapChanged: new Signal(),
 		spaceChanged: new Signal(),
 		rendererCreated: new Signal(),
@@ -90,7 +91,7 @@ function Editor() {
 		viewportShadingChanged: new Signal(),
 
 		intersectionsDetected: new Signal(),
-
+	
 	};
 
 	this.config = new Config();

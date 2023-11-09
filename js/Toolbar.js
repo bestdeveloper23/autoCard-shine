@@ -59,6 +59,45 @@ function Toolbar( editor ) {
 	} );
 	container.add( local );
 
+	const mergeIcon = document.createElement( 'img' );
+	mergeIcon.title = strings.getKey( 'toolbar/merge' );
+	mergeIcon.src = 'images/merge.svg';
+
+	const merge = new UIButton();
+	merge.dom.appendChild( mergeIcon );
+	merge.onClick( function () {
+
+		signals.booleanEventChanged.dispatch( 'merge' );
+
+	} );
+	container.add( merge );
+
+	const subtractIcon = document.createElement( 'img' );
+	subtractIcon.title = strings.getKey( 'toolbar/subtract' );
+	subtractIcon.src = 'images/subtract.svg';
+
+	const subtract = new UIButton();
+	subtract.dom.appendChild( subtractIcon );
+	subtract.onClick( function () {
+
+		signals.booleanEventChanged.dispatch( 'subtract' );
+
+	} );
+	container.add( subtract );
+	
+	const excludeIcon = document.createElement( 'img' );
+	excludeIcon.title = strings.getKey( 'toolbar/exclude' );
+	excludeIcon.src = 'images/exclude.svg';
+
+	const exclude = new UIButton();
+	exclude.dom.appendChild( excludeIcon );
+	exclude.onClick( function () {
+
+		signals.booleanEventChanged.dispatch( 'exclude' );
+
+	} );
+	container.add( exclude );
+
 	//
 
 	signals.transformModeChanged.add( function ( mode ) {
@@ -76,6 +115,18 @@ function Toolbar( editor ) {
 		}
 
 	} );
+
+	signals.booleanEventChanged.add( function (booleanType) {
+		merge.dom.classList.remove( 'selected' );
+		subtract.dom.classList.remove( 'selected' );
+		exclude.dom.classList.remove( 'selected' );
+		switch (booleanType) {
+			case 'merge' : merge.dom.classList.add( 'selected' ); break;
+			case 'subtract' : merge.dom.classList.add( 'selected' ); break;
+			case 'exclude' : merge.dom.classList.add( 'selected' ); break;
+		}
+	})
+
 
 	return container;
 
