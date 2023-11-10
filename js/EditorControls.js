@@ -2,12 +2,12 @@ import * as THREE from 'three';
 
 class EditorControls extends THREE.EventDispatcher {
 
-	constructor( object, domElement ) {
+	constructor( editor, object, domElement ) {
 
 		super();
 
 		// API
-
+		
 		this.enabled = true;
 		this.center = new THREE.Vector3();
 		this.panSpeed = 0.002;
@@ -30,9 +30,7 @@ class EditorControls extends THREE.EventDispatcher {
 		var pointerOld = new THREE.Vector2();
 		var spherical = new THREE.Spherical();
 		var sphere = new THREE.Sphere();
-
-		// events
-
+		
 		var changeEvent = { type: 'change' };
 
 		this.focus = function ( target ) {
@@ -176,7 +174,8 @@ class EditorControls extends THREE.EventDispatcher {
 		// mouse
 
 		function onMouseDown( event ) {
-
+			
+	
 			if ( event.button === 0 ) {
 
 				state = STATE.ROTATE;

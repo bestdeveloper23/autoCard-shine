@@ -122,9 +122,9 @@ function Toolbar( editor ) {
 		subtract.dom.classList.remove( 'selected' );
 		exclude.dom.classList.remove( 'selected' );
 		switch (booleanType) {
-			case 'merge' : merge.dom.classList.add( 'selected' ); break;
-			case 'subtract' : merge.dom.classList.add( 'selected' ); break;
-			case 'exclude' : merge.dom.classList.add( 'selected' ); break;
+			case 'merge' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
+			case 'subtract' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
+			case 'exclude' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
 		}
 	})
 

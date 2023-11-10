@@ -129,6 +129,8 @@ function Editor() {
 
 	this.addCamera( this.camera );
 
+	this.booleanEvent = null;
+
 }
 
 Editor.prototype = {

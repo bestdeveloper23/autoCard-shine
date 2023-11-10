@@ -98,7 +98,7 @@ function Viewport( editor ) {
 
 	} );
 	transformControls.addEventListener( 'mouseDown', function () {
-
+		
 		const object = transformControls.object;
 
 		objectPositionOnDown = object.position.clone();
@@ -290,7 +290,7 @@ function Viewport( editor ) {
 	// controls need to be added *after* main logic,
 	// otherwise controls.enabled doesn't work.
 
-	const controls = new EditorControls( camera, container.dom );
+	const controls = new EditorControls( editor, camera, container.dom );
 	controls.addEventListener( 'change', function () {
 
 		signals.cameraChanged.dispatch( camera );
