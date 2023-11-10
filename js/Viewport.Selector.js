@@ -9,10 +9,10 @@ class Selector {
 		this.editor = editor;
 		this.signals = signals;
 
-		this.booleanEventavailability = false;
+		this.booleanEventAvailability = false;
 		// events
 		signals.booleanEventChanged.add((booleanType) => {
-			booleanType ? (this.booleanEventavailability = true) : (this.booleanEventavailability = false);
+			booleanType ? (this.booleanEventAvailability = true) : (this.booleanEventAvailability = false);
 	});
 
 		// signals
@@ -56,17 +56,17 @@ class Selector {
 			uuid = object.uuid;
 
 		}
-		let originObject = this.editor.selected;
+		let originalObject = this.editor.selected;
 		this.editor.selected = object;
 		this.editor.config.setKey( 'selected', uuid );
 
 		this.signals.objectSelected.dispatch( object );
-		console.log("I am detected boolean", this.booleanEventavailability);
+		console.log("boolean operation detected ", this.booleanEventAvailability);
 
-			if(this.booleanEventavailability){
-				console.log("I am detected boolean", this.booleanEventavailability);
+			if(this.booleanEventAvailability){
+				console.log("boolean operation detected", this.booleanEventAvailability);
 				
-				const MeshCSG1 = CSG.fromMesh(originObject)
+				const MeshCSG1 = CSG.fromMesh(originalObject)
 				const MeshCSG2 = CSG.fromMesh(object)
 				let aCSG;
 				switch (this.editor.booleanEvent) {
@@ -77,21 +77,20 @@ class Selector {
 
 				const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4())
 	
-				this.editor.removeObject(originObject)
+				this.editor.removeObject(originalObject)
 				this.editor.removeObject(object);
 				
 				switch (this.editor.booleanEvent) {
-					case 'merge' : finalMesh.name = "new merged object"; break;
-					case 'subtract' : finalMesh.name = "new subtracted object"; break;
-					case 'exclude' : finalMesh.name = "new excluded object"; break;
+					case 'merge' : finalMesh.name = "united object"; break;
+					case 'subtract' : finalMesh.name = "subtracted object"; break;
+					case 'exclude' : finalMesh.name = "intersected object"; break;
 				}
 				this.editor.addObject(finalMesh);
 				
-				this.booleanEventavailability = false;
+				this.booleanEventAvailability = false;
 				this.signals.booleanEventChanged.dispatch();
-				this.originObject = object;
+				this.originalObject = object;
 			}
-		
 
 	}
 
