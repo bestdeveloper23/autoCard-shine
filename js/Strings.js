@@ -347,6 +347,9 @@ function Strings( config ) {
 			'toolbar/rotate': 'Rotate',
 			'toolbar/scale': 'Scale',
 			'toolbar/local': 'Local',
+			'toolbar/merge': 'Merge',
+			'toolbar/subtract': 'Subtract',
+			'toolbar/exclude': 'Exlude',
 
 			'viewport/info/objects': 'Objects',
 			'viewport/info/vertices': 'Vertices',
@@ -1045,6 +1048,7 @@ function Strings( config ) {
 			'toolbar/rotate': '旋转',
 			'toolbar/scale': '缩放',
 			'toolbar/local': '本地',
+		
 
 			'viewport/info/objects': '物体',
 			'viewport/info/vertices': '顶点',

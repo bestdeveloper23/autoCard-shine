@@ -117,15 +117,17 @@ function Toolbar( editor ) {
 	} );
 
 	signals.booleanEventChanged.add( function (booleanType) {
-		console.log("booleanEvent is changed!", booleanType)
+
 		merge.dom.classList.remove( 'selected' );
 		subtract.dom.classList.remove( 'selected' );
 		exclude.dom.classList.remove( 'selected' );
+		console.log("booleanEvent is changed!", merge.dom.classList, booleanType);
 		switch (booleanType) {
-			case 'merge' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
-			case 'subtract' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
-			case 'exclude' : merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
+			case 'merge': merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
+			case 'subtract': subtract.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
+			case 'exclude': exclude.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
 		}
+
 	})
 
 
