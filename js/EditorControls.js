@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 class EditorControls extends THREE.EventDispatcher {
 
-	constructor( editor, object, domElement ) {
+	constructor( object, domElement ) {
 
 		super();
 
