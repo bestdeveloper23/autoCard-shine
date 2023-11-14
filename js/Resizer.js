@@ -45,6 +45,9 @@ function Resizer( editor ) {
 		document.getElementById( 'script' ).style.right = x + 'px';
 		document.getElementById( 'viewport' ).style.right = x + 'px';
 
+		document.getElementById( 'player' ).style.width = 'calc(100% - 260px - ' + x + 'px';
+		document.getElementById( 'viewport' ).style.width = 'calc(100% - 260px - ' + x + 'px';
+
 		signals.windowResize.dispatch();
 
 	}

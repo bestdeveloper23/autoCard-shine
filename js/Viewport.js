@@ -4,6 +4,8 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
 import { UIPanel } from './libs/ui.js';
 
+import { Toolbar } from './Toolbar.js';
+
 import { EditorControls } from './EditorControls.js';
 
 import { ViewportCamera } from './Viewport.Camera.js';
@@ -30,6 +32,7 @@ function Viewport(editor) {
 	container.add(new ViewportCamera(editor));
 	container.add(new ViewportShading(editor));
 	container.add(new ViewportInfo(editor));
+	container.add(new Toolbar(editor));
 
 	//
 

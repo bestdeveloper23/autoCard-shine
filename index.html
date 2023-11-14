@@ -60,9 +60,10 @@
 
       import { Editor } from './js/Editor.js';
       import { Viewport } from './js/Viewport.js';
-      import { Toolbar } from './js/Toolbar.js';
+      // import { Toolbar } from './js/Toolbar.js';
       import { Script } from './js/Script.js';
       import { Player } from './js/Player.js';
+      import { ModelCategory } from './js/ModelCategories.js';
       import { Sidebar } from './js/Sidebar.js';
       import { Menubar } from './js/Menubar.js';
       import { Resizer } from './js/Resizer.js';
@@ -84,14 +85,17 @@
       const viewport = new Viewport( editor );
       document.body.appendChild( viewport.dom );
 
-      const toolbar = new Toolbar( editor );
-      document.body.appendChild( toolbar.dom );
+      // const toolbar = new Toolbar( editor );
+      // document.body.appendChild( toolbar.dom );
 
       const script = new Script( editor );
       document.body.appendChild( script.dom );
 
       const player = new Player( editor );
       document.body.appendChild( player.dom );
+
+      const modelcategory = new ModelCategory( editor );
+      document.body.appendChild( modelcategory.dom );
 
       const sidebar = new Sidebar( editor );
       document.body.appendChild( sidebar.dom );
