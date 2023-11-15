@@ -89,6 +89,7 @@ class Selector {
 				
 				this.booleanEventAvailability = false;
 				this.signals.booleanEventChanged.dispatch();
+				this.editor.booleanEvent = null;
 				this.originalObject = object;
 			}
 

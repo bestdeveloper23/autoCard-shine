@@ -67,7 +67,11 @@ function Toolbar( editor ) {
 	merge.dom.appendChild( mergeIcon );
 	merge.onClick( function () {
 
-		signals.booleanEventChanged.dispatch( 'merge' );
+		if (editor.booleanEvent === 'merge'){
+			signals.booleanEventChanged.dispatch();
+		} else {
+			signals.booleanEventChanged.dispatch( 'merge' );	
+		}
 
 	} );
 	container.add( merge );
@@ -79,8 +83,11 @@ function Toolbar( editor ) {
 	const subtract = new UIButton();
 	subtract.dom.appendChild( subtractIcon );
 	subtract.onClick( function () {
-
-		signals.booleanEventChanged.dispatch( 'subtract' );
+		if (editor.booleanEvent === 'subtract'){
+			signals.booleanEventChanged.dispatch();
+		} else {
+			signals.booleanEventChanged.dispatch( 'subtract' );	
+		}
 
 	} );
 	container.add( subtract );
@@ -93,7 +100,11 @@ function Toolbar( editor ) {
 	exclude.dom.appendChild( excludeIcon );
 	exclude.onClick( function () {
 
-		signals.booleanEventChanged.dispatch( 'exclude' );
+		if (editor.booleanEvent === 'exclude'){
+			signals.booleanEventChanged.dispatch();
+		} else {
+			signals.booleanEventChanged.dispatch( 'exclude' );	
+		}
 
 	} );
 	container.add( exclude );
@@ -118,16 +129,18 @@ function Toolbar( editor ) {
 
 	signals.booleanEventChanged.add( function (booleanType) {
 
-		merge.dom.classList.remove( 'selected' );
-		subtract.dom.classList.remove( 'selected' );
-		exclude.dom.classList.remove( 'selected' );
+		merge.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
+		subtract.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
+		exclude.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
 		console.log("booleanEvent is changed!", merge.dom.classList, booleanType);
-		switch (booleanType) {
-			case 'merge': merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
-			case 'subtract': subtract.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
-			case 'exclude': exclude.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
+		if(booleanType){
+			switch (booleanType) {
+				case 'merge': merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
+				case 'subtract': subtract.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
+				case 'exclude': exclude.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
+			}	
 		}
-
+		
 	})
 
 
