@@ -133,38 +133,50 @@ function ModelCategory(editor) {
 
   // we need to new each geometry module
 
-  var pRMin = 1, pRMax = 1.5, pDz = 2;
+  var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90;
 
-  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
-  const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshStandardMaterial());
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
-  const spheremesh2 = new THREE.Mesh(spheregeometry2, new THREE.MeshStandardMaterial());
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
-  const MeshCSG1 = CSG.fromMesh(spheremesh1);
-  const MeshCSG2 = CSG.fromMesh(spheremesh2);
+  const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+  const MeshCSG2 = CSG.fromMesh(cylindermesh2);
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
-  aCSG = aCSG.subtract(MeshCSG3);
-  boxmesh.rotateY(Math.PI / 2);
+
+  boxmesh.rotateY(SPhi / 180 * Math.PI);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
-  boxmesh.rotateY(Math.PI);
+
+  let repeatCount = Math.floor((270 - DPhi) / 90);
+
+  for (let i = 0; i < repeatCount; i++) {
+   let rotateVaule = Math.PI / 2;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+  }
+  let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+  boxmesh.rotateY(rotateVaule);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { x: 1, y: 2, z: 1 };
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
   finalMesh.geometry.parameters = param;
-  finalMesh.geometry.center();
-  finalMesh.updateMatrix()
+  finalMesh.geometry.type = 'aTubeGeometry';
+  finalMesh.updateMatrix();
   finalMesh.name = 'Tubs';
 
   editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -188,40 +200,50 @@ function ModelCategory(editor) {
   var direction = mouseScenePosition.sub(camera.position).normalize();
   var distance = -camera.position.y / direction.y;
   var position = camera.position.clone().add(direction.multiplyScalar(distance));
+  
+  var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90;
 
-  var pRMin = 1, pRMax = 1.5, pDz = 2;
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
-  const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshStandardMaterial());
-
-  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
-  const spheremesh2 = new THREE.Mesh(spheregeometry2, new THREE.MeshStandardMaterial());
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
-  const MeshCSG1 = CSG.fromMesh(spheremesh1);
-  const MeshCSG2 = CSG.fromMesh(spheremesh2);
+  const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+  const MeshCSG2 = CSG.fromMesh(cylindermesh2);
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
-  aCSG = aCSG.subtract(MeshCSG3);
-  boxmesh.rotateY(Math.PI / 2);
+  boxmesh.rotateY(SPhi / 180 * Math.PI);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
-  boxmesh.rotateY(Math.PI);
+
+  let repeatCount = Math.floor((270 - DPhi) / 90);
+
+  for (let i = 0; i < repeatCount; i++) {
+   let rotateVaule = Math.PI / 2;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+  }
+  let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+  boxmesh.rotateY(rotateVaule);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { x: 1, y: 2, z: 1 };
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
   finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aTubeGeometry';
   finalMesh.position.copy(position);
-  finalMesh.geometry.center();
-  finalMesh.updateMatrix()
+  finalMesh.updateMatrix();
   finalMesh.name = 'Tubs';
 
   editor.execute(new AddObjectCommand(editor, finalMesh));

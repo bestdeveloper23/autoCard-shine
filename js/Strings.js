@@ -236,6 +236,12 @@ function Strings( config ) {
 			'sidebar/geometry/tube_geometry/curvetype': 'Curve Type',
 			'sidebar/geometry/tube_geometry/tension': 'Tension',
 
+			'sidebar/geometry/atube_geometry/maxradius' : 'pRMax',
+			'sidebar/geometry/atube_geometry/minradius' : 'pRMin',
+			'sidebar/geometry/atube_geometry/height' : 'pDz',
+			'sidebar/geometry/atube_geometry/pSPhi' : 'pSPhi',
+			'sidebar/geometry/atube_geometry/pDPhi' : 'pDPhi',
+
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
 			'sidebar/material/paste': 'Paste',
