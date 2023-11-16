@@ -77,6 +77,8 @@ function GeometryParametersPanel( editor, object ) {
 
 	function update() {
 
+		// we need to new each geometry module
+
 		editor.execute( new SetGeometryCommand( editor, object, new THREE.BoxGeometry(
 			width.getValue(),
 			height.getValue(),

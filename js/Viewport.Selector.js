@@ -48,6 +48,7 @@ class Selector {
 	select( object ) {
 
 		if ( this.editor.selected === object ) return;
+		console.log(object)
 
 		let uuid = null;
 

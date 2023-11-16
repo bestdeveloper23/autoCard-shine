@@ -196,7 +196,7 @@ function SidebarGeometry( editor ) {
 					parameters.add( new SidebarGeometryModifiers( editor, object ) );
 
 				} else {
-
+					// we need to new each geometry module
 					const { GeometryParametersPanel } = await import( `./Sidebar.Geometry.${ geometry.type }.js` );
 
 					parameters.add( new GeometryParametersPanel( editor, object ) );
