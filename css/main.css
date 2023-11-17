@@ -91,6 +91,7 @@ input {
   border: 1px solid gray;
   border-radius: 5px;
   cursor: pointer;
+  color: #1b1b1b;
 }
 
 #Category .Category-widget .Category-item div{

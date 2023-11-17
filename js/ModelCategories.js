@@ -75,7 +75,7 @@ function ModelCategory(editor) {
 
  item.dom.style.backgroundImage = "url(../images/basicmodels/aOrb.jpg)";
 
- item.setTextContent(strings.getKey('menubar/add/box'));
+ item.setTextContent(strings.getKey('menubar/add/sphere'));
  item.dom.setAttribute('draggable', true);
  item.dom.setAttribute('item-type', 'Sphere');
  item.onClick(function () {
@@ -126,7 +126,7 @@ function ModelCategory(editor) {
 
  item.dom.style.backgroundImage = "url(../images/basicmodels/aTubs.jpg)";
 
- item.setTextContent(strings.getKey('menubar/add/box'));
+ item.setTextContent(strings.getKey('menubar/add/g4tube'));
  item.dom.setAttribute('draggable', true);
  item.dom.setAttribute('item-type', 'eTub');
  item.onClick(function () {
@@ -152,25 +152,56 @@ function ModelCategory(editor) {
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
 
-  boxmesh.rotateY(SPhi / 180 * Math.PI);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
+  let bCSG;
+  bCSG = MeshCSG1.subtract(MeshCSG2);
 
-  let repeatCount = Math.floor((270 - DPhi) / 90);
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
 
-  for (let i = 0; i < repeatCount; i++) {
-   let rotateVaule = Math.PI / 2;
+   boxmesh.rotateY((SPhi +90 ) / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
    boxmesh.rotateY(rotateVaule);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
    aCSG = aCSG.subtract(MeshCSG3);
+
   }
-  let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-  boxmesh.rotateY(rotateVaule);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
@@ -200,7 +231,7 @@ function ModelCategory(editor) {
   var direction = mouseScenePosition.sub(camera.position).normalize();
   var distance = -camera.position.y / direction.y;
   var position = camera.position.clone().add(direction.multiplyScalar(distance));
-  
+
   var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90;
 
   const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
@@ -218,25 +249,57 @@ function ModelCategory(editor) {
 
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
-  boxmesh.rotateY(SPhi / 180 * Math.PI);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
 
-  let repeatCount = Math.floor((270 - DPhi) / 90);
+  let bCSG;
+  bCSG = MeshCSG1.subtract(MeshCSG2);
 
-  for (let i = 0; i < repeatCount; i++) {
-   let rotateVaule = Math.PI / 2;
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
    boxmesh.rotateY(rotateVaule);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
    aCSG = aCSG.subtract(MeshCSG3);
+
   }
-  let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-  boxmesh.rotateY(rotateVaule);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };

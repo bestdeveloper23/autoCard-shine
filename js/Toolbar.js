@@ -37,18 +37,18 @@ function Toolbar( editor ) {
 	} );
 	container.add( rotate );
 
-	const scaleIcon = document.createElement( 'img' );
-	scaleIcon.title = strings.getKey( 'toolbar/scale' );
-	scaleIcon.src = 'images/scale.svg';
+	// const scaleIcon = document.createElement( 'img' );
+	// scaleIcon.title = strings.getKey( 'toolbar/scale' );
+	// scaleIcon.src = 'images/scale.svg';
 
-	const scale = new UIButton();
-	scale.dom.appendChild( scaleIcon );
-	scale.onClick( function () {
+	// const scale = new UIButton();
+	// scale.dom.appendChild( scaleIcon );
+	// scale.onClick( function () {
 
-		signals.transformModeChanged.dispatch( 'scale' );
+	// 	signals.transformModeChanged.dispatch( 'scale' );
 
-	} );
-	container.add( scale );
+	// } );
+	// container.add( scale );
 
 	const local = new UICheckbox( false );
 	local.dom.title = strings.getKey( 'toolbar/local' );

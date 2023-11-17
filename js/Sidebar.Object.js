@@ -132,15 +132,15 @@ function SidebarObject( editor ) {
 
 	// scale
 
-	const objectScaleRow = new UIRow();
-	const objectScaleX = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	const objectScaleY = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	const objectScaleZ = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleRow = new UIRow();
+	// const objectScaleX = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleY = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleZ = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
 
-	objectScaleRow.add( new UIText( strings.getKey( 'sidebar/object/scale' ) ).setWidth( '90px' ) );
-	objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
+	// objectScaleRow.add( new UIText( strings.getKey( 'sidebar/object/scale' ) ).setWidth( '90px' ) );
+	// objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
 
-	container.add( objectScaleRow );
+	// container.add( objectScaleRow );
 
 	// fov
 
@@ -409,12 +409,12 @@ function SidebarObject( editor ) {
 
 			}
 
-			const newScale = new THREE.Vector3( objectScaleX.getValue(), objectScaleY.getValue(), objectScaleZ.getValue() );
-			if ( object.scale.distanceTo( newScale ) >= 0.01 ) {
+			// const newScale = new THREE.Vector3( objectScaleX.getValue(), objectScaleY.getValue(), objectScaleZ.getValue() );
+			// if ( object.scale.distanceTo( newScale ) >= 0.01 ) {
 
-				editor.execute( new SetScaleCommand( editor, object, newScale ) );
+			// 	editor.execute( new SetScaleCommand( editor, object, newScale ) );
 
-			}
+			// }
 
 			if ( object.fov !== undefined && Math.abs( object.fov - objectFov.getValue() ) >= 0.01 ) {
 
@@ -651,12 +651,12 @@ function SidebarObject( editor ) {
 		   ( object.isObject3D && object.userData.targetInverse ) ) {
 
 			objectRotationRow.setDisplay( 'none' );
-			objectScaleRow.setDisplay( 'none' );
+			// objectScaleRow.setDisplay( 'none' );
 
 		} else {
 
 			objectRotationRow.setDisplay( '' );
-			objectScaleRow.setDisplay( '' );
+			// objectScaleRow.setDisplay( '' );
 
 		}
 
@@ -712,9 +712,9 @@ function SidebarObject( editor ) {
 		objectRotationY.setValue( object.rotation.y * THREE.MathUtils.RAD2DEG );
 		objectRotationZ.setValue( object.rotation.z * THREE.MathUtils.RAD2DEG );
 
-		objectScaleX.setValue( object.scale.x );
-		objectScaleY.setValue( object.scale.y );
-		objectScaleZ.setValue( object.scale.z );
+		// objectScaleX.setValue( object.scale.x );
+		// objectScaleY.setValue( object.scale.y );
+		// objectScaleZ.setValue( object.scale.z );
 
 		if ( object.fov !== undefined ) {
 

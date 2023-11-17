@@ -17,7 +17,7 @@ function GeometryParametersPanel(editor, object) {
  // maxRadius
 
  const maxRadiusRow = new UIRow();
- const maxRadius = new UINumber(parameters.pRMax).setRange(parameters.pRMin+0.001, Infinity).onChange(update);
+ const maxRadius = new UINumber(parameters.pRMax).setRange(parameters.pRMin + 0.001, Infinity).onChange(update);
 
  maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/maxradius')).setWidth('90px'));
  maxRadiusRow.add(maxRadius);
@@ -27,7 +27,7 @@ function GeometryParametersPanel(editor, object) {
  // minRadius
 
  const minRadiusRow = new UIRow();
- const minRadius = new UINumber(parameters.pRMin).setRange(0, parameters.pRMax-0.001).onChange(update);
+ const minRadius = new UINumber(parameters.pRMin).setRange(0, parameters.pRMax - 0.001).onChange(update);
 
  minRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/minradius')).setWidth('90px'));
  minRadiusRow.add(minRadius);
@@ -56,7 +56,7 @@ function GeometryParametersPanel(editor, object) {
  // height
 
  const pDPhiRow = new UIRow();
- const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 270).onChange(update);
+ const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 359.99).onChange(update);
  pDPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pDPhi')).setWidth('90px'));
  pDPhiRow.add(pDPhi);
 
@@ -85,25 +85,57 @@ function GeometryParametersPanel(editor, object) {
 
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
-  boxmesh.rotateY(SPhi / 180 * Math.PI);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
 
-  let repeatCount = Math.floor((270 - DPhi) / 90);
+  let bCSG;
+  bCSG = MeshCSG1.subtract(MeshCSG2);
 
-  for (let i = 0; i < repeatCount; i++) {
-   let rotateVaule = Math.PI / 2;
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
    boxmesh.rotateY(rotateVaule);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
    aCSG = aCSG.subtract(MeshCSG3);
+
   }
-  let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-  boxmesh.rotateY(rotateVaule);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
@@ -113,8 +145,8 @@ function GeometryParametersPanel(editor, object) {
   finalMesh.name = 'Tubs';
 
   // set Range 
-  maxRadius.setRange(pRMin+0.001, Infinity);
-  minRadius.setRange(0.001, pRMax-0.001);
+  maxRadius.setRange(pRMin + 0.001, Infinity);
+  minRadius.setRange(0.001, pRMax - 0.001);
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 

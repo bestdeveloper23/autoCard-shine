@@ -57,6 +57,9 @@ function Strings( config ) {
 			'menubar/add/perspectivecamera': 'PerspectiveCamera',
 			'menubar/add/orthographiccamera': 'OrthographicCamera',
 
+			'menubar/add/g4tube': 'Tube',
+
+
 			'menubar/status/autosave': 'autosave',
 
 			'menubar/play': 'Play',
