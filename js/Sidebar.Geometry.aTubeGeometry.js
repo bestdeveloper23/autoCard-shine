@@ -56,7 +56,7 @@ function GeometryParametersPanel(editor, object) {
  // height
 
  const pDPhiRow = new UIRow();
- const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 359.99).onChange(update);
+ const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 360).onChange(update);
  pDPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pDPhi')).setWidth('90px'));
  pDPhiRow.add(pDPhi);
 
@@ -88,8 +88,8 @@ function GeometryParametersPanel(editor, object) {
 
   let bCSG;
   bCSG = MeshCSG1.subtract(MeshCSG2);
-
-  if (DPhi > 270) {
+    
+  if (DPhi > 270 && DPhi< 360) {
    let v_DPhi = 360 - DPhi;
 
    boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
@@ -113,7 +113,7 @@ function GeometryParametersPanel(editor, object) {
    bCSG = bCSG.subtract(MeshCSG3);
    aCSG = aCSG.subtract(bCSG);
 
-  } else {
+  } else if(DPhi <= 270) {
 
    boxmesh.rotateY(SPhi / 180 * Math.PI);
    boxmesh.updateMatrix();
