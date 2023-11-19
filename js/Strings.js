@@ -58,7 +58,7 @@ function Strings( config ) {
 			'menubar/add/orthographiccamera': 'OrthographicCamera',
 
 			'menubar/add/g4tube': 'Tube',
-
+			'menubar/add/g4cuttube': 'CutTube',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -244,6 +244,9 @@ function Strings( config ) {
 			'sidebar/geometry/atube_geometry/height' : 'pDz',
 			'sidebar/geometry/atube_geometry/pSPhi' : 'pSPhi',
 			'sidebar/geometry/atube_geometry/pDPhi' : 'pDPhi',
+			
+			'sidebar/geometry/atube_geometry/pHighNorm': 'pHighNorm',
+			'sidebar/geometry/atube_geometry/pLowNorm': 'pLowNorm',
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
