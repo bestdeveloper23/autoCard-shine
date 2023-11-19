@@ -131,8 +131,6 @@ function GeometryParametersPanel(editor, object) {
    if (rotateY === Infinity) rotateY = boxmesh.rotation.y;
    if (rotateZ === Infinity) rotateZ = boxmesh.rotation.z;
 
-   console.log(pHighNorm, "X:", rotateX * 180 / Math.PI, "Y :", rotateY * 180 / Math.PI, "Z :", rotateZ * 180 / Math.PI)
-
    boxmesh.rotation.set(-rotateX, -rotateY, -rotateZ);
   }
 
@@ -152,8 +150,6 @@ function GeometryParametersPanel(editor, object) {
    if (rotateX === Infinity) rotateX = boxmesh2.rotation.x;
    if (rotateY === Infinity) rotateY = boxmesh2.rotation.y;
    if (rotateZ === Infinity) rotateZ = boxmesh2.rotation.z;
-
-   console.log(pLowNorm, "X:", rotateX * 180 / Math.PI, "Y :", rotateY * 180 / Math.PI, "Z :", rotateZ * 180 / Math.PI)
 
    boxmesh2.rotation.set(-rotateX, -rotateY, -rotateZ);
   }

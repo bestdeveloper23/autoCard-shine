@@ -59,6 +59,7 @@ function Strings( config ) {
 
 			'menubar/add/g4tube': 'Tube',
 			'menubar/add/g4cuttube': 'CutTube',
+			'menubar/add/g4cone': 'Cone',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -247,6 +248,11 @@ function Strings( config ) {
 			
 			'sidebar/geometry/atube_geometry/pHighNorm': 'pHighNorm',
 			'sidebar/geometry/atube_geometry/pLowNorm': 'pLowNorm',
+
+			'sidebar/geometry/acone_geometry/maxradius1': 'pRMax1',
+			'sidebar/geometry/acone_geometry/maxradius2': 'pRMax2',
+			'sidebar/geometry/acone_geometry/minradius1': 'pRMin1',
+			'sidebar/geometry/acone_geometry/minradius2': 'pRMin2',
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
