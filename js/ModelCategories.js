@@ -743,6 +743,173 @@ function ModelCategory(editor) {
 
  options.add(item);
 
+
+ // Parallelepiped model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aPara.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/apara'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Parallelediped');
+ item.onClick(function () {
+
+  const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+  const maxRadius = Math.max(dx, dy, dz);
+  const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+  const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  let MeshCSG1 = CSG.fromMesh(mesh);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.position.set(0 + dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.position.set(0 - dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0, 0, dz / 2);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0, 0, -dz / 2);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+  boxmesh.position.set(0, dy / 2, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+  boxmesh.position.set(0, - dy / 2, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+  
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aParallGeometry';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'Parallelepiped';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+  const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+  const maxRadius = Math.max(dx, dy, dz);
+  const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+  const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  let MeshCSG1 = CSG.fromMesh(mesh);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.position.set(0 + dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.position.set(0 - dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0, 0, dz / 2);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0, 0, -dz / 2);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+  boxmesh.position.set(0, dy / 2, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+  boxmesh.position.set(0, - dy / 2, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+  
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aParallGeometry';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'Parallelepiped';
+
+  editor.execute(new AddObjectCommand(editor, mesh));
+
+ });
+
+ options.add(item);
+
+
  return container;
 }
 

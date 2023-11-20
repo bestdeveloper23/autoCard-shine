@@ -56,6 +56,7 @@ function Strings( config ) {
 			'menubar/add/ambientlight': 'AmbientLight',
 			'menubar/add/perspectivecamera': 'PerspectiveCamera',
 			'menubar/add/orthographiccamera': 'OrthographicCamera',
+			'menubar/add/apara': 'Parallelepiped',
 
 			'menubar/add/g4tube': 'Tube',
 			'menubar/add/g4cuttube': 'CutTube',
@@ -253,6 +254,13 @@ function Strings( config ) {
 			'sidebar/geometry/acone_geometry/maxradius2': 'pRMax2',
 			'sidebar/geometry/acone_geometry/minradius1': 'pRMin1',
 			'sidebar/geometry/acone_geometry/minradius2': 'pRMin2',
+
+			'sidebar/geometry/aparall_geometry/dx': 'dx',
+			'sidebar/geometry/aparall_geometry/dy': 'dy',
+			'sidebar/geometry/aparall_geometry/dz': 'dz',
+			'sidebar/geometry/aparall_geometry/alpha': 'alpha',
+			'sidebar/geometry/aparall_geometry/theta': 'theta',
+			'sidebar/geometry/aparall_geometry/phi': 'phi',
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
