@@ -82,9 +82,10 @@ function ModelCategory(editor) {
  item.onClick(function () {
 
   const geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI);
+  geometry.type = 'SphereGeometry2';
+  console.log(geometry)
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
   mesh.name = 'Sphere';
-
   editor.execute(new AddObjectCommand(editor, mesh));
 
  });
@@ -108,6 +109,7 @@ function ModelCategory(editor) {
   var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
   const geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI);
+  geometry.type = 'SphereGeometry2';
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
   mesh.position.copy(position);
