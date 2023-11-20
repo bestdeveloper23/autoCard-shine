@@ -56,11 +56,12 @@ function Strings( config ) {
 			'menubar/add/ambientlight': 'AmbientLight',
 			'menubar/add/perspectivecamera': 'PerspectiveCamera',
 			'menubar/add/orthographiccamera': 'OrthographicCamera',
-			'menubar/add/apara': 'Parallelepiped',
 
 			'menubar/add/g4tube': 'Tube',
 			'menubar/add/g4cuttube': 'CutTube',
 			'menubar/add/g4cone': 'Cone',
+			'menubar/add/apara': 'Parall',
+			'menubar/add/atrapezoid': 'TrapeZoid',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -261,6 +262,13 @@ function Strings( config ) {
 			'sidebar/geometry/aparall_geometry/alpha': 'alpha',
 			'sidebar/geometry/aparall_geometry/theta': 'theta',
 			'sidebar/geometry/aparall_geometry/phi': 'phi',
+
+			'sidebar/geometry/atrapezoid_geometry/dx1': 'dx1',
+			'sidebar/geometry/atrapezoid_geometry/dx2': 'dx2',
+			'sidebar/geometry/atrapezoid_geometry/dy1': 'dy1',
+			'sidebar/geometry/atrapezoid_geometry/dy2': 'dy2',
+			'sidebar/geometry/atrapezoid_geometry/dz': 'dz',
+
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',

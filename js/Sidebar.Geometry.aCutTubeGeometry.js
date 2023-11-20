@@ -44,6 +44,23 @@ function GeometryParametersPanel(editor, object) {
 
  container.add(heightRow);
 
+ // sphi
+ const pSPhiRow = new UIRow();
+ const pSPhi = new UINumber(parameters.pSPhi).setStep(5).onChange(update);
+ pSPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pSPhi')).setWidth('90px'));
+ pSPhiRow.add(pSPhi);
+
+ container.add(pSPhiRow);
+
+ // dphi
+
+ const pDPhiRow = new UIRow();
+ const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 360).onChange(update);
+ pDPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pDPhi')).setWidth('90px'));
+ pDPhiRow.add(pDPhi);
+
+ container.add(pDPhiRow);
+
  // LowVector3
 
  const pLowNormRow = new UIRow();
@@ -78,7 +95,7 @@ function GeometryParametersPanel(editor, object) {
 
   // we need to new each geometry module
 
-  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), 
+  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue(),
   pHighNorm = new THREE.Vector3(pHighNormX.getValue(), pHighNormY.getValue(), pHighNormZ.getValue()), 
   pLowNorm = new THREE.Vector3(pLowNormX.getValue(), pLowNormY.getValue(), pLowNormZ.getValue());
 
@@ -106,16 +123,21 @@ function GeometryParametersPanel(editor, object) {
   const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(2 * Math.sqrt(2) * pDz, 2 * Math.sqrt(2) * pDz, 2 * Math.sqrt(2) * pDz);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+  const maxdis = Math.max(pRMax, pRMin, pDz);
 
-  const boxgeometry2 = new THREE.BoxGeometry(2 * Math.sqrt(2) * pDz, 2 * Math.sqrt(2) * pDz, 2 * Math.sqrt(2) * pDz);
+  const boxgeometry1 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
+  const boxmesh1 = new THREE.Mesh(boxgeometry1, new THREE.MeshStandardMaterial());
+
+  const boxgeometry2 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
   const boxmesh2 = new THREE.Mesh(boxgeometry2, new THREE.MeshStandardMaterial());
 
-  boxmesh.geometry.translate(0, Math.sqrt(2) * pDz, 0);
+  const boxgeometry = new THREE.BoxGeometry(pRMax, 2 * Math.sqrt(2) * maxdis, pRMax);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  boxmesh1.geometry.translate(0, Math.sqrt(2) * pDz, 0);
   const MeshCSG1 = CSG.fromMesh(cylindermesh1);
   const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-  let MeshCSG3 = CSG.fromMesh(boxmesh);
+  let MeshCSG3 = CSG.fromMesh(boxmesh1);
 
   let aCSG;
   aCSG = MeshCSG1.subtract(MeshCSG2);
@@ -127,16 +149,16 @@ function GeometryParametersPanel(editor, object) {
    let rotateY = Math.atan(pHighNorm.z / pHighNorm.x);
    let rotateZ = Math.atan(pHighNorm.x / pHighNorm.y);
 
-   if (rotateX === Infinity) rotateX = boxmesh.rotation.x;
-   if (rotateY === Infinity) rotateY = boxmesh.rotation.y;
-   if (rotateZ === Infinity) rotateZ = boxmesh.rotation.z;
+   if (rotateX === Infinity) rotateX = boxmesh1.rotation.x;
+   if (rotateY === Infinity) rotateY = boxmesh1.rotation.y;
+   if (rotateZ === Infinity) rotateZ = boxmesh1.rotation.z;
 
-   boxmesh.rotation.set(-rotateX, -rotateY, -rotateZ);
+   boxmesh1.rotation.set(-rotateX, -rotateY, -rotateZ);
   }
 
-  boxmesh.position.set(0, pDz / 2, 0);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
+  boxmesh1.position.set(0, pDz / 2, 0);
+  boxmesh1.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh1);
 
   aCSG = aCSG.subtract(MeshCSG3);
 
@@ -160,9 +182,59 @@ function GeometryParametersPanel(editor, object) {
 
   aCSG = aCSG.subtract(MeshCSG3);
 
+  boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+  let bCSG = aCSG;
+
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+  }
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pHighNorm': pHighNorm, 'pLowNorm': pLowNorm };
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pHighNorm': pHighNorm, 'pLowNorm': pLowNorm };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aCutTubeGeometry';
   finalMesh.updateMatrix();

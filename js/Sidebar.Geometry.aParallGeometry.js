@@ -43,7 +43,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	container.add( depthRow );
 
-	// widthSegments
+	// alpha
 
 	const alphaRow = new UIRow();
 	const alphaI = new UINumber( parameters.alpha ).setRange( -90, 90 ).onChange( update );
@@ -53,7 +53,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	container.add( alphaRow );
 
-	// heightSegments
+	// theta
 
 	const thetaRow = new UIRow();
 	const thetaI = new UINumber( parameters.theta ).setRange( -90, 90 ).onChange( update );
@@ -63,7 +63,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	container.add( thetaRow );
 
-	// depthSegments
+	// phi
 
 	const phiRow = new UIRow();
 	const phiI = new UINumber( parameters.phi ).setRange( -90, 90 ).onChange( update );
