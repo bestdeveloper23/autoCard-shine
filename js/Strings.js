@@ -62,6 +62,7 @@ function Strings( config ) {
 			'menubar/add/g4cone': 'Cone',
 			'menubar/add/apara': 'Parall',
 			'menubar/add/atrapezoid': 'TrapeZoid',
+			'menubar/add/atrapezoid2': 'TrapeZoid2',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -268,6 +269,12 @@ function Strings( config ) {
 			'sidebar/geometry/atrapezoid_geometry/dy1': 'dy1',
 			'sidebar/geometry/atrapezoid_geometry/dy2': 'dy2',
 			'sidebar/geometry/atrapezoid_geometry/dz': 'dz',
+
+			'sidebar/geometry/atrapezoid_geometry/dx3': 'dx3',
+			'sidebar/geometry/atrapezoid_geometry/dx4': 'dx4',
+			'sidebar/geometry/atrapezoid_geometry/alpha': 'alpha',
+			'sidebar/geometry/atrapezoid_geometry/theta': 'theta',
+			'sidebar/geometry/atrapezoid_geometry/phi': 'phi',
 
 
 			'sidebar/material/new': 'New',

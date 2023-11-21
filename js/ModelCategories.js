@@ -32,9 +32,7 @@ function ModelCategory(editor) {
 
   const geometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
-
   mesh.name = 'Box';
-
   editor.execute(new AddObjectCommand(editor, mesh));
 
  });
@@ -420,7 +418,7 @@ function ModelCategory(editor) {
 
   aCSG = aCSG.subtract(MeshCSG3);
 
-  
+
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
   let bCSG = aCSG;
 
@@ -884,7 +882,7 @@ function ModelCategory(editor) {
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   boxmesh.geometry.translate(2 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
   boxmesh.position.set(0 + dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -892,7 +890,7 @@ function ModelCategory(editor) {
 
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
   boxmesh.position.set(0 - dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -968,16 +966,16 @@ function ModelCategory(editor) {
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   boxmesh.geometry.translate(2 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
-  boxmesh.position.set(0 + dx1 / 2, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0 + dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   let aCSG = MeshCSG1.subtract(MeshCSG3);
 
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
-  boxmesh.position.set(0 - dx1 / 2, 0, 0);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+  boxmesh.position.set(0 - dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
@@ -1167,6 +1165,150 @@ function ModelCategory(editor) {
   finalMesh.updateMatrix();
   finalMesh.name = 'TrapeZoid';
 
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ options.add(item);
+
+
+ // TrapeZoid-P model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aTrap.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/atrapezoid2'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Parallelediped');
+ item.onClick(function () {
+
+  const pDx1 = 3, pDx2 = 4, pDy1 = 4, pDx3 = 5, pDx4 = 1.4, pDy2 = 1.6, pDz = 6, pTheta = 20, pPhi = 5, pAlpha = 10;
+  const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+  const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+  const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  let MeshCSG1 = CSG.fromMesh(mesh);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+  boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+  boxmesh.position.set(0 + dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+  boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+  boxmesh.position.set(0 - dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+  boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+  boxmesh.position.set(0, 0, dy );
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+  boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+  boxmesh.position.set(0, 0, -dy);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aTrapeZoidP';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aTrapeZoidP';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+  const pDx1 = 3, pDx2 = 4, pDy1 = 4, pDx3 = 5, pDx4 = 1.4, pDy2 = 1.6, pDz = 6, pTheta = 20, pPhi = 5, pAlpha = 10;
+  const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+  const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+  const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  let MeshCSG1 = CSG.fromMesh(mesh);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+  boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+  boxmesh.position.set(0 + dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+  boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+  boxmesh.position.set(0 - dx / 2, 0, 0);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+  boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+  boxmesh.position.set(0, 0, dy );
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+  boxmesh.rotation.set(0, 0, 0);
+  boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+  boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+  boxmesh.position.set(0, 0, -dy);
+  boxmesh.updateMatrix();
+  MeshCSG3 = CSG.fromMesh(boxmesh);
+  aCSG = aCSG.subtract(MeshCSG3);
+
+
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aTrapeZoidP';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aTrapeZoidP';
 
   editor.execute(new AddObjectCommand(editor, finalMesh));
 

@@ -91,7 +91,7 @@ function GeometryParametersPanel( editor, object ) {
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   boxmesh.geometry.translate(2 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
   boxmesh.position.set(0 + dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -99,7 +99,7 @@ function GeometryParametersPanel( editor, object ) {
 
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
-  boxmesh.rotation.set(alpha / 180 * Math.PI, 0, theta / 180 * Math.PI);
+  boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
   boxmesh.position.set(0 - dx / 2, 0, 0);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
