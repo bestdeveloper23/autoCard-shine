@@ -64,6 +64,7 @@ function Strings( config ) {
 			'menubar/add/atrapezoid': 'TrapeZoid',
 			'menubar/add/atrapezoid2': 'TrapeZoid2',
 			'menubar/add/atorus': 'Torus',
+			'menubar/add/aellipticalcylinder': 'E-Cylinder',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -282,6 +283,10 @@ function Strings( config ) {
 			'sidebar/geometry/atorus_geometry/torusradius' : 'pRtor',
 			'sidebar/geometry/atorus_geometry/pSPhi' : 'pSPhi',
 			'sidebar/geometry/atorus_geometry/pDPhi' : 'pDPhi',
+			
+			'sidebar/geometry/aecylinder_geometry/xSemiAxis' : 'xSemiAxis',
+			'sidebar/geometry/aecylinder_geometry/ySemiAxis' : 'semiAxisY',
+			'sidebar/geometry/aecylinder_geometry/dz' : 'Dz',
 
 
 			'sidebar/material/new': 'New',
@@ -637,6 +642,7 @@ function Strings( config ) {
 			'sidebar/geometry/tube_geometry/closed': 'Fermé',
 			'sidebar/geometry/tube_geometry/curvetype': 'Type de courbe',
 			'sidebar/geometry/tube_geometry/tension': 'Tension',
+			
 
 			'sidebar/material/new': 'Nouveau',
 			'sidebar/material/copy': 'Copier',

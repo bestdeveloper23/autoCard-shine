@@ -1522,6 +1522,80 @@ function ModelCategory(editor) {
  options.add(item);
 
 
+ // Tube model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aEllipticalTube.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/aellipticalcylinder'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'eCylinder');
+ item.onClick(function () {
+
+  // we need to new each geometry module
+
+  var xSemiAxis = 5, semiAxisY = 10, Dz = 20;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const ratioZ = semiAxisY / xSemiAxis;
+  cylindermesh.scale.z = ratioZ;
+  cylindermesh.updateMatrix();
+  const finalMesh = cylindermesh;
+  const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'EllipeCylnder';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+  var xSemiAxis = 5, semiAxisY = 10, Dz = 20;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const ratioZ = semiAxisY / xSemiAxis;
+  cylindermesh.scale.z = ratioZ;
+  cylindermesh.updateMatrix();
+  const finalMesh = cylindermesh;
+  const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'EllipeCylnder';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ options.add(item);
+
+
+
  return container;
 }
 
