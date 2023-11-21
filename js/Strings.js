@@ -63,6 +63,7 @@ function Strings( config ) {
 			'menubar/add/apara': 'Parall',
 			'menubar/add/atrapezoid': 'TrapeZoid',
 			'menubar/add/atrapezoid2': 'TrapeZoid2',
+			'menubar/add/atorus': 'Torus',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -275,6 +276,12 @@ function Strings( config ) {
 			'sidebar/geometry/atrapezoid_geometry/alpha': 'alpha',
 			'sidebar/geometry/atrapezoid_geometry/theta': 'theta',
 			'sidebar/geometry/atrapezoid_geometry/phi': 'phi',
+
+			'sidebar/geometry/atorus_geometry/maxradius' : 'pRMax',
+			'sidebar/geometry/atorus_geometry/minradius' : 'pRMin',
+			'sidebar/geometry/atorus_geometry/torusradius' : 'pRtor',
+			'sidebar/geometry/atorus_geometry/pSPhi' : 'pSPhi',
+			'sidebar/geometry/atorus_geometry/pDPhi' : 'pDPhi',
 
 
 			'sidebar/material/new': 'New',

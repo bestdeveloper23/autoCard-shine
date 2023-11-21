@@ -1215,7 +1215,7 @@ function ModelCategory(editor) {
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
   boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-  boxmesh.position.set(0, 0, dy );
+  boxmesh.position.set(0, 0, dy);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
@@ -1288,7 +1288,7 @@ function ModelCategory(editor) {
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
   boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-  boxmesh.position.set(0, 0, dy );
+  boxmesh.position.set(0, 0, dy);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
@@ -1309,6 +1309,211 @@ function ModelCategory(editor) {
   finalMesh.position.copy(position);
   finalMesh.updateMatrix();
   finalMesh.name = 'aTrapeZoidP';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ options.add(item);
+
+
+ // Tors model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aTorus.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/atorus'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Torus');
+ item.onClick(function () {
+
+  const pRMin = 1, pRMax = 1.5, pRtor = 5, SPhi = 0, DPhi = 90;
+
+
+  const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+  const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+  tormesh1.rotateX(Math.PI / 2);
+  tormesh1.updateMatrix();
+
+  const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+  const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+  tormesh2.rotateX(Math.PI / 2);
+  tormesh2.updateMatrix();
+
+  const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
+  const MeshCSG1 = CSG.fromMesh(tormesh1);
+  const MeshCSG2 = CSG.fromMesh(tormesh2);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  let aCSG;
+  aCSG = MeshCSG1.subtract(MeshCSG2);
+
+  let bCSG;
+  bCSG = MeshCSG1.subtract(MeshCSG2);
+
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+  }
+
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aTorusGeometry';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aTorus';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+  const pRMin = 1, pRMax = 1.5, pRtor = 5, SPhi = 0, DPhi = 90;
+
+
+  const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+  const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+  tormesh1.rotateX(Math.PI / 2);
+  tormesh1.updateMatrix();
+
+  const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+  const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+  tormesh2.rotateX(Math.PI / 2);
+  tormesh1.updateMatrix();
+
+  const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
+  const MeshCSG1 = CSG.fromMesh(tormesh1);
+  const MeshCSG2 = CSG.fromMesh(tormesh2);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  let aCSG;
+  aCSG = MeshCSG1.subtract(MeshCSG2);
+
+  let bCSG;
+  bCSG = MeshCSG1.subtract(MeshCSG2);
+
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+  }
+
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aTorusGeometry';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aTorus';
 
   editor.execute(new AddObjectCommand(editor, finalMesh));
 
