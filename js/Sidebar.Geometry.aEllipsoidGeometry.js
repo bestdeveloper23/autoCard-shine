@@ -69,10 +69,10 @@ function GeometryParametersPanel( editor, object ) {
 	function update() {
 
   var xSemiAxis = xSemiAxisI.getValue(), ySemiAxis = ySemiAxisI.getValue(), zSemiAxis = zSemiAxisI.getValue(), zTopCut = dzTopCutI.getValue(), zBottomCut = dzBottomCutI.getValue();
-
+		if(Math.max(Math.abs(zTopCut), Math.abs(zBottomCut))>= zSemiAxis || xSemiAxis < 0.2 || ySemiAxis < 0.2) return;
   const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
 
-  cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+  cylindergeometry1.translate(0, (zTopCut + zBottomCut)/2, 0);
 
   let positionAttribute = cylindergeometry1.getAttribute('position');
 
