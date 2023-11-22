@@ -1620,20 +1620,20 @@ function ModelCategory(editor) {
 
   let vertex = new THREE.Vector3();
 
-  function calculate_normal_vector(x, y, z, a, b, c){
-    // Calculate the components of the normal vector
-    let nx = 2 * (x / a**2)
-    let ny = 2 * (y / b**2)
-    let nz = 2 * (z / c**2)
-    
-    // Normalize the normal vector
-    let magnitude = Math.sqrt(nx**2 + ny**2 + nz**2)
-    nx /= magnitude
-    ny /= magnitude
-    nz /= magnitude
-    let normal={x: nx, y: ny, z: nz};
-    return normal;
- }
+  function calculate_normal_vector(x, y, z, a, b, c) {
+   // Calculate the components of the normal vector
+   let nx = 2 * (x / a ** 2)
+   let ny = 2 * (y / b ** 2)
+   let nz = 2 * (z / c ** 2)
+
+   // Normalize the normal vector
+   let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
+   nx /= magnitude
+   ny /= magnitude
+   nz /= magnitude
+   let normal = { x: nx, y: ny, z: nz };
+   return normal;
+  }
   for (let i = 0; i < positionAttribute.count; i++) {
 
    vertex.fromBufferAttribute(positionAttribute, i);
@@ -1642,33 +1642,33 @@ function ModelCategory(editor) {
    let k = 0;
    do {
     x = vertex.x + k;
-    if(Math.abs(x)<0){
-      x = vertex.x;
-      break;
+    if (Math.abs(x) < 0) {
+     x = vertex.x;
+     break;
     }
     if (vertex.z > 0) {
      z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
     } else {
      z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
     }
-    if(x>0){
-     k-=0.01 
+    if (x > 0) {
+     k -= 0.01
     } else {
      k += 0.01;
     }
-    
+
    } while (!z);
 
 
    cylindergeometry1.attributes.position.array[i * 3] = x;
    cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
    cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
- 
-   let normal = calculate_normal_vector(x,y,z, xSemiAxis, zSemiAxis, ySemiAxis)
+
+   let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
    cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
    cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
    cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
- 
+
   }
   cylindergeometry1.attributes.position.needsUpdate = true;
 
@@ -1714,20 +1714,20 @@ function ModelCategory(editor) {
 
   let vertex = new THREE.Vector3();
 
-  function calculate_normal_vector(x, y, z, a, b, c){
-    // Calculate the components of the normal vector
-    let nx = 2 * (x / a**2)
-    let ny = 2 * (y / b**2)
-    let nz = 2 * (z / c**2)
-    
-    // Normalize the normal vector
-    let magnitude = Math.sqrt(nx**2 + ny**2 + nz**2)
-    nx /= magnitude
-    ny /= magnitude
-    nz /= magnitude
-    let normal={x: nx, y: ny, z: nz};
-    return normal;
- }
+  function calculate_normal_vector(x, y, z, a, b, c) {
+   // Calculate the components of the normal vector
+   let nx = 2 * (x / a ** 2)
+   let ny = 2 * (y / b ** 2)
+   let nz = 2 * (z / c ** 2)
+
+   // Normalize the normal vector
+   let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
+   nx /= magnitude
+   ny /= magnitude
+   nz /= magnitude
+   let normal = { x: nx, y: ny, z: nz };
+   return normal;
+  }
   for (let i = 0; i < positionAttribute.count; i++) {
 
    vertex.fromBufferAttribute(positionAttribute, i);
@@ -1736,33 +1736,33 @@ function ModelCategory(editor) {
    let k = 0;
    do {
     x = vertex.x + k;
-    if(Math.abs(x)<0){
-      x = vertex.x;
-      break;
+    if (Math.abs(x) < 0) {
+     x = vertex.x;
+     break;
     }
     if (vertex.z > 0) {
      z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
     } else {
      z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
     }
-    if(x>0){
-     k-=0.01 
+    if (x > 0) {
+     k -= 0.01
     } else {
      k += 0.01;
     }
-    
+
    } while (!z);
 
 
    cylindergeometry1.attributes.position.array[i * 3] = x;
    cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
    cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
- 
-   let normal = calculate_normal_vector(x,y,z, xSemiAxis, zSemiAxis, ySemiAxis)
+
+   let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
    cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
    cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
    cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
- 
+
   }
   cylindergeometry1.attributes.position.needsUpdate = true;
 
@@ -1781,6 +1781,89 @@ function ModelCategory(editor) {
  });
 
  options.add(item);
+
+
+ // EllipticalCone model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aEllipticalCone.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'aEllipticalCone');
+ item.onClick(function () {
+
+  // we need to new each geometry module
+
+  var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
+  cylindergeometry1.translate(0, zTopCut / 2, 0)
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const ratioZ = ySemiAxis / xSemiAxis;
+
+  cylindermesh.scale.z = ratioZ;
+  cylindermesh.updateMatrix();
+  const aCSG = CSG.fromMesh(cylindermesh);
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+  const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipticalConeGeometry';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aEllipticalCone';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+  var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
+  cylindergeometry1.translate(0, zTopCut / 2, 0)
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const ratioZ = ySemiAxis / xSemiAxis;
+
+  cylindermesh.scale.z = ratioZ;
+  cylindermesh.updateMatrix();
+  const aCSG = CSG.fromMesh(cylindermesh);
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+  const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipticalConeGeometry';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'aEllipticalCone';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ options.add(item);
+
+
 
  return container;
 }

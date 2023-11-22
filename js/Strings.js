@@ -66,6 +66,7 @@ function Strings( config ) {
 			'menubar/add/atorus': 'Torus',
 			'menubar/add/aellipticalcylinder': 'E-Cylinder',
 			'menubar/add/aellipsoid': 'Ellipsoid',
+			'menubar/add/aellipticalcone': 'EllipticalCone',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -286,14 +287,18 @@ function Strings( config ) {
 			'sidebar/geometry/atorus_geometry/pDPhi' : 'pDPhi',
 			
 			'sidebar/geometry/aecylinder_geometry/xSemiAxis' : 'xSemiAxis',
-			'sidebar/geometry/aecylinder_geometry/ySemiAxis' : 'semiAxisY',
+			'sidebar/geometry/aecylinder_geometry/ySemiAxis' : 'ySemiAxis',
 			'sidebar/geometry/aecylinder_geometry/dz' : 'Dz',
 
 			'sidebar/geometry/aellipsoid_geometry/xSemiAxis' : 'xSemiAxis',
 			'sidebar/geometry/aellipsoid_geometry/ySemiAxis' : 'ySemiAxis',
 			'sidebar/geometry/aellipsoid_geometry/zSemiAxis' : 'zSemiAxis',
 			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'zBottomCut',
-			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'zTopCut',
+
+			'sidebar/geometry/aellipticalcone_geometry/xSemiAxis' : 'xSemiAxis',
+			'sidebar/geometry/aellipticalcone_geometry/ySemiAxis' : 'ySemiAxis',
+			'sidebar/geometry/aellipticalcone_geometry/height' : 'Height',
+			'sidebar/geometry/aellipticalcone_geometry/topcut' : 'TopCut',
 
 
 			'sidebar/material/new': 'New',
