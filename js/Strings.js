@@ -65,6 +65,7 @@ function Strings( config ) {
 			'menubar/add/atrapezoid2': 'TrapeZoid2',
 			'menubar/add/atorus': 'Torus',
 			'menubar/add/aellipticalcylinder': 'E-Cylinder',
+			'menubar/add/aellipsoid': 'Ellipsoid',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -287,6 +288,12 @@ function Strings( config ) {
 			'sidebar/geometry/aecylinder_geometry/xSemiAxis' : 'xSemiAxis',
 			'sidebar/geometry/aecylinder_geometry/ySemiAxis' : 'semiAxisY',
 			'sidebar/geometry/aecylinder_geometry/dz' : 'Dz',
+
+			'sidebar/geometry/aellipsoid_geometry/xSemiAxis' : 'xSemiAxis',
+			'sidebar/geometry/aellipsoid_geometry/ySemiAxis' : 'ySemiAxis',
+			'sidebar/geometry/aellipsoid_geometry/zSemiAxis' : 'zSemiAxis',
+			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'zBottomCut',
+			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'zTopCut',
 
 
 			'sidebar/material/new': 'New',

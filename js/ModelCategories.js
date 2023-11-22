@@ -1522,7 +1522,7 @@ function ModelCategory(editor) {
  options.add(item);
 
 
- // Tube model
+ // EllipticalCylinder model
 
  item = new UIDiv();
  item.setClass('Category-item');
@@ -1536,7 +1536,7 @@ function ModelCategory(editor) {
 
   // we need to new each geometry module
 
-  var xSemiAxis = 5, semiAxisY = 10, Dz = 20;
+  var xSemiAxis = 1, semiAxisY = 2, Dz = 4;
 
   const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
   const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
@@ -1573,7 +1573,7 @@ function ModelCategory(editor) {
   var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
 
-  var xSemiAxis = 5, semiAxisY = 10, Dz = 20;
+  var xSemiAxis = 1, semiAxisY = 2, Dz = 4;
 
   const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
   const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
@@ -1595,6 +1595,192 @@ function ModelCategory(editor) {
  options.add(item);
 
 
+
+ // Ellipsoid model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aEllipsoid.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Ellipsoid');
+ item.onClick(function () {
+
+  // we need to new each geometry module
+
+  var xSemiAxis = 1, ySemiAxis = 1.5, zSemiAxis = 4, zTopCut = 3, zBottomCut = -2;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
+
+  cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+
+  let positionAttribute = cylindergeometry1.getAttribute('position');
+
+  let vertex = new THREE.Vector3();
+
+  function calculate_normal_vector(x, y, z, a, b, c){
+    // Calculate the components of the normal vector
+    let nx = 2 * (x / a**2)
+    let ny = 2 * (y / b**2)
+    let nz = 2 * (z / c**2)
+    
+    // Normalize the normal vector
+    let magnitude = Math.sqrt(nx**2 + ny**2 + nz**2)
+    nx /= magnitude
+    ny /= magnitude
+    nz /= magnitude
+    let normal={x: nx, y: ny, z: nz};
+    return normal;
+ }
+  for (let i = 0; i < positionAttribute.count; i++) {
+
+   vertex.fromBufferAttribute(positionAttribute, i);
+   let x, y, z;
+   x = vertex.x, y = vertex.y;
+   let k = 0;
+   do {
+    x = vertex.x + k;
+    if(Math.abs(x)<0){
+      x = vertex.x;
+      break;
+    }
+    if (vertex.z > 0) {
+     z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+    } else {
+     z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+    }
+    if(x>0){
+     k-=0.01 
+    } else {
+     k += 0.01;
+    }
+    
+   } while (!z);
+
+
+   cylindergeometry1.attributes.position.array[i * 3] = x;
+   cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+   cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+ 
+   let normal = calculate_normal_vector(x,y,z, xSemiAxis, zSemiAxis, ySemiAxis)
+   cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
+   cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
+   cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
+ 
+  }
+  cylindergeometry1.attributes.position.needsUpdate = true;
+
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+
+  const finalMesh = cylindermesh;
+  const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipsoidGeometry';
+  finalMesh.updateMatrix();
+  finalMesh.name = 'Ellipsoid';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+  var xSemiAxis = 1, ySemiAxis = 1.5, zSemiAxis = 4, zTopCut = 3, zBottomCut = -2;
+
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
+
+  cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+
+  let positionAttribute = cylindergeometry1.getAttribute('position');
+
+  let vertex = new THREE.Vector3();
+
+  function calculate_normal_vector(x, y, z, a, b, c){
+    // Calculate the components of the normal vector
+    let nx = 2 * (x / a**2)
+    let ny = 2 * (y / b**2)
+    let nz = 2 * (z / c**2)
+    
+    // Normalize the normal vector
+    let magnitude = Math.sqrt(nx**2 + ny**2 + nz**2)
+    nx /= magnitude
+    ny /= magnitude
+    nz /= magnitude
+    let normal={x: nx, y: ny, z: nz};
+    return normal;
+ }
+  for (let i = 0; i < positionAttribute.count; i++) {
+
+   vertex.fromBufferAttribute(positionAttribute, i);
+   let x, y, z;
+   x = vertex.x, y = vertex.y;
+   let k = 0;
+   do {
+    x = vertex.x + k;
+    if(Math.abs(x)<0){
+      x = vertex.x;
+      break;
+    }
+    if (vertex.z > 0) {
+     z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+    } else {
+     z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+    }
+    if(x>0){
+     k-=0.01 
+    } else {
+     k += 0.01;
+    }
+    
+   } while (!z);
+
+
+   cylindergeometry1.attributes.position.array[i * 3] = x;
+   cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+   cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+ 
+   let normal = calculate_normal_vector(x,y,z, xSemiAxis, zSemiAxis, ySemiAxis)
+   cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
+   cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
+   cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
+ 
+  }
+  cylindergeometry1.attributes.position.needsUpdate = true;
+
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+
+  const finalMesh = cylindermesh;
+  const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.type = 'aEllipsoidGeometry';
+  finalMesh.position.copy(position);
+  finalMesh.updateMatrix();
+  finalMesh.name = 'Ellipsoid';
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ options.add(item);
 
  return container;
 }
