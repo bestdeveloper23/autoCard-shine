@@ -18,10 +18,10 @@ function ModelCategory(editor) {
  options.setClass('Category-widget');
  container.add(options);
 
+ // Box model
+
  let item = new UIDiv();
  item.setClass('Category-item');
-
- // Box model
 
  item.dom.style.backgroundImage = "url(../images/basicmodels/aBox.jpg)";
 
@@ -1864,6 +1864,82 @@ function ModelCategory(editor) {
  options.add(item);
 
 
+ // twisted box
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aTwistedBox.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/twistedbox'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Box');
+ item.onClick(function () {
+
+  const twistedangle = 30, pDx = 1, pDy = 2, pDz = 1;
+  const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
+  geometry.type = 'aTwistedBoxGeometry';
+  const positionAttribute = geometry.getAttribute('position');
+
+  let vec3 = new THREE.Vector3();
+  let axis_vector = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i < positionAttribute.count; i++) {
+   vec3.fromBufferAttribute(positionAttribute, i);
+   vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
+   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+  }
+
+  const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+  geometry.parameters = param;
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  mesh.name = 'TwistedBox';
+  editor.execute(new AddObjectCommand(editor, mesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+  const twistedangle = 30, pDx = 1, pDy = 2, pDz = 1;
+  const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
+  geometry.type = 'aTwistedBoxGeometry';
+  const positionAttribute = geometry.getAttribute('position');
+
+  let vec3 = new THREE.Vector3();
+  let axis_vector = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i < positionAttribute.count; i++) {
+   vec3.fromBufferAttribute(positionAttribute, i);
+   vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
+   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+  }
+
+  const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+  geometry.parameters = param;
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  mesh.position.copy(position);
+  mesh.name = 'TwistedBox';
+
+  editor.execute(new AddObjectCommand(editor, mesh));
+
+ });
+
+ options.add(item);
 
  return container;
 }

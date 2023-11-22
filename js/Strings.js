@@ -67,6 +67,7 @@ function Strings( config ) {
 			'menubar/add/aellipticalcylinder': 'E-Cylinder',
 			'menubar/add/aellipsoid': 'Ellipsoid',
 			'menubar/add/aellipticalcone': 'EllipticalCone',
+			'menubar/add/twistedbox': 'TwistedBox',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -300,6 +301,11 @@ function Strings( config ) {
 			'sidebar/geometry/aellipticalcone_geometry/height' : 'Height',
 			'sidebar/geometry/aellipticalcone_geometry/topcut' : 'TopCut',
 
+			'sidebar/geometry/atwistedbox_geometry/width' : 'width',
+			'sidebar/geometry/atwistedbox_geometry/height' : 'height',
+			'sidebar/geometry/atwistedbox_geometry/depth' : 'depth',
+			'sidebar/geometry/atwistedbox_geometry/angle' : 'twistedAngle',
+			
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
