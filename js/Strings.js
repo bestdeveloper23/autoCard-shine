@@ -294,6 +294,7 @@ function Strings( config ) {
 			'sidebar/geometry/aellipsoid_geometry/xSemiAxis' : 'xSemiAxis',
 			'sidebar/geometry/aellipsoid_geometry/ySemiAxis' : 'ySemiAxis',
 			'sidebar/geometry/aellipsoid_geometry/zSemiAxis' : 'zSemiAxis',
+			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'zTopCut',
 			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'zBottomCut',
 
 			'sidebar/geometry/aellipticalcone_geometry/xSemiAxis' : 'xSemiAxis',
