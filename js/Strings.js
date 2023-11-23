@@ -66,8 +66,10 @@ function Strings( config ) {
 			'menubar/add/atorus': 'Torus',
 			'menubar/add/aellipticalcylinder': 'E-Cylinder',
 			'menubar/add/aellipsoid': 'Ellipsoid',
-			'menubar/add/aellipticalcone': 'EllipticalCone',
+			'menubar/add/aellipticalcone': 'Ellip-Cone',
 			'menubar/add/twistedbox': 'TwistedBox',
+			'menubar/add/atwistedtrd': 'TrapeZoid3',
+			'menubar/add/atwistedtrap': 'TrapeZoid4',
 
 			'menubar/status/autosave': 'autosave',
 
@@ -280,6 +282,7 @@ function Strings( config ) {
 			'sidebar/geometry/atrapezoid_geometry/alpha': 'alpha',
 			'sidebar/geometry/atrapezoid_geometry/theta': 'theta',
 			'sidebar/geometry/atrapezoid_geometry/phi': 'phi',
+			'sidebar/geometry/atrapezoid_geometry/twistedangle': 'twistedangle',
 
 			'sidebar/geometry/atorus_geometry/maxradius' : 'pRMax',
 			'sidebar/geometry/atorus_geometry/minradius' : 'pRMin',

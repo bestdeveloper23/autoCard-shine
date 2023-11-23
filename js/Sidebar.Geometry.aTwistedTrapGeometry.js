@@ -116,16 +116,26 @@ function GeometryParametersPanel(editor, object) {
  container.add(phiRow);
 
 
+ // phi
+
+ const twistedangleRow = new UIRow();
+ const angleI = new UINumber(parameters.twistedangle).setRange(-90, 90).onChange(update);
+
+ twistedangleRow.add(new UIText(strings.getKey('sidebar/geometry/aparall_geometry/twistedangle')).setWidth('90px'));
+ twistedangleRow.add(angleI);
+
+ container.add(twistedangleRow);
+
  //
 
  function update() {
 
   // we need to new each geometry module
 
-  const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(), 
-  pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(), 
-  pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(), 
-  pAlpha = alphaI.getValue();
+  const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(),
+   pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(),
+   pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(),
+   pAlpha = alphaI.getValue(), twistedangle = angleI.getValue();
 
   const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
   const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
@@ -156,7 +166,7 @@ function GeometryParametersPanel(editor, object) {
   boxmesh.rotation.set(0, 0, 0);
   boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
   boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-  boxmesh.position.set(0, 0, dy );
+  boxmesh.position.set(0, 0, dy);
   boxmesh.updateMatrix();
   MeshCSG3 = CSG.fromMesh(boxmesh);
   aCSG = aCSG.subtract(MeshCSG3);
@@ -171,11 +181,21 @@ function GeometryParametersPanel(editor, object) {
 
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
   finalMesh.geometry.parameters = param;
-  finalMesh.geometry.type = 'aTrapeZoidP';
+
+  const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+  let vec3 = new THREE.Vector3();
+  let axis_vector = new THREE.Vector3(0, 1, 0);
+  for (let i = 0; i < positionAttribute.count; i++) {
+   vec3.fromBufferAttribute(positionAttribute, i);
+   vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+   finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+  }
+
+  finalMesh.geometry.type = 'aTwistedTrapGeometry';
   finalMesh.updateMatrix();
-  finalMesh.name = 'aTrapeZoidP';
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
  }
