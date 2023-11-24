@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh.js';
+import { PolyhedronGeometry } from './libs/geometry/PolyhedronGeometry.js';
 
 import { UIDiv, UIPanel, UIRow } from "./libs/ui.js";
 
@@ -2510,12 +2511,12 @@ function ModelCategory(editor) {
  item.dom.setAttribute('item-type', 'Tetrahedra');
  item.onClick(function () {
 
-  const anchor = [0, 0, Math.sqrt(3)], p2 = [0, 2 * Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p3 = [-Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p4 = [Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)];
+  const anchor = [0, Math.sqrt(3), 0], p2 = [0, -1 / Math.sqrt(3), 2 * Math.sqrt(2 / 3)], p3 = [-Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3),], p4 = [Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3)];
 
   const vertices = [], indices = [];
   vertices.push(...anchor, ...p2, ...p3, ...p4);
-  indices.push(0, 1, 2, 0, 1, 3, 0, 2, 3, 0, 3, 2, 0, 3, 1, 0, 2, 1, 1, 2, 3, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 3, 1, 2, 3, 2, 1);
-  const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+  indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
+  const geometry = new PolyhedronGeometry(vertices, indices);
   const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
   geometry.parameters = param;
   geometry.type = 'aTetrahedraGeometry';
@@ -2549,8 +2550,8 @@ function ModelCategory(editor) {
 
   const vertices = [], indices = [];
   vertices.push(...anchor, ...p2, ...p3, ...p4);
-  indices.push(0, 1, 2, 0, 1, 3, 0, 2, 3, 0, 3, 2, 0, 3, 1, 0, 2, 1, 1, 2, 3, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 3, 1, 2, 3, 2, 1);
-  const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+  indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
+  const geometry = new PolyhedronGeometry(vertices, indices);
   const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
   geometry.parameters = param;
   geometry.type = 'aTetrahedraGeometry';
