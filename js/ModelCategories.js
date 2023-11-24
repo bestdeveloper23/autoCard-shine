@@ -136,10 +136,10 @@ function ModelCategory(editor) {
 
   var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90;
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
@@ -235,10 +235,10 @@ function ModelCategory(editor) {
 
   var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90;
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
@@ -666,10 +666,10 @@ function ModelCategory(editor) {
 
   var pRmin1 = 0.5, pRmax1 = 1, pRmin2 = 2, pRmax2 = 2.5, pDz = 4, SPhi = 0, DPhi = 270
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const maxRadius = Math.max(pRmax1, pRmax2);
@@ -770,10 +770,10 @@ function ModelCategory(editor) {
 
   var pRmin1 = 0.5, pRmax1 = 1, pRmin2 = 2, pRmax2 = 2.5, pDz = 4, SPhi = 0, DPhi = 270
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const maxRadius = Math.max(pRmax1, pRmax2);
@@ -1956,10 +1956,10 @@ function ModelCategory(editor) {
   const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = 30;
   const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
   const maxwidth = Math.max(dx1, dy1, dx2, dy2);
-  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);
@@ -2043,10 +2043,10 @@ function ModelCategory(editor) {
   const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = 30;
   const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
   const maxwidth = Math.max(dx1, dy1, dx2, dy2);
-  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);
@@ -2131,7 +2131,7 @@ function ModelCategory(editor) {
   const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);
@@ -2215,7 +2215,7 @@ function ModelCategory(editor) {
   const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);
@@ -2278,7 +2278,7 @@ function ModelCategory(editor) {
 
  options.add(item);
 
- 
+
  // TwitsedTube model
 
  item = new UIDiv();
@@ -2295,13 +2295,13 @@ function ModelCategory(editor) {
 
   var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90, twistedangle = 30;
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
+  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
@@ -2362,11 +2362,11 @@ function ModelCategory(editor) {
    aCSG = aCSG.subtract(MeshCSG3);
 
   }
-  
+
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
   finalMesh.geometry.parameters = param;
-  
+
   const positionAttribute = finalMesh.geometry.getAttribute('position');
 
   let vec3 = new THREE.Vector3();
@@ -2376,7 +2376,7 @@ function ModelCategory(editor) {
    vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
    finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
   }
-  
+
   finalMesh.geometry.type = 'aTwistedTubeGeometry';
   finalMesh.updateMatrix();
   finalMesh.name = 'TwistedTubs';
@@ -2405,15 +2405,15 @@ function ModelCategory(editor) {
 
   var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90, twistedangle = 30;
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
-  boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+  boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2, 32, 32, 32);
   const MeshCSG1 = CSG.fromMesh(cylindermesh1);
   const MeshCSG2 = CSG.fromMesh(cylindermesh2);
   let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -2475,7 +2475,7 @@ function ModelCategory(editor) {
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
   finalMesh.geometry.parameters = param;
-  
+
   const positionAttribute = finalMesh.geometry.getAttribute('position');
 
   let vec3 = new THREE.Vector3();
@@ -2485,7 +2485,7 @@ function ModelCategory(editor) {
    vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
    finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
   }
-  
+
   finalMesh.geometry.type = 'aTwistedTubeGeometry';
   finalMesh.position.copy(position);
   finalMesh.updateMatrix();
@@ -2496,6 +2496,148 @@ function ModelCategory(editor) {
  });
 
  options.add(item);
+
+
+ // Polycons model
+
+ item = new UIDiv();
+ item.setClass('Category-item');
+
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aBREPSolidPCone.jpg)";
+
+ item.setTextContent(strings.getKey('menubar/add/polycone'));
+ item.dom.setAttribute('draggable', true);
+ item.dom.setAttribute('item-type', 'Polycone');
+ item.onClick(function () {
+
+  const SPhi = 90, DPhi = 10, numZPlanes = 9, rInner = [0, 0, 0, 0, 0, 0, 0, 0, 0], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+
+  const pointsIn = [];
+  const pointsOut = [];
+  // pointsIn.push(new THREE.Vector2(0,0));
+  // pointsOut.push(new THREE.Vector2(0,0));
+  for (let i = 1; i <= numZPlanes; i++) {
+   pointsIn.push(new THREE.Vector2(rInner[i - 1], z[i - 1]));
+   pointsOut.push(new THREE.Vector2(rOuter[i - 1], z[i - 1]));
+  }
+
+  // pointsIn.push(new THREE.Vector2(0, z[numZPlanes-1]));
+  // pointsOut.push(new THREE.Vector2(0, z[numZPlanes-1]));
+  console.log(pointsIn, pointsOut)
+  const geometryIn = new THREE.LatheGeometry(pointsIn);
+  const geometryOut = new THREE.LatheGeometry(pointsOut);
+
+  const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
+  const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+  console.log(meshIn)
+  let maxWidth = Math.max(...rOuter);
+  let maxHeight = Math.max(...z);
+
+  console.log(maxWidth, maxHeight);
+  const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight * 2, maxWidth, 32, 32, 32);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+  let MeshCSG1 = CSG.fromMesh(meshOut);
+  let MeshCSG2 = CSG.fromMesh(meshIn);
+  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+  let aCSG;
+  aCSG = MeshCSG1;
+
+  let bCSG;
+  bCSG = MeshCSG1;
+
+  boxmesh.geometry.translate(maxWidth / 2, maxHeight, maxWidth / 2);
+  if (DPhi > 270) {
+   let v_DPhi = 360 - DPhi;
+
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / 2;
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    bCSG = bCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   bCSG = bCSG.subtract(MeshCSG3);
+   aCSG = aCSG.subtract(bCSG);
+
+  } else {
+
+   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+   for (let i = 0; i < repeatCount; i++) {
+    let rotateVaule = Math.PI / (-2);
+    boxmesh.rotateY(rotateVaule);
+    boxmesh.updateMatrix();
+    MeshCSG3 = CSG.fromMesh(boxmesh);
+    aCSG = aCSG.subtract(MeshCSG3);
+   }
+   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+   boxmesh.rotateY(rotateVaule);
+   boxmesh.updateMatrix();
+   MeshCSG3 = CSG.fromMesh(boxmesh);
+   aCSG = aCSG.subtract(MeshCSG3);
+
+  }
+
+  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  const param = { 'rInner': rInner.toString, 'rOuter': rOuter.toString, 'z': z.toString, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
+  finalMesh.geometry.parameters = param;
+  finalMesh.geometry.computeVertexNormals();
+  finalMesh.geometry.type = 'aTwistedTrapGeometry';
+  finalMesh.updateMatrix();
+
+  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ });
+
+ item.dom.addEventListener('dragend', function (event) {
+
+  var mouseX = event.clientX;
+  var mouseY = event.clientY;
+
+  // Convert the mouse position to scene coordinates
+  var rect = renderer.getBoundingClientRect();
+  var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+  var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+  // Update the cube's position based on the mouse position
+  var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+  mouseScenePosition.unproject(camera);
+  var direction = mouseScenePosition.sub(camera.position).normalize();
+  var distance = -camera.position.y / direction.y;
+  var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+  const geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI);
+  geometry.type = 'SphereGeometry2';
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+  mesh.position.copy(position);
+  mesh.name = 'Sphere';
+
+  editor.execute(new AddObjectCommand(editor, mesh));
+
+ });
+
+ options.add(item);
+
 
 
  return container;

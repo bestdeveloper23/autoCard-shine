@@ -69,7 +69,7 @@ function GeometryParametersPanel(editor, object) {
  const angleI = new UINumber(parameters.twistedangle).setRange(0, Infinity).onChange(update);
 
  twistedAngleRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/twistedangle')).setWidth('90px'));
- twistedAngleRow.add (angleI);
+ twistedAngleRow.add(angleI);
 
  container.add(twistedAngleRow);
 
@@ -86,10 +86,10 @@ function GeometryParametersPanel(editor, object) {
   }
   const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
   const maxwidth = Math.max(dx1, dy1, dx2, dy2);
-  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+  const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
   const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+  const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);

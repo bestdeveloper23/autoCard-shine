@@ -71,7 +71,7 @@ function Strings( config ) {
 			'menubar/add/atwistedtrd': 'TrapeZoid3',
 			'menubar/add/atwistedtrap': 'TrapeZoid4',
 			'menubar/add/atwistedtube': 'TwistedTube',
-			'menubar/add/apolycons': 'Polycons',
+			'menubar/add/polycone': 'Polycons',
 
 
 			'menubar/status/autosave': 'autosave',

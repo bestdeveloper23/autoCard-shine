@@ -62,7 +62,7 @@ function GeometryParametersPanel(editor, object) {
 
  container.add(pDPhiRow);
 
- 
+
  // twistedangle
 
  const twistedangleRow = new UIRow();
@@ -80,13 +80,13 @@ function GeometryParametersPanel(editor, object) {
 
   var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = twistedangleI.getValue();
 
-  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 1, false, 0, Math.PI * 2);
+  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
   const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshStandardMaterial());
 
-  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 1, false, 0, Math.PI * 2);
+  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
   const spheremesh2 = new THREE.Mesh(spheregeometry2, new THREE.MeshStandardMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
+  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
   const MeshCSG1 = CSG.fromMesh(spheremesh1);
@@ -98,8 +98,8 @@ function GeometryParametersPanel(editor, object) {
 
   let bCSG;
   bCSG = MeshCSG1.subtract(MeshCSG2);
-    
-  if (DPhi > 270 && DPhi< 360) {
+
+  if (DPhi > 270 && DPhi < 360) {
    let v_DPhi = 360 - DPhi;
 
    boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
@@ -123,7 +123,7 @@ function GeometryParametersPanel(editor, object) {
    bCSG = bCSG.subtract(MeshCSG3);
    aCSG = aCSG.subtract(bCSG);
 
-  } else if(DPhi <= 270) {
+  } else if (DPhi <= 270) {
 
    boxmesh.rotateY(SPhi / 180 * Math.PI);
    boxmesh.updateMatrix();
@@ -150,7 +150,7 @@ function GeometryParametersPanel(editor, object) {
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
   finalMesh.geometry.parameters = param;
-  
+
   const positionAttribute = finalMesh.geometry.getAttribute('position');
 
   let vec3 = new THREE.Vector3();
