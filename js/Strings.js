@@ -71,6 +71,7 @@ function Strings( config ) {
 			'menubar/add/atwistedtrd': 'TrapeZoid3',
 			'menubar/add/atwistedtrap': 'TrapeZoid4',
 			'menubar/add/atwistedtube': 'TwistedTube',
+			'menubar/add/tetrahedra': 'Tetrahedra',
 			'menubar/add/polycone': 'Polycons',
 
 
@@ -313,6 +314,12 @@ function Strings( config ) {
 			'sidebar/geometry/atwistedbox_geometry/height' : 'height',
 			'sidebar/geometry/atwistedbox_geometry/depth' : 'depth',
 			'sidebar/geometry/atwistedbox_geometry/angle' : 'twistedAngle',
+
+			'sidebar/geometry/atetrahedra_geometry/anchor' : 'anchor',
+			'sidebar/geometry/atetrahedra_geometry/point2' : 'point2',
+			'sidebar/geometry/atetrahedra_geometry/point3' : 'point3',
+			'sidebar/geometry/atetrahedra_geometry/point4' : 'point4',
+
 			
 
 			'sidebar/material/new': 'New',

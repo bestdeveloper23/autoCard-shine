@@ -2498,112 +2498,31 @@ function ModelCategory(editor) {
  options.add(item);
 
 
- // Polycons model
+ // Box model
 
  item = new UIDiv();
  item.setClass('Category-item');
 
- item.dom.style.backgroundImage = "url(../images/basicmodels/aBREPSolidPCone.jpg)";
+ item.dom.style.backgroundImage = "url(../images/basicmodels/aTet.jpg)";
 
- item.setTextContent(strings.getKey('menubar/add/polycone'));
+ item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
  item.dom.setAttribute('draggable', true);
- item.dom.setAttribute('item-type', 'Polycone');
+ item.dom.setAttribute('item-type', 'Tetrahedra');
  item.onClick(function () {
 
-  const SPhi = 90, DPhi = 10, numZPlanes = 9, rInner = [0, 0, 0, 0, 0, 0, 0, 0, 0], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+  const anchor = [0, 0, Math.sqrt(3)], p2 = [0, 2 * Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p3 = [-Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p4 = [Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)];
 
-  const pointsIn = [];
-  const pointsOut = [];
-  // pointsIn.push(new THREE.Vector2(0,0));
-  // pointsOut.push(new THREE.Vector2(0,0));
-  for (let i = 1; i <= numZPlanes; i++) {
-   pointsIn.push(new THREE.Vector2(rInner[i - 1], z[i - 1]));
-   pointsOut.push(new THREE.Vector2(rOuter[i - 1], z[i - 1]));
-  }
+  const vertices = [], indices = [];
+  vertices.push(...anchor, ...p2, ...p3, ...p4);
+  indices.push(0, 1, 2, 0, 1, 3, 0, 2, 3, 0, 3, 2, 0, 3, 1, 0, 2, 1, 1, 2, 3, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 3, 1, 2, 3, 2, 1);
+  const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+  const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
+  geometry.parameters = param;
+  geometry.type = 'aTetrahedraGeometry';
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  mesh.name = 'Tetrahedra';
 
-  // pointsIn.push(new THREE.Vector2(0, z[numZPlanes-1]));
-  // pointsOut.push(new THREE.Vector2(0, z[numZPlanes-1]));
-  console.log(pointsIn, pointsOut)
-  const geometryIn = new THREE.LatheGeometry(pointsIn);
-  const geometryOut = new THREE.LatheGeometry(pointsOut);
-
-  const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
-  const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
-  console.log(meshIn)
-  let maxWidth = Math.max(...rOuter);
-  let maxHeight = Math.max(...z);
-
-  console.log(maxWidth, maxHeight);
-  const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight * 2, maxWidth, 32, 32, 32);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
-
-  let MeshCSG1 = CSG.fromMesh(meshOut);
-  let MeshCSG2 = CSG.fromMesh(meshIn);
-  let MeshCSG3 = CSG.fromMesh(boxmesh);
-
-  let aCSG;
-  aCSG = MeshCSG1;
-
-  let bCSG;
-  bCSG = MeshCSG1;
-
-  boxmesh.geometry.translate(maxWidth / 2, maxHeight, maxWidth / 2);
-  if (DPhi > 270) {
-   let v_DPhi = 360 - DPhi;
-
-   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
-   boxmesh.updateMatrix();
-   MeshCSG3 = CSG.fromMesh(boxmesh);
-   bCSG = bCSG.subtract(MeshCSG3);
-
-   let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-   for (let i = 0; i < repeatCount; i++) {
-    let rotateVaule = Math.PI / 2;
-    boxmesh.rotateY(rotateVaule);
-    boxmesh.updateMatrix();
-    MeshCSG3 = CSG.fromMesh(boxmesh);
-    bCSG = bCSG.subtract(MeshCSG3);
-   }
-   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-   boxmesh.rotateY(rotateVaule);
-   boxmesh.updateMatrix();
-   MeshCSG3 = CSG.fromMesh(boxmesh);
-   bCSG = bCSG.subtract(MeshCSG3);
-   aCSG = aCSG.subtract(bCSG);
-
-  } else {
-
-   boxmesh.rotateY(SPhi / 180 * Math.PI);
-   boxmesh.updateMatrix();
-   MeshCSG3 = CSG.fromMesh(boxmesh);
-   aCSG = aCSG.subtract(MeshCSG3);
-
-   let repeatCount = Math.floor((270 - DPhi) / 90);
-
-   for (let i = 0; i < repeatCount; i++) {
-    let rotateVaule = Math.PI / (-2);
-    boxmesh.rotateY(rotateVaule);
-    boxmesh.updateMatrix();
-    MeshCSG3 = CSG.fromMesh(boxmesh);
-    aCSG = aCSG.subtract(MeshCSG3);
-   }
-   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-   boxmesh.rotateY(rotateVaule);
-   boxmesh.updateMatrix();
-   MeshCSG3 = CSG.fromMesh(boxmesh);
-   aCSG = aCSG.subtract(MeshCSG3);
-
-  }
-
-  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'rInner': rInner.toString, 'rOuter': rOuter.toString, 'z': z.toString, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
-  finalMesh.geometry.parameters = param;
-  finalMesh.geometry.computeVertexNormals();
-  finalMesh.geometry.type = 'aTwistedTrapGeometry';
-  finalMesh.updateMatrix();
-
-  editor.execute(new AddObjectCommand(editor, finalMesh));
+  editor.execute(new AddObjectCommand(editor, mesh));
 
  });
 
@@ -2625,16 +2544,136 @@ function ModelCategory(editor) {
   var distance = -camera.position.y / direction.y;
   var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-  const geometry = new THREE.SphereGeometry(1, 32, 16, 0, Math.PI * 2, 0, Math.PI);
-  geometry.type = 'SphereGeometry2';
-  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  
+  const anchor = [0, 0, Math.sqrt(3)], p2 = [0, 2 * Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p3 = [-Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p4 = [Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)];
 
+  const vertices = [], indices = [];
+  vertices.push(...anchor, ...p2, ...p3, ...p4);
+  indices.push(0, 1, 2, 0, 1, 3, 0, 2, 3, 0, 3, 2, 0, 3, 1, 0, 2, 1, 1, 2, 3, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 3, 1, 2, 3, 2, 1);
+  const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+  const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
+  geometry.parameters = param;
+  geometry.type = 'aTetrahedraGeometry';
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  mesh.name = 'Tetrahedra';
   mesh.position.copy(position);
-  mesh.name = 'Sphere';
 
   editor.execute(new AddObjectCommand(editor, mesh));
 
  });
+
+ options.add(item);
+
+
+
+ // Polycons model
+
+ // item = new UIDiv();
+ // item.setClass('Category-item');
+
+ // item.dom.style.backgroundImage = "url(../images/basicmodels/aBREPSolidPCone.jpg)";
+
+ // item.setTextContent(strings.getKey('menubar/add/polycone'));
+ // item.dom.setAttribute('draggable', true);
+ // item.dom.setAttribute('item-type', 'Polycone');
+ // item.onClick(function () {
+
+ //  const SPhi = 90, DPhi = 10, numZPlanes = 9, rInner = [0, 0, 0, 0, 0, 0, 0, 0, 0], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+
+ //  const pointsIn = [];
+ //  const pointsOut = [];
+ //  // pointsIn.push(new THREE.Vector2(0,0));
+ //  // pointsOut.push(new THREE.Vector2(0,0));
+ //  for (let i = 1; i <= numZPlanes; i++) {
+ //   pointsIn.push(new THREE.Vector2(rInner[i - 1], z[i - 1]));
+ //   pointsOut.push(new THREE.Vector2(rOuter[i - 1], z[i - 1]));
+ //  }
+
+ //  // pointsIn.push(new THREE.Vector2(0, z[numZPlanes-1]));
+ //  // pointsOut.push(new THREE.Vector2(0, z[numZPlanes-1]));
+ //  console.log(pointsIn, pointsOut)
+ //  const geometryIn = new THREE.LatheGeometry(pointsIn);
+ //  const geometryOut = new THREE.LatheGeometry(pointsOut);
+
+ //  const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
+ //  const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+ //  console.log(meshIn)
+ //  let maxWidth = Math.max(...rOuter);
+ //  let maxHeight = Math.max(...z);
+
+ //  console.log(maxWidth, maxHeight);
+ //  const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight * 2, maxWidth, 32, 32, 32);
+ //  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+ //  let MeshCSG1 = CSG.fromMesh(meshOut);
+ //  let MeshCSG2 = CSG.fromMesh(meshIn);
+ //  let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+ //  let aCSG;
+ //  aCSG = MeshCSG1;
+
+ //  let bCSG;
+ //  bCSG = MeshCSG1;
+
+ //  boxmesh.geometry.translate(maxWidth / 2, maxHeight, maxWidth / 2);
+ //  if (DPhi > 270) {
+ //   let v_DPhi = 360 - DPhi;
+
+ //   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
+ //   boxmesh.updateMatrix();
+ //   MeshCSG3 = CSG.fromMesh(boxmesh);
+ //   bCSG = bCSG.subtract(MeshCSG3);
+
+ //   let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+ //   for (let i = 0; i < repeatCount; i++) {
+ //    let rotateVaule = Math.PI / 2;
+ //    boxmesh.rotateY(rotateVaule);
+ //    boxmesh.updateMatrix();
+ //    MeshCSG3 = CSG.fromMesh(boxmesh);
+ //    bCSG = bCSG.subtract(MeshCSG3);
+ //   }
+ //   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+ //   boxmesh.rotateY(rotateVaule);
+ //   boxmesh.updateMatrix();
+ //   MeshCSG3 = CSG.fromMesh(boxmesh);
+ //   bCSG = bCSG.subtract(MeshCSG3);
+ //   aCSG = aCSG.subtract(bCSG);
+
+ //  } else {
+
+ //   boxmesh.rotateY(SPhi / 180 * Math.PI);
+ //   boxmesh.updateMatrix();
+ //   MeshCSG3 = CSG.fromMesh(boxmesh);
+ //   aCSG = aCSG.subtract(MeshCSG3);
+
+ //   let repeatCount = Math.floor((270 - DPhi) / 90);
+
+ //   for (let i = 0; i < repeatCount; i++) {
+ //    let rotateVaule = Math.PI / (-2);
+ //    boxmesh.rotateY(rotateVaule);
+ //    boxmesh.updateMatrix();
+ //    MeshCSG3 = CSG.fromMesh(boxmesh);
+ //    aCSG = aCSG.subtract(MeshCSG3);
+ //   }
+ //   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+ //   boxmesh.rotateY(rotateVaule);
+ //   boxmesh.updateMatrix();
+ //   MeshCSG3 = CSG.fromMesh(boxmesh);
+ //   aCSG = aCSG.subtract(MeshCSG3);
+
+ //  }
+
+ //  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+ //  const param = { 'rInner': rInner.toString, 'rOuter': rOuter.toString, 'z': z.toString, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
+ //  finalMesh.geometry.parameters = param;
+ //  finalMesh.geometry.computeVertexNormals();
+ //  finalMesh.geometry.type = 'aTwistedTrapGeometry';
+ //  finalMesh.updateMatrix();
+
+ //  editor.execute(new AddObjectCommand(editor, finalMesh));
+
+ // });
 
  options.add(item);
 
