@@ -70,6 +70,9 @@ function Strings( config ) {
 			'menubar/add/twistedbox': 'TwistedBox',
 			'menubar/add/atwistedtrd': 'TrapeZoid3',
 			'menubar/add/atwistedtrap': 'TrapeZoid4',
+			'menubar/add/atwistedtube': 'TwistedTube',
+			'menubar/add/apolycons': 'Polycons',
+
 
 			'menubar/status/autosave': 'autosave',
 
@@ -255,6 +258,7 @@ function Strings( config ) {
 			'sidebar/geometry/atube_geometry/height' : 'pDz',
 			'sidebar/geometry/atube_geometry/pSPhi' : 'pSPhi',
 			'sidebar/geometry/atube_geometry/pDPhi' : 'pDPhi',
+			'sidebar/geometry/atube_geometry/twistedangle' : 'twistedAngle',
 			
 			'sidebar/geometry/atube_geometry/pHighNorm': 'pHighNorm',
 			'sidebar/geometry/atube_geometry/pLowNorm': 'pLowNorm',
