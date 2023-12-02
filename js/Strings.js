@@ -73,8 +73,10 @@ function Strings( config ) {
 			'menubar/add/atwistedtube': 'TwistedTube',
 			'menubar/add/tetrahedra': 'Tetrahedra',
 			'menubar/add/polycone': 'Polycons',
+			'menubar/add/generictrap': 'GenericTrap',
+			'menubar/add/aparaboloid': 'Paraboloid',
 
-
+			
 			'menubar/status/autosave': 'autosave',
 
 			'menubar/play': 'Play',
@@ -319,6 +321,16 @@ function Strings( config ) {
 			'sidebar/geometry/atetrahedra_geometry/point2' : 'point2',
 			'sidebar/geometry/atetrahedra_geometry/point3' : 'point3',
 			'sidebar/geometry/atetrahedra_geometry/point4' : 'point4',
+
+			'sidebar/geometry/agenerictrap_geometry/pdz' : 'pDz',
+			'sidebar/geometry/agenerictrap_geometry/point1' : 'point1',
+			'sidebar/geometry/agenerictrap_geometry/point2' : 'point2',
+			'sidebar/geometry/agenerictrap_geometry/point3' : 'point3',
+			'sidebar/geometry/agenerictrap_geometry/point4' : 'point4',
+			'sidebar/geometry/agenerictrap_geometry/point5' : 'point5',
+			'sidebar/geometry/agenerictrap_geometry/point6' : 'point6',
+			'sidebar/geometry/agenerictrap_geometry/point7' : 'point7',
+			'sidebar/geometry/agenerictrap_geometry/point8' : 'point8',
 
 			
 
