@@ -75,6 +75,7 @@ function Strings( config ) {
 			'menubar/add/polycone': 'Polycons',
 			'menubar/add/generictrap': 'GenericTrap',
 			'menubar/add/aparaboloid': 'Paraboloid',
+			'menubar/add/ahyperboloid': 'Hyperboloid',
 
 
 			'menubar/status/autosave': 'autosave',
@@ -336,7 +337,13 @@ function Strings( config ) {
 			'sidebar/geometry/aparaboloid_geometry/r2': 'R2',
 			'sidebar/geometry/aparaboloid_geometry/height': 'Height',
 
+			'sidebar/geometry/ahyperboloid_geometry/radiusout': 'outerRadius',
+			'sidebar/geometry/ahyperboloid_geometry/radiusin': 'innerRadius',
+			'sidebar/geometry/ahyperboloid_geometry/stereoout': 'outerStereo',
+			'sidebar/geometry/ahyperboloid_geometry/stereoin': 'innerStereo',
+			'sidebar/geometry/ahyperboloid_geometry/height': 'Height',
 
+			
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
 			'sidebar/material/paste': 'Paste',

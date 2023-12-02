@@ -2792,6 +2792,195 @@ function ModelCategory(editor) {
 
 
 
+    // Hyperboloid model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = "url(../images/basicmodels/aHyperboloid.jpg)";
+
+    item.setTextContent(strings.getKey('menubar/add/ahyperboloid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Hyperboloid');
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 30, stereo2 = 30, pDz = 6;
+        const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
+        const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+
+        let positionAttribute = cylindergeometry1.getAttribute('position');
+        let positionAttribute2 = cylindergeometry2.getAttribute('position');
+        let vertex = new THREE.Vector3();
+        let vertex2 = new THREE.Vector3();
+
+        for (let i = 0; i < positionAttribute.count; i++) {
+
+            vertex.fromBufferAttribute(positionAttribute, i);
+            vertex2.fromBufferAttribute(positionAttribute2, i);
+            let x, y, z, x2, y2, z2;
+            x = vertex.x;
+            y = vertex.y;
+            z = vertex.z;
+            x2 = vertex2.x;
+            y2 = vertex2.y;
+            z2 = vertex2.z;
+            let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
+            let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
+
+            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+            if (vertex.z >= 0) {
+                z = Math.abs(r * Math.sin(alpha));
+                z2 = Math.abs(r2 * Math.sin(alpha));
+            } else {
+                z = - Math.abs(r * Math.sin(alpha));
+                z2 = - Math.abs(r2 * Math.sin(alpha));
+            }
+            if (vertex.x >= 0) {
+                x = r * Math.cos(alpha);
+                x2 = r2 * Math.cos(alpha);
+            } else {
+                x = -r * Math.cos(alpha);
+                x2 = -r2 * Math.cos(alpha);
+            }
+
+            cylindergeometry1.attributes.position.array[i * 3] = x;
+            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+            cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
+
+
+            cylindergeometry2.attributes.position.array[i * 3] = x2;
+            cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
+            cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
+
+        }
+        cylindergeometry1.attributes.position.needsUpdate = true;
+        cylindergeometry2.attributes.position.needsUpdate = true;
+
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+
+        const MeshCSG1 = CSG.fromMesh(cylindermesh);
+        const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+
+        let aCSG = MeshCSG1.subtract(MeshCSG2);
+
+        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aHyperboloidGeometry';
+        finalMesh.updateMatrix();
+        finalMesh.name = 'Hyperboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
+
+        // Convert the mouse position to scene coordinates
+        var rect = renderer.getBoundingClientRect();
+        var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+        var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+        // Update the cube's position based on the mouse position
+        var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+        mouseScenePosition.unproject(camera);
+        var direction = mouseScenePosition.sub(camera.position).normalize();
+        var distance = -camera.position.y / direction.y;
+        var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 30, stereo2 = 30, pDz = 6;
+        const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
+        const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+
+        let positionAttribute = cylindergeometry1.getAttribute('position');
+        let positionAttribute2 = cylindergeometry2.getAttribute('position');
+        let vertex = new THREE.Vector3();
+        let vertex2 = new THREE.Vector3();
+
+        for (let i = 0; i < positionAttribute.count; i++) {
+
+            vertex.fromBufferAttribute(positionAttribute, i);
+            vertex2.fromBufferAttribute(positionAttribute2, i);
+            let x, y, z, x2, y2, z2;
+            x = vertex.x;
+            y = vertex.y;
+            z = vertex.z;
+            x2 = vertex2.x;
+            y2 = vertex2.y;
+            z2 = vertex2.z;
+            let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
+            let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
+
+            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+            if (vertex.z >= 0) {
+                z = Math.abs(r * Math.sin(alpha));
+                z2 = Math.abs(r2 * Math.sin(alpha));
+            } else {
+                z = - Math.abs(r * Math.sin(alpha));
+                z2 = - Math.abs(r2 * Math.sin(alpha));
+            }
+            if (vertex.x >= 0) {
+                x = r * Math.cos(alpha);
+                x2 = r2 * Math.cos(alpha);
+            } else {
+                x = -r * Math.cos(alpha);
+                x2 = -r2 * Math.cos(alpha);
+            }
+
+            cylindergeometry1.attributes.position.array[i * 3] = x;
+            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+            cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
+
+
+            cylindergeometry2.attributes.position.array[i * 3] = x2;
+            cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
+            cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
+
+        }
+        cylindergeometry1.attributes.position.needsUpdate = true;
+        cylindergeometry2.attributes.position.needsUpdate = true;
+
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+
+        const MeshCSG1 = CSG.fromMesh(cylindermesh);
+        const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+
+        let aCSG = MeshCSG1.subtract(MeshCSG2);
+
+        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aHyperboloidGeometry';
+        finalMesh.position.copy(position);
+        finalMesh.updateMatrix();
+        finalMesh.name = 'Hyperboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+
+
 
     // Polycons model
 
