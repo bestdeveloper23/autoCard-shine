@@ -2648,6 +2648,149 @@ function ModelCategory(editor) {
 
 
 
+    // PrabolicCylinder model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = "url(../images/basicmodels/aParaboloid.jpg)";
+
+    item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Paraboloid');
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var radius1 = 0.5, radius2 = 1, pDz = 2;
+        const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
+
+        const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
+
+        // cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+
+        let positionAttribute = cylindergeometry1.getAttribute('position');
+
+        let vertex = new THREE.Vector3();
+
+        for (let i = 0; i < positionAttribute.count; i++) {
+
+            vertex.fromBufferAttribute(positionAttribute, i);
+            let x, y, z;
+            x = vertex.x;
+            y = vertex.y;
+            z = vertex.z;
+            let r = Math.sqrt((y * k1 + k2));
+
+            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+            if (vertex.z >= 0) {
+                z = Math.abs(r * Math.sin(alpha));
+            } else {
+                z = - Math.abs(r * Math.sin(alpha));
+            }
+            if (vertex.x >= 0) {
+                x = r * Math.cos(alpha);
+            } else {
+                x = -r * Math.cos(alpha);
+            }
+
+            cylindergeometry1.attributes.position.array[i * 3] = x;
+            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+            cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+
+        }
+        cylindergeometry1.attributes.position.needsUpdate = true;
+
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+
+        const finalMesh = cylindermesh;
+        const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aParaboloidGeometry';
+        finalMesh.updateMatrix();
+        finalMesh.name = 'Paraboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
+
+        // Convert the mouse position to scene coordinates
+        var rect = renderer.getBoundingClientRect();
+        var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+        var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+        // Update the cube's position based on the mouse position
+        var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+        mouseScenePosition.unproject(camera);
+        var direction = mouseScenePosition.sub(camera.position).normalize();
+        var distance = -camera.position.y / direction.y;
+        var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+
+        var radius1 = 0.5, radius2 = 1, pDz = 2;
+        const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
+
+        const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
+
+        // cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+
+        let positionAttribute = cylindergeometry1.getAttribute('position');
+
+        let vertex = new THREE.Vector3();
+
+        for (let i = 0; i < positionAttribute.count; i++) {
+
+            vertex.fromBufferAttribute(positionAttribute, i);
+            let x, y, z;
+            x = vertex.x;
+            y = vertex.y;
+            z = vertex.z;
+            let r = Math.sqrt((y * k1 + k2));
+
+            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+            if (vertex.z >= 0) {
+                z = Math.abs(r * Math.sin(alpha));
+            } else {
+                z = - Math.abs(r * Math.sin(alpha));
+            }
+            if (vertex.x >= 0) {
+                x = r * Math.cos(alpha);
+            } else {
+                x = -r * Math.cos(alpha);
+            }
+
+            cylindergeometry1.attributes.position.array[i * 3] = x;
+            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+            cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+
+        }
+        cylindergeometry1.attributes.position.needsUpdate = true;
+
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+
+        const finalMesh = cylindermesh;
+        const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aParaboloidGeometry';
+        finalMesh.position.copy(position);
+        finalMesh.updateMatrix();
+        finalMesh.name = 'Paraboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
 
 
     // Polycons model

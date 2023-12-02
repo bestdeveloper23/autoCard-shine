@@ -76,7 +76,7 @@ function Strings( config ) {
 			'menubar/add/generictrap': 'GenericTrap',
 			'menubar/add/aparaboloid': 'Paraboloid',
 
-			
+
 			'menubar/status/autosave': 'autosave',
 
 			'menubar/play': 'Play',
@@ -332,7 +332,10 @@ function Strings( config ) {
 			'sidebar/geometry/agenerictrap_geometry/point7' : 'point7',
 			'sidebar/geometry/agenerictrap_geometry/point8' : 'point8',
 
-			
+			'sidebar/geometry/aparaboloid_geometry/r1': 'R1',
+			'sidebar/geometry/aparaboloid_geometry/r2': 'R2',
+			'sidebar/geometry/aparaboloid_geometry/height': 'Height',
+
 
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
