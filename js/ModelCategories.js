@@ -2977,7 +2977,6 @@ function ModelCategory(editor) {
     options.add(item);
 
 
-
     //Polycons model
 
     item = new UIDiv();
@@ -2990,14 +2989,10 @@ function ModelCategory(editor) {
     item.dom.setAttribute('item-type', 'Polycone');
     item.onClick(function () {
 
-        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0.5, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        if(rInner.some(item => item === 0) || rOuter.some(item => item === 0)){
-            return;
-        }
-
-        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 5, false);
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 5, false);
+        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
 
         const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
@@ -3012,61 +3007,7 @@ function ModelCategory(editor) {
         let MeshCSG2 = CSG.fromMesh(meshIn);
         let MeshCSG3 = CSG.fromMesh(boxmesh);
 
-        let aCSG;
-        aCSG = MeshCSG1;
-
-        let bCSG;
-        bCSG = MeshCSG1;
-        
-        if (DPhi > 270) {
-            let v_DPhi = 360 - DPhi;
-
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                bCSG = bCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-            aCSG = aCSG.subtract(bCSG);
-
-        } else {
-
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-        }
-
-        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
         const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
@@ -3097,98 +3038,104 @@ function ModelCategory(editor) {
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
 
-        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0.5, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        if(rInner.some(item => item === 0) || rOuter.some(item => item === 0)){
-            return;
-        }
-        
-        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 5, false);
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 5, false);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
 
-        const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
-        let maxWidth = Math.max(...rOuter);
-        let maxHeight = Math.max(...z);
-
-        const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
-        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
-        boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
 
         let MeshCSG1 = CSG.fromMesh(meshOut);
-        let MeshCSG2 = CSG.fromMesh(meshIn);
-        let MeshCSG3 = CSG.fromMesh(boxmesh);
 
         let aCSG;
         aCSG = MeshCSG1;
 
-        let bCSG;
-        bCSG = MeshCSG1;
-
-        if (DPhi > 270) {
-            let v_DPhi = 360 - DPhi;
-
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                bCSG = bCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-            aCSG = aCSG.subtract(bCSG);
-
-        } else {
-
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-        }
-
-        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
         const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyconeGeometry';
         finalMesh.position.copy(position);
         finalMesh.updateMatrix();
-        finalMesh.name = 'Hyperboloid';
+        finalMesh.name = 'Polycone';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
-
     options.add(item);
 
+    //PolyHedra model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = "url(../images/basicmodels/aBREPSolidPolyhedra.jpg)";
+
+    item.setTextContent(strings.getKey('menubar/add/polyhedra'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Polyhedra');
+    item.onClick(function () {
+
+        const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+        const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+
+        let MeshCSG1 = CSG.fromMesh(meshOut);
+
+        const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+        const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.computeVertexNormals();
+        finalMesh.geometry.type = 'aPolyhedraGeometry';
+        finalMesh.name = 'Polyhedra';
+        finalMesh.updateMatrix();
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
+
+        // Convert the mouse position to scene coordinates
+        var rect = renderer.getBoundingClientRect();
+        var mouseSceneX = ((mouseX - rect.left) / rect.width) * 2 - 1;
+        var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
+
+        // Update the cube's position based on the mouse position
+        var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+
+        mouseScenePosition.unproject(camera);
+        var direction = mouseScenePosition.sub(camera.position).normalize();
+        var distance = -camera.position.y / direction.y;
+        var position = camera.position.clone().add(direction.multiplyScalar(distance));
+
+        const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+        const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+
+        let MeshCSG1 = CSG.fromMesh(meshOut);
+
+        const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+        const param = {'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.computeVertexNormals();
+        finalMesh.geometry.type = 'aPolyhedraGeometry';
+        finalMesh.position.copy(position);
+        finalMesh.updateMatrix();
+        finalMesh.name = 'Polyhedra';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
 
 
     return container;

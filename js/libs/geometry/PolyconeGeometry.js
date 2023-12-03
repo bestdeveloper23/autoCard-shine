@@ -12,7 +12,7 @@ class PolyconeGeometry extends BufferGeometry {
         this.type = 'PolyconeGeometry';
 
         this.parameters = {
-            numberZ: numberZ,
+            numberZ: Math.min(numberZ, rInner.length, zArray.length),
             rInner: rInner,
             zArray: zArray,
             radialSegments: radialSegments,
@@ -89,7 +89,7 @@ class PolyconeGeometry extends BufferGeometry {
                     // calculate the radius of the current row
 
                     const radius = v * (radiusTop - radiusBottom) + radiusBottom;
-                    
+
                     for (let x = 0; x <= radialSegments; x++) {
 
                         const u = x / radialSegments;
@@ -120,6 +120,10 @@ class PolyconeGeometry extends BufferGeometry {
                         indexRow.push(index++);
 
                     }
+                    vertices.push(0, v * height + zArray[counter - 1], 0);
+                    normals.push(0, 0, 0);
+                    uvs.push(0.5, 0.5);
+                    indexRow.push(index++);
 
                     // now save vertices of the row in our index array
 
@@ -133,19 +137,32 @@ class PolyconeGeometry extends BufferGeometry {
             // generate indices
 
 
-            for (let x = 0; x < radialSegments; x++) {
+            for (let x = 0; x <= radialSegments; x++) {
                 for (let counter = 0; counter < numberZ - 1; counter++) {
                     for (let y = 0; y < heightSegments; y++) {
 
                         // we use the index array to access the correct indices
 
+                        if(x === radialSegments){
+                            const a = indexArray[counter][y][x+1];
+                            const b = indexArray[counter][y + 1][x+1];
+                            const c = indexArray[counter][y + 1][0];
+                            const d = indexArray[counter][y][0];
+    
+                            // faces
+    
+                            indices.push(a, d, b);
+                            indices.push(b, d, c);
+                            // update group counter
+                            groupCount += 6;    
+                        }
                         const a = indexArray[counter][y][x];
                         const b = indexArray[counter][y + 1][x];
                         const c = indexArray[counter][y + 1][x + 1];
                         const d = indexArray[counter][y][x + 1];
 
                         // faces
-                        
+
                         indices.push(a, d, b);
                         indices.push(b, d, c);
                         // update group counter

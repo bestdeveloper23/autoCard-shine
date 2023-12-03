@@ -76,6 +76,7 @@ function Strings( config ) {
 			'menubar/add/generictrap': 'GenericTrap',
 			'menubar/add/aparaboloid': 'Paraboloid',
 			'menubar/add/ahyperboloid': 'Hyperboloid',
+			'menubar/add/polyhedra': 'Polyhedra',
 
 
 			'menubar/status/autosave': 'autosave',
@@ -350,7 +351,12 @@ function Strings( config ) {
 			'sidebar/geometry/apolycone_geometry/sphi': 'SPhi',
 			'sidebar/geometry/apolycone_geometry/dphi': 'DPhi',
 
-
+			'sidebar/geometry/apolyhedra_geometry/radius': 'Radius',
+			'sidebar/geometry/apolyhedra_geometry/z': 'z',
+			'sidebar/geometry/apolyhedra_geometry/numside': 'numSide',
+			'sidebar/geometry/apolyhedra_geometry/znumber': 'numZPlanes',
+			'sidebar/geometry/apolyhedra_geometry/sphi': 'SPhi',
+			'sidebar/geometry/apolyhedra_geometry/dphi': 'DPhi',
 
 			
 			'sidebar/material/new': 'New',
