@@ -278,6 +278,7 @@ function Strings( config ) {
 			'sidebar/geometry/aparall_geometry/alpha': 'alpha',
 			'sidebar/geometry/aparall_geometry/theta': 'theta',
 			'sidebar/geometry/aparall_geometry/phi': 'phi',
+			'sidebar/geometry/aparall_geometry/twistedangle': 'twistedangle',
 
 			'sidebar/geometry/atrapezoid_geometry/dx1': 'dx1',
 			'sidebar/geometry/atrapezoid_geometry/dx2': 'dx2',
@@ -342,6 +343,14 @@ function Strings( config ) {
 			'sidebar/geometry/ahyperboloid_geometry/stereoout': 'outerStereo',
 			'sidebar/geometry/ahyperboloid_geometry/stereoin': 'innerStereo',
 			'sidebar/geometry/ahyperboloid_geometry/height': 'Height',
+
+			'sidebar/geometry/apolycone_geometry/radius': 'Radius',
+			'sidebar/geometry/apolycone_geometry/z': 'z',
+			'sidebar/geometry/apolycone_geometry/znumber': 'numZPlanes',
+			'sidebar/geometry/apolycone_geometry/sphi': 'SPhi',
+			'sidebar/geometry/apolycone_geometry/dphi': 'DPhi',
+
+
 
 			
 			'sidebar/material/new': 'New',
