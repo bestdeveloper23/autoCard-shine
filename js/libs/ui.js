@@ -411,6 +411,7 @@ class UISelect extends UIElement {
 		if ( this.dom.value !== value ) {
 
 			this.dom.value = value;
+			console.log(value)
 
 		}
 
@@ -705,6 +706,10 @@ class UINumber extends UIElement {
 		this.dom.addEventListener( 'focus', onFocus );
 		this.dom.addEventListener( 'blur', onBlur );
 
+	}
+
+	setDisabled( bool ) {
+		this.dom.disabled = bool;
 	}
 
 	getValue() {

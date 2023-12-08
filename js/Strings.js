@@ -366,6 +366,8 @@ function Strings( config ) {
 			'sidebar/material/type': 'Type',
 			'sidebar/material/uuid': 'UUID',
 			'sidebar/material/name': 'Name',
+			'sidebar/material/density': 'density[g/cm^3]',
+			'sidebar/material/energy': 'energy[eV]',
 			'sidebar/material/program': 'Program',
 			'sidebar/material/info': 'Info',
 			'sidebar/material/vertex': 'Vert',
