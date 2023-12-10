@@ -111,6 +111,11 @@ const assets = [
   './js/libs/ternjs/doc_comment.js',
   './js/libs/tern-threejs/threejs.js',
 
+  './js/libs/geometry/PolyconeGeometry.js',
+  './js/libs/geometry/PolyhedronGeometry.js',
+
+  './js/libs/CSGMesh.js',
+
   './js/libs/signals.min.js',
   './js/libs/ui.js',
   './js/libs/ui.three.js',
@@ -169,6 +174,28 @@ const assets = [
   './js/Sidebar.Geometry.TorusGeometry.js',
   './js/Sidebar.Geometry.TorusKnotGeometry.js',
   './js/Sidebar.Geometry.TubeGeometry.js',
+  './js/Sidebar.Geometry.aConeGeometry.js',
+  './js/Sidebar.Geometry.aCutTubeGeometry.js',
+  './js/Sidebar.Geometry.aEllipsoidGeometry.js',
+  './js/Sidebar.Geometry.aEllipticalConeGeometry.js',
+  './js/Sidebar.Geometry.aEllipticalCylinderGeometry.js',
+  './js/Sidebar.Geometry.aGenericTrapGeometry.js',
+  './js/Sidebar.Geometry.aHyperboloidGeometry.js',
+  './js/Sidebar.Geometry.aParaboloidGeometry.js',
+  './js/Sidebar.Geometry.aParallGeometry.js',
+  './js/Sidebar.Geometry.aPolyconeGeometry.js',
+  './js/Sidebar.Geometry.aPolyhedraGeometry.js',
+  './js/Sidebar.Geometry.aTetrahedraGeometry.js',
+  './js/Sidebar.Geometry.aTorusGeometry.js',
+  './js/Sidebar.Geometry.aTrapeZoidGeometry.js',
+  './js/Sidebar.Geometry.aTrapeZoidPGeometry.js',
+  './js/Sidebar.Geometry.aTubeGeometry.js',
+  './js/Sidebar.Geometry.aTwistedBoxGeometry.js',
+  './js/Sidebar.Geometry.aTwistedTrapGeometry.js',
+  './js/Sidebar.Geometry.aTwistedTrdGeometry.js',
+  './js/Sidebar.Geometry.aTwistedTrdGeometry.js',
+  './js/Sidebar.Geometry.aTwistedTubeGeometry.js',
+
   './js/Sidebar.Material.js',
   './js/Sidebar.Material.BooleanProperty.js',
   './js/Sidebar.Material.ColorProperty.js',
@@ -211,6 +238,7 @@ const assets = [
   './js/commands/SetMaterialVectorCommand.js',
   './js/commands/SetSceneCommand.js',
   './js/commands/Commands.js',
+
 
   './examples/arkanoid.app.json',
   './examples/camera.app.json',
