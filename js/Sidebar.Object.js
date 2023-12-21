@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { UIPanel, UIRow, UIInput, UIButton, UIColor, UICheckbox, UIInteger, UITextArea, UIText, UINumber } from './libs/ui.js';
+import { UIPanel, UIRow, UIInput, UISelect, UIButton, UIColor, UICheckbox, UIInteger, UITextArea, UIText, UINumber } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 
 import { SetUuidCommand } from './commands/SetUuidCommand.js';
@@ -9,6 +9,8 @@ import { SetPositionCommand } from './commands/SetPositionCommand.js';
 import { SetRotationCommand } from './commands/SetRotationCommand.js';
 import { SetScaleCommand } from './commands/SetScaleCommand.js';
 import { SetColorCommand } from './commands/SetColorCommand.js';
+
+import { SOURCE } from '/js/libs/nucleardata/radiation.js'
 
 function SidebarObject( editor ) {
 
@@ -105,6 +107,48 @@ function SidebarObject( editor ) {
 	objectNameRow.add( objectName );
 
 	container.add( objectNameRow );
+
+	// Source type
+
+	const energyKindRow = new UIRow();
+	const energykind = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const options = [];
+	SOURCE.type.forEach(element => {
+		options.push(element);
+	});
+
+	energykind.setOptions(options);
+
+	energyKindRow.add(new UIText(strings.getKey('sidebar/object/kind')).setWidth('90px'));
+	energyKindRow.add(energykind);
+
+	container.add(energyKindRow);
+
+	// energy size
+
+	const energysizeRow = new UIRow();
+	energysizeRow.add(new UIText(strings.getKey('sidebar/object/size')).setWidth('120px'));
+
+	const energysize = new UINumber().setPrecision( 3 ).setWidth('60px').onChange( update );
+	energysizeRow.add(energysize);
+	container.add(energysizeRow);
+
+	// energy unit
+
+	const energyunitRow = new UIRow();
+	const energyunit = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const unitoptions = [];
+	SOURCE.unit.forEach(element => {
+		unitoptions.push(element);
+	});
+
+	energyunit.setOptions(unitoptions);
+
+	energyunitRow.add(new UIText(strings.getKey('sidebar/object/unit')).setWidth('90px'));
+	energyunitRow.add(energyunit);
+
+	container.add(energyunitRow);
+
 
 	// position
 
@@ -395,6 +439,28 @@ function SidebarObject( editor ) {
 
 		if ( object !== null ) {
 
+
+			const newKind = energykind.getValue();
+			if( object.energy !== undefined ) {
+
+				object.energykind = SOURCE.type[newKind];
+				
+			}
+
+			const newSize = energysize.getValue();
+			if( object.energy !== undefined ) {
+
+				object.energysize = newSize;
+				
+			}
+			
+			const newUnit = energyunit.getValue();
+			if( object.energy !== undefined ) {
+
+				object.energyunit = SOURCE.unit[newUnit];
+				
+			}
+
 			const newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
 			if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
 
@@ -590,6 +656,9 @@ function SidebarObject( editor ) {
 	function updateRows( object ) {
 
 		const properties = {
+			'energykind': energyKindRow,
+			'energysize': energysizeRow,
+			'energyunit': energyunitRow,
 			'fov': objectFovRow,
 			'left': objectLeftRow,
 			'right': objectRightRow,

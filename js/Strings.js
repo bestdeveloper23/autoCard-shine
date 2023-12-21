@@ -78,6 +78,8 @@ function Strings( config ) {
 			'menubar/add/ahyperboloid': 'Hyperboloid',
 			'menubar/add/polyhedra': 'Polyhedra',
 
+			'menubar/add/pointsource' : 'PointSource',
+
 
 			'menubar/status/autosave': 'autosave',
 
@@ -147,6 +149,9 @@ function Strings( config ) {
 			'sidebar/object/frustumcull': 'Frustum Cull',
 			'sidebar/object/renderorder': 'Render Order',
 			'sidebar/object/userdata': 'User data',
+			'sidebar/object/kind': 'Kind',
+			'sidebar/object/unit': 'Unit',
+			'sidebar/object/size': 'Size',
 
 			'sidebar/geometry/type': 'Type',
 			'sidebar/geometry/new': 'New',

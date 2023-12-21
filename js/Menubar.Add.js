@@ -444,6 +444,26 @@ function MenubarAdd( editor ) {
 	} );
 	options.add( option );
 
+	
+	// PointSource
+
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/add/pointsource' ) );
+	option.onClick( function () {
+
+		const pointSource = new THREE.PerspectiveCamera();
+		pointSource.name = 'PointSource';
+		pointSource.type = "PointSource";
+		pointSource.energysize = 1;
+		pointSource.energyunit = "eV";
+		pointSource.energykind = "B+";
+
+		editor.execute( new AddObjectCommand( editor, pointSource ) );
+
+	} );
+	options.add( option );
+
 	return container;
 
 }

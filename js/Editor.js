@@ -6,6 +6,7 @@ import { History as _History } from './History.js';
 import { Strings } from './Strings.js';
 import { Storage as _Storage } from './Storage.js';
 import { Selector } from './Viewport.Selector.js';
+import { PointSourceHelper } from './libs/helper/pointsourceHelper.js';
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
 _DEFAULT_CAMERA.name = 'Camera';
@@ -174,7 +175,8 @@ Editor.prototype = {
 			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
 
-			scope.addCamera( child );
+			
+			if ( object.type !== "PointSource" ) scope.addCamera( child );
 			scope.addHelper( child );
 
 		} );
@@ -378,6 +380,11 @@ Editor.prototype = {
 
 	addCamera: function ( camera ) {
 
+		// if( camera.type === "PointSource" ){
+
+		// 	return;
+			
+		// }
 		if ( camera.isCamera ) {
 
 			this.cameras[ camera.uuid ] = camera;
@@ -410,6 +417,11 @@ Editor.prototype = {
 		return function ( object, helper ) {
 
 			if ( helper === undefined ) {
+				if ( object.name === "PointSource" ) {
+
+					helper = new PointSourceHelper( object );
+
+				}
 
 				if ( object.isCamera ) {
 

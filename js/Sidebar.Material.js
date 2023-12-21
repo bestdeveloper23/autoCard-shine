@@ -88,18 +88,18 @@ function SidebarMaterial(editor) {
 	// density
 
 	const densityRow = new UIRow();
-	densityRow.add(new UIText(strings.getKey('sidebar/material/density')).setWidth('90px'));
+	densityRow.add(new UIText(strings.getKey('sidebar/material/density')).setWidth('120px'));
 
-	const materialDensity = new UIText().setWidth('90px');
+	const materialDensity = new UIText().setWidth('60px');
 	densityRow.add(materialDensity);
 	container.add(densityRow);
 
 	// energy
 
 	const energyRow = new UIRow();
-	energyRow.add(new UIText(strings.getKey('sidebar/material/energy')).setWidth('90px'));
+	energyRow.add(new UIText(strings.getKey('sidebar/material/energy')).setWidth('120px'));
 
-	const materialEnergy = new UIText().setWidth('90px');
+	const materialEnergy = new UIText().setWidth('60px');
 	energyRow.add(materialEnergy);
 	container.add(energyRow);
 	// program
