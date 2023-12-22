@@ -126,17 +126,16 @@ function SidebarObject( editor ) {
 
 	// energy size
 
-	const energysizeRow = new UIRow();
-	energysizeRow.add(new UIText(strings.getKey('sidebar/object/size')).setWidth('120px'));
+	const energyRow = new UIRow();
+	energyRow.add(new UIText(strings.getKey('sidebar/object/size')).setWidth('120px'));
 
 	const energysize = new UINumber().setPrecision( 3 ).setWidth('60px').onChange( update );
-	energysizeRow.add(energysize);
-	container.add(energysizeRow);
+	energyRow.add(energysize);
+	container.add(energyRow);
 
 	// energy unit
 
-	const energyunitRow = new UIRow();
-	const energyunit = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const energyunit = new UISelect().setWidth('60px').setFontSize('12px').onChange( update );
 	const unitoptions = [];
 	SOURCE.unit.forEach(element => {
 		unitoptions.push(element);
@@ -144,10 +143,9 @@ function SidebarObject( editor ) {
 
 	energyunit.setOptions(unitoptions);
 
-	energyunitRow.add(new UIText(strings.getKey('sidebar/object/unit')).setWidth('90px'));
-	energyunitRow.add(energyunit);
+	energyRow.add(energyunit);
 
-	container.add(energyunitRow);
+	container.add(energyRow);
 
 
 	// position
@@ -657,8 +655,8 @@ function SidebarObject( editor ) {
 
 		const properties = {
 			'energykind': energyKindRow,
-			'energysize': energysizeRow,
-			'energyunit': energyunitRow,
+			'energysize': energyRow,
+			'energyunit': energyRow,
 			'fov': objectFovRow,
 			'left': objectLeftRow,
 			'right': objectRightRow,

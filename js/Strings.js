@@ -149,9 +149,9 @@ function Strings( config ) {
 			'sidebar/object/frustumcull': 'Frustum Cull',
 			'sidebar/object/renderorder': 'Render Order',
 			'sidebar/object/userdata': 'User data',
-			'sidebar/object/kind': 'Kind',
+			'sidebar/object/kind': 'Particle',
 			'sidebar/object/unit': 'Unit',
-			'sidebar/object/size': 'Size',
+			'sidebar/object/size': 'Energy',
 
 			'sidebar/geometry/type': 'Type',
 			'sidebar/geometry/new': 'New',
