@@ -1,5 +1,6 @@
 export const SOURCE = {
   type: [
+    "geantino",
     "B+",
     "B-",
     "B0",

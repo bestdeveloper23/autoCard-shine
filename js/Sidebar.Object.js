@@ -118,6 +118,7 @@ function SidebarObject( editor ) {
 	});
 
 	energykind.setOptions(options);
+	energykind.setValue(0);
 
 	energyKindRow.add(new UIText(strings.getKey('sidebar/object/kind')).setWidth('90px'));
 	energyKindRow.add(energykind);
@@ -142,6 +143,7 @@ function SidebarObject( editor ) {
 	});
 
 	energyunit.setOptions(unitoptions);
+	energyunit.setValue(0);
 
 	energyRow.add(energyunit);
 
