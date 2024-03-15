@@ -1,8 +1,10 @@
-import * as THREE from 'three';
+import * as  THREE from 'three';
 
 import { zipSync, strToU8 } from 'three/addons/libs/fflate.module.js';
 
 import { UIPanel, UIRow, UIHorizontalRule } from './libs/ui.js';
+
+import { GDMLLoader } from './libs/GDMLLoader.js';
 
 function MenubarFile( editor ) {
 
@@ -48,12 +50,40 @@ function MenubarFile( editor ) {
 	document.body.appendChild( form );
 
 	const fileInput = document.createElement( 'input' );
-	fileInput.multiple = true;
+	fileInput.multiple = false;
 	fileInput.type = 'file';
 	fileInput.addEventListener( 'change', function () {
+		let file = fileInput.files[0];
+		let fileName = file.name;
+		let fileExtension = fileName.split('.').pop().toLowerCase(); // Extract file extension
+		let url = URL.createObjectURL(file);
+		if (fileExtension === 'gdml') {
+			console.log("GDML file input", file);
+			var gdmlLoader = new GDMLLoader();
+			gdmlLoader.load(url, function(objects) {
+				console.log("objects",editor.scene, objects);
+				const bbox = new THREE.Box3().setFromObject(objects);
 
-		editor.loader.loadFiles( fileInput.files );
-		form.reset();
+				// Determine the size you want the model to fit in
+				const desiredSize = 5; // Example: Make the longest side 5 units long
+			
+				// Calculate the model's current size
+				const size = new THREE.Vector3();
+				bbox.getSize(size);
+			
+				// Determine the scale factor
+				const maxDimension = Math.max(size.x, size.y, size.z);
+				const scaleFactor = desiredSize / maxDimension;
+			
+				// Scale the model
+				objects.scale.set(scaleFactor, scaleFactor, scaleFactor);
+				editor.scene.add( objects );
+			});
+			// Handle GDML file specifically
+		} else {
+			editor.loader.loadFiles(fileInput.files);
+		}
+		form.reset(); // Make sure 'form' is defined and accessible
 
 	} );
 	form.appendChild( fileInput );
@@ -403,7 +433,7 @@ function MenubarFile( editor ) {
 
 		const title = config.getKey( 'project/title' );
 
-		const manager = new THREE.LoadingManager( function () {
+		const manager = new  THREE.LoadingManager( function () {
 
 			const zipped = zipSync( toZip, { level: 9 } );
 
@@ -413,7 +443,7 @@ function MenubarFile( editor ) {
 
 		} );
 
-		const loader = new THREE.FileLoader( manager );
+		const loader = new  THREE.FileLoader( manager );
 		loader.load( 'js/libs/app/index.html', function ( content ) {
 
 			content = content.replace( '<!-- title -->', title );
