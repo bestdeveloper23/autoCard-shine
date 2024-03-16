@@ -411,7 +411,6 @@ class UISelect extends UIElement {
 		if ( this.dom.value !== value ) {
 
 			this.dom.value = value;
-			console.log(value)
 
 		}
 

@@ -1,5 +1,27 @@
 export const SOURCE = {
   type: [
+    "Point",
+    "Plane",
+    "Beam",
+    "Surface",
+    "Volume"
+  ],
+  shape: {
+    plane: [
+      "Circle",
+      "Annulus",
+      "Ellipse",
+      "Square",
+      "Rectangle"
+    ],
+    volume: [
+      "Sphere",
+      "Ellipsoid",
+      "Cylinder",
+      "Para"
+    ]
+  },
+  particle: [
     "geantino",
     "B+",
     "B-",

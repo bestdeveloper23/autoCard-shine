@@ -43,7 +43,7 @@ function ModelCategory(editor) {
     options.setClass('Category-widget');
     container.add(options);
 
-    // Box model
+    // Source model
 
     let item = new UIDiv();
 
@@ -51,17 +51,24 @@ function ModelCategory(editor) {
 
     item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/pointsource'));
+    item.setTextContent(strings.getKey('menubar/add/source'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'PointSource');
     item.onClick(function () {
 
         const pointSource = new THREE.PerspectiveCamera();
-		pointSource.name = 'PointSource';
-		pointSource.type = "PointSource";
+        pointSource.name = 'RadiationSource';
+		pointSource.source = 'Point';
+        pointSource.planeshape = "Circle";
+        pointSource.volumeshape = "Sphere";
 		pointSource.energysize = 1;
 		pointSource.energyunit = "eV";
 		pointSource.energykind = "B+";
+        pointSource.halfX = 1;
+        pointSource.halfY = 1;
+        pointSource.halfZ = 1;
+        pointSource.innerradius = 1;
+        pointSource.outerradius = 1;
 
 		editor.execute( new AddObjectCommand( editor, pointSource ) );
 

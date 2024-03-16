@@ -78,7 +78,7 @@ function Strings( config ) {
 			'menubar/add/ahyperboloid': 'Hyperboloid',
 			'menubar/add/polyhedra': 'Polyhedra',
 
-			'menubar/add/pointsource' : 'PointSource',
+			'menubar/add/source' : 'Source',
 
 
 			'menubar/status/autosave': 'autosave',
@@ -122,6 +122,7 @@ function Strings( config ) {
 			'sidebar/object/new': 'New',
 			'sidebar/object/uuid': 'UUID',
 			'sidebar/object/name': 'Name',
+			'sidebar/object/shape': 'Shape',
 			'sidebar/object/position': 'Position',
 			'sidebar/object/rotation': 'Rotation',
 			'sidebar/object/scale': 'Scale',
@@ -152,6 +153,11 @@ function Strings( config ) {
 			'sidebar/object/kind': 'Particle',
 			'sidebar/object/unit': 'Unit',
 			'sidebar/object/size': 'Energy',
+			'sidebar/object/halfx': 'Half X',
+			'sidebar/object/halfy': 'Half Y',
+			'sidebar/object/halfz': 'Half Z',
+			'sidebar/object/inradius': 'Inner Radius',
+			'sidebar/object/outradius': 'Outer Radius',
 
 			'sidebar/geometry/type': 'Type',
 			'sidebar/geometry/new': 'New',

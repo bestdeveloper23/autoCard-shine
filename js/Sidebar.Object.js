@@ -94,6 +94,23 @@ function SidebarObject( editor ) {
 
 	container.add( objectUUIDRow );
 
+	// type
+
+	const sourceTypeRow = new UIRow();
+	const sourceType = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const sourcetypeoption = [];
+	SOURCE.type.forEach(element => {
+		sourcetypeoption.push(element);
+	});
+
+	sourceType.setOptions(sourcetypeoption);
+	sourceType.setValue(0);
+
+	sourceTypeRow.add(new UIText(strings.getKey('sidebar/object/type')).setWidth('90px'));
+	sourceTypeRow.add(sourceType);
+
+	container.add(sourceTypeRow);
+
 	// name
 
 	const objectNameRow = new UIRow();
@@ -108,16 +125,53 @@ function SidebarObject( editor ) {
 
 	container.add( objectNameRow );
 
-	// Source type
+	// Source Shape
+
+	const planesourceShapeRow = new UIRow();
+	const planesourceShape = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const planeshapeoption = [];
+	SOURCE.shape.plane.forEach(element => {
+		planeshapeoption.push(element);
+	});
+
+	planesourceShape.setOptions(planeshapeoption);
+	planesourceShape.setValue(0);
+
+	planesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
+	planesourceShapeRow.add(planesourceShape);
+	planesourceShapeRow.setDisplay( 'none' );
+
+	container.add(planesourceShapeRow);
+
+	// Source Shape
+
+	const volumesourceShapeRow = new UIRow();
+	const volumesourceShape = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const volumeshapeoption = [];
+	SOURCE.shape.volume.forEach(element => {
+		volumeshapeoption.push(element);
+	});
+
+	volumesourceShape.setOptions(volumeshapeoption);
+	volumesourceShape.setValue(0);
+
+	volumesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
+	volumesourceShapeRow.add(volumesourceShape);
+	volumesourceShapeRow.setDisplay( 'none' );
+
+	container.add(volumesourceShapeRow);
+	
+
+	// particle type
 
 	const energyKindRow = new UIRow();
 	const energykind = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
-	const options = [];
-	SOURCE.type.forEach(element => {
-		options.push(element);
+	const energyoptions = [];
+	SOURCE.particle.forEach(element => {
+		energyoptions.push(element);
 	});
 
-	energykind.setOptions(options);
+	energykind.setOptions(energyoptions);
 	energykind.setValue(0);
 
 	energyKindRow.add(new UIText(strings.getKey('sidebar/object/kind')).setWidth('90px'));
@@ -148,6 +202,56 @@ function SidebarObject( editor ) {
 	energyRow.add(energyunit);
 
 	container.add(energyRow);
+
+	
+	// HalfX
+
+	const sourceXRow = new UIRow();
+	sourceXRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+
+	const sourceX = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	sourceXRow.add(sourceX);
+	container.add(sourceXRow);
+
+
+	// HalfY
+
+	const sourceYRow = new UIRow();
+	sourceYRow.add(new UIText(strings.getKey('sidebar/object/halfy')).setWidth('120px'));
+
+	const sourceY = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	sourceYRow.add(sourceY);
+	container.add(sourceYRow);
+
+
+	// HalfZ
+
+	const sourceZRow = new UIRow();
+	sourceZRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+
+	const sourceZ = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	sourceZRow.add(sourceZ);
+	container.add(sourceZRow);
+
+
+	// InnerRadius
+
+	const sourceInRadiusRow = new UIRow();
+	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+
+	const sourceInRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	sourceInRadiusRow.add(sourceInRadius);
+	container.add(sourceInRadiusRow);
+
+
+	// OuterRadius
+
+	const sourceOuterRadiusRow = new UIRow();
+	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+
+	const sourceOuterRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	sourceOuterRadiusRow.add(sourceOuterRadius);
+	container.add(sourceOuterRadiusRow);
 
 
 	// position
@@ -439,11 +543,42 @@ function SidebarObject( editor ) {
 
 		if ( object !== null ) {
 
+			const newsourcename = sourceType.getValue();			
+			if ( newsourcename == 1 ) {
+				planesourceShapeRow.setDisplay( 'flex' );
+				volumesourceShapeRow.setDisplay( 'none' );
+			} else if ( newsourcename == 3 || newsourcename == 4 ) {
+				planesourceShapeRow.setDisplay( 'none' );
+				volumesourceShapeRow.setDisplay( 'flex' );
+			} else {
+				planesourceShapeRow.setDisplay( 'none' );
+				volumesourceShapeRow.setDisplay( 'none' );
+			}
+
+			if( object.source !== undefined ) {
+
+				object.source = SOURCE.type[newsourcename];
+				
+			}
+
+			const newplaneshape = planesourceShape.getValue();
+			if( object.planeshape !== undefined ) {
+
+				object.planeshape = SOURCE.shape.plane[newplaneshape];
+				
+			}
+
+			const newvolumeshape = volumesourceShape.getValue();
+			if( object.energy !== undefined ) {
+
+				object.planeshape = SOURCE.shape.volume[newvolumeshape];
+				
+			}
 
 			const newKind = energykind.getValue();
 			if( object.energy !== undefined ) {
 
-				object.energykind = SOURCE.type[newKind];
+				object.energykind = SOURCE.particle[newKind];
 				
 			}
 
@@ -458,6 +593,41 @@ function SidebarObject( editor ) {
 			if( object.energy !== undefined ) {
 
 				object.energyunit = SOURCE.unit[newUnit];
+				
+			}
+
+			const newHalfX = sourceX.getValue();
+			if( object.halfX !== undefined ) {
+
+				object.halfX = newHalfX;
+				
+			}
+
+			const newHalfY = sourceY.getValue();
+			if( object.halfY !== undefined ) {
+
+				object.halfY = newHalfY;
+				
+			}
+
+			const newHalfZ = sourceX.getValue();
+			if( object.halfZ !== undefined ) {
+
+				object.halfZ = newHalfZ;
+				
+			}
+
+			const newInRadius = sourceInRadius.getValue();
+			if( object.innerradius !== undefined ) {
+
+				object.innerradius = newInRadius;
+				
+			}
+
+			const newOutRadius = sourceOuterRadius.getValue();
+			if( object.outerradius !== undefined ) {
+
+				object.outerradius = newOutRadius;
 				
 			}
 
@@ -656,9 +826,17 @@ function SidebarObject( editor ) {
 	function updateRows( object ) {
 
 		const properties = {
+			'source': sourceTypeRow,
+			'planeshape': planesourceShapeRow,
+			'volumeshape': volumesourceShapeRow,
 			'energykind': energyKindRow,
 			'energysize': energyRow,
 			'energyunit': energyRow,
+			'halfX': sourceXRow,
+			'halfY': sourceYRow,
+			'halfZ': sourceZRow,
+			'innerradius': sourceInRadiusRow,
+			'outerradius': sourceOuterRadiusRow,
 			'fov': objectFovRow,
 			'left': objectLeftRow,
 			'right': objectRightRow,
@@ -699,6 +877,24 @@ function SidebarObject( editor ) {
 		}
 
 		//
+
+		if ( object.source !== undefined ) {
+			objectNameRow.setDisplay( 'none' );
+		}
+
+		if ( object.type === 'Plane' ) {
+			planesourceShapeRow.setDisplay( 'flex' );
+			objectTypeRow.setDisplay( 'none' );
+		} else if ( object.type === 'Shape' || object.type === 'Volume' ) {
+			volumesourceShapeRow.setDisplay( 'flex' );
+			objectTypeRow.setDisplay( 'none' );
+		} else if( object.type === 'Point' || object.type === 'Beam' ) {
+			planesourceShapeRow.setDisplay( 'none' );
+			volumesourceShapeRow.setDisplay( 'none' );
+			objectTypeRow.setDisplay( 'none' );
+		} else {
+			objectTypeRow.setDisplay( 'flex' );
+		}
 
 		if ( object.isLight ) {
 
@@ -772,6 +968,67 @@ function SidebarObject( editor ) {
 
 		objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );
+
+		console.log(SOURCE.type.indexOf(object.source), "SOURCETYPE")
+
+		if( object.source !== undefined ) {
+			sourceType.setValue( SOURCE.type.indexOf(object.source) );	
+		}
+		
+		if( object.planeshape !== undefined ) {
+			planesourceShape.setValue( SOURCE.shape.plane.indexOf(object.planeshape) );
+		}
+
+		if( object.volumeshape !== undefined ) {
+			volumesourceShape.setValue( SOURCE.shape.volume.indexOf(object.volumeshape) );
+		}
+
+		if( object.energysize !== undefined ) {
+			energysize.setValue( object.energysize );
+		}
+
+		if( object.energyunit !== undefined ) {
+			energyunit.setValue( object.energyunit );
+		}
+		
+		if( object.energykind !== undefined ) {
+			energyunit.setValue( SOURCE.unit.indexOf(object.energykind) );
+		}
+		
+		if( object.halfX !== undefined ) {
+			sourceX.setValue( object.halfX );
+		}
+		
+		if( object.halfY !== undefined ) {
+			sourceY.setValue( object.halfY );
+		}
+			
+		if( object.halfZ !== undefined ) {
+			sourceZ.setValue( object.halfZ );
+		}
+			
+		if( object.innerradius !== undefined ) {
+			sourceInRadius.setValue( object.innerradius );
+		}
+			
+		if( object.outerradius !== undefined ) {
+			sourceOuterRadius.setValue( object.outerradius );
+		}
+
+		const newsourcename = sourceType.getValue();
+		if( object.energy !== undefined ) {
+
+			object.planeshape = SOURCE.type[newsourcename];
+			
+		}
+		if ( newsourcename == 1 ) {
+			planesourceShapeRow.setDisplay( 'flex' );
+		} else if ( newsourcename == 3 || newsourcename == 4 ) {
+			volumesourceShapeRow.setDisplay( 'flex' );
+		} else {
+			planesourceShapeRow.setDisplay( 'none' );
+			volumesourceShapeRow.setDisplay( 'none' );
+		}
 
 		objectPositionX.setValue( object.position.x );
 		objectPositionY.setValue( object.position.y );
