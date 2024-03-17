@@ -227,7 +227,7 @@ function SidebarObject( editor ) {
 	// HalfZ
 
 	const sourceZRow = new UIRow();
-	sourceZRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+	sourceZRow.add(new UIText(strings.getKey('sidebar/object/halfz')).setWidth('120px'));
 
 	const sourceZ = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
 	sourceZRow.add(sourceZ);
@@ -237,7 +237,7 @@ function SidebarObject( editor ) {
 	// InnerRadius
 
 	const sourceInRadiusRow = new UIRow();
-	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/object/inradius')).setWidth('120px'));
 
 	const sourceInRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
 	sourceInRadiusRow.add(sourceInRadius);
@@ -247,7 +247,7 @@ function SidebarObject( editor ) {
 	// OuterRadius
 
 	const sourceOuterRadiusRow = new UIRow();
-	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/object/outradius')).setWidth('120px'));
 
 	const sourceOuterRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
 	sourceOuterRadiusRow.add(sourceOuterRadius);
@@ -880,15 +880,31 @@ function SidebarObject( editor ) {
 
 		if ( object.source !== undefined ) {
 			objectNameRow.setDisplay( 'none' );
+			objectUUIDRow.setDisplay( 'none' );
+			objectTypeRow.setDisplay( 'none' );
+		}
+		if ( object.name === "RadiatinSource" ) {
+			objectTypeRow.setDisplay( 'none' );
+			object.source = "Point";
+			object.planeshape = "Circle";
+			object.volumeshape = "Sphere";
+			object.energysize = 1;
+			object.energyunit = "eV";
+			object.energykind = "B+";
+			object.halfX = 1;
+			object.halfY = 1;
+			object.halfZ = 1;
+			object.innerradius = 1;
+			object.outerradius = 1;
 		}
 
-		if ( object.type === 'Plane' ) {
+		if ( object.source === 'Plane' ) {
 			planesourceShapeRow.setDisplay( 'flex' );
 			objectTypeRow.setDisplay( 'none' );
-		} else if ( object.type === 'Shape' || object.type === 'Volume' ) {
+		} else if ( object.source === 'Shape' || object.source === 'Volume' ) {
 			volumesourceShapeRow.setDisplay( 'flex' );
 			objectTypeRow.setDisplay( 'none' );
-		} else if( object.type === 'Point' || object.type === 'Beam' ) {
+		} else if( object.source === 'Point' || object.source === 'Beam' ) {
 			planesourceShapeRow.setDisplay( 'none' );
 			volumesourceShapeRow.setDisplay( 'none' );
 			objectTypeRow.setDisplay( 'none' );
@@ -968,8 +984,6 @@ function SidebarObject( editor ) {
 
 		objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );
-
-		console.log(SOURCE.type.indexOf(object.source), "SOURCETYPE")
 
 		if( object.source !== undefined ) {
 			sourceType.setValue( SOURCE.type.indexOf(object.source) );	
