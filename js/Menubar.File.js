@@ -58,10 +58,8 @@ function MenubarFile( editor ) {
 		let fileExtension = fileName.split('.').pop().toLowerCase(); // Extract file extension
 		let url = URL.createObjectURL(file);
 		if (fileExtension === 'gdml') {
-			console.log("GDML file input", file);
 			var gdmlLoader = new GDMLLoader();
 			gdmlLoader.load(url, function(objects) {
-				console.log("objects",editor.scene, objects);
 				const bbox = new THREE.Box3().setFromObject(objects);
 
 				// Determine the size you want the model to fit in

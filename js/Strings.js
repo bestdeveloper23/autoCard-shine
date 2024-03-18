@@ -93,6 +93,11 @@ function Strings( config ) {
 			'menubar/examples/Particles': 'Particles',
 			'menubar/examples/Pong': 'Pong',
 			'menubar/examples/Shaders': 'Shaders',
+			'menubar/examples/kidney': 'Kidney',
+			'menubar/examples/monkey': 'Monkey',
+			'menubar/examples/brain': 'Brain',
+			'menubar/examples/skull': 'Skull',
+
 
 			'menubar/view': 'View',
 			'menubar/view/fullscreen': 'Fullscreen',

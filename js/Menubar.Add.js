@@ -449,7 +449,7 @@ function MenubarAdd( editor ) {
 
 	option = new UIRow();
 	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/add/pointsource' ) );
+	option.setTextContent( strings.getKey( 'menubar/add/source' ) );
 	option.onClick( function () {
 
 		const pointSource = new THREE.PerspectiveCamera();
