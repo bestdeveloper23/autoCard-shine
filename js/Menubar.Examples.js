@@ -27,9 +27,14 @@ function MenubarExamples( editor ) {
 		{ title: 'menubar/examples/monkey', file: 'monkey.stl' },
 		{ title: 'menubar/examples/brain', file: 'brain.glb' },
 		{ title: 'menubar/examples/skull', file: 'skull.glb' },
+		{ title: 'menubar/examples/Arkanoid', file: 'arkanoid.app.json' },
+		{ title: 'menubar/examples/Camera', file: 'camera.app.json' },
+		{ title: 'menubar/examples/Particles', file: 'particles.app.json' },
+		{ title: 'menubar/examples/Pong', file: 'pong.app.json' },
+		{ title: 'menubar/examples/Shaders', file: 'shaders.app.json' }
 	];
 
-	const objLoader = new THREE.FileLoader
+	const loader = new THREE.FileLoader
 	const stlLoader = new STLLoader();
 	const gltfLoader = new GLTFLoader();
 
@@ -47,7 +52,7 @@ function MenubarExamples( editor ) {
 			const itemName = strings.getKey( item.title );
 
 			option.onClick( function () {
-
+				if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
 
 					if(fileFormat === 'obj') {
 						objLoader.load('examples/' + item.file, function (object) {
@@ -121,15 +126,15 @@ function MenubarExamples( editor ) {
 							editor.scene.add( gltf.scene );
 							console.log("GLB Model added to scene", gltf.scene, editor.scene)
 						});
+					} else if (fileFormat === 'json') {
+						loader.load( 'examples/' + item.file, function ( text ) {
+
+							editor.clear();
+							editor.fromJSON( JSON.parse( text ) );
+	
+						} );
 					}
-					// loader.load( 'examples/' + item.file, function ( text ) {
-
-					// 	editor.clear();
-					// 	editor.fromJSON( JSON.parse( text ) );
-
-					// } );
-
-
+				}
 			} );
 			options.add( option );
 
