@@ -276,7 +276,11 @@ const assets = [
   '/examples/camera.app.json',
   '/examples/particles.app.json',
   '/examples/pong.app.json',
-  '/examples/shaders.app.json'
+  '/examples/shaders.app.json',
+  '/examples/kidney.stl',
+  '/examples/monkey.stl',
+  '/examples/skull.glb',
+  '/examples/brain.glb'
 ];
 
 self.addEventListener( 'install', async function () {
