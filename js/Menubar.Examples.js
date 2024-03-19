@@ -4,6 +4,11 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { UIPanel, UIRow } from './libs/ui.js';
 
+import monkeyUrl from '/examples/monkey.stl';
+import kidneyUrl from '/examples/kidney.stl';
+import skullUrl from '/examples/skull.glb';
+import brainUrl from '/examples/brain.glb';
+
 function MenubarExamples( editor ) {
 
 	const strings = editor.strings;
@@ -38,109 +43,136 @@ function MenubarExamples( editor ) {
 	const stlLoader = new STLLoader();
 	const gltfLoader = new GLTFLoader();
 
-	for ( let i = 0; i < items.length; i ++ ) {
+	const optionKidney = new UIRow();
+	optionKidney.setClass( 'option' );
+	optionKidney.setTextContent( strings.getKey( items[0].title ) );
+	optionKidney.onClick( function () {
+		stlLoader.load(kidneyUrl, function (geometry) {
+			const material = new THREE.MeshNormalMaterial();
+			const mesh = new THREE.Mesh(geometry, material);
+			
+			mesh.position.set(0, 0, 0); // Set to (0, 0, 0) for center anchor
+			mesh.updateMatrixWorld(); // Ensure the scene's matrix is up-to-date
+			const bbox = new THREE.Box3().setFromObject(mesh);
 
-		( function ( i ) {
+			const center = bbox.getCenter(new THREE.Vector3());
+			mesh.geometry.center(); // Set the geometry's center
 
-			const item = items[ i ];
-			const fileFormat = item.file.split('.').pop();
-			console.log(fileFormat);
-			const option = new UIRow();
-			option.setClass( 'option' );
-			option.setTextContent( strings.getKey( item.title ) );
-
-			const itemName = strings.getKey( item.title );
-
-			option.onClick( function () {
-				if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
-
-					if(fileFormat === 'obj') {
-						objLoader.load('examples/' + item.file, function (object) {
-							const bbox = new THREE.Box3().setFromObject(object);
-
-							// Determine the size you want the model to fit in
-							const desiredSize = 5; // Example: Make the longest side 5 units long
-						
-							// Calculate the model's current size
-							const size = new THREE.Vector3();
-							bbox.getSize(size);
-						
-							// Determine the scale factor
-							const maxDimension = Math.max(size.x, size.y, size.z);
-							const scaleFactor = desiredSize / maxDimension;
-						
-							// Scale the model
-							object.scale.set(scaleFactor, scaleFactor, scaleFactor);
-							object.name = itemName;
-							editor.scene.add( object );
-							console.log("Obj Model added to scene", object, editor.scene)
-						});
-						
-					} else if (fileFormat === 'stl') {
-						stlLoader.load('examples/' + item.file, function (geometry) {
-							const material = new THREE.MeshNormalMaterial();
-							const mesh = new THREE.Mesh(geometry, material);
-							
-							mesh.position.set(0, 0, 0); // Set to (0, 0, 0) for center anchor
-							mesh.updateMatrixWorld(); // Ensure the scene's matrix is up-to-date
-							const bbox = new THREE.Box3().setFromObject(mesh);
-
-							const center = bbox.getCenter(new THREE.Vector3());
-							mesh.geometry.center(); // Set the geometry's center
-
-							// Determine the size you want the model to fit in
-							const desiredSize = 5; // Example: Make the longest side 5 units long
-						
-							// Calculate the model's current size
-							const size = new THREE.Vector3();
-							bbox.getSize(size);
-						
-							// Determine the scale factor
-							const maxDimension = Math.max(size.x, size.y, size.z);
-							const scaleFactor = desiredSize / maxDimension;
-						
-							// Scale the model
-							mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-							mesh.name = itemName;
-							editor.scene.add( mesh );
-							console.log("STL Model added to scene", mesh, editor.scene)
-						});
-					} else if (fileFormat === 'glb' || fileFormat === 'gltf') {
-						gltfLoader.load('examples/' + item.file, function (gltf) {
-							const bbox = new THREE.Box3().setFromObject(gltf.scene);
-
-							// Determine the size you want the model to fit in
-							const desiredSize = 5; // Example: Make the longest side 5 units long
-						
-							// Calculate the model's current size
-							const size = new THREE.Vector3();
-							bbox.getSize(size);
-						
-							// Determine the scale factor
-							const maxDimension = Math.max(size.x, size.y, size.z);
-							const scaleFactor = desiredSize / maxDimension;
-						
-							// Scale the model
-							gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-							gltf.scene.name = itemName;
-							editor.scene.add( gltf.scene );
-							console.log("GLB Model added to scene", gltf.scene, editor.scene)
-						});
-					} else if (fileFormat === 'json') {
-						loader.load( 'examples/' + item.file, function ( text ) {
-
-							editor.clear();
-							editor.fromJSON( JSON.parse( text ) );
+			// Determine the size you want the model to fit in
+			const desiredSize = 5; // Example: Make the longest side 5 units long
+		
+			// Calculate the model's current size
+			const size = new THREE.Vector3();
+			bbox.getSize(size);
+		
+			// Determine the scale factor
+			const maxDimension = Math.max(size.x, size.y, size.z);
+			const scaleFactor = desiredSize / maxDimension;
+		
+			// Scale the model
+			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
+			mesh.name = itemName;
+			editor.scene.add( mesh );
+			console.log("Kidney Model added to scene", mesh, editor.scene)
+		});
+	})
 	
-						} );
-					}
-				}
-			} );
-			options.add( option );
+	options.add( optionKidney );
 
-		} )( i );
+	
+	const optionMonkey = new UIRow();
+	optionMonkey.setClass( 'option' );
+	optionMonkey.setTextContent( strings.getKey( items[1].title ) );
+	optionMonkey.onClick( function () {
+		stlLoader.load(monkeyUrl, function (geometry) {
+			const material = new THREE.MeshNormalMaterial();
+			const mesh = new THREE.Mesh(geometry, material);
+			
+			mesh.position.set(0, 0, 0); // Set to (0, 0, 0) for center anchor
+			mesh.updateMatrixWorld(); // Ensure the scene's matrix is up-to-date
+			const bbox = new THREE.Box3().setFromObject(mesh);
 
-	}
+			const center = bbox.getCenter(new THREE.Vector3());
+			mesh.geometry.center(); // Set the geometry's center
+
+			// Determine the size you want the model to fit in
+			const desiredSize = 5; // Example: Make the longest side 5 units long
+		
+			// Calculate the model's current size
+			const size = new THREE.Vector3();
+			bbox.getSize(size);
+		
+			// Determine the scale factor
+			const maxDimension = Math.max(size.x, size.y, size.z);
+			const scaleFactor = desiredSize / maxDimension;
+		
+			// Scale the model
+			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
+			mesh.name = itemName;
+			editor.scene.add( mesh );
+			console.log("Monkey Model added to scene", mesh, editor.scene)
+		});
+	})
+	
+	options.add( optionMonkey );
+
+	
+	const optionBrain = new UIRow();
+	optionBrain.setClass( 'option' );
+	optionBrain.setTextContent( strings.getKey( items[2].title ) );
+	optionBrain.onClick( function () {
+		gltfLoader.load(brainUrl, function (gltf) {
+			const bbox = new THREE.Box3().setFromObject(gltf.scene);
+
+			// Determine the size you want the model to fit in
+			const desiredSize = 5; // Example: Make the longest side 5 units long
+		
+			// Calculate the model's current size
+			const size = new THREE.Vector3();
+			bbox.getSize(size);
+		
+			// Determine the scale factor
+			const maxDimension = Math.max(size.x, size.y, size.z);
+			const scaleFactor = desiredSize / maxDimension;
+		
+			// Scale the model
+			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+			gltf.scene.name = itemName;
+			editor.scene.add( gltf.scene );
+			console.log("Brain Model added to scene", gltf.scene, editor.scene)
+		});
+	})
+	
+	options.add( optionBrain );
+
+		
+	const optionSkull = new UIRow();
+	optionSkull.setClass( 'option' );
+	optionSkull.setTextContent( strings.getKey( items[3].title ) );
+	optionSkull.onClick( function () {
+		gltfLoader.load(brainUrl, function (gltf) {
+			const bbox = new THREE.Box3().setFromObject(gltf.scene);
+
+			// Determine the size you want the model to fit in
+			const desiredSize = 5; // Example: Make the longest side 5 units long
+		
+			// Calculate the model's current size
+			const size = new THREE.Vector3();
+			bbox.getSize(size);
+		
+			// Determine the scale factor
+			const maxDimension = Math.max(size.x, size.y, size.z);
+			const scaleFactor = desiredSize / maxDimension;
+		
+			// Scale the model
+			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
+			gltf.scene.name = itemName;
+			editor.scene.add( gltf.scene );
+			console.log("Skull Model added to scene", gltf.scene, editor.scene)
+		});
+	})
+	
+	options.add( optionSkull );
 
 	return container;
 
