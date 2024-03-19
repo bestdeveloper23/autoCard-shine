@@ -13,6 +13,8 @@ function MenubarExamples( editor ) {
 
 	const strings = editor.strings;
 
+	const signals = editor.signals;
+
 	const container = new UIPanel();
 	container.setClass( 'menu' );
 
@@ -73,6 +75,7 @@ function MenubarExamples( editor ) {
 			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 			mesh.name = strings.getKey( items[0].title );
 			editor.scene.add( mesh );
+			signals.sceneGraphChanged.dispatch();
 			console.log("Kidney Model added to scene", mesh, editor.scene)
 		});
 	})
@@ -110,6 +113,7 @@ function MenubarExamples( editor ) {
 			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 			mesh.name = strings.getKey( items[1].title);
 			editor.scene.add( mesh );
+			signals.sceneGraphChanged.dispatch();
 			console.log("Monkey Model added to scene", mesh, editor.scene)
 		});
 	})
@@ -139,6 +143,7 @@ function MenubarExamples( editor ) {
 			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
 			gltf.scene.name = strings.getKey( items[2].title );
 			editor.scene.add( gltf.scene );
+			signals.sceneGraphChanged.dispatch();
 			console.log("Brain Model added to scene", gltf.scene, editor.scene)
 		});
 	})
@@ -150,7 +155,7 @@ function MenubarExamples( editor ) {
 	optionSkull.setClass( 'option' );
 	optionSkull.setTextContent( strings.getKey( items[3].title ) );
 	optionSkull.onClick( function () {
-		gltfLoader.load(brainUrl, function (gltf) {
+		gltfLoader.load(skullUrl, function (gltf) {
 			const bbox = new THREE.Box3().setFromObject(gltf.scene);
 
 			// Determine the size you want the model to fit in
@@ -168,6 +173,7 @@ function MenubarExamples( editor ) {
 			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
 			gltf.scene.name = strings.getKey( items[3].title );
 			editor.scene.add( gltf.scene );
+			signals.sceneGraphChanged.dispatch();
 			console.log("Skull Model added to scene", gltf.scene, editor.scene)
 		});
 	})
