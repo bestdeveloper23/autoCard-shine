@@ -71,7 +71,7 @@ function MenubarExamples( editor ) {
 		
 			// Scale the model
 			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-			mesh.name = itemName;
+			mesh.name = strings.getKey( items[0].title );
 			editor.scene.add( mesh );
 			console.log("Kidney Model added to scene", mesh, editor.scene)
 		});
@@ -108,7 +108,7 @@ function MenubarExamples( editor ) {
 		
 			// Scale the model
 			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
-			mesh.name = itemName;
+			mesh.name = strings.getKey( items[1].title);
 			editor.scene.add( mesh );
 			console.log("Monkey Model added to scene", mesh, editor.scene)
 		});
@@ -137,7 +137,7 @@ function MenubarExamples( editor ) {
 		
 			// Scale the model
 			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-			gltf.scene.name = itemName;
+			gltf.scene.name = strings.getKey( items[2].title );
 			editor.scene.add( gltf.scene );
 			console.log("Brain Model added to scene", gltf.scene, editor.scene)
 		});
@@ -166,7 +166,7 @@ function MenubarExamples( editor ) {
 		
 			// Scale the model
 			gltf.scene.scale.set(scaleFactor, scaleFactor, scaleFactor);
-			gltf.scene.name = itemName;
+			gltf.scene.name = strings.getKey( items[3].title );
 			editor.scene.add( gltf.scene );
 			console.log("Skull Model added to scene", gltf.scene, editor.scene)
 		});
