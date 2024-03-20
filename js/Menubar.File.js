@@ -102,6 +102,37 @@ function MenubarFile( editor ) {
 
 	// Export Geometry
 
+		// Export DRC
+
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/file/export/geant4' ) );
+	option.onClick( async function () {
+
+		const object = editor.selected;
+
+		console.log(object)
+		var txt = `:volu world BOX 10. 10. 10. G4_AIR\n\n`;
+
+		if ( object !== null && object.isMesh != undefined ) {
+			switch (object.name) {
+				case "Box":
+					txt += `:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
+					txt += `:volu mybox box ${object.material.name.elementType}\n`
+					txt += `:place mybox 1 world r000 ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					break;
+				default:
+					break;
+			}
+		}
+
+		// TODO: Change to DRACOExporter's parse( geometry, onParse )?
+		downloadGeant4File( txt, 'box.gt')
+
+	} );
+	options.add( option );
+	
+
 	option = new UIRow();
 	option.setClass( 'option' );
 	option.setTextContent( strings.getKey( 'menubar/file/export/geometry' ) );
@@ -510,6 +541,18 @@ function MenubarFile( editor ) {
 
 		save( new Blob( [ buffer ], { type: 'application/octet-stream' } ), filename );
 
+	}
+
+	function downloadGeant4File(text, filename) {
+		const blob = new Blob([text], { type: 'text/plain' });
+		const url = URL.createObjectURL(blob);
+		
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+		a.click();
+	
+		URL.revokeObjectURL(url); // release the Blob URL
 	}
 
 	function saveString( text, filename ) {
