@@ -113,12 +113,13 @@ function MenubarFile( editor ) {
 
 		console.log(object)
 		var txt = `:volu world BOX 10. 10. 10. G4_AIR\n\n`;
+		txt += `:rotm r000 ${object.rotation.x} ${object.rotation.y} ${object.rotation.z}\n\n`;
 
 		if ( object !== null && object.isMesh != undefined ) {
 			switch (object.name) {
 				case "Box":
 					txt += `:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
-					txt += `:volu mybox box ${object.material.name.elementType}\n`
+					txt += `:volu mybox box ${object.material.name.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x} ${object.position.y} ${object.position.z}\n`
 					break;
 				default:
