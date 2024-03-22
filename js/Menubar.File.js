@@ -100,9 +100,7 @@ function MenubarFile( editor ) {
 
 	options.add( new UIHorizontalRule() );
 
-	// Export Geometry
-
-		// Export DRC
+	// Export GT
 
 	option = new UIRow();
 	option.setClass( 'option' );
@@ -137,7 +135,64 @@ function MenubarFile( editor ) {
 
 	} );
 	options.add( option );
+
+	// Export GDML
 	
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/file/export/gdml' ) );
+	option.onClick( async function () {
+
+		const object = editor.selected;
+		
+		const rotated = object.rotation;
+		const rotateX = rotated.x * 180 / Math.PI;
+		const rotateY = rotated.y * 180 / Math.PI;
+		const rotateZ = rotated.z * 180 / Math.PI;
+
+		let gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+		gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+		gdml += `  <define>\n`;
+		gdml += `    <materials>\n`;
+		gdml += `      <material name="Air" state="gas">\n`;
+		gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+		gdml += `        <composite n="1">\n`;
+		gdml += `          <fraction ref="N" n="0.7"/>\n`;
+		gdml += `          <fraction ref="O" n="0.3"/>\n`;
+		gdml += `        </composite>\n`;
+		gdml += `        <T value="293.15" unit="K"/>\n`;
+		gdml += `      </material>\n`;
+		gdml += `    </materials>\n`;
+		gdml += `    <solids>\n`;
+		gdml += `      <box name="boxSolid" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.depth}" z="${object.geometry.parameters.height}" lunit="m"/>\n`; // Adjust size as needed
+		gdml += `    </solids>\n`;
+		gdml += `  </define>\n`;
+		gdml += `  <structure>\n`;
+		gdml += `    <volume name="world">\n`;
+		gdml += `      <materialref ref="Air"/>\n`;
+		gdml += `      <solidref ref="boxSolid"/>\n`;
+		gdml += `      <physvol>\n`;
+		gdml += `        <volumeref ref="boxVolume"/>\n`;
+		gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+		gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+		gdml += `      </physvol>\n`;
+		gdml += `    </volume>\n`;
+		gdml += `    <volume name="boxVolume">\n`;
+		gdml += `      <materialref ref="Air"/>\n`;
+		gdml += `      <solidref ref="boxSolid"/>\n`;
+		gdml += `    </volume>\n`;
+		gdml += `  </structure>\n`;
+		gdml += `  <setup>\n`;
+		gdml += `    <world ref="world"/>\n`;
+		gdml += `  </setup>\n`;
+		gdml += `</gdml>\n`;
+		
+		downloadGeant4File( gdml, 'box.gdml')
+
+	} );
+	options.add( option );
+	
+	// Export Geometry	
 
 	option = new UIRow();
 	option.setClass( 'option' );
