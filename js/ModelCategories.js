@@ -563,7 +563,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aCutTubeGeometry';
         finalMesh.updateMatrix();
-        finalMesh.name = 'Tubs';
+        finalMesh.name = 'CTubs';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -830,7 +830,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aConeGeometry';
         finalMesh.updateMatrix();
-        finalMesh.name = 'Tubs';
+        finalMesh.name = 'Cone';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 

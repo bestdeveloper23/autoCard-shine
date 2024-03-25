@@ -11,6 +11,7 @@ function Strings( config ) {
 			'menubar/file/import': 'Import',
 			'menubar/file/export/geant4': 'Export Geant4',
 			'menubar/file/export/gdml': 'Export GDML',
+			'menubar/file/export/mac': 'Export Macro',
 			'menubar/file/export/geometry': 'Export Geometry',
 			'menubar/file/export/object': 'Export Object',
 			'menubar/file/export/scene': 'Export Scene',

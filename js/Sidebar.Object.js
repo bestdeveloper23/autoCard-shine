@@ -901,7 +901,7 @@ function SidebarObject( editor ) {
 		if ( object.source === 'Plane' ) {
 			planesourceShapeRow.setDisplay( 'flex' );
 			objectTypeRow.setDisplay( 'none' );
-		} else if ( object.source === 'Shape' || object.source === 'Volume' ) {
+		} else if ( object.source === 'Surface' || object.source === 'Volume' ) {
 			volumesourceShapeRow.setDisplay( 'flex' );
 			objectTypeRow.setDisplay( 'none' );
 		} else if( object.source === 'Point' || object.source === 'Beam' ) {

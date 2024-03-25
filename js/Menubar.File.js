@@ -121,11 +121,77 @@ function MenubarFile( editor ) {
 		if ( object !== null && object.isMesh != undefined ) {
 			switch (object.name) {
 				case "Box":
+
 					txt += `:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
 					txt += `:volu mybox box ${object.material.name.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					break;
+
+				case "Sphere":
+
+					txt += `:solid mysphere SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
+					txt += `:volu mysphere mysphere ${object.material.name.elementType}\n\n`
+					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "Tubs":
+					
+					txt += `:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `:volu mytub mytub ${object.material.name.elementType}\n\n`
+					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "CTubs":
+
+					txt += `:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.parameters.geometry.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}\n\n`
+					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "Cone":
+
+					txt += `:solid mycone CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `:volu mycone mycone ${object.material.name.elementType}\n\n`
+					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "Parallelepiped":
+
+					txt += `:solid mypara PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
+					txt += `:volu mypara mypara ${object.material.name.elementType}\n\n`
+					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "TrapeZoid":
+					
+					txt += `:solid mytrd TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n\n`
+					txt += `:volu mytrd mytrd ${object.material.name.elementType}\n\n`
+					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n\n`
+					break;
+
+				case "aTrapeZoidP": 
+
+					txt += `:solid mytrdp TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n\n`
+					txt += `:volu mytrdp mytrdp ${object.material.name.elementType}\n\n`
+					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+
+				case "aTorus":
+
+					txt += `:solid mytorus TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
+					txt += `:volu mytorus mytorus ${object.material.name.elementType}\n\n`
+					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+				
+				case "EllipeCylnder":
+
+					txt += `:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n\n`
+					txt += `:volu myellipT myellipT ${object.manager.name.elementType}\n\n`
+					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					break;
+				
 				default:
+
 					break;
 			}
 		}
@@ -192,6 +258,80 @@ function MenubarFile( editor ) {
 	} );
 	options.add( option );
 	
+
+	// Export Macro
+	
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/file/export/mac' ) );
+	option.onClick( async function () {
+
+		console.log(editor.scene)
+		var object = null;
+		editor.scene.traverse( function ( node ) {
+			if(node.name === 'RadiationSource'){
+				object = node;
+			}
+		})
+		
+		// const object = editor.selected;
+
+		if(object) {
+			const position = object.position
+			var sourceShape;
+	
+			switch (object.source) {
+				case 'Point':
+					
+					sourceShape = null;
+					break;
+	
+				case "Plane":
+	
+					sourceShape = object.planeshape;
+					break;
+	
+				case "Beam":
+	
+					sourceShape = null;
+					break;
+	
+				case "Surface":
+	
+					sourceShape = object.volumeshape;
+					break;
+	
+				case "Volume":
+	
+					sourceShape = object.volumeshape;
+					break;
+	
+				default:
+					break;
+			}
+	
+			let macro = `# Macro test2.g4mac`;
+			macro += `/gps/particle ${object.energykind}\n`
+			macro += `/gps/energy ${object.energysize}\n`
+			macro += `/gps/pos/centre ${position.x} ${position.y} ${position.z} m\n`
+			macro += `/gps/pos/type ${object.source}\n`
+			if(sourceShape) macro += `/gps/pos/shape ${sourceShape}\n`
+			macro += `/gps/pos/halfx ${object.halfX}\n`
+			macro += `/gps/pos/halfy ${object.halfY}\n`
+			macro += `/gps/pos/halfz ${object.halfZ}\n`
+			macro += `/gps/pos/inner_radius ${object.innerradius}\n`
+			macro += `/gps/pos/outer_radius ${object.outerradius}\n`
+	
+			downloadGeant4File( macro, 'box.mac')
+	
+		} else {
+			alert( 'The added source could not be found.');
+		}
+		
+	} );
+	options.add( option );
+
+
 	// Export Geometry	
 
 	option = new UIRow();
