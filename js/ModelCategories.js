@@ -729,7 +729,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.type = 'aCutTubeGeometry';
         finalMesh.position.copy(position);
         finalMesh.updateMatrix();
-        finalMesh.name = 'Tubs';
+        finalMesh.name = 'CTubs';
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
@@ -2271,7 +2271,7 @@ function ModelCategory(editor) {
 
         finalMesh.geometry.type = 'aTwistedTrapGeometry';
         finalMesh.updateMatrix();
-        finalMesh.name = 'TwistedTrapeZoid';
+        finalMesh.name = 'TwistedTrapeZoidP';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -2356,7 +2356,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.type = 'aTwistedTrapGeometry';
         finalMesh.position.copy(position);
         finalMesh.updateMatrix();
-        finalMesh.name = 'TwistedTrapeZoid';
+        finalMesh.name = 'TwistedTrapeZoidP';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
