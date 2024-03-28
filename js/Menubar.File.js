@@ -1488,19 +1488,203 @@ function MenubarFile( editor ) {
 
 	// Export GDML scene
 	
-	// option = new UIRow();
-	// option.setClass( 'option' );
-	// option.setTextContent( strings.getKey( 'menubar/file/export/gdml_scene' ) );
-	// option.onClick( async function () {
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/file/export/gdml_scene' ) );
+	option.onClick( async function () {
 
-	// 	const roomSize = 10;
-	// 	var sceneText = '';
-	// 	var materialsText = '';
-	// 	var solidsText = '';
-	// 	var 
+		const modelCount = editor.scene.children.length;
+		const roomSize = 10;
+		var sceneText = '';
 
-	// } );
-	// options.add( option );
+		var defineTexts = '';
+
+		var positionText = '';
+
+		var rotationText = '';
+
+		var materialsText = `    <materials>\n`;
+		materialsText += `      <material name="Air" state="gas">\n`;
+		materialsText += `        <D value="0.001205" unit="g/cm3"/>\n`;
+		materialsText += `        <composite n="1">\n`;
+		materialsText += `          <fraction ref="N" n="0.7"/>\n`;
+		materialsText += `          <fraction ref="O" n="0.3"/>\n`;
+		materialsText += `        </composite>\n`;
+		materialsText += `        <T value="293.15" unit="K"/>\n`;
+		materialsText += `      </material>\n`;
+
+		var solidsText = '';
+		solidsText += '    <solids/>\n';
+		solidsText += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}"/>\n`;
+
+		var structureText = '';
+
+		var volumesText = '';
+
+		var physvolsText = '';
+		physvolsText += `    <volume name="world"/>\n`
+		physvolsText += `      <materialref ref="Air"/>\n`;
+		physvolsText += `      <solidref ref="roomSolid"/>\n`;
+
+		var materialRefArray = [];
+
+		for (let i=0; i<modelCount; i++) {
+			const children = editor.scene.children[i];
+			switch (children.name) {
+				case "Box":
+					
+					break;
+
+				case "Sphere":
+					
+					break;
+
+				case "Tubs":
+					
+					break;
+
+				case "CTubs":
+					
+					break;
+
+				case "Cone":
+					
+					break;
+
+				case "Parallelepiped":
+					
+					break;
+
+				case "TrapeZoid":
+					
+					break;
+
+				case "aTrapeZoidP": 
+					
+					break;
+
+				case "aTorus":
+					
+					break;
+				
+				case "EllipeCylnder":
+					
+					break;
+				
+				case "Ellipsoid":
+					
+					break;
+
+				case "aEllipticalCone":
+					
+					break;
+
+				case "TwistedBox":
+					
+					break;
+
+				case "TwistedTrapeZoid":
+					
+					break;
+
+				case "TwistedTrapeZoidP":
+					
+					break;
+
+				case "TwistedTubs":
+					
+					break;
+
+				case "Tetrahedra":
+					
+					break;
+
+				case "Hyperboloid":
+					
+					break;
+
+				case "Polycone":
+					
+					break;
+
+				case "Polyhedra":
+					
+					break;
+
+				default:
+
+					break;
+			}
+			
+			// Material properties
+			
+			if( children.material && children.material.name ) {
+				if(!materialRefArray.contains(children.material.name.elementType)) {
+					materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
+					materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
+					materialsText += `        <T value="293.15" unit="K"/>\n`;
+					materialsText += `      <material/>\n`;
+	
+					materialRefArray.push(children.material?.name?.elementType);
+				}
+			}
+			// position and rotation properties
+			positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`;
+			rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${object.rotation.x.toFixed(4)}" y="${object.rotation.y.toFixed(4)}" z="${object.rotation.z.toFixed(4)}"/>\n`;
+
+			// Volume properties
+			volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
+			if( children.material && children.material.name ) {
+				volumesText += `      <materialref ref="${children.material.name.elementType}"/>\n`;
+			}
+			volumesText += `      <solidref ref="${children.name}-solid-${i+1}"/>\n`;
+
+			// PhysiVolume properties
+			physvolsText += `      <physvol>\n`
+			physvolsText += `        <volumeref ref="${children.name}-volume-${i+1}"/>\n`;
+			physvolsText += `        <positionref ref="${children.name}-pos-${i+1}"/>\n`;
+			physvolsText += `        <rotationref ref="${children.name}-rot-${i+1}"/>\n`;
+			physvolsText += `      </physvol/>\n`;
+
+			//:place gear1 1 world r000 -2*cm -8*cm 0
+			placeText += `:place ${children.name}-volu-${i+1} ${i+1} world rot${i+1} ${children.position.x} ${children.position.y} ${children.position.z}\n`
+
+		
+		}
+
+		var sceneText = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+		sceneText += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+		// close define
+		defineTexts += `  <define>\n`;
+		defineTexts += positionText;
+		defineTexts += rotationText;
+		defineTexts += `  </define>\n`;		
+	
+		// close material
+		materialsText = '    </materials>\n';
+
+		// close solidtext
+		solidsText = '    </solids>\n';
+
+		// close structure
+		structureText += `  <structure>\n`;
+		structureText += volumesText;
+		structureText += physvolsText;
+		structureText += `  </structure>\n`;
+
+		sceneText += defineTexts;
+		sceneText += materialsText;
+		sceneText += solidsText;
+		sceneText += structureText;
+		sceneText += `  <setup>\n`;
+		sceneText += `    <world ref="world"/>\n`;
+		sceneText += `  </setup>\n`;
+		sceneText += `</gdml>`;
+
+		downloadGeant4File(sceneText, 'scene.gdml');
+
+	} );
+	options.add( option );
 		
 
 	// Export Macro
