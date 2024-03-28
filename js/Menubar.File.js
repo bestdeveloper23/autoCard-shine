@@ -125,7 +125,7 @@ function MenubarFile( editor ) {
 					txt += `:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
 					txt += `:volu mybox box ${object.material.name.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'box.gt');
+					downloadGeant4File( txt, 'box.tg');
 					break;
 
 				case "Sphere":
@@ -133,7 +133,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mysphere SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
 					txt += `:volu mysphere mysphere ${object.material.name.elementType}\n\n`
 					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'sphere.gt');
+					downloadGeant4File( txt, 'sphere.tg');
 					break;
 
 				case "Tubs":
@@ -141,15 +141,15 @@ function MenubarFile( editor ) {
 					txt += `:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.material.name.elementType}\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'tub.gt');
+					downloadGeant4File( txt, 'tub.tg');
 					break;
 
 				case "CTubs":
 
-					txt += `:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.parameters.geometry.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'ctub.gt');
+					downloadGeant4File( txt, 'ctub.tg');
 					break;
 
 				case "Cone":
@@ -157,7 +157,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mycone CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mycone mycone ${object.material.name.elementType}\n\n`
 					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'cone.gt');
+					downloadGeant4File( txt, 'cone.tg');
 					break;
 
 				case "Parallelepiped":
@@ -165,7 +165,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mypara PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mypara mypara ${object.material.name.elementType}\n\n`
 					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'parallelepiped.gt');
+					downloadGeant4File( txt, 'parallelepiped.tg');
 					break;
 
 				case "TrapeZoid":
@@ -173,7 +173,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mytrd TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n\n`
 					txt += `:volu mytrd mytrd ${object.material.name.elementType}\n\n`
 					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n\n`
-					downloadGeant4File( txt, 'trapzoid.gt');
+					downloadGeant4File( txt, 'trapzoid.tg');
 					break;
 
 				case "aTrapeZoidP": 
@@ -181,7 +181,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mytrdp TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mytrdp mytrdp ${object.material.name.elementType}\n\n`
 					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'trapezoidp.gt');
+					downloadGeant4File( txt, 'trapezoidp.tg');
 					break;
 
 				case "aTorus":
@@ -189,7 +189,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mytorus TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
 					txt += `:volu mytorus mytorus ${object.material.name.elementType}\n\n`
 					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'torus.gt');
+					downloadGeant4File( txt, 'torus.tg');
 					break;
 				
 				case "EllipeCylnder":
@@ -197,7 +197,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n\n`
 					txt += `:volu myellipT myellipT ${object.manager.name.elementType}\n\n`
 					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'ellipeTub.gt');
+					downloadGeant4File( txt, 'ellipeTub.tg');
 					break;
 				
 				case "Ellipsoid":
@@ -205,7 +205,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myellipsoid ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipsoid myellipsoid ${object.material.name.elementType}\n\n`
 					txt += `:place myellipsoid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'ellipsoid.gt');
+					downloadGeant4File( txt, 'ellipsoid.tg');
 					break;
 
 				case "aEllipticalCone":
@@ -213,7 +213,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipticalcone myellipticalcone ${object.material.name.elementType}\n\n`
 					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'ellipticalcone.gt');
+					downloadGeant4File( txt, 'ellipticalcone.tg');
 					break;
 
 				case "TwistedBox":
@@ -221,7 +221,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n\n`
 					txt += `:volu mytbox mytbox ${object.material.name.elementType}\n\n`
 					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'twistedbox.gt');
+					downloadGeant4File( txt, 'twistedbox.tg');
 					break;
 
 				case "TwistedTrapeZoid":
@@ -229,7 +229,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n\n`
 					txt += `:volu myttrd myttrap ${object.material.name.elementType}\n\n`
 					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'twistedtrapzoid.gt');
+					downloadGeant4File( txt, 'twistedtrapzoid.tg');
 					break;
 
 				case "TwistedTrapeZoidP":
@@ -237,7 +237,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n\n`
 					txt += `:volu myttrap myttrap ${object.material.name.elementType}\n\n`
 					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'twistedtrapezoidp.gt');
+					downloadGeant4File( txt, 'twistedtrapezoidp.tg');
 					break;
 
 				case "TwistedTubs":
@@ -245,7 +245,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu myttubs myttubs ${object.material.name.elementType}\n\n`
 					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'twistedtub.gt');
+					downloadGeant4File( txt, 'twistedtub.tg');
 					break;
 
 				case "Tetrahedra":
@@ -253,7 +253,7 @@ function MenubarFile( editor ) {
 					txt += `:solid mytetra TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n\n`
 					txt += `:volu mytetra mytetra ${object.material.name.elementType}\n\n`
 					txt += `:place mytetra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'tetrahedra.gt');
+					downloadGeant4File( txt, 'tetrahedra.tg');
 					break;
 
 				case "Hyperboloid":
@@ -261,7 +261,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n\n`
 					txt += `:volu myhyperboloid myhyperboloid ${object.material.name.elementType}\n\n`
 					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'hyperboloid.gt');
+					downloadGeant4File( txt, 'hyperboloid.tg');
 					break;
 
 				case "Polycone":
@@ -269,7 +269,7 @@ function MenubarFile( editor ) {
 					txt += `:solid myploycone POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu myploycone mypolycone ${object.material.name.elementType}\n\n`
 					txt += `:place mypolycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'polycone.gt');
+					downloadGeant4File( txt, 'polycone.tg');
 					break;
 
 				case "Polyhedra":
@@ -277,17 +277,173 @@ function MenubarFile( editor ) {
 					txt += `:solid mypolyhedra POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu mypolyhedra mypolyhedra ${object.material.name.elementType}\n\n`
 					txt += `:place mypolyhedra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'polyhedra.gt');
+					downloadGeant4File( txt, 'polyhedra.tg');
 					break;
 
 				default:
 
 					break;
 			}
+		} else {
+			alert( 'The added model could not be found.');
 		}
 
 		// TODO: Change to DRACOExporter's parse( geometry, onParse )?
 		
+
+	} );
+	options.add( option );
+
+	// Export GT Scene
+
+	option = new UIRow();
+	option.setClass( 'option' );
+	option.setTextContent( strings.getKey( 'menubar/file/export/geant4_scene' ) );
+	option.onClick( async function () {
+
+		const modelCount = editor.scene.children.length;
+		
+		var solidText = ''
+		var voluText ='';
+		var placeText = '';
+		var rotationText = '';
+
+		if(modelCount > 0) {
+			for (let i=0; i<modelCount; i++) {
+				//:solid base TUBS 5*cm 14*cm 5*cm 0 360
+				const children = editor.scene.children[i];
+
+				switch (children.name) {
+					case "Box":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
+						solidText += `:solid box BOX ${children.geometry.parameters.width} ${children.geometry.parameters.depth} ${children.geometry.parameters.height}\n`
+						break;
+	
+					case "Sphere":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mysphere SPHERE ${children.geometry.parameters.radius} ${children.geometry.parameters.phiStart} ${children.geometry.parameters.phiLength} ${children.geometry.parameters.thetaStart} ${children.geometry.parameters.thetaLength}\n`
+						break;
+	
+					case "Tubs":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
+						solidText += `:solid mytub TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						break;
+	
+					case "CTubs":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mytub TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						break;
+	
+					case "Cone":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mycone CONS ${children.geometry.parameters.pRMin1} ${children.geometry.parameters.pRMin2} ${children.geometry.parameters.pRMax1} ${children.geometry.parameters.pRMax2} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						break;
+	
+					case "Parallelepiped":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mypara PARA ${children.geometry.parameters.dx} ${children.geometry.parameters.dy} ${children.geometry.parameters.dz} ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
+						break;
+	
+					case "TrapeZoid":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
+						solidText += `:solid mytrd TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz}\n`
+						break;
+	
+					case "aTrapeZoidP": 
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mytrdp TRAP ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4} ${children.geometry.parameters.phi}\n`
+						break;
+	
+					case "aTorus":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mytorus TORUS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pRTor} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.sDPhi}\n`
+						break;
+					
+					case "EllipeCylnder":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myellipT ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.semiAxisY} ${children.geometry.parameters.Dz}\n`
+						break;
+					
+					case "Ellipsoid":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myellipsoid ELLIPSOID ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.zSemiAxis} ${children.geometry.parameters.zBottomCut} ${children.geometry.parameters.zTopCut}\n`
+						break;
+	
+					case "aEllipticalCone":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myellipticalcone ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.height} ${children.geometry.parameters.zTopCut}\n`
+						break;
+	
+					case "TwistedBox":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mytbox TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width} ${children.geometry.parameters.height} ${children.geometry.parameters.depth}\n`
+						break;
+	
+					case "TwistedTrapeZoid":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myttrd TWISTED_TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz} ${children.geometry.parameters.twistedangle}\n`
+						break;
+	
+					case "TwistedTrapeZoidP":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myttrap TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4}\n`
+						break;
+	
+					case "TwistedTubs":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myttubs TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pDPhi}\n`
+						break;
+	
+					case "Tetrahedra":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid mytetra TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
+						break;
+	
+					case "Hyperboloid":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myhyperboloid HYPE ${children.geometry.parameters.radiusIn} ${children.geometry.parameters.radiusOut} ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}\n`
+						break;
+	
+					case "Polycone":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
+						solidText += `:solid myploycone POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+						break;
+	
+					case "Polyhedra":
+						rotationText += `:rotm rot${i+1} ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
+						solidText += `:solid mypolyhedra POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+						break;
+	
+					default:
+	
+						break;
+				}
+				//:volu gear1 bas5 G4_STAINLESS-STEEL
+				voluText += `:volu ${children.name}-volu-${i+1} ${children.name}-solid-${i+1} ${children.material.name.elementType}\n`
+
+				//:place gear1 1 world r000 -2*cm -8*cm 0
+				placeText += `:place ${children.name}-volu-${i+1} ${i+1} world rot${i+1} ${children.position.x} ${children.position.y} ${children.position.z}\n`
+
+			
+				//:vis world OFF
+			}
+
+			var sceneText = `:volu world BOX 10 10 10 G4_AIR\n\n`;
+
+			sceneText += `:rotm r000 0 0 0\n`;
+			sceneText += `${rotationText}\n`;
+
+			sceneText += `${solidText}\n`;
+
+			sceneText += `${voluText}\n`;
+
+			sceneText += `${placeText}`;
+			sceneText += `:vis world OFF`;
+
+			downloadGeant4File(sceneText, 'scene.tg')
+		} else {
+			alert( 'The added model could not be found.');
+		}
 
 	} );
 	options.add( option );
