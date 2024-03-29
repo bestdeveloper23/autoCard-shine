@@ -686,7 +686,7 @@ function MenubarFile( editor ) {
 				gdml += `    </materials>\n`;
 				gdml += `    <solids>\n`;
 				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" lowX="${object.geometry.parameters.pLowNorm.x} lowY="${object.geometry.parameters.pLowNorm.y}" lowZ="${object.geometry.parameters.pLowNorm.z}" highX="${object.geometry.parameters.pHighNorm.x}" highY="${object.geometry.parameters.pHighNorm.y}" highZ="${object.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+				gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 				gdml += `    </solids>\n`;
 				gdml += `  </define>\n`;
 				gdml += `  <structure>\n`;
@@ -1533,82 +1533,114 @@ function MenubarFile( editor ) {
 			switch (children.name) {
 				case "Box":
 					
+					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 					break;
 
 				case "Sphere":
 					
+					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tubs":
 					
+					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "CTubs":
 					
+					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Cone":
 					
+					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Parallelepiped":
 					
+					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TrapeZoid":
 					
+					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTrapeZoidP": 
 					
+					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTorus":
 					
+					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "EllipeCylnder":
 					
+					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "Ellipsoid":
 					
+					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
 					
+					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedBox":
 					
+					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoid":
 					
+					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoidP":
 					
+					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTubs":
 					
+					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tetrahedra":
 					
+					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 					break;
 
 				case "Hyperboloid":
 					
+					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Polycone":
 					
+					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
+					}
+
+					solidsText += `      </polycone>\n`;
 					break;
 
 				case "Polyhedra":
 					
+					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
+					}
+
+					solidsText += `      </polyhedra>\n`;
 					break;
 
 				default:
@@ -1619,7 +1651,7 @@ function MenubarFile( editor ) {
 			// Material properties
 			
 			if( children.material && children.material.name ) {
-				if(!materialRefArray.contains(children.material.name.elementType)) {
+				if(!materialRefArray.includes(children.material.name.elementType)) {
 					materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
 					materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
 					materialsText += `        <T value="293.15" unit="K"/>\n`;
@@ -1629,8 +1661,8 @@ function MenubarFile( editor ) {
 				}
 			}
 			// position and rotation properties
-			positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`;
-			rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${object.rotation.x.toFixed(4)}" y="${object.rotation.y.toFixed(4)}" z="${object.rotation.z.toFixed(4)}"/>\n`;
+			positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
+			rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;
 
 			// Volume properties
 			volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
@@ -1645,10 +1677,6 @@ function MenubarFile( editor ) {
 			physvolsText += `        <positionref ref="${children.name}-pos-${i+1}"/>\n`;
 			physvolsText += `        <rotationref ref="${children.name}-rot-${i+1}"/>\n`;
 			physvolsText += `      </physvol/>\n`;
-
-			//:place gear1 1 world r000 -2*cm -8*cm 0
-			placeText += `:place ${children.name}-volu-${i+1} ${i+1} world rot${i+1} ${children.position.x} ${children.position.y} ${children.position.z}\n`
-
 		
 		}
 
@@ -1661,10 +1689,10 @@ function MenubarFile( editor ) {
 		defineTexts += `  </define>\n`;		
 	
 		// close material
-		materialsText = '    </materials>\n';
+		materialsText += '    </materials>\n';
 
 		// close solidtext
-		solidsText = '    </solids>\n';
+		solidsText += '    </solids>\n';
 
 		// close structure
 		structureText += `  <structure>\n`;
