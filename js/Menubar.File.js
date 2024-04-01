@@ -664,58 +664,6 @@ function MenubarFile( editor ) {
 		const roomSize = 10;
 
 		switch (object.name) {
-			case "subtracted object":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <subtraction name="subtraction_object"/>\n`; // subtraction object name
-				gdml += `      <first ref="subtraction_object"/>\n`; // first object
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="boxVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="boxVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="boxSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'box.gdml')
-
-				break;
-
 			case "Box":
 				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
