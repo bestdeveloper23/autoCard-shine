@@ -254,17 +254,17 @@ function MenubarFile( editor ) {
 				
 				case "united_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
 					break;
 
 				case "subtracted_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
 					break;
 					
 				case "intersected_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
 					break;
 					
 				default:
@@ -852,15 +852,207 @@ function MenubarFile( editor ) {
 
 	option.onClick( async function () {
 
-		console.log(editor.scene)
 		const object = editor.selected;
-		
+
+		function traversebooleanObjects(object, callback ) {
+
+			callback( object );
+			const children = object.childrenObject;
+			if(!children) return
+
+			for ( let i = 0, l = children.length; i < l; i ++ ) {
+
+				traversebooleanObjects(children[ i ], callback );
+
+			}
+
+		}
+
+		function getPositionText( children ) {
+			return `    <position name="${children.name}_${children.uuid}_pos" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
+		}
+
+		function getRotationText( children ) {
+			const rotated = children.rotation;
+			const rotateX = rotated.x * 180 / Math.PI;
+			const rotateY = rotated.y * 180 / Math.PI;
+			const rotateZ = rotated.z * 180 / Math.PI;
+			return `    <rotation name="${children.name}_${children.uuid}_rot" unit="m" x="${rotateX.toFixed(4)}" y="${rotateY.toFixed(4)}" z="${rotateZ.toFixed(4)}"/>\n`;
+		}
+
+		function getSolidText( children ) {
+			let solidsText = '';
+			switch (children.name) {
+				case "Box":
+					
+					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
+					break;
+
+				case "Sphere":
+					
+					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Tubs":
+					
+					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "CTubs":
+					
+					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Cone":
+					
+					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Parallelepiped":
+					
+					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TrapeZoid":
+					
+					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aTrapeZoidP": 
+					
+					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aTorus":
+					
+					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+				
+				case "EllipeCylnder":
+					
+					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+				
+				case "Ellipsoid":
+					
+					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aEllipticalCone":
+					
+					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedBox":
+					
+					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTrapeZoid":
+					
+					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTrapeZoidP":
+					
+					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTubs":
+					
+					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Tetrahedra":
+					
+					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					break;
+
+				case "Hyperboloid":
+					
+					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Polycone":
+					
+					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
+					}
+
+					solidsText += `      </polycone>\n`;
+					break;
+
+				case "Polyhedra":
+					
+					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
+					}
+
+					solidsText += `      </polyhedra>\n`;
+					break;
+				
+				case "united_object":
+
+					solidsText += `      <union name="${children.name}_${children.uuid}">\n`;
+					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `        <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `        <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `        <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+
+				case "subtracted_object":
+
+					solidsText += `      <subtraction name="${children.name}_${children.uuid}">\n`;
+					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `        <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `        <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `        <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+					
+				case "intersected_object":
+
+					solidsText += `      <intersection name="${children.name}_${children.uuid}">\n`;
+					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `        <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `        <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `        <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+					
+				default:
+
+					break;
+			}
+
+			return solidsText;
+		}
+
 		const rotated = object.rotation;
 		const rotateX = rotated.x * 180 / Math.PI;
 		const rotateY = rotated.y * 180 / Math.PI;
 		const rotateZ = rotated.z * 180 / Math.PI;
 
 		const roomSize = 10;
+
+		let solidText = '';
+		let rotationText = '';
+		let positionText = '';
+
+		traversebooleanObjects(object, function ( child ) {
+
+			if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
+				rotationText += getRotationText(child);
+				positionText += getPositionText(child)
+			}
+			solidText += getSolidText(child);
+
+		} );
 
 		switch (object.name) {
 			case "Box":
@@ -1876,6 +2068,165 @@ function MenubarFile( editor ) {
 				downloadGeant4File( gdml, 'Polyhedra.gdml')
 				break;
 				
+				case "united_object":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += rotationText;
+					gdml += positionText;
+					gdml += `  </define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += solidText;
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="unitedVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="unitedVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'united_object.gdml')
+					break;
+				
+					case "subtracted_object":
+						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+						gdml += `  <define>\n`;
+						gdml += rotationText;
+						gdml += positionText;
+						gdml += `  </define>\n`;
+						gdml += `    <materials>\n`;
+						gdml += `      <material name="Air" state="gas">\n`;
+						gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+						gdml += `        <composite n="1">\n`;
+						gdml += `          <fraction ref="N" n="0.7"/>\n`;
+						gdml += `          <fraction ref="O" n="0.3"/>\n`;
+						gdml += `        </composite>\n`;
+						gdml += `        <T value="293.15" unit="K"/>\n`;
+						gdml += `      </material>\n`;
+						gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+						gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+						gdml += `        <T value="293.15" unit="K"/>\n`;
+						gdml += `      </material>\n`;
+						gdml += `    </materials>\n`;
+						gdml += `    <solids>\n`;
+						gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+						gdml += solidText;
+						gdml += `    </solids>\n`;
+						gdml += `  </define>\n`;
+						gdml += `  <structure>\n`;
+						gdml += `    <volume name="world">\n`;
+						gdml += `      <materialref ref="Air"/>\n`;
+						gdml += `      <solidref ref="roomSolid"/>\n`;
+						gdml += `      <physvol>\n`;
+						gdml += `        <volumeref ref="subtractedVolume"/>\n`;
+						gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+						gdml += `      </physvol>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `    <volume name="roomVolume">\n`;
+						gdml += `      <materialref ref="Air"/>\n`;
+						gdml += `      <solidref ref="roomSolid"/>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `    <volume name="subtractedVolume">\n`;
+						gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+						gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `  </structure>\n`;
+						gdml += `  <setup>\n`;
+						gdml += `    <world ref="world"/>\n`;
+						gdml += `  </setup>\n`;
+						gdml += `</gdml>\n`;
+						
+						downloadGeant4File( gdml, 'subtracted_object.gdml')
+						break;
+										
+				case "intersected_object":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += rotationText;
+					gdml += positionText;
+					gdml += `  </define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += solidText;
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="intersectedVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="intersectedVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'intersected_object.gdml')
+					break;
+
 			default:
 				break;
 		}
@@ -1890,6 +2241,185 @@ function MenubarFile( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( strings.getKey( 'menubar/file/export/gdml_scene' ) );
 	option.onClick( async function () {
+
+		function traversebooleanObjects(object, callback ) {
+
+			callback( object );
+			const children = object.childrenObject;
+			if(!children) return
+
+			for ( let i = 0, l = children.length; i < l; i ++ ) {
+
+				traversebooleanObjects(children[ i ], callback );
+
+			}
+
+		}
+
+		function getPositionText( object ) {
+			return `    <position name="${children.name}_${children.uuid}_pos" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
+		}
+
+		function getRotationText( children ) {
+			const rotated = children.rotation;
+			const rotateX = rotated.x * 180 / Math.PI;
+			const rotateY = rotated.y * 180 / Math.PI;
+			const rotateZ = rotated.z * 180 / Math.PI;
+			return `    <rotation name="${children.name}_${children.uuid}_rot" unit="m" x="${rotateX.toFixed(4)}" y="${rotateY.toFixed(4)}" z="${rotateZ.toFixed(4)}"/>\n`;
+		}
+
+		function getSolidText( children ) {
+			let solidsText = '';
+			switch (children.name) {
+				case "Box":
+					
+					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
+					break;
+
+				case "Sphere":
+					
+					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Tubs":
+					
+					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "CTubs":
+					
+					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Cone":
+					
+					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Parallelepiped":
+					
+					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TrapeZoid":
+					
+					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aTrapeZoidP": 
+					
+					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aTorus":
+					
+					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+				
+				case "EllipeCylnder":
+					
+					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+				
+				case "Ellipsoid":
+					
+					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "aEllipticalCone":
+					
+					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedBox":
+					
+					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTrapeZoid":
+					
+					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTrapeZoidP":
+					
+					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "TwistedTubs":
+					
+					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Tetrahedra":
+					
+					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					break;
+
+				case "Hyperboloid":
+					
+					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
+				case "Polycone":
+					
+					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
+					}
+
+					solidsText += `      </polycone>\n`;
+					break;
+
+				case "Polyhedra":
+					
+					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+
+					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
+						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
+					}
+
+					solidsText += `      </polyhedra>\n`;
+					break;
+				
+				case "united_object":
+
+					solidsText += `      <union name="${children.name}_${children.uuid}">\n`;
+					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `      <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `      <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `      <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+
+				case "subtracted_object":
+
+					solidsText += `      <subtraction name="${children.name}_${children.uuid}">\n`;
+					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `      <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `      <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `      <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+					
+				case "intersected_object":
+
+					solidsText += `      <intersection name="${children.name}_${children.uuid}">\n`;
+					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
+					solidsText += `      <second ref="${children.childrenObject[1].name}_${children.childrenObject[1].uuid}">\n`;
+					solidsText += `      <positionref ref="${children.name}_${children.uuid}_pos">\n`;
+					solidsText += `      <rotationref ref="${children.name}_${children.uuid}_rot">\n`;
+					solidsText += `      </union>\n`;
+					break;
+					
+				default:
+
+					break;
+			}
+
+			return solidsText;
+		}
 
 		const modelCount = editor.scene.children.length;
 		const roomSize = 10;
@@ -2041,6 +2571,39 @@ function MenubarFile( editor ) {
 					solidsText += `      </polyhedra>\n`;
 					break;
 
+				case "united_object":
+
+					traversebooleanObjects(children, function ( child ) {
+
+						rotationText += getRotationText(child);
+						positionText += getPositionText(child);
+						solidsText += getSolidText(child);
+			
+					} );
+					break;
+
+					case "subtracted_object":
+
+					traversebooleanObjects(children, function ( child ) {
+
+						rotationText += getRotationText(child);
+						positionText += getPositionText(child);
+						solidsText += getSolidText(child);
+			
+					} );
+					break;
+
+					case "intersected_object":
+
+					traversebooleanObjects(children, function ( child ) {
+
+						rotationText += getRotationText(child);
+						positionText += getPositionText(child);
+						solidsText += getSolidText(child);
+			
+					} );
+					break;
+
 				default:
 
 					break;
@@ -2059,9 +2622,11 @@ function MenubarFile( editor ) {
 				}
 			}
 			// position and rotation properties
-			positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
-			rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;
-
+			if(children.name != "united_object" && children.name != "subtracted_object" && children.name != "intersected_object"){
+				positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
+				rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;	
+			}
+			
 			// Volume properties
 			volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
 			if( children.material && children.material.name ) {
