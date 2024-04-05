@@ -278,24 +278,25 @@ function MenubarFile( editor ) {
 
 		let solidText = '';
 		let rotationText = '';
-		traversebooleanObjects(object, function ( child ) {
 
-			if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-				rotationText += getRotationText(child);
-			}
-			solidText += getSolidText(child);
-
-		} );
-
-		var txt = `:volu world BOX 10. 10. 10. G4_AIR\n\n`;
-		const rotated = object.rotation;
-		const rotateX = rotated.x * 180 / Math.PI;
-		const rotateY = rotated.y * 180 / Math.PI;
-		const rotateZ = rotated.z * 180 / Math.PI;
-
-		txt += `:rotm r000 ${rotateX.toFixed(2)} ${rotateY.toFixed(2)} ${rotateZ.toFixed(2)}\n`;
 
 		if ( object !== null && object.isMesh != undefined ) {
+			var txt = `:volu world BOX 10. 10. 10. G4_AIR\n\n`;
+			const rotated = object.rotation;
+			const rotateX = rotated.x * 180 / Math.PI;
+			const rotateY = rotated.y * 180 / Math.PI;
+			const rotateZ = rotated.z * 180 / Math.PI;
+	
+			txt += `:rotm r000 ${rotateX.toFixed(2)} ${rotateY.toFixed(2)} ${rotateZ.toFixed(2)}\n`;
+	
+			traversebooleanObjects(object, function ( child ) {
+
+				if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
+					rotationText += getRotationText(child);
+				}
+				solidText += getSolidText(child);
+	
+			} );
 			switch (object.name) {
 				case "united_object":
 					txt += `${rotationText}\n`;
@@ -486,7 +487,7 @@ function MenubarFile( editor ) {
 					break;
 			}
 		} else {
-			alert( 'The added model could not be found.');
+			alert( 'Please select a model!');
 		}
 
 		// TODO: Change to DRACOExporter's parse( geometry, onParse )?
@@ -885,97 +886,97 @@ function MenubarFile( editor ) {
 			switch (children.name) {
 				case "Box":
 					
-					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
+					solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 					break;
 
 				case "Sphere":
 					
-					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tubs":
 					
-					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "CTubs":
 					
-					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Cone":
 					
-					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Parallelepiped":
 					
-					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TrapeZoid":
 					
-					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTrapeZoidP": 
 					
-					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTorus":
 					
-					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "EllipeCylnder":
 					
-					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "Ellipsoid":
 					
-					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
 					
-					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedBox":
 					
-					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoid":
 					
-					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoidP":
 					
-					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTubs":
 					
-					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tetrahedra":
 					
-					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 					break;
 
 				case "Hyperboloid":
 					
-					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Polycone":
 					
-					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
 
 					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
@@ -986,7 +987,7 @@ function MenubarFile( editor ) {
 
 				case "Polyhedra":
 					
-					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
 
 					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
@@ -1033,1048 +1034,32 @@ function MenubarFile( editor ) {
 			return solidsText;
 		}
 
-		const rotated = object.rotation;
-		const rotateX = rotated.x * 180 / Math.PI;
-		const rotateY = rotated.y * 180 / Math.PI;
-		const rotateZ = rotated.z * 180 / Math.PI;
-
-		const roomSize = 10;
-
-		let solidText = '';
-		let rotationText = '';
-		let positionText = '';
-
-		traversebooleanObjects(object, function ( child ) {
-
-			if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-				rotationText += getRotationText(child);
-				positionText += getPositionText(child)
-			}
-			solidText += getSolidText(child);
-
-		} );
-
-		switch (object.name) {
-			case "Box":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <box name="boxSolid" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.depth}" z="${object.geometry.parameters.height}" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="boxVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="boxVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="boxSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'box.gdml')
-
-				break;
-		
-			case "Sphere":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <sphere name="sphereSolid" rmin="${0}" rmax="${object.geometry.parameters.radius}" deltaphi="${object.geometry.parameters.phiLength}" deltatheta="${object.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="sphereVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="sphereVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="sphereSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'spehre.gdml')
-				break;
+		if ( object !== null && object.isMesh != undefined ) {
+			const rotated = object.rotation;
+			const rotateX = rotated.x * 180 / Math.PI;
+			const rotateY = rotated.y * 180 / Math.PI;
+			const rotateZ = rotated.z * 180 / Math.PI;
 	
-			case "Tubs":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <tube name="tubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="sphereVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="sphereVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="tubeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Tube.gdml')
-				break;
-						
-			case "CTubs":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <cutTube name="CtubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" lowX="${object.geometry.parameters.pLowNorm.x} lowY="${object.geometry.parameters.pLowNorm.y}" lowZ="${object.geometry.parameters.pLowNorm.z}" highX="${object.geometry.parameters.pHighNorm.x}" highY="${object.geometry.parameters.pHighNorm.y}" highZ="${object.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="CtubVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="CtubVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="CtubeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Ctube.gdml')
-				break;
-											
-			case "Cone":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="coneVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="coneVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="coneSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Cone.gdml')
-				break;
-																
-			case "Parallelepiped":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <para name="paraSolid" x="${object.geometry.parameters.dx}" y="${object.geometry.parameters.dy}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="paraVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="paraVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="paraSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Parallelepiped.gdml')
-				break;
-																					
-			case "TrapeZoid":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <trd name="trdSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="trdVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="trdVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="trdSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Trapezoid.gdml')
-				break;
-																										
-			case "aTrapeZoidP":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="trapVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="trapVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="trapSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Trapezoid.gdml')
-				break;
-																									
-			case "aTorus":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" starttheta="${object.geometry.parameters.pSPhi}" deltatheta="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="torusVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="torusVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="torusSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Torus.gdml')
-				break;
-																															
-			case "EllipeCylnder":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <eltube name="ellipetubeSolid" dx="${object.geometry.parameters.xSemiAxis}" dy="${object.geometry.parameters.semiAxisY}" dz="${object.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="elliptubeVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="elliptubeVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="ellipetubeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'EllipeTube.gdml')
-				break;
-																																					
-			case "Ellipsoid":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <ellipsoid name="ellipsoidSolid" ax="${object.geometry.parameters.xSemiAxis}" by="${object.geometry.parameters.semiAxisY}" cz="${object.geometry.parameters.zSemiAxis}" zcut2="${object.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="ellipsoidVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="ellipsoidVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="ellipsoidSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Ellipsoid.gdml')
-				break;
-																																											
-			case "aEllipticalCone":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <elcone name="elconeSolid" dx="${object.geometry.parameters.xSemiAxis}" dy="${object.geometry.parameters.ySemiAxis}" zmax="${object.geometry.parameters.height}" zcut="${object.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="elconeVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="elconeVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="elconeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'EllipticalCone.gdml')
-				break;
-																																															
-			case "TwistedBox":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <twistedbox name="tboxSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.height}" z="${object.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="tboxVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="tboxVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="tboxSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'TwistedBox.gdml')
-				break;
-																																																			
-			case "TwistedTrapeZoid":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <twistedtrd name="ttradSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="ttradVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="ttradVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="ttradSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'TwistedTrapeZoid.gdml')
-				break;
-																																																							
-			case "TwistedTrapeZoidP":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <twistedtrap name="ttrapSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" Alph="${object.geometry.parameters.alpha}" Theta="${object.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="ttrapVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="ttrapVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="ttrapSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'TwistedTrapeZoidP.gdml')
-				break;
-																																																											
-			case "TwistedTubs":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <twistedtubs name="ttubeSolid" twistedangle="${object.geometry.parameters.twistedangle}" endinnerrad="${object.geometry.parameters.pRMin}" endouterrad="${object.geometry.parameters.pRMax}" zlen="${object.geometry.parameters.pDz}" phi="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="ttubeVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="ttubeVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="ttubeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'TwistedTubs.gdml')
-				break;
-																																																															
-			case "Tetrahedra":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <tet name="tetraSolid" vertex1="${object.geometry.parameters.anchor}" vertex2="${object.geometry.parameters.p2}" vertex3="${object.geometry.parameters.p3}" vertex4="${object.geometry.parameters.p4}"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="tetraVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="tetraVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="tetraSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Tetrahedra.gdml')
-				break;
-																																																														
-			case "Hyperboloid":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <hype name="hypeSolid" rmin="${object.geometry.parameters.radiusIn}" rmax="${object.geometry.parameters.radiusOut}" z="${object.geometry.parameters.pDz}" inst="${object.geometry.parameters.stereo1}" outst="${object.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="hypeVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="hypeVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="hypeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Hyperboloid.gdml')
-				break;
-																																																													
-			case "Polycone":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <polycone name="polyconeSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
-
-				for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
-					gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
+			const roomSize = 10;
+	
+			let solidText = '';
+			let rotationText = '';
+			let positionText = '';
+	
+			traversebooleanObjects(object, function ( child ) {
+	
+				if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
+					rotationText += getRotationText(child);
+					positionText += getPositionText(child)
 				}
-
-				gdml += `      </polycone>\n`;
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="polyconeVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="polyconeVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="polyconeSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Polycone.gdml')
-				break;
-																																																																		
-			case "Polyhedra":
-				var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-				gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-				gdml += `  <define>\n`;
-				gdml += `    <materials>\n`;
-				gdml += `      <material name="Air" state="gas">\n`;
-				gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-				gdml += `        <composite n="1">\n`;
-				gdml += `          <fraction ref="N" n="0.7"/>\n`;
-				gdml += `          <fraction ref="O" n="0.3"/>\n`;
-				gdml += `        </composite>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-				gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-				gdml += `        <T value="293.15" unit="K"/>\n`;
-				gdml += `      </material>\n`;
-				gdml += `    </materials>\n`;
-				gdml += `    <solids>\n`;
-				gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-				gdml += `      <polyhedra name="polyhedraSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" numsides="${object.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
-
-				for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
-					gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
-				}
-
-				gdml += `      </polyhedra>\n`;
-				gdml += `    </solids>\n`;
-				gdml += `  </define>\n`;
-				gdml += `  <structure>\n`;
-				gdml += `    <volume name="world">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `      <physvol>\n`;
-				gdml += `        <volumeref ref="polyhedraVolume"/>\n`;
-				gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-				gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-				gdml += `      </physvol>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="roomVolume">\n`;
-				gdml += `      <materialref ref="Air"/>\n`;
-				gdml += `      <solidref ref="roomSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `    <volume name="polyhedraVolume">\n`;
-				gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-				gdml += `      <solidref ref="polyhedraSolid"/>\n`;
-				gdml += `    </volume>\n`;
-				gdml += `  </structure>\n`;
-				gdml += `  <setup>\n`;
-				gdml += `    <world ref="world"/>\n`;
-				gdml += `  </setup>\n`;
-				gdml += `</gdml>\n`;
-				
-				downloadGeant4File( gdml, 'Polyhedra.gdml')
-				break;
-				
-				case "united_object":
+				solidText += getSolidText(child);
+	
+			} );
+			switch (object.name) {
+				case "Box":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
-					gdml += rotationText;
-					gdml += positionText;
-					gdml += `  </define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
@@ -2091,7 +1076,7 @@ function MenubarFile( editor ) {
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += solidText;
+					gdml += `      <box name="boxSolid" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.depth}" z="${object.geometry.parameters.height}" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -2099,7 +1084,7 @@ function MenubarFile( editor ) {
 					gdml += `      <materialref ref="Air"/>\n`;
 					gdml += `      <solidref ref="roomSolid"/>\n`;
 					gdml += `      <physvol>\n`;
-					gdml += `        <volumeref ref="unitedVolume"/>\n`;
+					gdml += `        <volumeref ref="boxVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
 					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
@@ -2108,9 +1093,9 @@ function MenubarFile( editor ) {
 					gdml += `      <materialref ref="Air"/>\n`;
 					gdml += `      <solidref ref="roomSolid"/>\n`;
 					gdml += `    </volume>\n`;
-					gdml += `    <volume name="unitedVolume">\n`;
+					gdml += `    <volume name="boxVolume">\n`;
 					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-					gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+					gdml += `      <solidref ref="boxSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
 					gdml += `  <setup>\n`;
@@ -2118,10 +1103,973 @@ function MenubarFile( editor ) {
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
 					
-					downloadGeant4File( gdml, 'united_object.gdml')
+					downloadGeant4File( gdml, 'box.gdml')
+	
 					break;
-				
-					case "subtracted_object":
+			
+				case "Sphere":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <sphere name="sphereSolid" rmin="${0}" rmax="${object.geometry.parameters.radius}" deltaphi="${object.geometry.parameters.phiLength}" deltatheta="${object.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="sphereVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="sphereVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="sphereSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'spehre.gdml')
+					break;
+		
+				case "Tubs":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <tube name="tubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="sphereVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="sphereVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="tubeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Tube.gdml')
+					break;
+							
+				case "CTubs":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <cutTube name="CtubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" lowX="${object.geometry.parameters.pLowNorm.x} lowY="${object.geometry.parameters.pLowNorm.y}" lowZ="${object.geometry.parameters.pLowNorm.z}" highX="${object.geometry.parameters.pHighNorm.x}" highY="${object.geometry.parameters.pHighNorm.y}" highZ="${object.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="CtubVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="CtubVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="CtubeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Ctube.gdml')
+					break;
+												
+				case "Cone":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="coneVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="coneVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="coneSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Cone.gdml')
+					break;
+																	
+				case "Parallelepiped":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <para name="paraSolid" x="${object.geometry.parameters.dx}" y="${object.geometry.parameters.dy}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="paraVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="paraVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="paraSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Parallelepiped.gdml')
+					break;
+																						
+				case "TrapeZoid":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <trd name="trdSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="trdVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="trdVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="trdSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Trapezoid.gdml')
+					break;
+																											
+				case "aTrapeZoidP":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="trapVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="trapVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="trapSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Trapezoid.gdml')
+					break;
+																										
+				case "aTorus":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" starttheta="${object.geometry.parameters.pSPhi}" deltatheta="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="torusVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="torusVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="torusSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Torus.gdml')
+					break;
+																																
+				case "EllipeCylnder":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <eltube name="ellipetubeSolid" dx="${object.geometry.parameters.xSemiAxis}" dy="${object.geometry.parameters.semiAxisY}" dz="${object.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="elliptubeVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="elliptubeVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="ellipetubeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'EllipeTube.gdml')
+					break;
+																																						
+				case "Ellipsoid":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <ellipsoid name="ellipsoidSolid" ax="${object.geometry.parameters.xSemiAxis}" by="${object.geometry.parameters.semiAxisY}" cz="${object.geometry.parameters.zSemiAxis}" zcut2="${object.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="ellipsoidVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="ellipsoidVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="ellipsoidSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Ellipsoid.gdml')
+					break;
+																																												
+				case "aEllipticalCone":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <elcone name="elconeSolid" dx="${object.geometry.parameters.xSemiAxis}" dy="${object.geometry.parameters.ySemiAxis}" zmax="${object.geometry.parameters.height}" zcut="${object.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="elconeVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="elconeVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="elconeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'EllipticalCone.gdml')
+					break;
+																																																
+				case "TwistedBox":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <twistedbox name="tboxSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.height}" z="${object.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="tboxVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="tboxVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="tboxSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'TwistedBox.gdml')
+					break;
+																																																				
+				case "TwistedTrapeZoid":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <twistedtrd name="ttradSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="ttradVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="ttradVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="ttradSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'TwistedTrapeZoid.gdml')
+					break;
+																																																								
+				case "TwistedTrapeZoidP":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <twistedtrap name="ttrapSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" Alph="${object.geometry.parameters.alpha}" Theta="${object.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="ttrapVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="ttrapVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="ttrapSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'TwistedTrapeZoidP.gdml')
+					break;
+																																																												
+				case "TwistedTubs":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <twistedtubs name="ttubeSolid" twistedangle="${object.geometry.parameters.twistedangle}" endinnerrad="${object.geometry.parameters.pRMin}" endouterrad="${object.geometry.parameters.pRMax}" zlen="${object.geometry.parameters.pDz}" phi="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="ttubeVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="ttubeVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="ttubeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'TwistedTubs.gdml')
+					break;
+																																																																
+				case "Tetrahedra":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <tet name="tetraSolid" vertex1="${object.geometry.parameters.anchor}" vertex2="${object.geometry.parameters.p2}" vertex3="${object.geometry.parameters.p3}" vertex4="${object.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="tetraVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="tetraVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="tetraSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Tetrahedra.gdml')
+					break;
+																																																															
+				case "Hyperboloid":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <hype name="hypeSolid" rmin="${object.geometry.parameters.radiusIn}" rmax="${object.geometry.parameters.radiusOut}" z="${object.geometry.parameters.pDz}" inst="${object.geometry.parameters.stereo1}" outst="${object.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="hypeVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="hypeVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="hypeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Hyperboloid.gdml')
+					break;
+																																																														
+				case "Polycone":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <polycone name="polyconeSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+	
+					for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
+						gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
+					}
+	
+					gdml += `      </polycone>\n`;
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="polyconeVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="polyconeVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="polyconeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Polycone.gdml')
+					break;
+																																																																			
+				case "Polyhedra":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `        <composite n="1">\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `        </composite>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <polyhedra name="polyhedraSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" numsides="${object.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+	
+					for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
+						gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
+					}
+	
+					gdml += `      </polyhedra>\n`;
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="polyhedraVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="polyhedraVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="polyhedraSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Polyhedra.gdml')
+					break;
+					
+					case "united_object":
 						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
 						gdml += `  <define>\n`;
@@ -2152,7 +2100,7 @@ function MenubarFile( editor ) {
 						gdml += `      <materialref ref="Air"/>\n`;
 						gdml += `      <solidref ref="roomSolid"/>\n`;
 						gdml += `      <physvol>\n`;
-						gdml += `        <volumeref ref="subtractedVolume"/>\n`;
+						gdml += `        <volumeref ref="unitedVolume"/>\n`;
 						gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
 						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
 						gdml += `      </physvol>\n`;
@@ -2161,7 +2109,7 @@ function MenubarFile( editor ) {
 						gdml += `      <materialref ref="Air"/>\n`;
 						gdml += `      <solidref ref="roomSolid"/>\n`;
 						gdml += `    </volume>\n`;
-						gdml += `    <volume name="subtractedVolume">\n`;
+						gdml += `    <volume name="unitedVolume">\n`;
 						gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
 						gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
 						gdml += `    </volume>\n`;
@@ -2171,65 +2119,123 @@ function MenubarFile( editor ) {
 						gdml += `  </setup>\n`;
 						gdml += `</gdml>\n`;
 						
-						downloadGeant4File( gdml, 'subtracted_object.gdml')
+						downloadGeant4File( gdml, 'united_object.gdml')
 						break;
-										
-				case "intersected_object":
-					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-					gdml += `  <define>\n`;
-					gdml += rotationText;
-					gdml += positionText;
-					gdml += `  </define>\n`;
-					gdml += `    <materials>\n`;
-					gdml += `      <material name="Air" state="gas">\n`;
-					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
-					gdml += `          <fraction ref="N" n="0.7"/>\n`;
-					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
-					gdml += `      </material>\n`;
-					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
-					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
-					gdml += `      </material>\n`;
-					gdml += `    </materials>\n`;
-					gdml += `    <solids>\n`;
-					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += solidText;
-					gdml += `    </solids>\n`;
-					gdml += `  </define>\n`;
-					gdml += `  <structure>\n`;
-					gdml += `    <volume name="world">\n`;
-					gdml += `      <materialref ref="Air"/>\n`;
-					gdml += `      <solidref ref="roomSolid"/>\n`;
-					gdml += `      <physvol>\n`;
-					gdml += `        <volumeref ref="intersectedVolume"/>\n`;
-					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
-					gdml += `      </physvol>\n`;
-					gdml += `    </volume>\n`;
-					gdml += `    <volume name="roomVolume">\n`;
-					gdml += `      <materialref ref="Air"/>\n`;
-					gdml += `      <solidref ref="roomSolid"/>\n`;
-					gdml += `    </volume>\n`;
-					gdml += `    <volume name="intersectedVolume">\n`;
-					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
-					gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
-					gdml += `    </volume>\n`;
-					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
-					gdml += `    <world ref="world"/>\n`;
-					gdml += `  </setup>\n`;
-					gdml += `</gdml>\n`;
 					
-					downloadGeant4File( gdml, 'intersected_object.gdml')
+						case "subtracted_object":
+							var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+							gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+							gdml += `  <define>\n`;
+							gdml += rotationText;
+							gdml += positionText;
+							gdml += `  </define>\n`;
+							gdml += `    <materials>\n`;
+							gdml += `      <material name="Air" state="gas">\n`;
+							gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+							gdml += `        <composite n="1">\n`;
+							gdml += `          <fraction ref="N" n="0.7"/>\n`;
+							gdml += `          <fraction ref="O" n="0.3"/>\n`;
+							gdml += `        </composite>\n`;
+							gdml += `        <T value="293.15" unit="K"/>\n`;
+							gdml += `      </material>\n`;
+							gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+							gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+							gdml += `        <T value="293.15" unit="K"/>\n`;
+							gdml += `      </material>\n`;
+							gdml += `    </materials>\n`;
+							gdml += `    <solids>\n`;
+							gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+							gdml += solidText;
+							gdml += `    </solids>\n`;
+							gdml += `  </define>\n`;
+							gdml += `  <structure>\n`;
+							gdml += `    <volume name="world">\n`;
+							gdml += `      <materialref ref="Air"/>\n`;
+							gdml += `      <solidref ref="roomSolid"/>\n`;
+							gdml += `      <physvol>\n`;
+							gdml += `        <volumeref ref="subtractedVolume"/>\n`;
+							gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+							gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+							gdml += `      </physvol>\n`;
+							gdml += `    </volume>\n`;
+							gdml += `    <volume name="roomVolume">\n`;
+							gdml += `      <materialref ref="Air"/>\n`;
+							gdml += `      <solidref ref="roomSolid"/>\n`;
+							gdml += `    </volume>\n`;
+							gdml += `    <volume name="subtractedVolume">\n`;
+							gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+							gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+							gdml += `    </volume>\n`;
+							gdml += `  </structure>\n`;
+							gdml += `  <setup>\n`;
+							gdml += `    <world ref="world"/>\n`;
+							gdml += `  </setup>\n`;
+							gdml += `</gdml>\n`;
+							
+							downloadGeant4File( gdml, 'subtracted_object.gdml')
+							break;
+											
+					case "intersected_object":
+						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+						gdml += `  <define>\n`;
+						gdml += rotationText;
+						gdml += positionText;
+						gdml += `  </define>\n`;
+						gdml += `    <materials>\n`;
+						gdml += `      <material name="Air" state="gas">\n`;
+						gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+						gdml += `        <composite n="1">\n`;
+						gdml += `          <fraction ref="N" n="0.7"/>\n`;
+						gdml += `          <fraction ref="O" n="0.3"/>\n`;
+						gdml += `        </composite>\n`;
+						gdml += `        <T value="293.15" unit="K"/>\n`;
+						gdml += `      </material>\n`;
+						gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+						gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
+						gdml += `        <T value="293.15" unit="K"/>\n`;
+						gdml += `      </material>\n`;
+						gdml += `    </materials>\n`;
+						gdml += `    <solids>\n`;
+						gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+						gdml += solidText;
+						gdml += `    </solids>\n`;
+						gdml += `  </define>\n`;
+						gdml += `  <structure>\n`;
+						gdml += `    <volume name="world">\n`;
+						gdml += `      <materialref ref="Air"/>\n`;
+						gdml += `      <solidref ref="roomSolid"/>\n`;
+						gdml += `      <physvol>\n`;
+						gdml += `        <volumeref ref="intersectedVolume"/>\n`;
+						gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+						gdml += `      </physvol>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `    <volume name="roomVolume">\n`;
+						gdml += `      <materialref ref="Air"/>\n`;
+						gdml += `      <solidref ref="roomSolid"/>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `    <volume name="intersectedVolume">\n`;
+						gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+						gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
+						gdml += `    </volume>\n`;
+						gdml += `  </structure>\n`;
+						gdml += `  <setup>\n`;
+						gdml += `    <world ref="world"/>\n`;
+						gdml += `  </setup>\n`;
+						gdml += `</gdml>\n`;
+						
+						downloadGeant4File( gdml, 'intersected_object.gdml')
+						break;
+	
+				default:
 					break;
-
-			default:
-				break;
+			}
+		} else {
+			alert( 'Please select a model!');
 		}
+
+
 		
 
 	} );
@@ -2256,7 +2262,7 @@ function MenubarFile( editor ) {
 
 		}
 
-		function getPositionText( object ) {
+		function getPositionText( children ) {
 			return `    <position name="${children.name}_${children.uuid}_pos" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
 		}
 
@@ -2273,97 +2279,97 @@ function MenubarFile( editor ) {
 			switch (children.name) {
 				case "Box":
 					
-					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
+					solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 					break;
 
 				case "Sphere":
 					
-					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tubs":
 					
-					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "CTubs":
 					
-					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Cone":
 					
-					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Parallelepiped":
 					
-					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TrapeZoid":
 					
-					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTrapeZoidP": 
 					
-					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTorus":
 					
-					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "EllipeCylnder":
 					
-					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "Ellipsoid":
 					
-					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
 					
-					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedBox":
 					
-					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoid":
 					
-					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoidP":
 					
-					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTubs":
 					
-					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tetrahedra":
 					
-					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 					break;
 
 				case "Hyperboloid":
 					
-					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Polycone":
 					
-					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
 
 					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
@@ -2374,7 +2380,7 @@ function MenubarFile( editor ) {
 
 				case "Polyhedra":
 					
-					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
 
 					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
@@ -2455,224 +2461,228 @@ function MenubarFile( editor ) {
 		physvolsText += `      <solidref ref="roomSolid"/>\n`;
 
 		var materialRefArray = [];
-
-		for (let i=0; i<modelCount; i++) {
-			const children = editor.scene.children[i];
-			switch (children.name) {
-				case "Box":
-					
-					solidsText += `      <box name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
-					break;
-
-				case "Sphere":
-					
-					solidsText += `      <sphere name="${children.name}-solid-${i+1}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "Tubs":
-					
-					solidsText += `      <tube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "CTubs":
-					
-					solidsText += `      <cutTube name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "Cone":
-					
-					solidsText += `      <cone name="${children.name}-solid-${i+1}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "Parallelepiped":
-					
-					solidsText += `      <para name="${children.name}-solid-${i+1}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "TrapeZoid":
-					
-					solidsText += `      <trd name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "aTrapeZoidP": 
-					
-					solidsText += `      <trap name="${children.name}-solid-${i+1}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "aTorus":
-					
-					solidsText += `      <torus name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-				
-				case "EllipeCylnder":
-					
-					solidsText += `      <eltube name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
-					break;
-				
-				case "Ellipsoid":
-					
-					solidsText += `      <ellipsoid name="${children.name}-solid-${i+1}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "aEllipticalCone":
-					
-					solidsText += `      <elcone name="${children.name}-solid-${i+1}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "TwistedBox":
-					
-					solidsText += `      <twistedbox name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "TwistedTrapeZoid":
-					
-					solidsText += `      <twistedtrd name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "TwistedTrapeZoidP":
-					
-					solidsText += `      <twistedtrap name="${children.name}-solid-${i+1}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "TwistedTubs":
-					
-					solidsText += `      <twistedtubs name="${children.name}-solid-${i+1}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "Tetrahedra":
-					
-					solidsText += `      <tet name="${children.name}-solid-${i+1}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
-					break;
-
-				case "Hyperboloid":
-					
-					solidsText += `      <hype name="${children.name}-solid-${i+1}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
-					break;
-
-				case "Polycone":
-					
-					solidsText += `      <polycone name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
-
-					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
-						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
-					}
-
-					solidsText += `      </polycone>\n`;
-					break;
-
-				case "Polyhedra":
-					
-					solidsText += `      <polyhedra name="${children.name}-solid-${i+1}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
-
-					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
-						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
-					}
-
-					solidsText += `      </polyhedra>\n`;
-					break;
-
-				case "united_object":
-
-					traversebooleanObjects(children, function ( child ) {
-
-						rotationText += getRotationText(child);
-						positionText += getPositionText(child);
-						solidsText += getSolidText(child);
-			
-					} );
-					break;
-
-					case "subtracted_object":
-
-					traversebooleanObjects(children, function ( child ) {
-
-						rotationText += getRotationText(child);
-						positionText += getPositionText(child);
-						solidsText += getSolidText(child);
-			
-					} );
-					break;
-
-					case "intersected_object":
-
-					traversebooleanObjects(children, function ( child ) {
-
-						rotationText += getRotationText(child);
-						positionText += getPositionText(child);
-						solidsText += getSolidText(child);
-			
-					} );
-					break;
-
-				default:
-
-					break;
-			}
-			
-			// Material properties
-			
-			if( children.material && children.material.name ) {
-				if(!materialRefArray.includes(children.material.name.elementType)) {
-					materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
-					materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
-					materialsText += `        <T value="293.15" unit="K"/>\n`;
-					materialsText += `      <material/>\n`;
+		if(modelCount > 0) {
+			for (let i=0; i<modelCount; i++) {
+				const children = editor.scene.children[i];
+				switch (children.name) {
+					case "Box":
+						
+						solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
+						break;
 	
-					materialRefArray.push(children.material?.name?.elementType);
+					case "Sphere":
+						
+						solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Tubs":
+						
+						solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "CTubs":
+						
+						solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Cone":
+						
+						solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Parallelepiped":
+						
+						solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "TrapeZoid":
+						
+						solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "aTrapeZoidP": 
+						
+						solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "aTorus":
+						
+						solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+					
+					case "EllipeCylnder":
+						
+						solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
+						break;
+					
+					case "Ellipsoid":
+						
+						solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "aEllipticalCone":
+						
+						solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "TwistedBox":
+						
+						solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "TwistedTrapeZoid":
+						
+						solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "TwistedTrapeZoidP":
+						
+						solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "TwistedTubs":
+						
+						solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Tetrahedra":
+						
+						solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Hyperboloid":
+						
+						solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Polycone":
+						
+						solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+	
+						for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
+							solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
+						}
+	
+						solidsText += `      </polycone>\n`;
+						break;
+	
+					case "Polyhedra":
+						
+						solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+	
+						for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
+							solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
+						}
+	
+						solidsText += `      </polyhedra>\n`;
+						break;
+	
+					case "united_object":
+	
+						traversebooleanObjects(children, function ( child ) {
+	
+							rotationText += getRotationText(child);
+							positionText += getPositionText(child);
+							solidsText += getSolidText(child);
+				
+						} );
+						break;
+	
+						case "subtracted_object":
+	
+						traversebooleanObjects(children, function ( child ) {
+	
+							rotationText += getRotationText(child);
+							positionText += getPositionText(child);
+							solidsText += getSolidText(child);
+				
+						} );
+						break;
+	
+						case "intersected_object":
+	
+						traversebooleanObjects(children, function ( child ) {
+	
+							rotationText += getRotationText(child);
+							positionText += getPositionText(child);
+							solidsText += getSolidText(child);
+				
+						} );
+						break;
+	
+					default:
+	
+						break;
 				}
-			}
-			// position and rotation properties
-			if(children.name != "united_object" && children.name != "subtracted_object" && children.name != "intersected_object"){
-				positionText += `    <position name="${children.name}-pos-${i+1}" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
-				rotationText += `    <rotation name="${children.name}-rot-${i+1}" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;	
-			}
-			
-			// Volume properties
-			volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
-			if( children.material && children.material.name ) {
-				volumesText += `      <materialref ref="${children.material.name.elementType}"/>\n`;
-			}
-			volumesText += `      <solidref ref="${children.name}-solid-${i+1}"/>\n`;
-
-			// PhysiVolume properties
-			physvolsText += `      <physvol>\n`
-			physvolsText += `        <volumeref ref="${children.name}-volume-${i+1}"/>\n`;
-			physvolsText += `        <positionref ref="${children.name}-pos-${i+1}"/>\n`;
-			physvolsText += `        <rotationref ref="${children.name}-rot-${i+1}"/>\n`;
-			physvolsText += `      </physvol/>\n`;
+				
+				// Material properties
+				
+				if( children.material && children.material.name ) {
+					if(!materialRefArray.includes(children.material.name.elementType)) {
+						materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
+						materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
+						materialsText += `        <T value="293.15" unit="K"/>\n`;
+						materialsText += `      <material/>\n`;
 		
-		}
-
-		var sceneText = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-		sceneText += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
-		// close define
-		defineTexts += `  <define>\n`;
-		defineTexts += positionText;
-		defineTexts += rotationText;
-		defineTexts += `  </define>\n`;		
+						materialRefArray.push(children.material?.name?.elementType);
+					}
+				}
+				// position and rotation properties
+				if(children.name != "united_object" && children.name != "subtracted_object" && children.name != "intersected_object"){
+					positionText += `    <position name="${children.name}_${children.uuid}_pos" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
+					rotationText += `    <rotation name="${children.name}_${children.uuid}_rot" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;	
+				}
+				
+				// Volume properties
+				volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
+				if( children.material && children.material.name ) {
+					volumesText += `      <materialref ref="${children.material.name.elementType}"/>\n`;
+				}
+				volumesText += `      <solidref ref="${children.name}_${children.uuid}"/>\n`;
 	
-		// close material
-		materialsText += '    </materials>\n';
-
-		// close solidtext
-		solidsText += '    </solids>\n';
-
-		// close structure
-		structureText += `  <structure>\n`;
-		structureText += volumesText;
-		structureText += physvolsText;
-		structureText += `  </structure>\n`;
-
-		sceneText += defineTexts;
-		sceneText += materialsText;
-		sceneText += solidsText;
-		sceneText += structureText;
-		sceneText += `  <setup>\n`;
-		sceneText += `    <world ref="world"/>\n`;
-		sceneText += `  </setup>\n`;
-		sceneText += `</gdml>`;
-
-		downloadGeant4File(sceneText, 'scene.gdml');
+				// PhysiVolume properties
+				physvolsText += `      <physvol>\n`
+				physvolsText += `        <volumeref ref="${children.name}_${children.uuid}_volume"/>\n`;
+				physvolsText += `        <positionref ref="${children.name}_${children.uuid}_pos"/>\n`;
+				physvolsText += `        <rotationref ref="${children.name}_${children.uuid}_rot"/>\n`;
+				physvolsText += `      </physvol/>\n`;
+			
+			}
+	
+			var sceneText = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+			sceneText += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+			// close define
+			defineTexts += `  <define>\n`;
+			defineTexts += positionText;
+			defineTexts += rotationText;
+			defineTexts += `  </define>\n`;		
+		
+			// close material
+			materialsText += '    </materials>\n';
+	
+			// close solidtext
+			solidsText += '    </solids>\n';
+	
+			// close structure
+			structureText += `  <structure>\n`;
+			structureText += volumesText;
+			structureText += physvolsText;
+			structureText += `  </structure>\n`;
+	
+			sceneText += defineTexts;
+			sceneText += materialsText;
+			sceneText += solidsText;
+			sceneText += structureText;
+			sceneText += `  <setup>\n`;
+			sceneText += `    <world ref="world"/>\n`;
+			sceneText += `  </setup>\n`;
+			sceneText += `</gdml>`;
+	
+			downloadGeant4File(sceneText, 'scene.gdml');
+		} 
+		else {
+			alert( 'The added model could not be found.');
+		}
 
 	} );
 	options.add( option );
