@@ -1,4 +1,6 @@
 import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh } from "three";
+import { CSG } from "./CSGMesh";
+import { PolyconeGeometry } from "./geometry/PolyconeGeometry";
 
 class GDMLLoader extends Loader {
     constructor(manager) {
@@ -44,7 +46,7 @@ class GDMLLoader extends Loader {
         let defines = {};
         let geometries = {};
         let refs = {};
-        let meshes;
+        let meshes = {};
 
         function parseDefines() {
             var elements = GDML.querySelectorAll('define');
@@ -603,7 +605,290 @@ class GDMLLoader extends Loader {
                     geometries[name] = trd;
 
                 }
+                
+                if (type === 'ellipsoid') {
 
+                    name = solid.getAttribute('name');
+                    let xSemiAxis = solid.getAttribute('ax');
+                    let ySemiAxis = solid.getAttribute('by');
+                    let zSemiAxis = solid.getAttribute('cz');
+                    let zBottomCut = solid.getAttribute('zcut1');
+                    let zTopCut = solid.getAttribute('zcut2');
+
+                    
+                    const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
+            
+                    cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+            
+                    let positionAttribute = cylindergeometry1.getAttribute('position');
+            
+                    let vertex = new THREE.Vector3();
+            
+                    function calculate_normal_vector(x, y, z, a, b, c) {
+                        // Calculate the components of the normal vector
+                        let nx = 2 * (x / a ** 2)
+                        let ny = 2 * (y / b ** 2)
+                        let nz = 2 * (z / c ** 2)
+            
+                        // Normalize the normal vector
+                        let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
+                        nx /= magnitude
+                        ny /= magnitude
+                        nz /= magnitude
+                        let normal = { x: nx, y: ny, z: nz };
+                        return normal;
+                    }
+                    for (let i = 0; i < positionAttribute.count; i++) {
+            
+                        vertex.fromBufferAttribute(positionAttribute, i);
+                        let x, y, z;
+                        x = vertex.x, y = vertex.y;
+                        let k = 0;
+                        do {
+                            x = vertex.x + k;
+                            if (Math.abs(x) < 0) {
+                                x = vertex.x;
+                                break;
+                            }
+                            if (vertex.z > 0) {
+                                z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+                            } else {
+                                z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+                            }
+                            if (x > 0) {
+                                k -= 0.01
+                            } else {
+                                k += 0.01;
+                            }
+            
+                        } while (!z);
+            
+            
+                        cylindergeometry1.attributes.position.array[i * 3] = x;
+                        cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+                        cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+            
+                        let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
+                        cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
+                        cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
+                        cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
+            
+                    }
+                    cylindergeometry1.attributes.position.needsUpdate = true;
+            
+                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+            
+                    const finalMesh = cylindermesh;
+                    const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aEllipsoidGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Ellipsoid';
+                    
+                    meshes[name] = finalMesh;
+
+                }
+
+                if (type === 'elcone') {
+                    name = solid.getAttribute('name');
+                    let xSemiAxis = solid.getAttribute('dx');
+                    let ySemiAxis = solid.getAttribute('dy');
+                    var height = solid.getAttribute('zmax');
+                    var zTopCut = solid.getAttribute('zcut');
+
+                    const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
+                    cylindergeometry1.translate(0, zTopCut / 2, 0)
+                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                    const ratioZ = ySemiAxis / xSemiAxis;
+
+                    cylindermesh.scale.z = ratioZ;
+                    cylindermesh.updateMatrix();
+                    const aCSG = CSG.fromMesh(cylindermesh);
+                    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+                    const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aEllipticalConeGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'aEllipticalCone';
+                    meshes[name] = finalMesh;
+
+                }
+
+                if (type === 'paraboloid') {
+                    name = solid.getAttribute('name');
+                    let radius1 = solid.getAttribute('rlo');
+                    let radius2 = solid.getAttribute('rhi');
+                    let pDz = solid.getAttribute('dz');
+
+                    const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
+
+                    const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
+
+                    // cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+
+                    let positionAttribute = cylindergeometry1.getAttribute('position');
+
+                    let vertex = new THREE.Vector3();
+
+                    for (let i = 0; i < positionAttribute.count; i++) {
+
+                        vertex.fromBufferAttribute(positionAttribute, i);
+                        let x, y, z;
+                        x = vertex.x;
+                        y = vertex.y;
+                        z = vertex.z;
+                        let r = Math.sqrt((y * k1 + k2));
+
+                        let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+                        if (vertex.z >= 0) {
+                            z = Math.abs(r * Math.sin(alpha));
+                        } else {
+                            z = - Math.abs(r * Math.sin(alpha));
+                        }
+                        if (vertex.x >= 0) {
+                            x = r * Math.cos(alpha);
+                        } else {
+                            x = -r * Math.cos(alpha);
+                        }
+
+                        cylindergeometry1.attributes.position.array[i * 3] = x;
+                        cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+                        cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+
+                    }
+                    cylindergeometry1.attributes.position.needsUpdate = true;
+
+                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+
+                    const finalMesh = cylindermesh;
+                    const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aParaboloidGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Paraboloid';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'para') {
+                    name = solid.getAttribute('name');
+                    let dx = solid.getAttribute('x');
+                    let dy = solid.getAttribute('y');
+                    let dz = solid.getAttribute('z');
+                    let alpha = solid.getAttribute('alpha');
+                    let theta = solid.getAttribute('theta');
+                    let phi = solid.getAttribute('phi');
+
+                    const maxRadius = Math.max(dx, dy, dz);
+                    const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+                    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+                    const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+                    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+                    let MeshCSG1 = CSG.fromMesh(mesh);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+                    boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+                    boxmesh.position.set(0 + dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+                    boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+                    boxmesh.position.set(0 - dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+                    boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+                    boxmesh.position.set(0, 0, dz / 2);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+                    boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+                    boxmesh.position.set(0, 0, -dz / 2);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+                    boxmesh.position.set(0, dy / 2, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+                    boxmesh.position.set(0, - dy / 2, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+                    const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aParallGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Parallelepiped';
+
+                    meshes[name] = finalMesh;
+
+                }
+
+                if (type === 'polycone') {
+                    name = solid.getAttribute('name');
+                    
+                    let SPhi = solid.getAttribute('startphi');
+                    let DPhi = solid.getAttribute('deltaphi');
+                    let zplanes = solid.childNodes;
+                    let numZPlanes = solid.childNodes.length;
+                    let rInner = [];
+                    let rOuter = [];
+                    let z = [];
+
+
+                    for (var j = 0; j < zplanes.length; j++) {
+                        const rmin = zplanes[j].getAttribute('rmin');
+                        const rmax = zplanes[j].getAttribute('rmax');
+                        const zvalue = zplanes[j].getAttribute('z');
+                        rInner.push (rmin);
+                        rOuter.push(rmax);
+                        z.push(zvalue);
+                    }
+
+                    const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
+
+                    const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+                    let maxWidth = Math.max(...rOuter);
+                    let maxHeight = Math.max(...z);
+
+                    const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
+                    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                    boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
+
+                    let MeshCSG1 = CSG.fromMesh(meshOut);
+
+                    const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+                    const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.computeVertexNormals();
+                    finalMesh.geometry.type = 'aPolyconeGeometry';
+                    finalMesh.name = 'Polycone';
+                    finalMesh.updateMatrix();
+
+                    meshes[name] = finalMesh;
+                }
             }
         }
 
