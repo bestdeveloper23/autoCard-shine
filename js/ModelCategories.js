@@ -3172,7 +3172,7 @@ function ModelCategory(editor) {
         let MeshCSG1 = CSG.fromMesh(meshOut);
 
         const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
-        const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+        const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide, 'rInner': rInner };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyhedraGeometry';
@@ -3210,7 +3210,7 @@ function ModelCategory(editor) {
         let MeshCSG1 = CSG.fromMesh(meshOut);
 
         const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
-        const param = {'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+        const param = {'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide, 'rInner': rInner };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyhedraGeometry';

@@ -234,6 +234,11 @@ function MenubarFile( editor ) {
 					
 					break;
 
+				case "Paraboloid":
+			
+					solidText1 += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
 				case "Hyperboloid":
 
 					solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
@@ -630,6 +635,11 @@ function MenubarFile( editor ) {
 					
 					break;
 
+				case "Paraboloid":
+			
+					solidText1 += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					break;
+
 				case "Hyperboloid":
 
 					solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
@@ -891,42 +901,42 @@ function MenubarFile( editor ) {
 
 				case "Sphere":
 					
-					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tubs":
 					
-					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "CTubs":
 					
-					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Cone":
 					
-					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Parallelepiped":
 					
-					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TrapeZoid":
 					
-					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTrapeZoidP": 
 					
-					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTorus":
 					
-					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "EllipeCylnder":
@@ -936,7 +946,7 @@ function MenubarFile( editor ) {
 				
 				case "Ellipsoid":
 					
-					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
@@ -946,27 +956,32 @@ function MenubarFile( editor ) {
 
 				case "TwistedBox":
 					
-					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoid":
 					
-					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoidP":
 					
-					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTubs":
 					
-					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tetrahedra":
 					
 					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					break;
+
+				case "Paraboloid":
+			
+					solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Hyperboloid":
@@ -976,7 +991,7 @@ function MenubarFile( editor ) {
 
 				case "Polycone":
 					
-					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
 					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
@@ -987,7 +1002,7 @@ function MenubarFile( editor ) {
 
 				case "Polyhedra":
 					
-					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
 					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
@@ -1058,20 +1073,16 @@ function MenubarFile( editor ) {
 			switch (object.name) {
 				case "Box":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
@@ -1109,25 +1120,21 @@ function MenubarFile( editor ) {
 			
 				case "Sphere":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <sphere name="sphereSolid" rmin="${0}" rmax="${object.geometry.parameters.radius}" deltaphi="${object.geometry.parameters.phiLength}" deltatheta="${object.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <sphere name="sphereSolid" rmin="${0}" rmax="${object.geometry.parameters.radius}" deltaphi="${object.geometry.parameters.phiLength}" deltatheta="${object.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1159,25 +1166,21 @@ function MenubarFile( editor ) {
 		
 				case "Tubs":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <tube name="tubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <tube name="tubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1209,25 +1212,21 @@ function MenubarFile( editor ) {
 							
 				case "CTubs":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <cutTube name="CtubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" lowX="${object.geometry.parameters.pLowNorm.x} lowY="${object.geometry.parameters.pLowNorm.y}" lowZ="${object.geometry.parameters.pLowNorm.z}" highX="${object.geometry.parameters.pHighNorm.x}" highY="${object.geometry.parameters.pHighNorm.y}" highZ="${object.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <cutTube name="CtubeSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" lowX="${object.geometry.parameters.pLowNorm.x}" lowY="${object.geometry.parameters.pLowNorm.y}" lowZ="${object.geometry.parameters.pLowNorm.z}" highX="${object.geometry.parameters.pHighNorm.x}" highY="${object.geometry.parameters.pHighNorm.y}" highZ="${object.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1259,25 +1258,21 @@ function MenubarFile( editor ) {
 												
 				case "Cone":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1309,25 +1304,21 @@ function MenubarFile( editor ) {
 																	
 				case "Parallelepiped":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <para name="paraSolid" x="${object.geometry.parameters.dx}" y="${object.geometry.parameters.dy}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <para name="paraSolid" x="${object.geometry.parameters.dx}" y="${object.geometry.parameters.dy}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1359,25 +1350,21 @@ function MenubarFile( editor ) {
 																						
 				case "TrapeZoid":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <trd name="trdSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <trd name="trdSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1409,25 +1396,21 @@ function MenubarFile( editor ) {
 																											
 				case "aTrapeZoidP":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1459,25 +1442,21 @@ function MenubarFile( editor ) {
 																										
 				case "aTorus":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" starttheta="${object.geometry.parameters.pSPhi}" deltatheta="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" starttheta="${object.geometry.parameters.pSPhi}" deltatheta="${object.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1509,20 +1488,16 @@ function MenubarFile( editor ) {
 																																
 				case "EllipeCylnder":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
@@ -1559,25 +1534,21 @@ function MenubarFile( editor ) {
 																																						
 				case "Ellipsoid":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <ellipsoid name="ellipsoidSolid" ax="${object.geometry.parameters.xSemiAxis}" by="${object.geometry.parameters.semiAxisY}" cz="${object.geometry.parameters.zSemiAxis}" zcut2="${object.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <ellipsoid name="ellipsoidSolid" ax="${object.geometry.parameters.xSemiAxis}" by="${object.geometry.parameters.ySemiAxis}" cz="${object.geometry.parameters.zSemiAxis}" zcut2="${object.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1609,20 +1580,16 @@ function MenubarFile( editor ) {
 																																												
 				case "aEllipticalCone":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
@@ -1659,25 +1626,21 @@ function MenubarFile( editor ) {
 																																																
 				case "TwistedBox":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <twistedbox name="tboxSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.height}" z="${object.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <twistedbox name="tboxSolid" PhiTwist="${object.geometry.parameters.angle}" x="${object.geometry.parameters.width}" y="${object.geometry.parameters.height}" z="${object.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1709,25 +1672,21 @@ function MenubarFile( editor ) {
 																																																				
 				case "TwistedTrapeZoid":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <twistedtrd name="ttradSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <twistedtrd name="ttradSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1759,25 +1718,21 @@ function MenubarFile( editor ) {
 																																																								
 				case "TwistedTrapeZoidP":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <twistedtrap name="ttrapSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" Alph="${object.geometry.parameters.alpha}" Theta="${object.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <twistedtrap name="ttrapSolid" PhiTwist="${object.geometry.parameters.twistedangle}" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" Alph="${object.geometry.parameters.alpha}" Theta="${object.geometry.parameters.theta}" Phi="${object.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1809,25 +1764,21 @@ function MenubarFile( editor ) {
 																																																												
 				case "TwistedTubs":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <twistedtubs name="ttubeSolid" twistedangle="${object.geometry.parameters.twistedangle}" endinnerrad="${object.geometry.parameters.pRMin}" endouterrad="${object.geometry.parameters.pRMax}" zlen="${object.geometry.parameters.pDz}" phi="${object.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <twistedtubs name="ttubeSolid" twistedangle="${object.geometry.parameters.twistedangle}" endinnerrad="${object.geometry.parameters.pRMin}" endouterrad="${object.geometry.parameters.pRMax}" zlen="${object.geometry.parameters.pDz}" phi="${object.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1859,20 +1810,16 @@ function MenubarFile( editor ) {
 																																																																
 				case "Tetrahedra":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
@@ -1906,23 +1853,65 @@ function MenubarFile( editor ) {
 					
 					downloadGeant4File( gdml, 'Tetrahedra.gdml')
 					break;
-																																																															
-				case "Hyperboloid":
+						
+				case "Paraboloid":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `    </materials>\n`;
+					gdml += `    <solids>\n`;
+					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
+					gdml += `      <paraboloid name="${object.name}_${object.uuid}" rhi="${object.geometry.parameters.R2}" rlo="${object.geometry.parameters.R1}" dz="${object.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `    </solids>\n`;
+					gdml += `  </define>\n`;
+					gdml += `  <structure>\n`;
+					gdml += `    <volume name="world">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `      <physvol>\n`;
+					gdml += `        <volumeref ref="paraboloidVolume"/>\n`;
+					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `      </physvol>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="roomVolume">\n`;
+					gdml += `      <materialref ref="Air"/>\n`;
+					gdml += `      <solidref ref="roomSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `    <volume name="paraboloidVolume">\n`;
+					gdml += `      <materialref ref="${object.material.name?.elementType}"/>\n`;
+					gdml += `      <solidref ref="hypeSolid"/>\n`;
+					gdml += `    </volume>\n`;
+					gdml += `  </structure>\n`;
+					gdml += `  <setup>\n`;
+					gdml += `    <world ref="world"/>\n`;
+					gdml += `  </setup>\n`;
+					gdml += `</gdml>\n`;
+					
+					downloadGeant4File( gdml, 'Paraboloid.gdml')
+					break;
+
+				case "Hyperboloid":
+					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
+					gdml += `  <define>\n`;
+					gdml += `    <materials>\n`;
+					gdml += `      <material name="Air" state="gas">\n`;
+					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
+					gdml += `          <fraction ref="N" n="0.7"/>\n`;
+					gdml += `          <fraction ref="O" n="0.3"/>\n`;
+					gdml += `      </material>\n`;
+					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
+					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
@@ -1959,25 +1948,21 @@ function MenubarFile( editor ) {
 																																																														
 				case "Polycone":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <polycone name="polyconeSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					gdml += `      <polycone name="polyconeSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
 					for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
 						gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
@@ -2015,25 +2000,21 @@ function MenubarFile( editor ) {
 																																																																			
 				case "Polyhedra":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
 					gdml += `    <materials>\n`;
 					gdml += `      <material name="Air" state="gas">\n`;
 					gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-					gdml += `        <composite n="1">\n`;
 					gdml += `          <fraction ref="N" n="0.7"/>\n`;
 					gdml += `          <fraction ref="O" n="0.3"/>\n`;
-					gdml += `        </composite>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 					gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-					gdml += `        <T value="293.15" unit="K"/>\n`;
 					gdml += `      </material>\n`;
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <polyhedra name="polyhedraSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" numsides="${object.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					gdml += `      <polyhedra name="polyhedraSolid" startphi="${object.geometry.parameters.SPhi}" deltaphi="${object.geometry.parameters.DPhi}" numsides="${object.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
 					for(var i = 0; i < object.geometry.parameters.numZPlanes; i++){
 						gdml += `        <zplane rmin="${object.geometry.parameters.rInner[i]}" rmax="${object.geometry.parameters.rOuter[i]}" z="${object.geometry.parameters.z[i]}"/>\n`
@@ -2071,7 +2052,7 @@ function MenubarFile( editor ) {
 					
 					case "united_object":
 						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 						gdml += `  <define>\n`;
 						gdml += rotationText;
 						gdml += positionText;
@@ -2079,15 +2060,11 @@ function MenubarFile( editor ) {
 						gdml += `    <materials>\n`;
 						gdml += `      <material name="Air" state="gas">\n`;
 						gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-						gdml += `        <composite n="1">\n`;
-						gdml += `          <fraction ref="N" n="0.7"/>\n`;
+							gdml += `          <fraction ref="N" n="0.7"/>\n`;
 						gdml += `          <fraction ref="O" n="0.3"/>\n`;
-						gdml += `        </composite>\n`;
-						gdml += `        <T value="293.15" unit="K"/>\n`;
 						gdml += `      </material>\n`;
 						gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 						gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-						gdml += `        <T value="293.15" unit="K"/>\n`;
 						gdml += `      </material>\n`;
 						gdml += `    </materials>\n`;
 						gdml += `    <solids>\n`;
@@ -2124,7 +2101,7 @@ function MenubarFile( editor ) {
 					
 						case "subtracted_object":
 							var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-							gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+							gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 							gdml += `  <define>\n`;
 							gdml += rotationText;
 							gdml += positionText;
@@ -2132,15 +2109,11 @@ function MenubarFile( editor ) {
 							gdml += `    <materials>\n`;
 							gdml += `      <material name="Air" state="gas">\n`;
 							gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-							gdml += `        <composite n="1">\n`;
-							gdml += `          <fraction ref="N" n="0.7"/>\n`;
+									gdml += `          <fraction ref="N" n="0.7"/>\n`;
 							gdml += `          <fraction ref="O" n="0.3"/>\n`;
-							gdml += `        </composite>\n`;
-							gdml += `        <T value="293.15" unit="K"/>\n`;
 							gdml += `      </material>\n`;
 							gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 							gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-							gdml += `        <T value="293.15" unit="K"/>\n`;
 							gdml += `      </material>\n`;
 							gdml += `    </materials>\n`;
 							gdml += `    <solids>\n`;
@@ -2177,7 +2150,7 @@ function MenubarFile( editor ) {
 											
 					case "intersected_object":
 						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 						gdml += `  <define>\n`;
 						gdml += rotationText;
 						gdml += positionText;
@@ -2185,15 +2158,11 @@ function MenubarFile( editor ) {
 						gdml += `    <materials>\n`;
 						gdml += `      <material name="Air" state="gas">\n`;
 						gdml += `        <D value="0.001205" unit="g/cm3"/>\n`;
-						gdml += `        <composite n="1">\n`;
-						gdml += `          <fraction ref="N" n="0.7"/>\n`;
+							gdml += `          <fraction ref="N" n="0.7"/>\n`;
 						gdml += `          <fraction ref="O" n="0.3"/>\n`;
-						gdml += `        </composite>\n`;
-						gdml += `        <T value="293.15" unit="K"/>\n`;
 						gdml += `      </material>\n`;
 						gdml += `      <material name="${object.material?.name?.elementType}">\n`;
 						gdml += `        <D value="${object.material?.name?.density}" unit="g/cm3"/>\n`;
-						gdml += `        <T value="293.15" unit="K"/>\n`;
 						gdml += `      </material>\n`;
 						gdml += `    </materials>\n`;
 						gdml += `    <solids>\n`;
@@ -2284,42 +2253,42 @@ function MenubarFile( editor ) {
 
 				case "Sphere":
 					
-					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tubs":
 					
-					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "CTubs":
 					
-					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Cone":
 					
-					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Parallelepiped":
 					
-					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TrapeZoid":
 					
-					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTrapeZoidP": 
 					
-					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aTorus":
 					
-					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
 				case "EllipeCylnder":
@@ -2329,7 +2298,7 @@ function MenubarFile( editor ) {
 				
 				case "Ellipsoid":
 					
-					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
@@ -2339,27 +2308,32 @@ function MenubarFile( editor ) {
 
 				case "TwistedBox":
 					
-					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoid":
 					
-					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTrapeZoidP":
 					
-					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "TwistedTubs":
 					
-					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Tetrahedra":
 					
 					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+					break;
+
+				case "Paraboloid":
+			
+					solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "Hyperboloid":
@@ -2369,7 +2343,7 @@ function MenubarFile( editor ) {
 
 				case "Polycone":
 					
-					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
 					for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
@@ -2380,7 +2354,7 @@ function MenubarFile( editor ) {
 
 				case "Polyhedra":
 					
-					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
 					for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
 						solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
@@ -2440,15 +2414,12 @@ function MenubarFile( editor ) {
 		var materialsText = `    <materials>\n`;
 		materialsText += `      <material name="Air" state="gas">\n`;
 		materialsText += `        <D value="0.001205" unit="g/cm3"/>\n`;
-		materialsText += `        <composite n="1">\n`;
 		materialsText += `          <fraction ref="N" n="0.7"/>\n`;
 		materialsText += `          <fraction ref="O" n="0.3"/>\n`;
-		materialsText += `        </composite>\n`;
-		materialsText += `        <T value="293.15" unit="K"/>\n`;
 		materialsText += `      </material>\n`;
 
 		var solidsText = '';
-		solidsText += '    <solids/>\n';
+		solidsText += '    <solids>\n';
 		solidsText += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}"/>\n`;
 
 		var structureText = '';
@@ -2456,7 +2427,7 @@ function MenubarFile( editor ) {
 		var volumesText = '';
 
 		var physvolsText = '';
-		physvolsText += `    <volume name="world"/>\n`
+		physvolsText += `    <volume name="world">\n`
 		physvolsText += `      <materialref ref="Air"/>\n`;
 		physvolsText += `      <solidref ref="roomSolid"/>\n`;
 
@@ -2472,42 +2443,42 @@ function MenubarFile( editor ) {
 	
 					case "Sphere":
 						
-						solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "Tubs":
 						
-						solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "CTubs":
 						
-						solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x} lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "Cone":
 						
-						solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "Parallelepiped":
 						
-						solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "TrapeZoid":
 						
-						solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "aTrapeZoidP": 
 						
-						solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "aTorus":
 						
-						solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 					
 					case "EllipeCylnder":
@@ -2517,7 +2488,7 @@ function MenubarFile( editor ) {
 					
 					case "Ellipsoid":
 						
-						solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.semiAxisY}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "aEllipticalCone":
@@ -2527,27 +2498,32 @@ function MenubarFile( editor ) {
 	
 					case "TwistedBox":
 						
-						solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "TwistedTrapeZoid":
 						
-						solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "TwistedTrapeZoidP":
 						
-						solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "TwistedTubs":
 						
-						solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="rad" lunit="m"/>\n`; // Adjust size as needed
+						solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "Tetrahedra":
 						
 						solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
+						break;
+	
+					case "Paraboloid":
+			
+						solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
 					case "Hyperboloid":
@@ -2557,7 +2533,7 @@ function MenubarFile( editor ) {
 	
 					case "Polycone":
 						
-						solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+						solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
 						for(var j = 0; j < children.geometry.parameters.numZPlanes; j++){
 							solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[j]}" rmax="${children.geometry.parameters.rOuter[j]}" z="${children.geometry.parameters.z[j]}"/>\n`
@@ -2568,7 +2544,7 @@ function MenubarFile( editor ) {
 	
 					case "Polyhedra":
 						
-						solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="rad" lunit="m">\n`; // Adjust size as needed
+						solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
 						for(var k = 0; k < children.geometry.parameters.numZPlanes; k++){
 							solidsText += `        <zplane rmin="${children.geometry.parameters.rInner[k]}" rmax="${children.geometry.parameters.rOuter[k]}" z="${children.geometry.parameters.z[k]}"/>\n`
@@ -2621,7 +2597,6 @@ function MenubarFile( editor ) {
 					if(!materialRefArray.includes(children.material.name.elementType)) {
 						materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
 						materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
-						materialsText += `        <T value="293.15" unit="K"/>\n`;
 						materialsText += `      <material/>\n`;
 		
 						materialRefArray.push(children.material?.name?.elementType);
@@ -2634,23 +2609,26 @@ function MenubarFile( editor ) {
 				}
 				
 				// Volume properties
-				volumesText += `    <volume name="${children.name}-volume-${i+1}"/>\n`;
+				volumesText += `    <volume name="${children.name}_${children.uuid}_volume">\n`;
 				if( children.material && children.material.name ) {
 					volumesText += `      <materialref ref="${children.material.name.elementType}"/>\n`;
+				} else {
+					volumesText += `      <materialref ref="G4_C"/>\n`;
 				}
 				volumesText += `      <solidref ref="${children.name}_${children.uuid}"/>\n`;
-	
+				volumesText += `    </volume>\n`
+
 				// PhysiVolume properties
 				physvolsText += `      <physvol>\n`
 				physvolsText += `        <volumeref ref="${children.name}_${children.uuid}_volume"/>\n`;
 				physvolsText += `        <positionref ref="${children.name}_${children.uuid}_pos"/>\n`;
 				physvolsText += `        <rotationref ref="${children.name}_${children.uuid}_rot"/>\n`;
-				physvolsText += `      </physvol/>\n`;
+				physvolsText += `      </physvol>\n`;
 			
 			}
 	
 			var sceneText = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-			sceneText += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://gdml.web.cern.ch/GDML/schema/gdml.xsd">\n`;
+			sceneText += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 			// close define
 			defineTexts += `  <define>\n`;
 			defineTexts += positionText;
@@ -2667,13 +2645,14 @@ function MenubarFile( editor ) {
 			structureText += `  <structure>\n`;
 			structureText += volumesText;
 			structureText += physvolsText;
+			structureText += `    </volume>\n`;
 			structureText += `  </structure>\n`;
 	
 			sceneText += defineTexts;
 			sceneText += materialsText;
 			sceneText += solidsText;
 			sceneText += structureText;
-			sceneText += `  <setup>\n`;
+			sceneText += `  <setup name="Default" version="1.0">\n`;
 			sceneText += `    <world ref="world"/>\n`;
 			sceneText += `  </setup>\n`;
 			sceneText += `</gdml>`;

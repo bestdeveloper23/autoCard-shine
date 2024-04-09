@@ -1,4 +1,4 @@
-import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh } from "three";
+import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4 } from "three";
 import { CSG } from "./CSGMesh";
 import { PolyconeGeometry } from "./geometry/PolyconeGeometry";
 
@@ -615,14 +615,20 @@ class GDMLLoader extends Loader {
                     let zBottomCut = solid.getAttribute('zcut1');
                     let zTopCut = solid.getAttribute('zcut2');
 
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
                     
-                    const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
+                    const cylindergeometry1 = new CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
             
                     cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
             
                     let positionAttribute = cylindergeometry1.getAttribute('position');
             
-                    let vertex = new THREE.Vector3();
+                    let vertex = new Vector3();
             
                     function calculate_normal_vector(x, y, z, a, b, c) {
                         // Calculate the components of the normal vector
@@ -676,7 +682,7 @@ class GDMLLoader extends Loader {
                     }
                     cylindergeometry1.attributes.position.needsUpdate = true;
             
-                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                    const cylindermesh = new Mesh(cylindergeometry1, material);
             
                     const finalMesh = cylindermesh;
                     const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
@@ -696,15 +702,22 @@ class GDMLLoader extends Loader {
                     var height = solid.getAttribute('zmax');
                     var zTopCut = solid.getAttribute('zcut');
 
-                    const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const cylindergeometry1 = new CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
                     cylindergeometry1.translate(0, zTopCut / 2, 0)
-                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                    const cylindermesh = new Mesh(cylindergeometry1, material);
                     const ratioZ = ySemiAxis / xSemiAxis;
 
                     cylindermesh.scale.z = ratioZ;
                     cylindermesh.updateMatrix();
                     const aCSG = CSG.fromMesh(cylindermesh);
-                    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
 
                     const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
                     finalMesh.geometry.parameters = param;
@@ -723,13 +736,20 @@ class GDMLLoader extends Loader {
 
                     const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
 
-                    const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+                    
+                    const cylindergeometry1 = new CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
 
                     // cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
 
                     let positionAttribute = cylindergeometry1.getAttribute('position');
 
-                    let vertex = new THREE.Vector3();
+                    let vertex = new Vector3();
 
                     for (let i = 0; i < positionAttribute.count; i++) {
 
@@ -760,7 +780,7 @@ class GDMLLoader extends Loader {
                     }
                     cylindergeometry1.attributes.position.needsUpdate = true;
 
-                    const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                    const cylindermesh = new Mesh(cylindergeometry1, material);
 
                     const finalMesh = cylindermesh;
                     const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
@@ -781,12 +801,19 @@ class GDMLLoader extends Loader {
                     let theta = solid.getAttribute('theta');
                     let phi = solid.getAttribute('phi');
 
-                    const maxRadius = Math.max(dx, dy, dz);
-                    const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
-                    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
 
-                    const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
-                    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                    const maxRadius = Math.max(dx, dy, dz);
+                    const geometry = new BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+                    const mesh = new Mesh(geometry, material);
+
+                    const boxgeometry = new BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+                    const boxmesh = new Mesh(boxgeometry, material);
 
                     let MeshCSG1 = CSG.fromMesh(mesh);
                     let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -835,7 +862,7 @@ class GDMLLoader extends Loader {
                     MeshCSG3 = CSG.fromMesh(boxmesh);
                     aCSG = aCSG.subtract(MeshCSG3);
 
-                    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
                     const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aParallGeometry';
@@ -851,13 +878,15 @@ class GDMLLoader extends Loader {
                     
                     let SPhi = solid.getAttribute('startphi');
                     let DPhi = solid.getAttribute('deltaphi');
-                    let zplanes = solid.childNodes;
-                    let numZPlanes = solid.childNodes.length;
+                    let zplanes = solid.querySelectorAll('zplane');
+                    let numZPlanes = zplanes.length;
                     let rInner = [];
                     let rOuter = [];
                     let z = [];
 
-
+                    console.log(
+                        solid, zplanes
+                    )
                     for (var j = 0; j < zplanes.length; j++) {
                         const rmin = zplanes[j].getAttribute('rmin');
                         const rmax = zplanes[j].getAttribute('rmax');
@@ -867,19 +896,28 @@ class GDMLLoader extends Loader {
                         z.push(zvalue);
                     }
 
+                    
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
                     const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
 
-                    const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+                    const meshOut = new Mesh(geometryOut, material);
                     let maxWidth = Math.max(...rOuter);
                     let maxHeight = Math.max(...z);
 
-                    const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
-                    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                    const boxgeometry = new BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
+
+                    const boxmesh = new Mesh(boxgeometry, material);
                     boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
 
                     let MeshCSG1 = CSG.fromMesh(meshOut);
 
-                    const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+                    const finalMesh = CSG.toMesh(MeshCSG1, new Matrix4());
                     const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.computeVertexNormals();
@@ -889,7 +927,869 @@ class GDMLLoader extends Loader {
 
                     meshes[name] = finalMesh;
                 }
+
+                if (type === 'genericPolycone') {
+                    name = solid.getAttribute('name');
+                    
+                    let SPhi = solid.getAttribute('startphi');
+                    let DPhi = solid.getAttribute('deltaphi');
+                    let zplanes = solid.querySelectorAll('zplane');
+                    let numZPlanes = zplanes.length;
+                    let rInner = [];
+                    let rOuter = [];
+                    let z = [];
+
+
+                    for (var j = 0; j < zplanes.length; j++) {
+                        const rmax = zplanes[j].getAttribute('rmax');
+                        const zvalue = zplanes[j].getAttribute('z');
+                        rInner.push (0.01);
+                        rOuter.push(rmax);
+                        z.push(zvalue);
+                    }
+
+                    
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
+
+                    const meshOut = new Mesh(geometryOut, material);
+                    let maxWidth = Math.max(...rOuter);
+                    let maxHeight = Math.max(...z);
+
+                    const boxgeometry = new BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
+
+                    const boxmesh = new Mesh(boxgeometry, material);
+                    boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
+
+                    let MeshCSG1 = CSG.fromMesh(meshOut);
+
+                    const finalMesh = CSG.toMesh(MeshCSG1, new Matrix4());
+                    const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.computeVertexNormals();
+                    finalMesh.geometry.type = 'aPolyconeGeometry';
+                    finalMesh.name = 'Polycone';
+                    finalMesh.updateMatrix();
+
+                    meshes[name] = finalMesh;
+
+                }
+
+                if (type === 'polyhedra') {
+                    name = solid.getAttribute('name');
+
+                    let SPhi = solid.getAttribute('startphi');
+                    let DPhi = solid.getAttribute('deltaphi');
+                    let numSide = solid.getAttribute('numsides');
+                    let zplanes = solid.querySelectorAll('zplane');
+                    let numZPlanes = zplanes.length;
+                    let rInner = [];
+                    let rOuter = [];
+                    let z = [];
+
+                    for (let j = 0; j < numZPlanes; j++) {
+                        const rmin = zplanes[j].getAttribute('rmin');
+                        const rmax = zplanes[j].getAttribute('rmax');
+                        const zvalue = zplanes[j].getAttribute('z');
+
+                        rInner.push(rmin);
+                        rOuter.push(rmax);
+                        z.push(zvalue);
+                    }
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+                    const meshOut = new Mesh(geometryOut, material);
+
+                    let MeshCSG1 = CSG.fromMesh(meshOut);
+
+                    const finalMesh = CSG.toMesh(MeshCSG1, new Matrix4());
+                    const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.computeVertexNormals();
+                    finalMesh.geometry.type = 'aPolyhedraGeometry';
+                    finalMesh.name = 'Polyhedra';
+                    finalMesh.updateMatrix();
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'genericPolyhedra') {
+                    name = solid.getAttribute('name');
+
+                    let SPhi = solid.getAttribute('startphi');
+                    let DPhi = solid.getAttribute('deltaphi');
+                    let numSide = solid.getAttribute('numsides');
+                    let zplanes = solid.querySelectorAll('zplane');
+                    let numZPlanes = zplanes.length;
+                    let rInner = [];
+                    let rOuter = [];
+                    let z = [];
+
+                    for (let j = 0; j < numZPlanes; j++) {
+                        const rmax = zplanes[j].getAttribute('rmax');
+                        const zvalue = zplanes[j].getAttribute('z');
+
+                        rInner.push(0.01);
+                        rOuter.push(rmax);
+                        z.push(zvalue);
+                    }
+
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+                    const meshOut = new Mesh(geometryOut, material);
+
+                    let MeshCSG1 = CSG.fromMesh(meshOut);
+
+                    const finalMesh = CSG.toMesh(MeshCSG1, new Matrix4());
+                    const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.computeVertexNormals();
+                    finalMesh.geometry.type = 'aPolyhedraGeometry';
+                    finalMesh.name = 'Polyhedra';
+                    finalMesh.updateMatrix();
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'trap') {
+                    name = solid.getAttribute('name');
+
+                    let pDx1 = solid.getAttribute('x1');
+                    let pDx2 = solid.getAttribute('x2');
+                    let pDx3 = solid.getAttribute('x3');
+                    let pDx4 = solid.getAttribute('x4');
+                    let pDy1 = solid.getAttribute('y1');
+                    let pDy2 = solid.getAttribute('y2');
+                    let pDz = solid.getAttribute('z');
+                    let pTheta = solid.getAttribute('theta');
+                    let pPhi = solid.getAttribute('phi');
+                    let pAlpha = solid.getAttribute('alpha1');
+
+                    const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+                    const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+                    
+                    const geometry = new BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+                    const mesh = new Mesh(geometry, material1);
+
+                    const boxgeometry = new BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+                    const boxmesh = new Mesh(boxgeometry, material2);
+
+                    let MeshCSG1 = CSG.fromMesh(mesh);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+                    boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+                    boxmesh.position.set(0 + dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+                    boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+                    boxmesh.position.set(0 - dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+                    boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+                    boxmesh.position.set(0, 0, dy);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+                    boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+                    boxmesh.position.set(0, 0, -dy);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aTrapeZoidPGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'aTrapeZoidP';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'hype') {
+                    name = solid.getAttribute('name');
+
+                    let radiusIn = solid.getAttribute('rmin');
+                    let radiusOut = solid.getAttribute('rmax');
+                    let stereo1 = solid.getAttribute('outst');
+                    let stereo2 = solid.getAttribute('inst');
+                    let pDz = solid.getAttribute('z');
+
+                    const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
+                    const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
+                    const cylindergeometry1 = new CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
+                    const cylindergeometry2 = new CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+
+                    let positionAttribute = cylindergeometry1.getAttribute('position');
+                    let positionAttribute2 = cylindergeometry2.getAttribute('position');
+                    let vertex = new Vector3();
+                    let vertex2 = new Vector3();
+
+                    for (let i = 0; i < positionAttribute.count; i++) {
+
+                        vertex.fromBufferAttribute(positionAttribute, i);
+                        vertex2.fromBufferAttribute(positionAttribute2, i);
+                        let x, y, z, x2, y2, z2;
+                        x = vertex.x;
+                        y = vertex.y;
+                        z = vertex.z;
+                        x2 = vertex2.x;
+                        y2 = vertex2.y;
+                        z2 = vertex2.z;
+                        let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
+                        let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
+
+                        let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+                        if (vertex.z >= 0) {
+                            z = Math.abs(r * Math.sin(alpha));
+                            z2 = Math.abs(r2 * Math.sin(alpha));
+                        } else {
+                            z = - Math.abs(r * Math.sin(alpha));
+                            z2 = - Math.abs(r2 * Math.sin(alpha));
+                        }
+                        if (vertex.x >= 0) {
+                            x = r * Math.cos(alpha);
+                            x2 = r2 * Math.cos(alpha);
+                        } else {
+                            x = -r * Math.cos(alpha);
+                            x2 = -r2 * Math.cos(alpha);
+                        }
+
+                        cylindergeometry1.attributes.position.array[i * 3] = x;
+                        cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+                        cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
+
+
+                        cylindergeometry2.attributes.position.array[i * 3] = x2;
+                        cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
+                        cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
+
+                    }
+                    cylindergeometry1.attributes.position.needsUpdate = true;
+                    cylindergeometry2.attributes.position.needsUpdate = true;
+
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const cylindermesh = new Mesh(cylindergeometry1, material1);
+                    const cylindermesh2 = new Mesh(cylindergeometry2, material2);
+
+                    const MeshCSG1 = CSG.fromMesh(cylindermesh);
+                    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+
+                    let aCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+
+                    const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aHyperboloidGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Hyperboloid';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === '') {
+                    name = solid.getAttribute('name');
+
+                    let pRMin = solid.getAttribute('rmin');
+                    let pRMax = solid.getAttribute('rmax');
+                    let pDz = solid.getAttribute('z');
+                    let SPhi = solid.getAttribute('startphi');
+                    let DPhi = solid.getAttribute('deltaphi');
+                    let pLowNorm = new Vector3();
+                    pLowNorm.x = solid.getAttribute('lowX');
+                    pLowNorm.y = solid.getAttribute('lowY');
+                    pLowNorm.z = solid.getAttribute('lowZ');
+
+                    let pHighNorm = new Vector3();
+                    pHighNorm.x = solid.getAttribute('highX');
+                    pHighNorm.y = solid.getAttribute('highY');
+                    pHighNorm.z = solid.getAttribute('highZ');
+
+                    function CutTube_vectorVal(vector) {
+                        if (CutTube_vectorVertical(vector)) {
+                            return true;
+                        } else if ((vector.x * vector.y) === 0 && (vector.x * vector.z) === 0 && (vector.y * vector.z) === 0) {
+                            return false;
+                        } else if (vector.y === 0) {
+                            return false;
+                        } else return true;
+                    }
+
+                    function CutTube_vectorVertical(vector) {
+                        if (vector.y !== 0 && vector.x === 0 && vector.z === 0) {
+                            return true;
+                        } else return false;
+                    }
+
+                    if (CutTube_vectorVal(pLowNorm) === false || CutTube_vectorVal(pHighNorm) === false) return;
+
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material3 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material4 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material5 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
+                    const cylindermesh1 = new Mesh(cylindergeometry1, material1);
+
+                    const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
+                    const cylindermesh2 = new Mesh(cylindergeometry2, material2);
+
+                    const maxdis = Math.max(pRMax, pRMin, pDz);
+
+                    const boxgeometry1 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
+                    const boxmesh1 = new Mesh(boxgeometry1, material3);
+
+                    const boxgeometry2 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
+                    const boxmesh2 = new Mesh(boxgeometry2, material4);
+
+                    const boxgeometry = new BoxGeometry(pRMax, 2 * Math.sqrt(2) * maxdis, pRMax);
+                    const boxmesh = new Mesh(boxgeometry, material5);
+
+
+                    boxmesh1.geometry.translate(0, Math.sqrt(2) * maxdis, 0);
+                    const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+                    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh1);
+
+                    let aCSG;
+                    aCSG = MeshCSG1.subtract(MeshCSG2);
+
+
+                    if (CutTube_vectorVertical(pHighNorm) === false) {
+
+                        let rotateX = Math.atan(pHighNorm.z / pHighNorm.y);
+                        let rotateY = Math.atan(pHighNorm.z / pHighNorm.x);
+                        let rotateZ = Math.atan(pHighNorm.x / pHighNorm.y);
+
+                        if (rotateX === Infinity) rotateX = boxmesh1.rotation.x;
+                        if (rotateY === Infinity) rotateY = boxmesh1.rotation.y;
+                        if (rotateZ === Infinity) rotateZ = boxmesh1.rotation.z;
+
+                        boxmesh1.rotation.set(-rotateX, -rotateY, -rotateZ);
+                    }
+
+                    boxmesh1.position.set(0, pDz / 2, 0);
+                    boxmesh1.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh1);
+
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh2.geometry.translate(0, -Math.sqrt(2) * pDz, 0);
+                    if (!CutTube_vectorVertical(pLowNorm)) {
+
+                        let rotateX = Math.atan(pLowNorm.z / pLowNorm.y);
+                        let rotateY = Math.atan(pLowNorm.z / pLowNorm.x);
+                        let rotateZ = Math.atan(pLowNorm.x / pLowNorm.y);
+
+                        if (rotateX === Infinity) rotateX = boxmesh2.rotation.x;
+                        if (rotateY === Infinity) rotateY = boxmesh2.rotation.y;
+                        if (rotateZ === Infinity) rotateZ = boxmesh2.rotation.z;
+
+                        boxmesh2.rotation.set(-rotateX, -rotateY, -rotateZ);
+                    }
+
+                    boxmesh2.position.set(0, -maxdis / 2, 0);
+                    boxmesh2.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh2);
+
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+
+                    boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+                    let bCSG = aCSG;
+
+                    if (DPhi > 270) {
+                        let v_DPhi = 360 - DPhi;
+
+                        boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / 2;
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            bCSG = bCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+                        aCSG = aCSG.subtract(bCSG);
+
+                    } else {
+
+                        boxmesh.rotateY(SPhi / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / (-2);
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            aCSG = aCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                    }
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pHighNorm': pHighNorm, 'pLowNorm': pLowNorm };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aCutTubeGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'CTubs';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'twistedbox') {
+                    name = solid.getAttribute('name');
+
+                    let twistedangle = solid.getAttribute('PhiTwist');
+                    let pDx = solid.getAttribute('x');
+                    let pDy = solid.getAttribute('y');
+                    let pDz = solid.getAttribute('z');
+                    
+                    const geometry = new BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
+                    geometry.type = 'aTwistedBoxGeometry';
+                    const positionAttribute = geometry.getAttribute('position');
+
+                    let vec3 = new Vector3();
+                    let axis_vector = new Vector3(0, 1, 0);
+                    for (let i = 0; i < positionAttribute.count; i++) {
+                        vec3.fromBufferAttribute(positionAttribute, i);
+                        vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
+                        geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+                    }
+
+                    const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+                    geometry.parameters = param;
+
+                    var material = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const mesh = new Mesh(geometry, material);
+                    mesh.name = 'TwistedBox';
+
+                    meshes[name] = mesh;
+                }
+
+                if (type === 'twistedtrd') {
+                    name = solid.getAttribute('name');
+
+                    let dx1 = solid.getAttribute('x1');
+                    let dx2 = solid.getAttribute('x2');
+                    let dy1 = solid.getAttribute('y1');
+                    let dy2 = solid.getAttribute('y2');
+                    let twistedangle = solid.getAttribute('PhiTwist');
+                    let dz = solid.getAttribute('z');
+                    
+                    const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
+                    const maxwidth = Math.max(dx1, dy1, dx2, dy2);
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const geometry = new BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
+                    const mesh = new Mesh(geometry, material1);
+            
+                    const boxgeometry = new BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
+                    const boxmesh = new Mesh(boxgeometry, material2);
+            
+                    let MeshCSG1 = CSG.fromMesh(mesh);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+            
+                    let alpha = Math.atan((dx1 - dx2) / 2 / dz);
+                    let phi = Math.atan((dy1 - dy2) / 2 / dz);
+            
+                    boxmesh.geometry.translate(maxdis, maxdis, 0);
+                    boxmesh.rotation.set(0, 0, phi);
+                    boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    let aCSG = MeshCSG1.subtract(MeshCSG3);
+            
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(-2 * maxdis, 0, 0);
+                    boxmesh.rotation.set(0, 0, -phi);
+                    boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+            
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(maxdis, 0, maxdis);
+                    boxmesh.rotation.set(-alpha, 0, 0);
+                    boxmesh.position.set(0, -dz / 2, dy1 / 2);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+            
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(0, 0, -2 * maxdis);
+                    boxmesh.rotation.set(alpha, 0, 0);
+                    boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+            
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
+                    finalMesh.geometry.parameters = param;
+            
+                    const positionAttribute = finalMesh.geometry.getAttribute('position');
+            
+                    let vec3 = new Vector3();
+                    let axis_vector = new Vector3(0, 1, 0);
+                    for (let i = 0; i < positionAttribute.count; i++) {
+                        vec3.fromBufferAttribute(positionAttribute, i);
+                        vec3.applyAxisAngle(axis_vector, (vec3.y / dz) * twistedangle / 180 * Math.PI);
+                        finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+                    }
+            
+                    finalMesh.geometry.type = 'aTwistedTrdGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'TwistedTrapeZoid';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'twistedtrap') {
+                    name = solid.getAttribute('name');
+
+                    let pDx1 = solid.getAttribute('x1');
+                    let pDx2 = solid.getAttribute('x2');
+                    let pDx3 = solid.getAttribute('x3');
+                    let pDx4 = solid.getAttribute('x4');
+                    let pDy1 = solid.getAttribute('y1');
+                    let pDy2 = solid.getAttribute('y2');
+                    let pDz = solid.getAttribute('z');
+                    let twistedangle = solid.getAttribute('PhiTwist');
+                    let pAlpha = solid.getAttribute('Alph');
+                    let pTheta = solid.getAttribute('Theta');
+                    let pPhi = solid.getAttribute('Phi');
+                
+                    const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+                    const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const geometry = new BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+                    const mesh = new Mesh(geometry, material1);
+
+                    const boxgeometry = new BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
+                    const boxmesh = new Mesh(boxgeometry, material2);
+
+                    let MeshCSG1 = CSG.fromMesh(mesh);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+                    boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+                    boxmesh.position.set(0 + dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+                    boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+                    boxmesh.position.set(0 - dx / 2, 0, 0);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+                    boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+                    boxmesh.position.set(0, 0, dy);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+                    boxmesh.rotation.set(0, 0, 0);
+                    boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+                    boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+                    boxmesh.position.set(0, 0, -dy);
+                    boxmesh.updateMatrix();
+                    MeshCSG3 = CSG.fromMesh(boxmesh);
+                    aCSG = aCSG.subtract(MeshCSG3);
+
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
+                    finalMesh.geometry.parameters = param;
+
+                    const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+                    let vec3 = new Vector3();
+                    let axis_vector = new Vector3(0, 1, 0);
+                    for (let i = 0; i < positionAttribute.count; i++) {
+                        vec3.fromBufferAttribute(positionAttribute, i);
+                        vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+                        finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+                    }
+
+                    finalMesh.geometry.type = 'aTwistedTrapGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'TwistedTrapeZoidP';
+
+                    meshes[name] = finalMesh;
+                }
+
+                if (type === 'twistedtubs') {
+                    name = solid.getAttribute('name');
+
+                    let pRMin = solid.getAttribute('endinnerrad');
+                    let pRMax = solid.getAttribute('endouterrad');
+                    let pDz = solid.getAttribute('zlen');
+                    let SPhi = 0
+                    let DPhi = solid.getAttribute('phi');
+                    let twistedangle = solid.getAttribute('twistedangle');
+
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+                    
+                    var material3 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh1 = new Mesh(cylindergeometry1, material1);
+
+                    const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh2 = new Mesh(cylindergeometry2, material2);
+
+                    const boxgeometry = new BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
+                    const boxmesh = new Mesh(boxgeometry, material3);
+
+                    boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+                    const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+                    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    let aCSG;
+                    aCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    let bCSG;
+                    bCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    if (DPhi > 270) {
+                        let v_DPhi = 360 - DPhi;
+
+                        boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / 2;
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            bCSG = bCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+                        aCSG = aCSG.subtract(bCSG);
+
+                    } else {
+
+                        boxmesh.rotateY(SPhi / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / (-2);
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            aCSG = aCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                    }
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
+                    finalMesh.geometry.parameters = param;
+
+                    const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+                    let vec3 = new Vector3();
+                    let axis_vector = new Vector3(0, 1, 0);
+                    for (let i = 0; i < positionAttribute.count; i++) {
+                        vec3.fromBufferAttribute(positionAttribute, i);
+                        vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+                        finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+                    }
+
+                    finalMesh.geometry.type = 'aTwistedTubeGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'TwistedTubs';
+
+                    meshes[name] = finalMesh;
+                }
             }
+            
+            console.log(geometries, meshes)
         }
 
         function parseVolumes() {
@@ -911,6 +1811,7 @@ class GDMLLoader extends Loader {
                     }
                 }
             }
+            console.log(volumes)
         }
 
         function parsePhysVols() {
@@ -932,6 +1833,8 @@ class GDMLLoader extends Loader {
 
                 var geometry;
 
+                var newMesh;
+
                 var material = new MeshPhongMaterial({
                     color: 0xffffff, //delete randomColor
                     transparent: true,
@@ -947,6 +1850,7 @@ class GDMLLoader extends Loader {
 
                         var volumeref = children[j].getAttribute('ref');
                         geometry = geometries[refs[volumeref]];
+                        newMesh = meshes[refs[volumeref]];
 
                     }
 
@@ -994,13 +1898,21 @@ class GDMLLoader extends Loader {
                     group.add(mesh);
 
                 }
+                if (newMesh) {
+                    newMesh.visible = true;
+                    newMesh.position.set(position.x, position.y, position.z);
+                    newMesh.rotation.set(rotation.x, rotation.y, rotation.z);
+                    group.add(newMesh);
+                }
             }
+            console.log(physvols)
         }
 
         function parseSetup() {
             var setup = GDML.querySelectorAll('setup');
+            console.log(setup)
             var worlds = setup[0].childNodes;
-
+            
             for (var i = 0; i < worlds.length; i++) {
 
                 var nodeName = worlds[i].nodeName;
