@@ -1,4 +1,4 @@
-import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4 } from "three";
+import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4, MeshStandardMaterial } from "three";
 import { CSG } from "./CSGMesh";
 import { PolyconeGeometry } from "./geometry/PolyconeGeometry";
 
@@ -169,40 +169,141 @@ class GDMLLoader extends Loader {
                     name = solid.getAttribute('name');
                     //console.log(type, name);
 
-                    var rmin = solid.getAttribute('rmin');
-                    var rmax = solid.getAttribute('rmax');
-                    var z = solid.getAttribute('z');
+                    var pRMin = solid.getAttribute('rmin');
+                    var pRMax = solid.getAttribute('rmax');
+                    var pDz = solid.getAttribute('z');
 
-                    var startphi = solid.getAttribute('startphi');
-                    var deltaphi = solid.getAttribute('deltaphi');
+                    var SPhi = solid.getAttribute('startphi');
+                    var DPhi = solid.getAttribute('deltaphi');
 
-                    if (aunit === 'deg') {
-                        startphi *= Math.PI / 180.0;
-                        deltaphi *= Math.PI / 180.0;
+                    if (aunit === 'rad') {
+                        DPhi *= 180.0 / Math.PI;
+                        DPhi *= 180.0 / Math.PI;
                     }
 
-                    var shape = new Shape();
-                    // x,y, radius, startAngle, endAngle, clockwise, rotation
-                    shape.absarc(0, 0, rmax, startphi, deltaphi, false);
+                    var material1 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
 
-                    if (rmin > 0.0) {
+                    var material2 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
 
-                        var hole = new Path();
-                        hole.absarc(0, 0, rmin, startphi, deltaphi, true);
-                        shape.holes.push(hole);
+                    var material3 = new MeshPhongMaterial({
+                        color: 0xffffff, //delete randomColor
+                        transparent: true,
+                        opacity: 0.6, //set opacity to 0.6
+                        wireframe: false
+                    });
+
+                    const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh1 = new Mesh(cylindergeometry1, material1);
+                    cylindermesh1.rotateX(Math.PI / 2);
+                    cylindermesh1.updateMatrix();
+
+                    const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh2 = new Mesh(cylindergeometry2, material2);
+                    cylindermesh2.rotateX(Math.PI / 2);
+                    cylindermesh2.updateMatrix();
+
+                    const boxgeometry = new BoxGeometry(pRMax, pRMax, pDz);
+                    const boxmesh = new Mesh(boxgeometry, material3);
+
+                    boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
+                    const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+                    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    let aCSG;
+                    aCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    let bCSG;
+                    bCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    if (DPhi > 270) {
+                        let v_DPhi = 360 - DPhi;
+
+                        boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / 2;
+                            boxmesh.rotateZ(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            bCSG = bCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateZ(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+                        aCSG = aCSG.subtract(bCSG);
+
+                    } else {
+
+                        boxmesh.rotateZ(SPhi / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / (-2);
+                            boxmesh.rotateZ(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            aCSG = aCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateZ(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
 
                     }
 
-                    var extrudeSettings = {
-                        depth: z,//new version three.js use depth insted of amount.
-                        steps: 1,
-                        bevelEnabled: false,
-                        curveSegments: 100 // set segment from 24 to 100
-                    };
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aTubeGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Tubs';
 
-                    var geometry = new ExtrudeGeometry(shape, extrudeSettings);
-                    geometry.center();
-                    geometries[name] = geometry;
+                    meshes[name] = finalMesh;
+                    // var shape = new Shape();
+                    // // x,y, radius, startAngle, endAngle, clockwise, rotation
+                    // shape.absarc(0, 0, rmax, startphi, deltaphi, false);
+
+                    // if (rmin > 0.0) {
+
+                    //     var hole = new Path();
+                    //     hole.absarc(0, 0, rmin, startphi, deltaphi, true);
+                    //     shape.holes.push(hole);
+
+                    // }
+
+                    // var extrudeSettings = {
+                    //     depth: z,//new version three.js use depth insted of amount.
+                    //     steps: 1,
+                    //     bevelEnabled: false,
+                    //     curveSegments: 100 // set segment from 24 to 100
+                    // };
+
+                    // var geometry = new ExtrudeGeometry(shape, extrudeSettings);
+                    // geometry.center();
+                    // geometries[name] = geometry;
 
                 }
 
@@ -285,7 +386,7 @@ class GDMLLoader extends Loader {
 
                     }
 
-                    // Note: ConeGeometry in THREE assumes inner radii of 0 and rmax1 = 0
+                    // Note: ConeGeometry in assumes inner radii of 0 and rmax1 = 0
                     // radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength
                     var cone = new ConeGeometry(rmax2, z, 32, 1, false, startphi, deltaphi);
                     geometries[name] = cone;
@@ -1249,7 +1350,7 @@ class GDMLLoader extends Loader {
                     meshes[name] = finalMesh;
                 }
 
-                if (type === '') {
+                if (type === 'cutTube') {
                     name = solid.getAttribute('name');
 
                     let pRMin = solid.getAttribute('rmin');
@@ -1276,168 +1377,137 @@ class GDMLLoader extends Loader {
                             return false;
                         } else return true;
                     }
-
+            
                     function CutTube_vectorVertical(vector) {
                         if (vector.y !== 0 && vector.x === 0 && vector.z === 0) {
                             return true;
                         } else return false;
                     }
-
+            
                     if (CutTube_vectorVal(pLowNorm) === false || CutTube_vectorVal(pHighNorm) === false) return;
-
-                    var material1 = new MeshPhongMaterial({
-                        color: 0xffffff, //delete randomColor
-                        transparent: true,
-                        opacity: 0.6, //set opacity to 0.6
-                        wireframe: false
-                    });
-
-                    var material2 = new MeshPhongMaterial({
-                        color: 0xffffff, //delete randomColor
-                        transparent: true,
-                        opacity: 0.6, //set opacity to 0.6
-                        wireframe: false
-                    });
-
-                    var material3 = new MeshPhongMaterial({
-                        color: 0xffffff, //delete randomColor
-                        transparent: true,
-                        opacity: 0.6, //set opacity to 0.6
-                        wireframe: false
-                    });
-
-                    var material4 = new MeshPhongMaterial({
-                        color: 0xffffff, //delete randomColor
-                        transparent: true,
-                        opacity: 0.6, //set opacity to 0.6
-                        wireframe: false
-                    });
-
-                    var material5 = new MeshPhongMaterial({
-                        color: 0xffffff, //delete randomColor
-                        transparent: true,
-                        opacity: 0.6, //set opacity to 0.6
-                        wireframe: false
-                    });
-
+            
                     const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                    const cylindermesh1 = new Mesh(cylindergeometry1, material1);
-
+                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    cylindermesh1.rotateX(Math.PI / 2);
+                    cylindermesh1.updateMatrix();
+            
                     const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                    const cylindermesh2 = new Mesh(cylindergeometry2, material2);
-
+                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                    cylindermesh2.rotateX(Math.PI / 2);
+                    cylindermesh2.updateMatrix();
+            
                     const maxdis = Math.max(pRMax, pRMin, pDz);
-
+            
                     const boxgeometry1 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                    const boxmesh1 = new Mesh(boxgeometry1, material3);
-
+                    const boxmesh1 = new Mesh(boxgeometry1, new MeshStandardMaterial());
+            
                     const boxgeometry2 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                    const boxmesh2 = new Mesh(boxgeometry2, material4);
-
-                    const boxgeometry = new BoxGeometry(pRMax, 2 * Math.sqrt(2) * maxdis, pRMax);
-                    const boxmesh = new Mesh(boxgeometry, material5);
-
-
-                    boxmesh1.geometry.translate(0, Math.sqrt(2) * maxdis, 0);
+                    const boxmesh2 = new Mesh(boxgeometry2, new MeshStandardMaterial());
+            
+                    const boxgeometry = new BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
+                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+            
+            
+                    boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);
                     const MeshCSG1 = CSG.fromMesh(cylindermesh1);
                     const MeshCSG2 = CSG.fromMesh(cylindermesh2);
                     let MeshCSG3 = CSG.fromMesh(boxmesh1);
-
+            
                     let aCSG;
                     aCSG = MeshCSG1.subtract(MeshCSG2);
-
-
+            
+            
                     if (CutTube_vectorVertical(pHighNorm) === false) {
-
+            
                         let rotateX = Math.atan(pHighNorm.z / pHighNorm.y);
-                        let rotateY = Math.atan(pHighNorm.z / pHighNorm.x);
-                        let rotateZ = Math.atan(pHighNorm.x / pHighNorm.y);
-
+                        let rotateY = Math.atan(pHighNorm.x / pHighNorm.y);
+                        let rotateZ = Math.atan(pHighNorm.z / pHighNorm.x);
+            
                         if (rotateX === Infinity) rotateX = boxmesh1.rotation.x;
                         if (rotateY === Infinity) rotateY = boxmesh1.rotation.y;
                         if (rotateZ === Infinity) rotateZ = boxmesh1.rotation.z;
-
+            
                         boxmesh1.rotation.set(-rotateX, -rotateY, -rotateZ);
                     }
-
-                    boxmesh1.position.set(0, pDz / 2, 0);
+            
+                    boxmesh1.position.set(0, 0, maxdis / 2);
                     boxmesh1.updateMatrix();
                     MeshCSG3 = CSG.fromMesh(boxmesh1);
-
+            
                     aCSG = aCSG.subtract(MeshCSG3);
-
-                    boxmesh2.geometry.translate(0, -Math.sqrt(2) * pDz, 0);
+            
+                    boxmesh2.geometry.translate(0, 0, -Math.sqrt(2) * pDz);
                     if (!CutTube_vectorVertical(pLowNorm)) {
-
+            
                         let rotateX = Math.atan(pLowNorm.z / pLowNorm.y);
-                        let rotateY = Math.atan(pLowNorm.z / pLowNorm.x);
-                        let rotateZ = Math.atan(pLowNorm.x / pLowNorm.y);
-
+                        let rotateY = Math.atan(pLowNorm.x / pLowNorm.y);
+                        let rotateZ = Math.atan(pLowNorm.z / pLowNorm.x);
+            
                         if (rotateX === Infinity) rotateX = boxmesh2.rotation.x;
                         if (rotateY === Infinity) rotateY = boxmesh2.rotation.y;
                         if (rotateZ === Infinity) rotateZ = boxmesh2.rotation.z;
-
+            
                         boxmesh2.rotation.set(-rotateX, -rotateY, -rotateZ);
                     }
-
-                    boxmesh2.position.set(0, -maxdis / 2, 0);
+            
+                    boxmesh2.position.set(0, 0, -maxdis / 2);
                     boxmesh2.updateMatrix();
                     MeshCSG3 = CSG.fromMesh(boxmesh2);
-
+            
                     aCSG = aCSG.subtract(MeshCSG3);
-
-
-                    boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+            
+            
+                    boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
                     let bCSG = aCSG;
-
+            
                     if (DPhi > 270) {
                         let v_DPhi = 360 - DPhi;
-
-                        boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+            
+                        boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
                         boxmesh.updateMatrix();
                         MeshCSG3 = CSG.fromMesh(boxmesh);
                         bCSG = bCSG.subtract(MeshCSG3);
-
+            
                         let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
+            
                         for (let i = 0; i < repeatCount; i++) {
                             let rotateVaule = Math.PI / 2;
-                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.rotateZ(rotateVaule);
                             boxmesh.updateMatrix();
                             MeshCSG3 = CSG.fromMesh(boxmesh);
                             bCSG = bCSG.subtract(MeshCSG3);
                         }
                         let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.rotateZ(rotateVaule);
                         boxmesh.updateMatrix();
                         MeshCSG3 = CSG.fromMesh(boxmesh);
                         bCSG = bCSG.subtract(MeshCSG3);
                         aCSG = aCSG.subtract(bCSG);
-
+            
                     } else {
-
-                        boxmesh.rotateY(SPhi / 180 * Math.PI);
+            
+                        boxmesh.rotateZ(SPhi / 180 * Math.PI);
                         boxmesh.updateMatrix();
                         MeshCSG3 = CSG.fromMesh(boxmesh);
                         aCSG = aCSG.subtract(MeshCSG3);
-
+            
                         let repeatCount = Math.floor((270 - DPhi) / 90);
-
+            
                         for (let i = 0; i < repeatCount; i++) {
                             let rotateVaule = Math.PI / (-2);
-                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.rotateZ(rotateVaule);
                             boxmesh.updateMatrix();
                             MeshCSG3 = CSG.fromMesh(boxmesh);
                             aCSG = aCSG.subtract(MeshCSG3);
                         }
                         let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.rotateZ(rotateVaule);
                         boxmesh.updateMatrix();
                         MeshCSG3 = CSG.fromMesh(boxmesh);
                         aCSG = aCSG.subtract(MeshCSG3);
-
+            
                     }
-
+            
                     const finalMesh = CSG.toMesh(aCSG, new Matrix4());
                     const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pHighNorm': pHighNorm, 'pLowNorm': pLowNorm };
                     finalMesh.geometry.parameters = param;

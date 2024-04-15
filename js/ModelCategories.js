@@ -226,14 +226,18 @@ function ModelCategory(editor) {
 
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        cylindermesh1.rotateX(Math.PI / 2);
+        cylindermesh1.updateMatrix();
 
         const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        cylindermesh2.rotateX(Math.PI / 2);
+        cylindermesh2.updateMatrix();
 
-        const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
+        const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
         const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
-        boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+        boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
         const MeshCSG1 = CSG.fromMesh(cylindermesh1);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
         let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -247,7 +251,7 @@ function ModelCategory(editor) {
         if (DPhi > 270) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -256,13 +260,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 bCSG = bCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -270,7 +274,7 @@ function ModelCategory(editor) {
 
         } else {
 
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -279,13 +283,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -325,13 +329,18 @@ function ModelCategory(editor) {
 
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        cylindermesh1.rotateX(Math.PI / 2);
+        cylindermesh1.updateMatrix();
 
         const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        cylindermesh2.rotateX(Math.PI / 2);
+        cylindermesh2.updateMatrix();
 
-        const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax);
+        const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
         const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
-        boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+        boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
+
         const MeshCSG1 = CSG.fromMesh(cylindermesh1);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
         let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -345,7 +354,7 @@ function ModelCategory(editor) {
         if (DPhi > 270) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
+            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI * (-1));
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -354,13 +363,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 bCSG = bCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -368,7 +377,7 @@ function ModelCategory(editor) {
 
         } else {
 
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -377,13 +386,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -442,9 +451,13 @@ function ModelCategory(editor) {
 
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        cylindermesh1.rotateX(Math.PI / 2);
+        cylindermesh1.updateMatrix();
 
         const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
         const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        cylindermesh2.rotateX(Math.PI / 2);
+        cylindermesh2.updateMatrix();
 
         const maxdis = Math.max(pRMax, pRMin, pDz);
 
@@ -454,11 +467,11 @@ function ModelCategory(editor) {
         const boxgeometry2 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
         const boxmesh2 = new THREE.Mesh(boxgeometry2, new THREE.MeshStandardMaterial());
 
-        const boxgeometry = new THREE.BoxGeometry(pRMax, 2 * Math.sqrt(2) * maxdis, pRMax);
+        const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
         const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
 
-        boxmesh1.geometry.translate(0, Math.sqrt(2) * maxdis, 0);
+        boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);
         const MeshCSG1 = CSG.fromMesh(cylindermesh1);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
         let MeshCSG3 = CSG.fromMesh(boxmesh1);
@@ -470,8 +483,8 @@ function ModelCategory(editor) {
         if (CutTube_vectorVertical(pHighNorm) === false) {
 
             let rotateX = Math.atan(pHighNorm.z / pHighNorm.y);
-            let rotateY = Math.atan(pHighNorm.z / pHighNorm.x);
-            let rotateZ = Math.atan(pHighNorm.x / pHighNorm.y);
+            let rotateY = Math.atan(pHighNorm.x / pHighNorm.y);
+            let rotateZ = Math.atan(pHighNorm.z / pHighNorm.x);
 
             if (rotateX === Infinity) rotateX = boxmesh1.rotation.x;
             if (rotateY === Infinity) rotateY = boxmesh1.rotation.y;
@@ -480,18 +493,18 @@ function ModelCategory(editor) {
             boxmesh1.rotation.set(-rotateX, -rotateY, -rotateZ);
         }
 
-        boxmesh1.position.set(0, pDz / 2, 0);
+        boxmesh1.position.set(0, 0, maxdis / 2);
         boxmesh1.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh1);
 
         aCSG = aCSG.subtract(MeshCSG3);
 
-        boxmesh2.geometry.translate(0, -Math.sqrt(2) * pDz, 0);
+        boxmesh2.geometry.translate(0, 0, -Math.sqrt(2) * pDz);
         if (!CutTube_vectorVertical(pLowNorm)) {
 
             let rotateX = Math.atan(pLowNorm.z / pLowNorm.y);
-            let rotateY = Math.atan(pLowNorm.z / pLowNorm.x);
-            let rotateZ = Math.atan(pLowNorm.x / pLowNorm.y);
+            let rotateY = Math.atan(pLowNorm.x / pLowNorm.y);
+            let rotateZ = Math.atan(pLowNorm.z / pLowNorm.x);
 
             if (rotateX === Infinity) rotateX = boxmesh2.rotation.x;
             if (rotateY === Infinity) rotateY = boxmesh2.rotation.y;
@@ -500,20 +513,20 @@ function ModelCategory(editor) {
             boxmesh2.rotation.set(-rotateX, -rotateY, -rotateZ);
         }
 
-        boxmesh2.position.set(0, -maxdis / 2, 0);
+        boxmesh2.position.set(0, 0, -maxdis / 2);
         boxmesh2.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh2);
 
         aCSG = aCSG.subtract(MeshCSG3);
 
 
-        boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+        boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
         let bCSG = aCSG;
 
         if (DPhi > 270) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -522,13 +535,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 bCSG = bCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -536,7 +549,7 @@ function ModelCategory(editor) {
 
         } else {
 
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -545,13 +558,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -609,9 +622,13 @@ function ModelCategory(editor) {
 
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        cylindermesh1.rotateX(Math.PI / 2);
+        cylindermesh1.updateMatrix();
 
         const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
         const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        cylindermesh2.rotateX(Math.PI / 2);
+        cylindermesh2.updateMatrix();
 
         const maxdis = Math.max(pRMax, pRMin, pDz);
 
@@ -621,10 +638,11 @@ function ModelCategory(editor) {
         const boxgeometry2 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
         const boxmesh2 = new THREE.Mesh(boxgeometry2, new THREE.MeshStandardMaterial());
 
-        const boxgeometry = new THREE.BoxGeometry(pRMax, 2 * Math.sqrt(2) * maxdis, pRMax);
+        const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
         const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
-        boxmesh1.geometry.translate(0, Math.sqrt(2) * maxdis, 0);
+
+        boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);
         const MeshCSG1 = CSG.fromMesh(cylindermesh1);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
         let MeshCSG3 = CSG.fromMesh(boxmesh1);
@@ -632,11 +650,12 @@ function ModelCategory(editor) {
         let aCSG;
         aCSG = MeshCSG1.subtract(MeshCSG2);
 
+
         if (CutTube_vectorVertical(pHighNorm) === false) {
 
             let rotateX = Math.atan(pHighNorm.z / pHighNorm.y);
-            let rotateY = Math.atan(pHighNorm.z / pHighNorm.x);
-            let rotateZ = Math.atan(pHighNorm.x / pHighNorm.y);
+            let rotateY = Math.atan(pHighNorm.x / pHighNorm.y);
+            let rotateZ = Math.atan(pHighNorm.z / pHighNorm.x);
 
             if (rotateX === Infinity) rotateX = boxmesh1.rotation.x;
             if (rotateY === Infinity) rotateY = boxmesh1.rotation.y;
@@ -645,18 +664,18 @@ function ModelCategory(editor) {
             boxmesh1.rotation.set(-rotateX, -rotateY, -rotateZ);
         }
 
-        boxmesh1.position.set(0, pDz / 2, 0);
+        boxmesh1.position.set(0, 0, maxdis / 2);
         boxmesh1.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh1);
 
         aCSG = aCSG.subtract(MeshCSG3);
 
-        boxmesh2.geometry.translate(0, -Math.sqrt(2) * pDz, 0);
+        boxmesh2.geometry.translate(0, 0, -Math.sqrt(2) * pDz);
         if (!CutTube_vectorVertical(pLowNorm)) {
 
             let rotateX = Math.atan(pLowNorm.z / pLowNorm.y);
-            let rotateY = Math.atan(pLowNorm.z / pLowNorm.x);
-            let rotateZ = Math.atan(pLowNorm.x / pLowNorm.y);
+            let rotateY = Math.atan(pLowNorm.x / pLowNorm.y);
+            let rotateZ = Math.atan(pLowNorm.z / pLowNorm.x);
 
             if (rotateX === Infinity) rotateX = boxmesh2.rotation.x;
             if (rotateY === Infinity) rotateY = boxmesh2.rotation.y;
@@ -665,19 +684,20 @@ function ModelCategory(editor) {
             boxmesh2.rotation.set(-rotateX, -rotateY, -rotateZ);
         }
 
-        boxmesh2.position.set(0, -pDz / 2, 0);
+        boxmesh2.position.set(0, 0, -maxdis / 2);
         boxmesh2.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh2);
 
         aCSG = aCSG.subtract(MeshCSG3);
 
-        boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+
+        boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
         let bCSG = aCSG;
 
         if (DPhi > 270) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -686,13 +706,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 bCSG = bCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -700,7 +720,7 @@ function ModelCategory(editor) {
 
         } else {
 
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -709,19 +729,18 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
 
         }
-
 
         const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pHighNorm': pHighNorm, 'pLowNorm': pLowNorm };
@@ -755,15 +774,19 @@ function ModelCategory(editor) {
 
         const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        cylindermesh1.rotateX(Math.PI / 2);
+        cylindermesh1.updateMatrix();
 
         const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
         const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        cylindermesh2.rotateX(Math.PI / 2);
+        cylindermesh2.updateMatrix();
 
         const maxRadius = Math.max(pRmax1, pRmax2);
         const boxgeometry = new THREE.BoxGeometry(maxRadius, pDz, maxRadius);
         const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
-        boxmesh.geometry.translate(maxRadius / 2, 0, maxRadius / 2);
+        boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
         const MeshCSG1 = CSG.fromMesh(cylindermesh1);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
         let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -780,7 +803,7 @@ function ModelCategory(editor) {
         if (DPhi > 270) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -789,13 +812,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / 2;
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 bCSG = bCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -803,7 +826,7 @@ function ModelCategory(editor) {
 
         } else {
 
-            boxmesh.rotateY(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -812,13 +835,13 @@ function ModelCategory(editor) {
 
             for (let i = 0; i < repeatCount; i++) {
                 let rotateVaule = Math.PI / (-2);
-                boxmesh.rotateY(rotateVaule);
+                boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
             }
             let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateY(rotateVaule);
+            boxmesh.rotateZ(rotateVaule);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);

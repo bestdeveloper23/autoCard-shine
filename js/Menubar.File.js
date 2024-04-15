@@ -1109,7 +1109,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="boxSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1156,7 +1156,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="sphereSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1202,7 +1202,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="tubeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1248,7 +1248,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="CtubeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1294,7 +1294,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="coneSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1340,7 +1340,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="paraSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1386,7 +1386,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="trdSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1432,7 +1432,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="trapSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1478,7 +1478,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="torusSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1524,7 +1524,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="ellipetubeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1570,7 +1570,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="ellipsoidSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1616,7 +1616,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="elconeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1662,7 +1662,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="tboxSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1708,7 +1708,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="ttradSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1754,7 +1754,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="ttrapSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1800,7 +1800,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="ttubeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1846,7 +1846,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="tetraSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1892,7 +1892,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="hypeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1938,7 +1938,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="hypeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -1990,7 +1990,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="polyconeSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -2042,7 +2042,7 @@ function MenubarFile( editor ) {
 					gdml += `      <solidref ref="polyhedraSolid"/>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `  </structure>\n`;
-					gdml += `  <setup>\n`;
+					gdml += `  <setup name="default" version="1.0">\n`;
 					gdml += `    <world ref="world"/>\n`;
 					gdml += `  </setup>\n`;
 					gdml += `</gdml>\n`;
@@ -2091,7 +2091,7 @@ function MenubarFile( editor ) {
 						gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
 						gdml += `    </volume>\n`;
 						gdml += `  </structure>\n`;
-						gdml += `  <setup>\n`;
+						gdml += `  <setup name="default" version="1.0">\n`;
 						gdml += `    <world ref="world"/>\n`;
 						gdml += `  </setup>\n`;
 						gdml += `</gdml>\n`;
@@ -2140,7 +2140,7 @@ function MenubarFile( editor ) {
 							gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
 							gdml += `    </volume>\n`;
 							gdml += `  </structure>\n`;
-							gdml += `  <setup>\n`;
+							gdml += `  <setup name="default" version="1.0">\n`;
 							gdml += `    <world ref="world"/>\n`;
 							gdml += `  </setup>\n`;
 							gdml += `</gdml>\n`;
@@ -2189,7 +2189,7 @@ function MenubarFile( editor ) {
 						gdml += `      <solidref ref="${object.name}_${object.uuid}"/>\n`;
 						gdml += `    </volume>\n`;
 						gdml += `  </structure>\n`;
-						gdml += `  <setup>\n`;
+						gdml += `  <setup name="default" version="1.0">\n`;
 						gdml += `    <world ref="world"/>\n`;
 						gdml += `  </setup>\n`;
 						gdml += `</gdml>\n`;
