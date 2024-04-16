@@ -946,7 +946,7 @@ function MenubarFile( editor ) {
 				
 				case "Ellipsoid":
 					
-					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
+					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" zcut1="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
 				case "aEllipticalCone":
@@ -1272,7 +1272,7 @@ function MenubarFile( editor ) {
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}"aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <cone name="coneSolid" rmin1="${object.geometry.parameters.pRMin1}" rmin2="${object.geometry.parameters.pRMin2}" rmax1="${object.geometry.parameters.pRMax1}" rmax2="${object.geometry.parameters.pRMax2}" z="${object.geometry.parameters.pDz}" deltaphi="${object.geometry.parameters.pDPhi}" startphi="${object.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1410,7 +1410,7 @@ function MenubarFile( editor ) {
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <trap name="trapSolid" x1="${object.geometry.parameters.dx1}" x2="${object.geometry.parameters.dx2}" x3="${object.geometry.parameters.dx3}" x4="${object.geometry.parameters.dx4}" y1="${object.geometry.parameters.dy1}" y2="${object.geometry.parameters.dy2}" z="${object.geometry.parameters.dz}" alpha1="${object.geometry.parameters.alpha}" alpha2="${object.geometry.parameters.alpha}" theta="${object.geometry.parameters.theta}" phi="${object.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;
@@ -1456,7 +1456,7 @@ function MenubarFile( editor ) {
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" starttheta="${object.geometry.parameters.pSPhi}" deltatheta="${object.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <torus name="torusSolid" rmin="${object.geometry.parameters.pRMin}" rmax="${object.geometry.parameters.pRMax}" rtor="${object.geometry.parameters.pRTor}" startphi="${object.geometry.parameters.pSPhi}" deltaphi="${object.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;

@@ -72,6 +72,8 @@ function GeometryParametersPanel(editor, object) {
   const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aEllipticalConeGeometry';
+  finalMesh.rotateX(Math.PI / 2);
+  finalMesh.updateMatrix();
 
   dzI.setRange(zTopCut + 0.01, Infinity);
   zTopCutI.setRange(0, zTopCut - 0.01);

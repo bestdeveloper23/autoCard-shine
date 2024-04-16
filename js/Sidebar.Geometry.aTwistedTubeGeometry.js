@@ -162,6 +162,7 @@ function GeometryParametersPanel(editor, object) {
   }
 
   finalMesh.geometry.type = 'aTwistedTubeGeometry';
+  finalMesh.rotateX(Math.PI / 2);
   finalMesh.updateMatrix();
 
   // set Range 

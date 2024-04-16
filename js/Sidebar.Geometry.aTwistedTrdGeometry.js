@@ -169,6 +169,7 @@ function GeometryParametersPanel(editor, object) {
   }
 
   finalMesh.geometry.type = 'aTwistedTrdGeometry';
+  finalMesh.rotateX(Math.PI / 2);
   finalMesh.updateMatrix();
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));

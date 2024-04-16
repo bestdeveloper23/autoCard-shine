@@ -138,6 +138,8 @@ function GeometryParametersPanel( editor, object ) {
   const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aParallGeometry';
+  finalMesh.rotateX(Math.PI / 2);
+  finalMesh.name = 'Parallelepiped';
   
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 	}

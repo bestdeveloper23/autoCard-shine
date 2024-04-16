@@ -1,4 +1,4 @@
-import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4, MeshStandardMaterial } from "three";
+import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, PolyhedronGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4, MeshStandardMaterial } from "three";
 import { CSG } from "./CSGMesh";
 import { PolyconeGeometry } from "./geometry/PolyconeGeometry";
 
@@ -366,30 +366,117 @@ class GDMLLoader extends Loader {
                     name = solid.getAttribute('name');
                     //console.log(type, name);
 
-                    var rmin1 = solid.getAttribute('rmin1');
-                    var rmax1 = solid.getAttribute('rmax1');
+                    var pRmin1 = solid.getAttribute('rmin1');
+                    var pRmax1 = solid.getAttribute('rmax1');
 
-                    var rmin2 = solid.getAttribute('rmin2');
-                    var rmax2 = solid.getAttribute('rmax2');
+                    var pRmin2 = solid.getAttribute('rmin2');
+                    var pRmax2 = solid.getAttribute('rmax2');
 
-                    var z = solid.getAttribute('z');
+                    var pDz = solid.getAttribute('z');
 
-                    var startphi = solid.getAttribute('startphi');
-                    var deltaphi = solid.getAttribute('deltaphi');
+                    var SPhi = solid.getAttribute('startphi');
+                    var DPhi = solid.getAttribute('deltaphi');
 
                     var aunit = solid.getAttribute('aunit');
 
                     if (aunit === 'deg') {
 
-                        startphi *= Math.PI / 180.0;
-                        deltaphi *= Math.PI / 180.0;
+                        SPhi *= Math.PI / 180.0;
+                        DPhi *= Math.PI / 180.0;
 
                     }
 
+                    var pRmin1 = 0.5, pRmax1 = 1, pRmin2 = 2, pRmax2 = 2.5, pDz = 4, SPhi = 0, DPhi = 270
+
+                    const cylindergeometry1 = new CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    cylindermesh1.rotateX(Math.PI / 2);
+                    cylindermesh1.updateMatrix();
+
+                    const cylindergeometry2 = new CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
+                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                    cylindermesh2.rotateX(Math.PI / 2);
+                    cylindermesh2.updateMatrix();
+
+                    const maxRadius = Math.max(pRmax1, pRmax2);
+                    const boxgeometry = new BoxGeometry(maxRadius, maxRadius, pDz);
+                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+
+                    boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
+                    const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+                    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    let aCSG;
+
+                    aCSG = MeshCSG2.subtract(MeshCSG1);
+
+                    let bCSG;
+
+                    bCSG = MeshCSG2.subtract(MeshCSG1);
+
+
+                    if (DPhi > 270) {
+                        let v_DPhi = 360 - DPhi;
+
+                        boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / 2;
+                            boxmesh.rotateZ(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            bCSG = bCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateZ(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+                        aCSG = aCSG.subtract(bCSG);
+
+                    } else {
+
+                        boxmesh.rotateZ(SPhi / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / (-2);
+                            boxmesh.rotateZ(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            aCSG = aCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateZ(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                    }
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aConeGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'Cone';
+
+                    meshes[name] = finalMesh;
+
                     // Note: ConeGeometry in assumes inner radii of 0 and rmax1 = 0
                     // radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength
-                    var cone = new ConeGeometry(rmax2, z, 32, 1, false, startphi, deltaphi);
-                    geometries[name] = cone;
+                    // var cone = new ConeGeometry(rmax2, z, 32, 1, false, startphi, deltaphi);
+                    // geometries[name] = cone;
 
                 }
 
@@ -398,26 +485,111 @@ class GDMLLoader extends Loader {
                     name = solid.getAttribute('name');
                     //console.log(type, name);
 
-                    var rmin = solid.getAttribute('rmin');
-                    var rmax = solid.getAttribute('rmax');
-                    var rtor = solid.getAttribute('rtor');
-                    var startphi = solid.getAttribute('startphi');
-                    var deltaphi = solid.getAttribute('deltaphi');
+                    var pRMin = Number(solid.getAttribute('rmin'));
+                    var pRMax = Number(solid.getAttribute('rmax'));
+                    var pRtor = Number(solid.getAttribute('rtor'));
+                    var SPhi = (solid.getAttribute('startphi'));
+                    var DPhi = (solid.getAttribute('deltaphi'));
 
+                    console.log(SPhi, DPhi)
                     var aunit = solid.getAttribute('aunit');
 
-                    if (aunit === 'deg') {
+                    if (aunit === 'rad') {
 
-                        startphi *= Math.PI / 180.0;
-                        deltaphi *= Math.PI / 180.0;
+                        SPhi *= 180.0 / Math.PI;
+                        DPhi *= 180.0 / Math.PI;
 
                     }
+
+                    // const pRMin = 1, pRMax = 1.5, pRtor = 5, SPhi = 0, DPhi = 90;
+
+
+                    const torgeometry1 = new TorusGeometry(pRtor, pRMax, 16, 48);
+                    const tormesh1 = new Mesh(torgeometry1, new MeshStandardMaterial());
+                    tormesh1.rotateX(Math.PI / 2);
+                    tormesh1.updateMatrix();
+
+                    const torgeometry2 = new TorusGeometry(pRtor, pRMin, 16, 48);
+                    const tormesh2 = new Mesh(torgeometry2, new MeshStandardMaterial());
+                    tormesh2.rotateX(Math.PI / 2);
+                    tormesh2.updateMatrix();
+
+                    const boxgeometry = new BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
+                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+
+                    boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
+                    const MeshCSG1 = CSG.fromMesh(tormesh1);
+                    const MeshCSG2 = CSG.fromMesh(tormesh2);
+                    let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+                    let aCSG;
+                    aCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    let bCSG;
+                    bCSG = MeshCSG1.subtract(MeshCSG2);
+
+                    if (DPhi > 270) {
+                        let v_DPhi = 360 - DPhi;
+
+                        boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / 2;
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            bCSG = bCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        bCSG = bCSG.subtract(MeshCSG3);
+                        aCSG = aCSG.subtract(bCSG);
+
+                    } else {
+
+                        boxmesh.rotateY(SPhi / 180 * Math.PI);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                        let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                        for (let i = 0; i < repeatCount; i++) {
+                            let rotateVaule = Math.PI / (-2);
+                            boxmesh.rotateY(rotateVaule);
+                            boxmesh.updateMatrix();
+                            MeshCSG3 = CSG.fromMesh(boxmesh);
+                            aCSG = aCSG.subtract(MeshCSG3);
+                        }
+                        let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                        boxmesh.rotateY(rotateVaule);
+                        boxmesh.updateMatrix();
+                        MeshCSG3 = CSG.fromMesh(boxmesh);
+                        aCSG = aCSG.subtract(MeshCSG3);
+
+                    }
+
+                    const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aTorusGeometry';
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'aTorus';
+
+                    meshes[name] = finalMesh;
 
                     // Note: There is no inner radius for a TorusGeometry
                     // and start phi is always 0.0
                     // radius, tube, radialSegments, tubularSegments, arc
-                    var torus = new TorusGeometry(1.0 * rtor, rmax, 16, 100, deltaphi);
-                    geometries[name] = torus;
+                    // var torus = new TorusGeometry(1.0 * rtor, rmax, 16, 100, deltaphi);
+                    // geometries[name] = torus;
 
                 }
 
@@ -466,6 +638,38 @@ class GDMLLoader extends Loader {
                         tet.setFromPoints(points)
                         geometries[name] = tet;
 
+                    } else {
+                        var anchor = v1;
+                        var p2 = v2;
+                        var p3 = v3;
+                        var p4 = v4;
+
+                        function getArray(string) {
+                            return string.split(",").map(Number);
+                            // return string.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
+                        }
+
+                        anchor = getArray(anchor);
+                        p2 = getArray(p2);
+                        p3 = getArray(p3);
+                        p4 = getArray(p4);
+
+                        var vertices = [], indices = [];
+                        vertices.push(...anchor, ...p2, ...p3, ...p4);
+                        indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
+
+                        // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
+                        console.log(vertices)
+                        const geometry = new PolyhedronGeometry(vertices, indices);
+                        const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
+                        geometry.parameters = param;
+                        geometry.type = 'aTetrahedraGeometry';
+                        const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                        mesh.name = 'Tetrahedra';
+                        mesh.rotateX(Math.PI / 2);
+                        mesh.updateMatrix();
+
+                        meshes[name] = mesh;
                     }
 
                 }
@@ -561,6 +765,11 @@ class GDMLLoader extends Loader {
                     // trd.faces.push(new Face3(7, 6, 2));
 
                     trd.setFromPoints(points);
+
+                    const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
+                    trd.parameters = param;
+                    trd.type = 'aTrapeZoidGeometry';
+                    
                     // trd.computeVertexNormals();
                     geometries[name] = trd;
                 }
@@ -570,25 +779,41 @@ class GDMLLoader extends Loader {
                     name = solid.getAttribute('name');
                     //console.log(type, name);
 
-                    var dx = solid.getAttribute('dx');
-                    var dy = solid.getAttribute('dy');
-                    var dz = solid.getAttribute('dz');
+                    var xSemiAxis = solid.getAttribute('dx');
+                    var semiAxisY = solid.getAttribute('dy');
+                    var Dz = solid.getAttribute('dz');
 
-                    var shape = new Shape();
-                    // x, y, xRadius, yRadius, startAngle, endAngle, clockwise, rotation
-                    shape.absellipse(0, 0, dx, dy, 0.0, 2 * Math.PI, false, 0);
+                    // var shape = new Shape();
+                    // // x, y, xRadius, yRadius, startAngle, endAngle, clockwise, rotation
+                    // shape.absellipse(0, 0, dx, dy, 0.0, 2 * Math.PI, false, 0);
 
-                    var extrudeSettings = {
-                        amount: 2 * dz,
-                        steps: 1,
-                        bevelEnabled: false,
-                        curveSegments: 24
-                    };
+                    // var extrudeSettings = {
+                    //     amount: 2 * dz,
+                    //     steps: 1,
+                    //     bevelEnabled: false,
+                    //     curveSegments: 24
+                    // };
+                    // var geometry = new ExtrudeGeometry(shape, extrudeSettings);
+                    // geometry.center();
+                    // geometries[name] = geometry;
 
-                    var geometry = new ExtrudeGeometry(shape, extrudeSettings);
-                    geometry.center();
-                    geometries[name] = geometry;
+                    // var xSemiAxis = 1, semiAxisY = 2, Dz = 4;
 
+                    const cylindergeometry1 = new CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+                    const cylindermesh = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    const ratioZ = semiAxisY / xSemiAxis;
+                    cylindermesh.scale.z = ratioZ;
+                    cylindermesh.updateMatrix();
+                    const aCSG = CSG.fromMesh(cylindermesh);
+		            const finalMesh = CSG.toMesh(aCSG, new Matrix4());
+                    const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
+                    finalMesh.geometry.parameters = param;
+                    finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
+                    finalMesh.updateMatrix();
+                    finalMesh.name = 'EllipeCylnder';
+
+                    meshes[name] = finalMesh;
                 }
 
                 if (type === 'arb8') {
@@ -710,11 +935,11 @@ class GDMLLoader extends Loader {
                 if (type === 'ellipsoid') {
 
                     name = solid.getAttribute('name');
-                    let xSemiAxis = solid.getAttribute('ax');
-                    let ySemiAxis = solid.getAttribute('by');
-                    let zSemiAxis = solid.getAttribute('cz');
-                    let zBottomCut = solid.getAttribute('zcut1');
-                    let zTopCut = solid.getAttribute('zcut2');
+                    let xSemiAxis = Number(solid.getAttribute('ax'));
+                    let ySemiAxis = Number(solid.getAttribute('by'));
+                    let zSemiAxis = Number(solid.getAttribute('cz'));
+                    let zBottomCut = Number(solid.getAttribute('zcut2'));
+                    let zTopCut = Number(solid.getAttribute('zcut1'));
 
                     var material = new MeshPhongMaterial({
                         color: 0xffffff, //delete randomColor
@@ -725,7 +950,7 @@ class GDMLLoader extends Loader {
                     
                     const cylindergeometry1 = new CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
             
-                    cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
+                    cylindergeometry1.translate(0, (zTopCut + zBottomCut)/2, 0);
             
                     let positionAttribute = cylindergeometry1.getAttribute('position');
             
@@ -789,6 +1014,7 @@ class GDMLLoader extends Loader {
                     const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aEllipsoidGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'Ellipsoid';
                     
@@ -823,6 +1049,7 @@ class GDMLLoader extends Loader {
                     const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aEllipticalConeGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'aEllipticalCone';
                     meshes[name] = finalMesh;
@@ -834,6 +1061,8 @@ class GDMLLoader extends Loader {
                     let radius1 = solid.getAttribute('rlo');
                     let radius2 = solid.getAttribute('rhi');
                     let pDz = solid.getAttribute('dz');
+
+                    console.log(radius1, radius2, pDz);
 
                     const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
 
@@ -887,6 +1116,7 @@ class GDMLLoader extends Loader {
                     const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aParaboloidGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'Paraboloid';
 
@@ -967,6 +1197,7 @@ class GDMLLoader extends Loader {
                     const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aParallGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'Parallelepiped';
 
@@ -1175,13 +1406,13 @@ class GDMLLoader extends Loader {
                 if (type === 'trap') {
                     name = solid.getAttribute('name');
 
-                    let pDx1 = solid.getAttribute('x1');
-                    let pDx2 = solid.getAttribute('x2');
-                    let pDx3 = solid.getAttribute('x3');
-                    let pDx4 = solid.getAttribute('x4');
-                    let pDy1 = solid.getAttribute('y1');
-                    let pDy2 = solid.getAttribute('y2');
-                    let pDz = solid.getAttribute('z');
+                    let pDx1 = Number(solid.getAttribute('x1'));
+                    let pDx2 = Number(solid.getAttribute('x2'));
+                    let pDx3 = Number(solid.getAttribute('x3'));
+                    let pDx4 = Number(solid.getAttribute('x4'));
+                    let pDy1 = Number(solid.getAttribute('y1'));
+                    let pDy2 = Number(solid.getAttribute('y2'));
+                    let pDz = Number(solid.getAttribute('z'));
                     let pTheta = solid.getAttribute('theta');
                     let pPhi = solid.getAttribute('phi');
                     let pAlpha = solid.getAttribute('alpha1');
@@ -1202,6 +1433,8 @@ class GDMLLoader extends Loader {
                         opacity: 0.6, //set opacity to 0.6
                         wireframe: false
                     });
+
+                    console.log(dy, maxWidth, pDx1, pDx2, pDx3, pDx4, pDy1, pDy2,pDz, pTheta, pAlpha, pPhi)
                     
                     const geometry = new BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
                     const mesh = new Mesh(geometry, material1);
@@ -1549,6 +1782,8 @@ class GDMLLoader extends Loader {
                     });
 
                     const mesh = new Mesh(geometry, material);
+                    mesh.rotateX(Math.PI / 2);
+                    mesh.updateMatrix();
                     mesh.name = 'TwistedBox';
 
                     meshes[name] = mesh;
@@ -1638,6 +1873,7 @@ class GDMLLoader extends Loader {
                     }
             
                     finalMesh.geometry.type = 'aTwistedTrdGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'TwistedTrapeZoid';
 
@@ -1647,13 +1883,13 @@ class GDMLLoader extends Loader {
                 if (type === 'twistedtrap') {
                     name = solid.getAttribute('name');
 
-                    let pDx1 = solid.getAttribute('x1');
-                    let pDx2 = solid.getAttribute('x2');
-                    let pDx3 = solid.getAttribute('x3');
-                    let pDx4 = solid.getAttribute('x4');
-                    let pDy1 = solid.getAttribute('y1');
-                    let pDy2 = solid.getAttribute('y2');
-                    let pDz = solid.getAttribute('z');
+                    let pDx1 = Number(solid.getAttribute('x1'));
+                    let pDx2 = Number(solid.getAttribute('x2'));
+                    let pDx3 = Number(solid.getAttribute('x3'));
+                    let pDx4 = Number(solid.getAttribute('x4'));
+                    let pDy1 = Number(solid.getAttribute('y1'));
+                    let pDy2 = Number(solid.getAttribute('y2'));
+                    let pDz = Number(solid.getAttribute('z'));
                     let twistedangle = solid.getAttribute('PhiTwist');
                     let pAlpha = solid.getAttribute('Alph');
                     let pTheta = solid.getAttribute('Theta');
@@ -1732,6 +1968,7 @@ class GDMLLoader extends Loader {
                     }
 
                     finalMesh.geometry.type = 'aTwistedTrapGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'TwistedTrapeZoidP';
 
@@ -1852,6 +2089,7 @@ class GDMLLoader extends Loader {
                     }
 
                     finalMesh.geometry.type = 'aTwistedTubeGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'TwistedTubs';
 
@@ -1980,7 +2218,7 @@ class GDMLLoader extends Loader {
 
         function parseSetup() {
             var setup = GDML.querySelectorAll('setup');
-            console.log(setup)
+            console.log(setup, GDML)
             var worlds = setup[0].childNodes;
             
             for (var i = 0; i < worlds.length; i++) {

@@ -58,7 +58,7 @@ function GeometryParametersPanel( editor, object ) {
 	// bottomcut
 	
 	const dzBottomCutRow = new UIRow();
-	const dzBottomCutI = new UINumber( parameters.zBottomCut ).setRange(0, Infinity).onChange( update );
+	const dzBottomCutI = new UINumber( parameters.zBottomCut ).onChange( update );
 
 	dzBottomCutRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/zbottomcut' ) ).setWidth( '90px' ) );
 	dzBottomCutRow.add( dzBottomCutI );
@@ -70,6 +70,9 @@ function GeometryParametersPanel( editor, object ) {
 
   var xSemiAxis = xSemiAxisI.getValue(), ySemiAxis = ySemiAxisI.getValue(), zSemiAxis = zSemiAxisI.getValue(), zTopCut = dzTopCutI.getValue(), zBottomCut = dzBottomCutI.getValue();
 		if(Math.max(Math.abs(zTopCut), Math.abs(zBottomCut))>= zSemiAxis || xSemiAxis < 0.2 || ySemiAxis < 0.2) return;
+
+  dzBottomCutI.setRange(-Infinity, zTopCut);
+  dzTopCutI.setRange(zBottomCut, Infinity)
   const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
 
   cylindergeometry1.translate(0, (zTopCut + zBottomCut)/2, 0);
@@ -136,6 +139,7 @@ function GeometryParametersPanel( editor, object ) {
   const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aEllipsoidGeometry';
+  finalMesh.rotateX(Math.PI / 2);
   finalMesh.updateMatrix();
   finalMesh.name = 'Ellipsoid';
 

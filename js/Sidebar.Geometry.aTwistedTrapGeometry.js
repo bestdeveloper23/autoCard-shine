@@ -195,7 +195,9 @@ function GeometryParametersPanel(editor, object) {
   }
 
   finalMesh.geometry.type = 'aTwistedTrapGeometry';
+  finalMesh.rotateX(Math.PI / 2);
   finalMesh.updateMatrix();
+  finalMesh.name = 'TwistedTrapeZoidP';
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
  }
