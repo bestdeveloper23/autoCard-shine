@@ -1870,7 +1870,7 @@ function MenubarFile( editor ) {
 					gdml += `    </materials>\n`;
 					gdml += `    <solids>\n`;
 					gdml += `      <box name="roomSolid" x="${roomSize}" y="${roomSize}" z="${roomSize}" lunit="m"/>\n`;
-					gdml += `      <paraboloid name="${object.name}_${object.uuid}" rhi="${object.geometry.parameters.R2}" rlo="${object.geometry.parameters.R1}" dz="${object.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+					gdml += `      <paraboloid name="hypeSolid" rhi="${object.geometry.parameters.R2}" rlo="${object.geometry.parameters.R1}" dz="${object.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					gdml += `    </solids>\n`;
 					gdml += `  </define>\n`;
 					gdml += `  <structure>\n`;

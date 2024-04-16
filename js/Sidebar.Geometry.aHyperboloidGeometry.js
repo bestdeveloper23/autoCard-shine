@@ -137,6 +137,8 @@ function GeometryParametersPanel( editor, object ) {
         const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aHyperboloidGeometry';
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
 
 		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
 

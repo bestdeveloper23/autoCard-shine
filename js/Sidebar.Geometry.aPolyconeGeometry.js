@@ -90,6 +90,8 @@ function GeometryParametersPanel(editor, object) {
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyconeGeometry';
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
 
         editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 

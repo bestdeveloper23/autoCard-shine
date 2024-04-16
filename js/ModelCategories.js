@@ -3036,6 +3036,7 @@ function ModelCategory(editor) {
         const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aHyperboloidGeometry';
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
         finalMesh.name = 'Hyperboloid';
 
@@ -3131,6 +3132,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aHyperboloidGeometry';
         finalMesh.position.copy(position);
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
         finalMesh.name = 'Hyperboloid';
 
@@ -3177,6 +3179,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyconeGeometry';
         finalMesh.name = 'Polycone';
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -3219,6 +3222,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyconeGeometry';
         finalMesh.position.copy(position);
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
         finalMesh.name = 'Polycone';
 
@@ -3254,6 +3258,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyhedraGeometry';
         finalMesh.name = 'Polyhedra';
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -3292,6 +3297,7 @@ function ModelCategory(editor) {
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyhedraGeometry';
         finalMesh.position.copy(position);
+        finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
         finalMesh.name = 'Polyhedra';
 

@@ -1216,18 +1216,18 @@ class GDMLLoader extends Loader {
                     let rOuter = [];
                     let z = [];
 
-                    console.log(
-                        solid, zplanes
-                    )
+
                     for (var j = 0; j < zplanes.length; j++) {
-                        const rmin = zplanes[j].getAttribute('rmin');
-                        const rmax = zplanes[j].getAttribute('rmax');
-                        const zvalue = zplanes[j].getAttribute('z');
+                        const rmin = Number(zplanes[j].getAttribute('rmin'));
+                        const rmax = Number(zplanes[j].getAttribute('rmax'));
+                        const zvalue = Number(zplanes[j].getAttribute('z'));
                         rInner.push (rmin);
                         rOuter.push(rmax);
                         z.push(zvalue);
                     }
-
+                    console.log(
+                        SPhi, DPhi, zplanes, numZPlanes, rInner, rOuter
+                    )
                     
                     var material = new MeshPhongMaterial({
                         color: 0xffffff, //delete randomColor
@@ -1307,6 +1307,7 @@ class GDMLLoader extends Loader {
                     finalMesh.geometry.computeVertexNormals();
                     finalMesh.geometry.type = 'aPolyconeGeometry';
                     finalMesh.name = 'Polycone';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
 
                     meshes[name] = finalMesh;
@@ -1326,9 +1327,9 @@ class GDMLLoader extends Loader {
                     let z = [];
 
                     for (let j = 0; j < numZPlanes; j++) {
-                        const rmin = zplanes[j].getAttribute('rmin');
-                        const rmax = zplanes[j].getAttribute('rmax');
-                        const zvalue = zplanes[j].getAttribute('z');
+                        const rmin = Number(zplanes[j].getAttribute('rmin'));
+                        const rmax = Number(zplanes[j].getAttribute('rmax'));
+                        const zvalue = Number(zplanes[j].getAttribute('z'));
 
                         rInner.push(rmin);
                         rOuter.push(rmax);
@@ -1353,6 +1354,7 @@ class GDMLLoader extends Loader {
                     finalMesh.geometry.computeVertexNormals();
                     finalMesh.geometry.type = 'aPolyhedraGeometry';
                     finalMesh.name = 'Polyhedra';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
 
                     meshes[name] = finalMesh;
@@ -1577,6 +1579,7 @@ class GDMLLoader extends Loader {
                     const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
                     finalMesh.geometry.parameters = param;
                     finalMesh.geometry.type = 'aHyperboloidGeometry';
+                    finalMesh.rotateX(Math.PI / 2);
                     finalMesh.updateMatrix();
                     finalMesh.name = 'Hyperboloid';
 
