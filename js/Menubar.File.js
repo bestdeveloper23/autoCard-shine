@@ -78,7 +78,18 @@ function MenubarFile( editor ) {
 				editor.scene.add( objects );
 			});
 			// Handle GDML file specifically
-		} else {
+		} 
+		// else if (fileExtension === 'tg') {
+		// 	const reader = new FileReader();
+		// 	reader.onload = function() {
+        //         var content = reader.result;
+        //         // You can process the content here, such as splitting it into an array
+        //         var lines = content.split('\n');
+        //         console.log(lines);
+        //     };
+        //     reader.readAsText(file);
+		// } 
+		else {
 			editor.loader.loadFiles(fileInput.files);
 		}
 		form.reset(); // Make sure 'form' is defined and accessible

@@ -791,6 +791,21 @@ function Loader( editor ) {
 
 			}
 
+			case 'tg': 
+
+			{
+
+				reader.addEventListener( 'load', function ( event ) {
+
+					handleTG( event.target.result );
+
+				}, false);
+				reader.readAsText(file);
+
+				break;
+
+			}
+
 			default:
 
 				console.error( 'Unsupported file format (' + extension + ').' );
@@ -1013,6 +1028,10 @@ function Loader( editor ) {
 
 		}
 
+	}
+
+	async function handleTG( contents ){
+		console.log( contents );
 	}
 
 }

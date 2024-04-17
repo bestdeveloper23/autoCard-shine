@@ -112,6 +112,12 @@ class GDMLLoader extends Loader {
 
                     name = def.getAttribute('name');
                     var type = def.getAttribute('type');
+                    var value = def.getAttribute('value');
+                    var unit = def.getAttribute('unit');
+                    if (unit === 'mm') {
+                        value /= 1000;
+                    }
+                    defines[name] = value;
 
                 }
 
@@ -157,6 +163,8 @@ class GDMLLoader extends Loader {
                     // x,y,z in GDML are half-widths
                     var geometry = new BoxGeometry(2 * x, 2 * y, 2 * z);
                     geometries[name] = geometry;
+                    
+
 
                 }
 
@@ -491,7 +499,6 @@ class GDMLLoader extends Loader {
                     var SPhi = (solid.getAttribute('startphi'));
                     var DPhi = (solid.getAttribute('deltaphi'));
 
-                    console.log(SPhi, DPhi)
                     var aunit = solid.getAttribute('aunit');
 
                     if (aunit === 'rad') {
@@ -1062,8 +1069,6 @@ class GDMLLoader extends Loader {
                     let radius2 = solid.getAttribute('rhi');
                     let pDz = solid.getAttribute('dz');
 
-                    console.log(radius1, radius2, pDz);
-
                     const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
 
                     var material = new MeshPhongMaterial({
@@ -1225,9 +1230,6 @@ class GDMLLoader extends Loader {
                         rOuter.push(rmax);
                         z.push(zvalue);
                     }
-                    console.log(
-                        SPhi, DPhi, zplanes, numZPlanes, rInner, rOuter
-                    )
                     
                     var material = new MeshPhongMaterial({
                         color: 0xffffff, //delete randomColor
@@ -1265,7 +1267,7 @@ class GDMLLoader extends Loader {
                     
                     let SPhi = solid.getAttribute('startphi');
                     let DPhi = solid.getAttribute('deltaphi');
-                    let zplanes = solid.querySelectorAll('zplane');
+                    let zplanes = solid.querySelectorAll('rzpoint');
                     let numZPlanes = zplanes.length;
                     let rInner = [];
                     let rOuter = [];
@@ -1273,13 +1275,12 @@ class GDMLLoader extends Loader {
 
 
                     for (var j = 0; j < zplanes.length; j++) {
-                        const rmax = zplanes[j].getAttribute('rmax');
-                        const zvalue = zplanes[j].getAttribute('z');
+                        const rmax = Number(zplanes[j].getAttribute('r'));
+                        const zvalue = Number(zplanes[j].getAttribute('z'));
                         rInner.push (0.01);
                         rOuter.push(rmax);
                         z.push(zvalue);
                     }
-
                     
                     var material = new MeshPhongMaterial({
                         color: 0xffffff, //delete randomColor
@@ -1366,15 +1367,15 @@ class GDMLLoader extends Loader {
                     let SPhi = solid.getAttribute('startphi');
                     let DPhi = solid.getAttribute('deltaphi');
                     let numSide = solid.getAttribute('numsides');
-                    let zplanes = solid.querySelectorAll('zplane');
+                    let zplanes = solid.querySelectorAll('rzpoint');
                     let numZPlanes = zplanes.length;
                     let rInner = [];
                     let rOuter = [];
                     let z = [];
 
                     for (let j = 0; j < numZPlanes; j++) {
-                        const rmax = zplanes[j].getAttribute('rmax');
-                        const zvalue = zplanes[j].getAttribute('z');
+                        const rmax = Number(zplanes[j].getAttribute('r'));
+                        const zvalue = Number(zplanes[j].getAttribute('z'));
 
                         rInner.push(0.01);
                         rOuter.push(rmax);
@@ -1436,8 +1437,6 @@ class GDMLLoader extends Loader {
                         wireframe: false
                     });
 
-                    console.log(dy, maxWidth, pDx1, pDx2, pDx3, pDx4, pDy1, pDy2,pDz, pTheta, pAlpha, pPhi)
-                    
                     const geometry = new BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
                     const mesh = new Mesh(geometry, material1);
 
@@ -2100,7 +2099,6 @@ class GDMLLoader extends Loader {
                 }
             }
             
-            console.log(geometries, meshes)
         }
 
         function parseVolumes() {
@@ -2122,7 +2120,6 @@ class GDMLLoader extends Loader {
                     }
                 }
             }
-            console.log(volumes)
         }
 
         function parsePhysVols() {
@@ -2216,12 +2213,10 @@ class GDMLLoader extends Loader {
                     group.add(newMesh);
                 }
             }
-            console.log(physvols)
         }
 
         function parseSetup() {
             var setup = GDML.querySelectorAll('setup');
-            console.log(setup, GDML)
             var worlds = setup[0].childNodes;
             
             for (var i = 0; i < worlds.length; i++) {
