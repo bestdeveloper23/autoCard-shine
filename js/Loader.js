@@ -1031,7 +1031,7 @@ function Loader( editor ) {
 	}
 
 	async function handleTG( contents ){
-		console.log( contents );
+		console.log( contents.split("\n") );
 	}
 
 }
