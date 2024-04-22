@@ -42,7 +42,8 @@ function SidebarModifies( editor ) {
 
 	const replicaAngleRow = new UIRow();
 	const replicaAngle = new UINumber().setWidth( '150px' ).setFontSize( '12px' ).setUnit('°');
-
+    replicaAngleRow.setDisplay('none');
+    
 	replicaAngleRow.add( new UIText( strings.getKey( 'sidebar/modify/replicas/angle' ) ).setWidth( '90px' ) );
 	replicaAngleRow.add( replicaAngle );
     replicaAngle.setValue(90);
@@ -68,7 +69,7 @@ function SidebarModifies( editor ) {
 	const replicaRadiusRow = new UIRow();
 	const replicaRadius = new UINumber().setWidth( '150px' ).setFontSize( '12px' );
     replicaRadiusRow.setDisplay('none');
-    
+
 	replicaRadiusRow.add( new UIText( strings.getKey( 'sidebar/modify/replicas/radius' ) ).setWidth( '90px' ) );
 	replicaRadiusRow.add( replicaRadius );
     replicaRadius.setValue(1);
@@ -108,11 +109,13 @@ function SidebarModifies( editor ) {
         if( replicationType === 'Linear') {
 
             replicaRadiusRow.setDisplay('none');
+            replicaAngleRow.setDisplay('none');
             replicaDistanceRow.setDisplay('flex');
 
         } else if( replicationType === 'Circular' ) {
 
             replicaRadiusRow.setDisplay('flex');
+            replicaAngleRow.setDisplay('flex');
             replicaDistanceRow.setDisplay('none');
 
         }
