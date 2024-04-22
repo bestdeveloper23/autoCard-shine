@@ -489,6 +489,18 @@ function Strings( config ) {
 			'sidebar/history': 'History',
 			'sidebar/history/persistent': 'persistent',
 
+			'sidebar/modify': 'Modify',
+			'sidebar/modify/replicas': 'Replicas',
+			'sidebar/modify/replicas/type': 'Type',
+			'sidebar/modify/replicas/circular': 'Circular',
+			'sidebar/modify/replicas/linear': 'Linear',
+			'sidebar/modify/replicas/axis': 'Axis',
+			'sidebar/modify/replicas/count': 'Count',
+			'sidebar/modify/replicas/radius': 'Radius',
+			'sidebar/modify/replicas/angle': 'Angle',
+			'sidebar/modify/replicas/distance': 'Distance',
+			'sidebar/modify/replicas/submit': 'Submit',
+
 			'toolbar/translate': 'Translate',
 			'toolbar/rotate': 'Rotate',
 			'toolbar/scale': 'Scale',

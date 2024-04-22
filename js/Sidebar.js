@@ -6,6 +6,7 @@ import { SidebarScript } from './Sidebar.Script.js';
 import { SidebarAnimation } from './Sidebar.Animation.js';
 import { SidebarProject } from './Sidebar.Project.js';
 import { SidebarSettings } from './Sidebar.Settings.js';
+import { SidebarModify } from './Sidebar.Modify.js';
 
 function Sidebar( editor ) {
 
@@ -18,7 +19,7 @@ function Sidebar( editor ) {
 		new SidebarScene( editor ),
 		new SidebarProperties( editor ),
 		new SidebarAnimation( editor ),
-		new SidebarScript( editor )
+		new SidebarModify( editor )
 	);
 	const project = new SidebarProject( editor );
 	const settings = new SidebarSettings( editor );

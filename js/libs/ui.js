@@ -225,6 +225,18 @@ class UIPanel extends UIDiv {
 
 }
 
+class UIDivider extends UIDiv {
+
+	constructor() {
+
+		super();
+
+		this.dom.className = 'Divider';
+
+	}
+
+}
+
 class UIText extends UISpan {
 
 	constructor( text ) {
@@ -1292,4 +1304,4 @@ class ListboxItem extends UIDiv {
 
 }
 
-export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UIProgress, UITabbedPanel, UIListbox, ListboxItem };
+export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIDivider, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UIProgress, UITabbedPanel, UIListbox, ListboxItem };
