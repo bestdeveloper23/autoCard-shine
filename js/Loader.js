@@ -8,6 +8,7 @@ import { SetSceneCommand } from './commands/SetSceneCommand.js';
 import { LoaderUtils } from './LoaderUtils.js';
 
 import { unzipSync, strFromU8 } from 'three/addons/libs/fflate.module.js';
+import { CSG } from './libs/CSGMesh.js';
 
 function Loader( editor ) {
 
@@ -1087,26 +1088,135 @@ function Loader( editor ) {
 	
 									var mesh = new THREE.Mesh(geometry, material);
 	
-									meshs[solidName] = mesh;
-									solidText[solidName] = mesh;
-	
+									
 									// set the name of mesh
 	
 									const meshName = solidName.split('_')[0];
 									
 									mesh.name = meshName;	
+
+									meshs[solidName] = mesh;
+									solidText[solidName] = mesh;
+	
 								}
 
 								break;
 			
 							case "SPHERE":
 			
-								// solidText1 += `:solid ${object.name}_${object.uuid} SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
+								{
+									const radius = Number(wordArray[3]);
+									const startPhi = Number(wordArray[4]);
+									const deltaPhi = Number(wordArray[5]);
+
+									const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
+									geometry.type = 'SphereGeometry2';
+									const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+									const meshName = solidName.split('_')[0];
+									
+									mesh.name = meshName;	
+
+									meshs[solidName] = mesh;
+
+								}
 								
 								break;
 			
 							case "TUBS":
 								
+								{
+									const pRMin = Number(wordArray[3]);
+									const pRMax = Number(wordArray[4]);
+									const pDz = Number(wordArray[5]);
+									const SPhi = Number(wordArray[6]);
+									const DPhi = Number(wordArray[7]);
+
+									const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
+									const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+									cylindermesh1.rotateX(Math.PI / 2);
+									cylindermesh1.updateMatrix();
+
+									const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
+									const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+									cylindermesh2.rotateX(Math.PI / 2);
+									cylindermesh2.updateMatrix();
+
+									const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
+									const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+									boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
+									const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+									const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+									let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+									let aCSG;
+									aCSG = MeshCSG1.subtract(MeshCSG2);
+
+									let bCSG;
+									bCSG = MeshCSG1.subtract(MeshCSG2);
+
+									if (DPhi > 270) {
+										let v_DPhi = 360 - DPhi;
+
+										boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / 2;
+											boxmesh.rotateZ(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											bCSG = bCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateZ(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+										aCSG = aCSG.subtract(bCSG);
+
+									} else {
+
+										boxmesh.rotateZ(SPhi / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / (-2);
+											boxmesh.rotateZ(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											aCSG = aCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateZ(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+									}
+
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+									const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aTubeGeometry';
+									finalMesh.updateMatrix();
+									
+									const meshName = solidName.split('_')[0];
+									
+									finalMesh.name = meshName;	
+
+									meshs[solidName] = finalMesh;
+
+								}
 								// solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 								
 								break;
@@ -1251,7 +1361,7 @@ function Loader( editor ) {
 
 						if(newMesh && materialName && materialName !== 'undefined') {
 							const materialElement = materialTypeOptions[materialName];
-							newMesh.material.name = materialElement;
+							newMesh.material.newmaterial = materialElement;
 
 							meshs[solidName] = newMesh;
 	
@@ -1304,7 +1414,6 @@ function Loader( editor ) {
 								console.log(newMesh)
 
 								editor.execute(new AddObjectCommand(editor, newMesh));
-								editor.signals.sceneGraphChanged.dispatch();
 
 							}
 

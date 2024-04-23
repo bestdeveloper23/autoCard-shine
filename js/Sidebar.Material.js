@@ -555,9 +555,9 @@ function SidebarMaterial(editor) {
 
 		}
 
-		if (material.name !== undefined) {
+		if (material.newmaterial !== undefined) {
 
-			materialName.setValue(material.name.id - 1);
+			materialName.setValue(material.newmaterial.id - 1);
 
 		}
 
@@ -652,7 +652,8 @@ function SidebarMaterial(editor) {
 		const materialElement = materialTypeOptions[selectedMaterialID];
 		materialDensity.setValue(materialElement.density);
 		materialEnergy.setValue(materialElement.energy);
-		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'name', materialElement, currentMaterialSlot));
+		console.log(editor.selected)
+		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
 		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
 		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
 	}
