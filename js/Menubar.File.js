@@ -840,7 +840,7 @@ function MenubarFile( editor ) {
 				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}-solid-${i+1} ${children.material.name.elementType}\n`
 
 				//:place gear1 1 world r000 -2*cm -8*cm 0
-				placeText += `:place ${children.name}-place-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
+				placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
 
 			
 				//:vis world OFF

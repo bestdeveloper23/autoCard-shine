@@ -1032,6 +1032,247 @@ function Loader( editor ) {
 
 	async function handleTG( contents ){
 		console.log( contents.split("\n") );
+		const tgText = contents.split("\n");
+
+		let solidText = {};
+		let rotationText = {};
+		let volumeText = {};
+		let placementText = {};
+
+		tgText.forEach(rowtext => {
+			
+			const wordArray = rowtext.split(' ');
+			const identify = wordArray[0];
+			
+			switch ( identify ){
+
+				case ':rotm':
+
+					{
+						const rotmName = wordArray[1];
+
+						let newRotation = new THREE.Vector3(0, 0, 0);
+
+						const x = Number(wordArray[2]);
+						const y = Number(wordArray[3]);
+						const z = Number(wordArray[4]);
+
+						newRotation.set(x, y, z);
+
+						rotationText[rotmName] = newRotation;
+
+						console.log(rotationText[rotmName]);
+					}
+
+					break;
+
+				case ':solid':
+
+					{
+						const solidName = wordArray[1];
+						const solidType = wordArray[2];
+
+						// set the new mesh 
+
+						switch (object.name) {
+							case "BOX":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n`
+								
+								break;
+			
+							case "SPHERE":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
+								
+								break;
+			
+							case "TUBS":
+								
+								solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+								
+								break;
+			
+							case "TUBS":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+								
+								break;
+			
+							case "CONS":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+								
+								break;
+			
+							case "PARA":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+								
+								break;
+			
+							case "TRD":
+								
+								solidText1 += `:solid ${object.name}_${object.uuid} TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n`
+								
+								break;
+			
+							case "TRAP": 
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n`
+								
+								break;
+			
+							case "TORUS":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
+								
+								break;
+							
+							case "ELLIPTICAL_TUBE":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n`
+								
+								break;
+							
+							case "ELLIPSOID":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n`
+								
+								break;
+			
+							case "ELLIPTICAL_CONE":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n`
+								
+								break;
+			
+							case "TWISTED_BOX":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n`
+								
+								break;
+			
+							case "TWISTED_TRD":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n`
+								
+								break;
+			
+							case "TWISTED_TRAP":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n`
+								
+								break;
+			
+							case "TWISTED_TUBS":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n`
+								
+								break;
+			
+							case "TET":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
+								
+								break;
+			
+							case "me":
+						
+								solidText1 += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
+								break;
+			
+							case "HYPE":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
+								
+								break;
+			
+							case "POLYCONE":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+								
+								break;
+			
+							case "POLYHEDRA":
+								
+								solidText1 += `:solid ${object.name}_${object.uuid} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+								
+								break;
+							
+							case "UNION":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+								break;
+			
+							case "SUBTRACTION":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+								break;
+								
+							case "INTERSECTION":
+			
+								solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+								break;
+								
+							default:
+			
+								break;
+						}
+
+					}
+
+					break;
+
+				case ':volu':
+
+					{
+						const voluName = wordArray[1];
+						const solidName = wordArray[2];
+						const materialName = wordArray[2];
+
+						// set material of mesh
+
+
+					}
+
+					break;
+
+				case ':place':
+
+					{
+						const voluName = wordArray[1];
+
+						const worldName = wordArray[3];
+
+						if ( worldName === 'world' ) {
+
+							// rotationName 
+							const rotmName = wordArray[4];
+
+							// the Position of mesh
+
+							const x = Number(wordArray[5]);
+							const y = Number(wordArray[6]);
+							const z = Number(wordArray[7]);
+
+							const meshPosition = new THREE.Vector3(0, 0, 0);
+
+							meshPosition.set(x, y, z);
+
+							// setting the rotation and position of mesh
+
+
+						}
+					}
+
+					break;
+
+				default :
+
+					break;
+			}
+		});
 	}
 
 }
