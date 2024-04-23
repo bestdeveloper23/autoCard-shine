@@ -1177,11 +1177,6 @@ function Loader( editor ) {
 								
 								break;
 			
-							case "me":
-						
-								solidText1 += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
-								break;
-			
 							case "HYPE":
 			
 								solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
