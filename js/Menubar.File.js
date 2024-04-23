@@ -697,102 +697,102 @@ function MenubarFile( editor ) {
 				switch (children.name) {
 					case "Box":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}-solid-${children.uuid} BOX ${children.geometry.parameters.width} ${children.geometry.parameters.depth} ${children.geometry.parameters.height}\n`
+						solidText += `:solid ${children.name}_${children.uuid} BOX ${children.geometry.parameters.width} ${children.geometry.parameters.depth} ${children.geometry.parameters.height}\n`
 						break;
 	
 					case "Sphere":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} SPHERE ${children.geometry.parameters.radius} ${children.geometry.parameters.phiStart} ${children.geometry.parameters.phiLength} ${children.geometry.parameters.thetaStart} ${children.geometry.parameters.thetaLength}\n`
+						solidText += `:solid ${children.name}_${children.uuid} SPHERE ${children.geometry.parameters.radius} ${children.geometry.parameters.phiStart} ${children.geometry.parameters.phiLength} ${children.geometry.parameters.thetaStart} ${children.geometry.parameters.thetaLength}\n`
 						break;
 	
 					case "Tubs":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}-solid-${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 						break;
 	
 					case "CTubs":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 						break;
 	
 					case "Cone":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} CONS ${children.geometry.parameters.pRMin1} ${children.geometry.parameters.pRMin2} ${children.geometry.parameters.pRMax1} ${children.geometry.parameters.pRMax2} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} CONS ${children.geometry.parameters.pRMin1} ${children.geometry.parameters.pRMin2} ${children.geometry.parameters.pRMax1} ${children.geometry.parameters.pRMax2} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 						break;
 	
 					case "Parallelepiped":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} PARA ${children.geometry.parameters.dx} ${children.geometry.parameters.dy} ${children.geometry.parameters.dz} ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} PARA ${children.geometry.parameters.dx} ${children.geometry.parameters.dy} ${children.geometry.parameters.dz} ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
 						break;
 	
 					case "TrapeZoid":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}-solid-${children.uuid} TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz}\n`
 						break;
 	
 					case "aTrapeZoidP": 
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TRAP ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4} ${children.geometry.parameters.phi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TRAP ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4} ${children.geometry.parameters.phi}\n`
 						break;
 	
 					case "aTorus":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TORUS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pRTor} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.sDPhi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TORUS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pRTor} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.sDPhi}\n`
 						break;
 					
 					case "EllipeCylnder":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.semiAxisY} ${children.geometry.parameters.Dz}\n`
+						solidText += `:solid ${children.name}_${children.uuid} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.semiAxisY} ${children.geometry.parameters.Dz}\n`
 						break;
 					
 					case "Ellipsoid":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} ELLIPSOID ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.zSemiAxis} ${children.geometry.parameters.zBottomCut} ${children.geometry.parameters.zTopCut}\n`
+						solidText += `:solid ${children.name}_${children.uuid} ELLIPSOID ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.zSemiAxis} ${children.geometry.parameters.zBottomCut} ${children.geometry.parameters.zTopCut}\n`
 						break;
 	
 					case "aEllipticalCone":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.height} ${children.geometry.parameters.zTopCut}\n`
+						solidText += `:solid ${children.name}_${children.uuid} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.height} ${children.geometry.parameters.zTopCut}\n`
 						break;
 	
 					case "TwistedBox":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width} ${children.geometry.parameters.height} ${children.geometry.parameters.depth}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width} ${children.geometry.parameters.height} ${children.geometry.parameters.depth}\n`
 						break;
 	
 					case "TwistedTrapeZoid":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TWISTED_TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz} ${children.geometry.parameters.twistedangle}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz} ${children.geometry.parameters.twistedangle}\n`
 						break;
 	
 					case "TwistedTrapeZoidP":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4}\n`
 						break;
 	
 					case "TwistedTubs":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pDPhi}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pDPhi}\n`
 						break;
 	
 					case "Tetrahedra":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
+						solidText += `:solid ${children.name}_${children.uuid} TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
 						break;
 	
 					case "Hyperboloid":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} HYPE ${children.geometry.parameters.radiusIn} ${children.geometry.parameters.radiusOut} ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}\n`
+						solidText += `:solid ${children.name}_${children.uuid} HYPE ${children.geometry.parameters.radiusIn} ${children.geometry.parameters.radiusOut} ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}\n`
 						break;
 	
 					case "Polycone":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}-solid-${children.uuid} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+						solidText += `:solid ${children.name}_${children.uuid} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
 						break;
 	
 					case "Polyhedra":
 						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}-solid-${children.uuid} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+						solidText += `:solid ${children.name}_${children.uuid} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
 						break;
 	
 					case "united_object":
@@ -827,7 +827,7 @@ function MenubarFile( editor ) {
 						break;
 				}
 				//:volu gear1 bas5 G4_STAINLESS-STEEL
-				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}-solid-${i+1} ${children.material.name.elementType}\n`
+				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}_${children.uuid} ${children.material.name.elementType}\n`
 
 				//:place gear1 1 world r000 -2*cm -8*cm 0
 				placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
