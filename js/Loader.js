@@ -1093,7 +1093,7 @@ function Loader( editor ) {
 	
 									const meshName = solidName.split('_')[0];
 									
-									mesh.name = meshName;	
+									mesh.name = meshName;
 
 									meshs[solidName] = mesh;
 									solidText[solidName] = mesh;
@@ -1217,49 +1217,468 @@ function Loader( editor ) {
 									meshs[solidName] = finalMesh;
 
 								}
-								// solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
-								
-								break;
-			
-							case "TUBS":
-			
-								// solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 								
 								break;
 			
 							case "CONS":
-			
-								// solidText1 += `:solid ${object.name}_${object.uuid} CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+
+								{
+									const pRmin1 = Number(wordArray[3]);
+									const pRmin2 = Number(wordArray[4]);
+									const pRmax1 = Number(wordArray[5]);
+									const pRmax2 = Number(wordArray[6]);
+									const pDz = Number(wordArray[7]);
+									const SPhi = Number(wordArray[8]);
+									const DPhi = Number(wordArray[9]);
+
+									const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
+									const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+									cylindermesh1.rotateX(Math.PI / 2);
+									cylindermesh1.updateMatrix();
+
+									const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
+									const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+									cylindermesh2.rotateX(Math.PI / 2);
+									cylindermesh2.updateMatrix();
+
+									const maxRadius = Math.max(pRmax1, pRmax2);
+									const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
+									const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+									boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
+									const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+									const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+									let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+									let aCSG;
+
+									aCSG = MeshCSG2.subtract(MeshCSG1);
+
+									let bCSG;
+
+									bCSG = MeshCSG2.subtract(MeshCSG1);
+
+
+									if (DPhi > 270) {
+										let v_DPhi = 360 - DPhi;
+
+										boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / 2;
+											boxmesh.rotateZ(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											bCSG = bCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateZ(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+										aCSG = aCSG.subtract(bCSG);
+
+									} else {
+
+										boxmesh.rotateZ(SPhi / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / (-2);
+											boxmesh.rotateZ(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											aCSG = aCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateZ(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+									}
+
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+									const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aConeGeometry';
+									finalMesh.updateMatrix();
+
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 			
 							case "PARA":
 			
-								// solidText1 += `:solid ${object.name}_${object.uuid} PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+								{
+									const dx = Number(wordArray[3]);
+									const dy = Number(wordArray[4]);
+									const dz = Number(wordArray[5]);
+									const alpha = Number(wordArray[6]);
+									const theta = Number(wordArray[7]);
+									const phi = Number(wordArray[8]);
+
+									const maxRadius = Math.max(dx, dy, dz);
+									const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+									const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+									const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+									const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+									let MeshCSG1 = CSG.fromMesh(mesh);
+									let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+									boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+									boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+									boxmesh.position.set(0 + dx / 2, 0, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+									boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+									boxmesh.position.set(0 - dx / 2, 0, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+									boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+									boxmesh.position.set(0, 0, dz / 2);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+									boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+									boxmesh.position.set(0, 0, -dz / 2);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+									boxmesh.position.set(0, dy / 2, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+									boxmesh.position.set(0, - dy / 2, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+									const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aParallGeometry';
+									finalMesh.rotateX(Math.PI/2);
+									finalMesh.updateMatrix();
+									
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 			
 							case "TRD":
 								
-								// solidText1 += `:solid ${object.name}_${object.uuid} TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n`
+								{
+									const x1 = Number(wordArray[3]);
+									const x2 = Number(wordArray[4]);
+									const y1 = Number(wordArray[5]);
+									const y2 = Number(wordArray[6]);
+									const z = Number(wordArray[7]);
+									
+									var trd = new THREE.BufferGeometry();
+
+									const points = [
+										new THREE.Vector3(-x2, -y2, z),//2
+										new THREE.Vector3(-x2, y2, z),//1
+										new THREE.Vector3(x2, y2, z),//0
+
+										new THREE.Vector3(x2, y2, z),//0
+										new THREE.Vector3(x2, -y2, z),//3
+										new THREE.Vector3(-x2, -y2, z),//2
+
+										new THREE.Vector3(x1, y1, -z),//4
+										new THREE.Vector3(-x1, y1, -z),//5
+										new THREE.Vector3(-x1, -y1, -z),//6
+
+										new THREE.Vector3(-x1, -y1, -z),//6
+										new THREE.Vector3(x1, -y1, -z),//7
+										new THREE.Vector3(x1, y1, -z),//4
+
+										new THREE.Vector3(x2, y2, z),//0
+										new THREE.Vector3(x1, y1, -z),//4
+										new THREE.Vector3(x1, -y1, -z),//7
+
+										new THREE.Vector3(x1, -y1, -z),//7
+										new THREE.Vector3(x2, -y2, z),//3
+										new THREE.Vector3(x2, y2, z),//0
+
+										new THREE.Vector3(-x2, y2, z),//1
+										new THREE.Vector3(-x2, -y2, z),//2
+										new THREE.Vector3(-x1, -y1, -z),//6
+
+										new THREE.Vector3(-x1, -y1, -z),//6
+										new THREE.Vector3(-x1, y1, -z),//5
+										new THREE.Vector3(-x2, y2, z),//1
+
+										new THREE.Vector3(-x2, y2, z),//1
+										new THREE.Vector3(-x1, y1, -z),//5
+										new THREE.Vector3(x1, y1, -z),//4
+
+										new THREE.Vector3(x1, y1, -z),//4
+										new THREE.Vector3(x2, y2, z),//0
+										new THREE.Vector3(-x2, y2, z),//1
+
+										new THREE.Vector3(-x2, -y2, z),//2
+										new THREE.Vector3(x2, -y2, z),//3
+										new THREE.Vector3(x1, -y1, -z),//7
+
+										new THREE.Vector3(x1, -y1, -z),//7
+										new THREE.Vector3(-x1, -y1, -z),//6
+										new THREE.Vector3(-x2, -y2, z),//2
+									]
+
+									trd.setFromPoints(points);
+
+									const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
+									trd.parameters = param;
+									trd.type = 'aTrapeZoidGeometry';
+									const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
+									finalMesh.updateMatrix();
+									
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 			
 							case "TRAP": 
-			
-								// solidText1 += `:solid ${object.name}_${object.uuid} TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n`
+								
+								{
+									const pDz = Number(wordArray[3]);
+									const pTheta = Number(wordArray[4]);
+									const pPhi = Number(wordArray[5]);
+									const pDy1 = Number(wordArray[6]);
+									const pDx1 = Number(wordArray[7]);
+									const pDx2 = Number(wordArray[8]);
+									const pAlpha = Number(wordArray[9]);
+									const pDy2 = Number(wordArray[10]);
+									const pDx3 = Number(wordArray[11]);
+									const pDx4 = Number(wordArray[12]);
+
+
+									const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4,
+									 dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+									const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+									const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+									const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+									const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+									const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+									let MeshCSG1 = CSG.fromMesh(mesh);
+									let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+									boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+									boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+									boxmesh.position.set(0 + dx / 2, 0, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+									boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+									boxmesh.position.set(0 - dx / 2, 0, 0);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+									boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+									boxmesh.position.set(0, 0, dy);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+									boxmesh.rotation.set(0, 0, 0);
+									boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+									boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+									boxmesh.position.set(0, 0, -dy);
+									boxmesh.updateMatrix();
+									MeshCSG3 = CSG.fromMesh(boxmesh);
+									aCSG = aCSG.subtract(MeshCSG3);
+
+
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+									const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aTrapeZoidPGeometry';
+									finalMesh.rotateX(Math.PI / 2);
+									finalMesh.updateMatrix();
+
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 			
 							case "TORUS":
 			
-								// solidText1 += `:solid ${object.name}_${object.uuid} TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
+								{
+									const pRMin = Number(wordArray[3]);
+									const pRMax = Number(wordArray[4]);
+									const pRtor = Number(wordArray[5]);
+									const SPhi = Number(wordArray[6]);
+									const DPhi = Number(wordArray[7]);
+
+
+									const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+									const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+									tormesh1.rotateX(Math.PI / 2);
+									tormesh1.updateMatrix();
+
+									const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+									const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+									tormesh2.rotateX(Math.PI / 2);
+									tormesh2.updateMatrix();
+
+									const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
+									const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+									boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
+									const MeshCSG1 = CSG.fromMesh(tormesh1);
+									const MeshCSG2 = CSG.fromMesh(tormesh2);
+									let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+									let aCSG;
+									aCSG = MeshCSG1.subtract(MeshCSG2);
+
+									let bCSG;
+									bCSG = MeshCSG1.subtract(MeshCSG2);
+
+									if (DPhi > 270) {
+										let v_DPhi = 360 - DPhi;
+
+										boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / 2;
+											boxmesh.rotateY(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											bCSG = bCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateY(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										bCSG = bCSG.subtract(MeshCSG3);
+										aCSG = aCSG.subtract(bCSG);
+
+									} else {
+
+										boxmesh.rotateY(SPhi / 180 * Math.PI);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+										let repeatCount = Math.floor((270 - DPhi) / 90);
+
+										for (let i = 0; i < repeatCount; i++) {
+											let rotateVaule = Math.PI / (-2);
+											boxmesh.rotateY(rotateVaule);
+											boxmesh.updateMatrix();
+											MeshCSG3 = CSG.fromMesh(boxmesh);
+											aCSG = aCSG.subtract(MeshCSG3);
+										}
+										let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+										boxmesh.rotateY(rotateVaule);
+										boxmesh.updateMatrix();
+										MeshCSG3 = CSG.fromMesh(boxmesh);
+										aCSG = aCSG.subtract(MeshCSG3);
+
+									}
+
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+									const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aTorusGeometry';
+									finalMesh.updateMatrix();
+									
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 							
 							case "ELLIPTICAL_TUBE":
 			
-								// solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n`
+								{
+									const xSemiAxis = Number(wordArray[3]);
+									const semiAxisY = Number(wordArray[4]);
+									const Dz = Number(wordArray[5]);
+
+									const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+									const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+									const ratioZ = semiAxisY / xSemiAxis;
+									cylindermesh.scale.z = ratioZ;
+									cylindermesh.updateMatrix();
+									const aCSG = CSG.fromMesh(cylindermesh);
+									const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+									const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
+									finalMesh.geometry.parameters = param;
+									finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
+									finalMesh.rotateX(Math.PI / 2);
+									finalMesh.updateMatrix();
+									
+									const meshName = solidName.split('_')[0];
+									finalMesh.name = meshName;
+
+									meshs[solidName] = finalMesh;
+
+								}
 								
 								break;
 							

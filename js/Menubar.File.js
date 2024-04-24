@@ -312,7 +312,7 @@ function MenubarFile( editor ) {
 				case "united_object":
 					txt += `${rotationText}\n`;
 					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'united_object.tg');
 					break;
@@ -320,7 +320,7 @@ function MenubarFile( editor ) {
 				case "subtracted_object":
 					txt += `${rotationText}\n`;
 					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial.elementType}\n\n`;
+					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`;
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'subtracted_object.tg');
 					break;
@@ -328,7 +328,7 @@ function MenubarFile( editor ) {
 				case "intersected_object":
 					txt += `${rotationText}\n`;
 					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'intersected_object.tg');
 					break;
@@ -336,7 +336,7 @@ function MenubarFile( editor ) {
 				case "Box":
 
 					txt += `\n:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
-					txt += `:volu mybox box ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'box.tg');
 					break;
@@ -344,7 +344,7 @@ function MenubarFile( editor ) {
 				case "Sphere":
 
 					txt += `\n:solid mysphere SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
-					txt += `:volu mysphere mysphere ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mysphere mysphere ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'sphere.tg');
 					break;
@@ -352,7 +352,7 @@ function MenubarFile( editor ) {
 				case "Tubs":
 					
 					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
-					txt += `:volu mytub mytub ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytub mytub ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'tub.tg');
 					break;
@@ -368,7 +368,7 @@ function MenubarFile( editor ) {
 				case "Cone":
 
 					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
-					txt += `:volu mycone mycone ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mycone mycone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'cone.tg');
 					break;
@@ -376,7 +376,7 @@ function MenubarFile( editor ) {
 				case "Parallelepiped":
 
 					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
-					txt += `:volu mypara mypara ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mypara mypara ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'parallelepiped.tg');
 					break;
@@ -384,7 +384,7 @@ function MenubarFile( editor ) {
 				case "TrapeZoid":
 					
 					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n\n`
-					txt += `:volu mytrd mytrd ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytrd mytrd ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n\n`
 					downloadGeant4File( txt, 'trapzoid.tg');
 					break;
@@ -392,7 +392,7 @@ function MenubarFile( editor ) {
 				case "aTrapeZoidP": 
 
 					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n\n`
-					txt += `:volu mytrdp mytrdp ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytrdp mytrdp ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'trapezoidp.tg');
 					break;
@@ -400,7 +400,7 @@ function MenubarFile( editor ) {
 				case "aTorus":
 
 					txt += `\n:solid mytorus TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
-					txt += `:volu mytorus mytorus ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytorus mytorus ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'torus.tg');
 					break;
@@ -416,7 +416,7 @@ function MenubarFile( editor ) {
 				case "Ellipsoid":
 
 					txt += `\n:solid myellipsoid ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n\n`
-					txt += `:volu myellipsoid myellipsoid ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myellipsoid myellipsoid ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myellipsoid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'ellipsoid.tg');
 					break;
@@ -424,7 +424,7 @@ function MenubarFile( editor ) {
 				case "aEllipticalCone":
 
 					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n\n`
-					txt += `:volu myellipticalcone myellipticalcone ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myellipticalcone myellipticalcone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'ellipticalcone.tg');
 					break;
@@ -432,7 +432,7 @@ function MenubarFile( editor ) {
 				case "TwistedBox":
 
 					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n\n`
-					txt += `:volu mytbox mytbox ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytbox mytbox ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'twistedbox.tg');
 					break;
@@ -440,7 +440,7 @@ function MenubarFile( editor ) {
 				case "TwistedTrapeZoid":
 
 					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n\n`
-					txt += `:volu myttrd myttrap ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myttrd myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'twistedtrapzoid.tg');
 					break;
@@ -448,7 +448,7 @@ function MenubarFile( editor ) {
 				case "TwistedTrapeZoidP":
 
 					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n\n`
-					txt += `:volu myttrap myttrap ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myttrap myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'twistedtrapezoidp.tg');
 					break;
@@ -456,7 +456,7 @@ function MenubarFile( editor ) {
 				case "TwistedTubs":
 
 					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n\n`
-					txt += `:volu myttubs myttubs ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myttubs myttubs ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'twistedtub.tg');
 					break;
@@ -464,7 +464,7 @@ function MenubarFile( editor ) {
 				case "Tetrahedra":
 
 					txt += `\n:solid mytetra TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n\n`
-					txt += `:volu mytetra mytetra ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mytetra mytetra ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytetra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'tetrahedra.tg');
 					break;
@@ -472,7 +472,7 @@ function MenubarFile( editor ) {
 				case "Hyperboloid":
 
 					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n\n`
-					txt += `:volu myhyperboloid myhyperboloid ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myhyperboloid myhyperboloid ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'hyperboloid.tg');
 					break;
@@ -480,7 +480,7 @@ function MenubarFile( editor ) {
 				case "Polycone":
 
 					txt += `\n:solid myploycone POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
-					txt += `:volu myploycone mypolycone ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu myploycone mypolycone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mypolycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'polycone.tg');
 					break;
@@ -488,7 +488,7 @@ function MenubarFile( editor ) {
 				case "Polyhedra":
 					
 					txt += `\n:solid mypolyhedra POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
-					txt += `:volu mypolyhedra mypolyhedra ${object.material.newmaterial.elementType}\n\n`
+					txt += `:volu mypolyhedra mypolyhedra ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mypolyhedra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
 					downloadGeant4File( txt, 'polyhedra.tg');
 					break;
@@ -827,7 +827,7 @@ function MenubarFile( editor ) {
 						break;
 				}
 				//:volu gear1 bas5 G4_STAINLESS-STEEL
-				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}_${children.uuid} ${children.material.newmaterial.elementType}\n`
+				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}_${children.uuid} ${children.material.newmaterial?.elementType}\n`
 
 				//:place gear1 1 world r000 -2*cm -8*cm 0
 				placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
@@ -2595,7 +2595,7 @@ function MenubarFile( editor ) {
 				// Material properties
 				
 				if( children.material && children.material.newmaterial ) {
-					if(!materialRefArray.includes(children.material.newmaterial.elementType)) {
+					if(!materialRefArray.includes(children.material.newmaterial?.elementType)) {
 						materialsText += `      <material name="${children.material?.name?.elementType}"/>\n`;
 						materialsText += `        <D value="${children.material?.name?.density}"/>\n`;
 						materialsText += `      <material/>\n`;
@@ -2612,7 +2612,7 @@ function MenubarFile( editor ) {
 				// Volume properties
 				volumesText += `    <volume name="${children.name}_${children.uuid}_volume">\n`;
 				if( children.material && children.material.newmaterial ) {
-					volumesText += `      <materialref ref="${children.material.newmaterial.elementType}"/>\n`;
+					volumesText += `      <materialref ref="${children.material.newmaterial?.elementType}"/>\n`;
 				} else {
 					volumesText += `      <materialref ref="G4_C"/>\n`;
 				}
