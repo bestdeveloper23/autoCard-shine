@@ -65,9 +65,9 @@ function GeometryParametersPanel(editor, object) {
 
  const pLowNormRow = new UIRow();
  pLowNormRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pLowNorm')).setWidth('90px'));
- const pLowNormX = new UINumber(parameters.pLowNorm.x).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
- const pLowNormY = new UINumber(parameters.pLowNorm.y).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
- const pLowNormZ = new UINumber(parameters.pLowNorm.z).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
+ const pLowNormX = new UINumber(parameters.pLowNorm.x).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
+ const pLowNormY = new UINumber(parameters.pLowNorm.y).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
+ const pLowNormZ = new UINumber(parameters.pLowNorm.z).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
 
  pLowNormRow.add(pLowNormX);
  pLowNormRow.add(pLowNormY);
@@ -79,9 +79,9 @@ function GeometryParametersPanel(editor, object) {
 
  const pHighNormRow = new UIRow();
  pHighNormRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pHighNorm')).setWidth('90px'));
- const pHighNormX = new UINumber(parameters.pHighNorm.x).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
- const pHighNormY = new UINumber(parameters.pHighNorm.y).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
- const pHighNormZ = new UINumber(parameters.pHighNorm.z).setPrecision( 3 ).setWidth( '50px' ).onChange(update);
+ const pHighNormX = new UINumber(parameters.pHighNorm.x).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
+ const pHighNormY = new UINumber(parameters.pHighNorm.y).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
+ const pHighNormZ = new UINumber(parameters.pHighNorm.z).setPrecision( 5 ).setWidth( '50px' ).onChange(update);
 
  pHighNormRow.add(pHighNormX);
  pHighNormRow.add(pHighNormY);

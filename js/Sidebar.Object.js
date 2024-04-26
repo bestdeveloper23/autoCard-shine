@@ -184,7 +184,7 @@ function SidebarObject( editor ) {
 	const energyRow = new UIRow();
 	energyRow.add(new UIText(strings.getKey('sidebar/object/size')).setWidth('120px'));
 
-	const energysize = new UINumber().setPrecision( 3 ).setWidth('60px').onChange( update );
+	const energysize = new UINumber().setPrecision( 5 ).setWidth('60px').onChange( update );
 	energyRow.add(energysize);
 	container.add(energyRow);
 
@@ -209,7 +209,7 @@ function SidebarObject( editor ) {
 	const sourceXRow = new UIRow();
 	sourceXRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
 
-	const sourceX = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	const sourceX = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceXRow.add(sourceX);
 	container.add(sourceXRow);
 
@@ -219,7 +219,7 @@ function SidebarObject( editor ) {
 	const sourceYRow = new UIRow();
 	sourceYRow.add(new UIText(strings.getKey('sidebar/object/halfy')).setWidth('120px'));
 
-	const sourceY = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	const sourceY = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceYRow.add(sourceY);
 	container.add(sourceYRow);
 
@@ -229,7 +229,7 @@ function SidebarObject( editor ) {
 	const sourceZRow = new UIRow();
 	sourceZRow.add(new UIText(strings.getKey('sidebar/object/halfz')).setWidth('120px'));
 
-	const sourceZ = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	const sourceZ = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceZRow.add(sourceZ);
 	container.add(sourceZRow);
 
@@ -239,7 +239,7 @@ function SidebarObject( editor ) {
 	const sourceInRadiusRow = new UIRow();
 	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/object/inradius')).setWidth('120px'));
 
-	const sourceInRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	const sourceInRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceInRadiusRow.add(sourceInRadius);
 	container.add(sourceInRadiusRow);
 
@@ -249,7 +249,7 @@ function SidebarObject( editor ) {
 	const sourceOuterRadiusRow = new UIRow();
 	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/object/outradius')).setWidth('120px'));
 
-	const sourceOuterRadius = new UINumber().setPrecision( 3 ).setWidth('120px').onChange( update );
+	const sourceOuterRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceOuterRadiusRow.add(sourceOuterRadius);
 	container.add(sourceOuterRadiusRow);
 
@@ -257,9 +257,9 @@ function SidebarObject( editor ) {
 	// position
 
 	const objectPositionRow = new UIRow();
-	const objectPositionX = new UINumber().setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	const objectPositionY = new UINumber().setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	const objectPositionZ = new UINumber().setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+	const objectPositionX = new UINumber().setPrecision( 5 ).setWidth( '50px' ).onChange( update );
+	const objectPositionY = new UINumber().setPrecision( 5 ).setWidth( '50px' ).onChange( update );
+	const objectPositionZ = new UINumber().setPrecision( 5 ).setWidth( '50px' ).onChange( update );
 
 	objectPositionRow.add( new UIText( strings.getKey( 'sidebar/object/position' ) ).setWidth( '90px' ) );
 	objectPositionRow.add( objectPositionX, objectPositionY, objectPositionZ );
@@ -281,9 +281,9 @@ function SidebarObject( editor ) {
 	// scale
 
 	// const objectScaleRow = new UIRow();
-	// const objectScaleX = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	// const objectScaleY = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	// const objectScaleZ = new UINumber( 1 ).setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleX = new UINumber( 1 ).setPrecision( 5 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleY = new UINumber( 1 ).setPrecision( 5 ).setWidth( '50px' ).onChange( update );
+	// const objectScaleZ = new UINumber( 1 ).setPrecision( 5 ).setWidth( '50px' ).onChange( update );
 
 	// objectScaleRow.add( new UIText( strings.getKey( 'sidebar/object/scale' ) ).setWidth( '90px' ) );
 	// objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
@@ -403,7 +403,7 @@ function SidebarObject( editor ) {
 	// angle
 
 	const objectAngleRow = new UIRow();
-	const objectAngle = new UINumber().setPrecision( 3 ).setRange( 0, Math.PI / 2 ).onChange( update );
+	const objectAngle = new UINumber().setPrecision( 5 ).setRange( 0, Math.PI / 2 ).onChange( update );
 
 	objectAngleRow.add( new UIText( strings.getKey( 'sidebar/object/angle' ) ).setWidth( '90px' ) );
 	objectAngleRow.add( objectAngle );

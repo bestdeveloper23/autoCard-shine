@@ -1,7 +1,7 @@
 import { UINumber, UIRow, UIText } from './libs/ui.js';
 import { SetMaterialRangeCommand } from './commands/SetMaterialRangeCommand.js';
 
-function SidebarMaterialRangeValueProperty( editor, property, name, isMin, range = [ - Infinity, Infinity ], precision = 2, step = 1, nudge = 0.01, unit = '' ) {
+function SidebarMaterialRangeValueProperty( editor, property, name, isMin, range = [ - Infinity, Infinity ], precision = 5, step = 1, nudge = 0.01, unit = '' ) {
 
 	const signals = editor.signals;
 

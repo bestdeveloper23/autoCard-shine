@@ -17,9 +17,9 @@ function GeometryParametersPanel(editor, object) {
 
  const anchorRow = new UIRow();
  anchorRow.add(new UIText(strings.getKey('sidebar/geometry/atetrahedra_geometry/anchor')).setWidth('90px'));
- const anchorX = new UINumber(parameters.anchor[0]).setPrecision(3).setWidth('50px').onChange(update);
- const anchorY = new UINumber(parameters.anchor[1]).setPrecision(3).setWidth('50px').onChange(update);
- const anchorZ = new UINumber(parameters.anchor[2]).setPrecision(3).setWidth('50px').onChange(update);
+ const anchorX = new UINumber(parameters.anchor[0]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const anchorY = new UINumber(parameters.anchor[1]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const anchorZ = new UINumber(parameters.anchor[2]).setPrecision( 5 ).setWidth('50px').onChange(update);
 
  anchorRow.add(anchorX);
  anchorRow.add(anchorY);
@@ -31,9 +31,9 @@ function GeometryParametersPanel(editor, object) {
 
  const point2Row = new UIRow();
  point2Row.add(new UIText(strings.getKey('sidebar/geometry/atetrahedra_geometry/point2')).setWidth('90px'));
- const point2X = new UINumber(parameters.p2[0]).setPrecision(3).setWidth('50px').onChange(update);
- const point2Y = new UINumber(parameters.p2[1]).setPrecision(3).setWidth('50px').onChange(update);
- const point2Z = new UINumber(parameters.p2[2]).setPrecision(3).setWidth('50px').onChange(update);
+ const point2X = new UINumber(parameters.p2[0]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point2Y = new UINumber(parameters.p2[1]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point2Z = new UINumber(parameters.p2[2]).setPrecision( 5 ).setWidth('50px').onChange(update);
 
  point2Row.add(point2X);
  point2Row.add(point2Y);
@@ -45,9 +45,9 @@ function GeometryParametersPanel(editor, object) {
 
  const point3Row = new UIRow();
  point3Row.add(new UIText(strings.getKey('sidebar/geometry/atetrahedra_geometry/point3')).setWidth('90px'));
- const point3X = new UINumber(parameters.p3[0]).setPrecision(3).setWidth('50px').onChange(update);
- const point3Y = new UINumber(parameters.p3[1]).setPrecision(3).setWidth('50px').onChange(update);
- const point3Z = new UINumber(parameters.p3[2]).setPrecision(3).setWidth('50px').onChange(update);
+ const point3X = new UINumber(parameters.p3[0]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point3Y = new UINumber(parameters.p3[1]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point3Z = new UINumber(parameters.p3[2]).setPrecision( 5 ).setWidth('50px').onChange(update);
 
  point3Row.add(point3X);
  point3Row.add(point3Y);
@@ -59,9 +59,9 @@ function GeometryParametersPanel(editor, object) {
 
  const point4Row = new UIRow();
  point4Row.add(new UIText(strings.getKey('sidebar/geometry/atetrahedra_geometry/point4')).setWidth('90px'));
- const point4X = new UINumber(parameters.p4[0]).setPrecision(3).setWidth('50px').onChange(update);
- const point4Y = new UINumber(parameters.p4[1]).setPrecision(3).setWidth('50px').onChange(update);
- const point4Z = new UINumber(parameters.p4[2]).setPrecision(3).setWidth('50px').onChange(update);
+ const point4X = new UINumber(parameters.p4[0]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point4Y = new UINumber(parameters.p4[1]).setPrecision( 5 ).setWidth('50px').onChange(update);
+ const point4Z = new UINumber(parameters.p4[2]).setPrecision( 5 ).setWidth('50px').onChange(update);
 
  point4Row.add(point4X);
  point4Row.add(point4Y);

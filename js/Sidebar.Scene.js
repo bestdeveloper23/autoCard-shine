@@ -337,7 +337,7 @@ function SidebarScene( editor ) {
 
 	// fog density
 
-	const fogDensity = new UINumber( 0.05 ).setWidth( '40px' ).setRange( 0, 0.1 ).setStep( 0.001 ).setPrecision( 3 ).onChange( onFogSettingsChanged );
+	const fogDensity = new UINumber( 0.05 ).setWidth( '40px' ).setRange( 0, 0.1 ).setStep( 0.001 ).setPrecision( 5 ).onChange( onFogSettingsChanged );
 	fogPropertiesRow.add( fogDensity );
 
 	//

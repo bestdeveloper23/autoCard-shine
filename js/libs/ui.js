@@ -537,7 +537,7 @@ class UINumber extends UIElement {
 		this.min = - Infinity;
 		this.max = Infinity;
 
-		this.precision = 2;
+		this.precision = 5;
 		this.step = 1;
 		this.unit = '';
 		this.nudge = 0.01;
