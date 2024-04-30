@@ -132,12 +132,32 @@ function MenubarFile( editor ) {
 
 		}
 
-		function getRotationText( object ) {
-			const rotated = object.rotation;
-			const rotateX = rotated.x * 180 / Math.PI;
-			const rotateY = rotated.y * 180 / Math.PI;
-			const rotateZ = rotated.z * 180 / Math.PI;
-			return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(2)} ${rotateY.toFixed(2)} ${rotateZ.toFixed(2)}\n`
+		function getRotationText( object, boolean = false ) {
+			let rotated = object.rotation;
+			let rotateX = rotated.x * 180 / Math.PI;
+			let rotateY = rotated.y * 180 / Math.PI;
+			let rotateZ = rotated.z * 180 / Math.PI;
+			if(boolean){
+				let rotated1 = object.childrenObject[0].rotation;
+				let rotated2 = object.childrenObject[1].rotation;
+
+				let rotateX1 = rotated1.x * 180 / Math.PI;
+				let rotateY1 = rotated1.y * 180 / Math.PI;
+				let rotateZ1 = rotated1.z * 180 / Math.PI;
+				let rotateX2 = rotated2.x * 180 / Math.PI;
+				let rotateY2 = rotated2.y * 180 / Math.PI;
+				let rotateZ2 = rotated2.z * 180 / Math.PI;
+
+				let rotateX = rotateX2 - rotateX1;
+				let rotateY = rotateY2 - rotateY1;
+				let rotateZ = rotateZ2 - rotateZ1;
+
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n
+						`
+			} else {
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+			}
+			
 		}
 
 		function getSolidText( object ) {
@@ -265,17 +285,61 @@ function MenubarFile( editor ) {
 				
 				case "united_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+
+						solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+					}
 					break;
 
 				case "subtracted_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+	
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+	
+						solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+					}
+					
 					break;
 					
 				case "intersected_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+	
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+	
+						solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+					}
+					
 					break;
 					
 				default:
@@ -297,47 +361,66 @@ function MenubarFile( editor ) {
 			const rotateX = rotated.x * 180 / Math.PI;
 			const rotateY = rotated.y * 180 / Math.PI;
 			const rotateZ = rotated.z * 180 / Math.PI;
+
+			const rotateX1 = object.childrenObject[0].rotation.x * 180 / Math.PI;
+			const rotateY1 = object.childrenObject[0].rotation.y * 180 / Math.PI;
+			const rotateZ1 = object.childrenObject[0].rotation.z * 180 / Math.PI;
 	
-			txt += `:rotm r000 ${rotateX.toFixed(2)} ${rotateY.toFixed(2)} ${rotateZ.toFixed(2)}\n`;
+			if(object.name === "united_object" || object.name === "subtracted_object" || object.name === "intersected_object") {
+				txt += `:rotm r000 ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n`;
+			}
+			else {
+				txt += `:rotm r000 ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`;
+			}
+			
 	
 			traversebooleanObjects(object, function ( child ) {
 
 				if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-					rotationText += getRotationText(child);
+					rotationText += getRotationText(child, true);
 				}
 				solidText += getSolidText(child);
 	
 			} );
 			switch (object.name) {
 				case "united_object":
-					txt += `${rotationText}\n`;
-					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'united_object.tg');
+					{
+						txt += `${rotationText}\n`;
+						txt += `${solidText}\n`;
+						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
+						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
+						downloadGeant4File( txt, 'united_object.tg');
+					}
+					
 					break;
 				
 				case "subtracted_object":
-					txt += `${rotationText}\n`;
-					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`;
-					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'subtracted_object.tg');
+					{
+						txt += `${rotationText}\n`;
+						txt += `${solidText}\n`;
+						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`;
+						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
+						downloadGeant4File( txt, 'subtracted_object.tg');	
+					}
+					
 					break;
 					
 				case "intersected_object":
-					txt += `${rotationText}\n`;
-					txt += `${solidText}\n`;
-					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
-					downloadGeant4File( txt, 'intersected_object.tg');
+					{
+						txt += `${rotationText}\n`;
+						txt += `${solidText}\n`;
+						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
+						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
+						downloadGeant4File( txt, 'intersected_object.tg');
+					}
+
 					break;
 
 				case "Box":
 
 					txt += `\n:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
 					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'box.tg');
 					break;
 
@@ -345,7 +428,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mysphere SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
 					txt += `:volu mysphere mysphere ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'sphere.tg');
 					break;
 
@@ -353,7 +436,7 @@ function MenubarFile( editor ) {
 					
 					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'tub.tg');
 					break;
 
@@ -361,7 +444,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}\n\n`
-					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ctub.tg');
 					break;
 
@@ -369,7 +452,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mycone mycone ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'cone.tg');
 					break;
 
@@ -377,7 +460,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mypara mypara ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'parallelepiped.tg');
 					break;
 
@@ -385,7 +468,7 @@ function MenubarFile( editor ) {
 					
 					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n\n`
 					txt += `:volu mytrd mytrd ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n\n`
+					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n\n`
 					downloadGeant4File( txt, 'trapzoid.tg');
 					break;
 
@@ -393,7 +476,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mytrdp mytrdp ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'trapezoidp.tg');
 					break;
 
@@ -401,7 +484,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mytorus TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
 					txt += `:volu mytorus mytorus ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'torus.tg');
 					break;
 				
@@ -409,7 +492,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n\n`
 					txt += `:volu myellipT myellipT ${object.manager.name.elementType}\n\n`
-					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipeTub.tg');
 					break;
 				
@@ -417,7 +500,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myellipsoid ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipsoid myellipsoid ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myellipsoid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myellipsoid 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipsoid.tg');
 					break;
 
@@ -425,7 +508,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipticalcone myellipticalcone ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipticalcone.tg');
 					break;
 
@@ -433,7 +516,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n\n`
 					txt += `:volu mytbox mytbox ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedbox.tg');
 					break;
 
@@ -441,7 +524,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n\n`
 					txt += `:volu myttrd myttrap ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtrapzoid.tg');
 					break;
 
@@ -449,7 +532,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n\n`
 					txt += `:volu myttrap myttrap ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtrapezoidp.tg');
 					break;
 
@@ -457,7 +540,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu myttubs myttubs ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtub.tg');
 					break;
 
@@ -465,7 +548,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid mytetra TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n\n`
 					txt += `:volu mytetra mytetra ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mytetra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mytetra 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'tetrahedra.tg');
 					break;
 
@@ -473,7 +556,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n\n`
 					txt += `:volu myhyperboloid myhyperboloid ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'hyperboloid.tg');
 					break;
 
@@ -481,7 +564,7 @@ function MenubarFile( editor ) {
 
 					txt += `\n:solid myploycone POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu myploycone mypolycone ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mypolycone 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mypolycone 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'polycone.tg');
 					break;
 
@@ -489,7 +572,7 @@ function MenubarFile( editor ) {
 					
 					txt += `\n:solid mypolyhedra POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu mypolyhedra mypolyhedra ${object.material.newmaterial?.elementType}\n\n`
-					txt += `:place mypolyhedra 1 world r000 ${object.position.x.toFixed(2)} ${object.position.y.toFixed(2)} ${object.position.z.toFixed(2)}\n`
+					txt += `:place mypolyhedra 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'polyhedra.tg');
 					break;
 
@@ -528,12 +611,33 @@ function MenubarFile( editor ) {
 
 		}
 
-		function getRotationText( object ) {
-			const rotated = object.rotation;
-			const rotateX = rotated.x * 180 / Math.PI;
-			const rotateY = rotated.y * 180 / Math.PI;
-			const rotateZ = rotated.z * 180 / Math.PI;
-			return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(2)} ${rotateY.toFixed(2)} ${rotateZ.toFixed(2)}\n`
+		function getRotationText( object, boolean = false ) {
+			let rotated = object.rotation;
+			let rotateX = rotated.x * 180 / Math.PI;
+			let rotateY = rotated.y * 180 / Math.PI;
+			let rotateZ = rotated.z * 180 / Math.PI;
+			if(boolean){
+				let rotated1 = object.childrenObject[0].rotation;
+				let rotated2 = object.childrenObject[1].rotation;
+
+				let rotateX1 = rotated1.x * 180 / Math.PI;
+				let rotateY1 = rotated1.y * 180 / Math.PI;
+				let rotateZ1 = rotated1.z * 180 / Math.PI;
+				let rotateX2 = rotated2.x * 180 / Math.PI;
+				let rotateY2 = rotated2.y * 180 / Math.PI;
+				let rotateZ2 = rotated2.z * 180 / Math.PI;
+
+				let rotateX = rotateX2 - rotateX1;
+				let rotateY = rotateY2 - rotateY1;
+				let rotateZ = rotateZ2 - rotateZ1;
+				console.log(rotateX1)
+
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n
+						`
+			} else {
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+			}
+			
 		}
 
 		function getSolidText( object ) {
@@ -661,17 +765,66 @@ function MenubarFile( editor ) {
 				
 				case "united_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+	
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+
+						solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+					}
+					
 					break;
 
 				case "subtracted_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+	
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+						
+						solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`	
+					}
+					
 					break;
 					
 				case "intersected_object":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[1].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot ${object.position.x} ${object.position.y} ${object.position.z}\n`
+					{
+						
+						const positionX1 = object.childrenObject[0].position.x;
+						const positionY1 = object.childrenObject[0].position.y;
+						const positionZ1 = object.childrenObject[0].position.z;
+						
+						const positionX2 = object.childrenObject[1].position.x;
+						const positionY2 = object.childrenObject[1].position.y;
+						const positionZ2 = object.childrenObject[1].position.z;
+	
+						const positionX = positionX2 - positionX1;
+						const positionY = positionY2 - positionY1;
+						const positionZ = positionZ2 - positionZ1;
+
+						solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+
+					}
+					
 					break;
 					
 				default:
@@ -798,7 +951,7 @@ function MenubarFile( editor ) {
 					case "united_object":
 						traversebooleanObjects(children, function (child) {
 							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child);
+								rotationText += getRotationText(child, true);
 							}
 							solidText += getSolidText(child);
 						});
@@ -807,7 +960,7 @@ function MenubarFile( editor ) {
 					case "subtracted_object":
 						traversebooleanObjects(children, function (child) {
 							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child);
+								rotationText += getRotationText(child, true);
 							}
 							solidText += getSolidText(child);
 						});
@@ -816,7 +969,7 @@ function MenubarFile( editor ) {
 					case "intersected_object":
 						traversebooleanObjects(children, function (child) {
 							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child);
+								rotationText += getRotationText(child, true);
 							}
 							solidText += getSolidText(child);
 						});
@@ -830,7 +983,12 @@ function MenubarFile( editor ) {
 				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}_${children.uuid} ${children.material.newmaterial?.elementType}\n`
 
 				//:place gear1 1 world r000 -2*cm -8*cm 0
-				placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
+				if(children.name === "united_object" || children.name === "subtracted_object" || children.name === "intersected_object") {
+					placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.childrenObject[0].position.x} ${children.childrenObject[0].position.y} ${children.childrenObject[0].position.z}\n`
+				}
+				else {
+					placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
+				}
 
 			
 				//:vis world OFF
@@ -1098,7 +1256,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="boxVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1145,7 +1303,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="sphereVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1191,7 +1349,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="sphereVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1237,7 +1395,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="CtubVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1283,7 +1441,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="coneVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1329,7 +1487,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="paraVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1375,7 +1533,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="trdVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1421,7 +1579,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="trapVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1467,7 +1625,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="torusVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1513,7 +1671,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="elliptubeVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1559,7 +1717,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="ellipsoidVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1605,7 +1763,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="elconeVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1651,7 +1809,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="tboxVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1697,7 +1855,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="ttradVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1743,7 +1901,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="ttrapVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1789,7 +1947,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="ttubeVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1835,7 +1993,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="tetraVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1881,7 +2039,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="paraboloidVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1927,7 +2085,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="hypeVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -1979,7 +2137,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="polyconeVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -2031,7 +2189,7 @@ function MenubarFile( editor ) {
 					gdml += `      <physvol>\n`;
 					gdml += `        <volumeref ref="polyhedraVolume"/>\n`;
 					gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+					gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 					gdml += `      </physvol>\n`;
 					gdml += `    </volume>\n`;
 					gdml += `    <volume name="roomVolume">\n`;
@@ -2080,7 +2238,7 @@ function MenubarFile( editor ) {
 						gdml += `      <physvol>\n`;
 						gdml += `        <volumeref ref="unitedVolume"/>\n`;
 						gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 						gdml += `      </physvol>\n`;
 						gdml += `    </volume>\n`;
 						gdml += `    <volume name="roomVolume">\n`;
@@ -2129,7 +2287,7 @@ function MenubarFile( editor ) {
 							gdml += `      <physvol>\n`;
 							gdml += `        <volumeref ref="subtractedVolume"/>\n`;
 							gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-							gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+							gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 							gdml += `      </physvol>\n`;
 							gdml += `    </volume>\n`;
 							gdml += `    <volume name="roomVolume">\n`;
@@ -2178,7 +2336,7 @@ function MenubarFile( editor ) {
 						gdml += `      <physvol>\n`;
 						gdml += `        <volumeref ref="intersectedVolume"/>\n`;
 						gdml += `        <position name="pos" unit="m" x="${object.position.x.toFixed(4)}" y="${object.position.y.toFixed(4)}" z="${object.position.z.toFixed(4)}"/>\n`; // Adjust position as needed
-						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(2)}" y="${rotateY.toFixed(2)}" z="${rotateZ.toFixed(2)}"/>\n`; // Adjust rotation as needed
+						gdml += `        <rotation name="rot" unit="deg" x="${rotateX.toFixed(5)}" y="${rotateY.toFixed(5)}" z="${rotateZ.toFixed(5)}"/>\n`; // Adjust rotation as needed
 						gdml += `      </physvol>\n`;
 						gdml += `    </volume>\n`;
 						gdml += `    <volume name="roomVolume">\n`;
