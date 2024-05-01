@@ -152,8 +152,7 @@ function MenubarFile( editor ) {
 				let rotateY = rotateY2 - rotateY1;
 				let rotateZ = rotateZ2 - rotateZ1;
 
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n
-						`
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			} else {
 				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			}
@@ -632,8 +631,7 @@ function MenubarFile( editor ) {
 				let rotateZ = rotateZ2 - rotateZ1;
 				console.log(rotateX1)
 
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n
-						`
+				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			} else {
 				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			}
