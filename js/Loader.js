@@ -3705,6 +3705,7 @@ function Loader( editor ) {
 
               if(meshRotation) {
                 mesh.rotation.copy(meshRotation);
+                console.log(meshRotation);
               }
 
               const meshName = solidName.split('_')[0];
@@ -3756,6 +3757,14 @@ function Loader( editor ) {
 
               mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
               
+              let meshRotationName = rotationName.replace('_rel', '');
+              const meshRotation = rotationText[meshRotationName];
+
+              if(meshRotation) {
+                mesh.rotation.copy(meshRotation);
+                console.log(meshRotation);
+              }
+
               const meshName = solidName.split('_')[0];
 
               mesh.name = meshName;
@@ -3805,6 +3814,14 @@ function Loader( editor ) {
               aCSG = aCSG.intersect(bCSG);
 
               mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              
+              let meshRotationName = rotationName.replace('_rel', '');
+              const meshRotation = rotationText[meshRotationName];
+
+              if(meshRotation) {
+                mesh.rotation.copy(meshRotation);
+                console.log(meshRotation);
+              }
               
               const meshName = solidName.split('_')[0];
 
@@ -5122,9 +5139,9 @@ function Loader( editor ) {
       energy: 56.4,
     },
 
-    "G4_1,2-DICHLOROBENZENE": {
+    "G4_l,2-DICHLOROBENZENE": {
       id: 147,
-      elementType: "G4_1,2-DICHLOROBENZENE",
+      elementType: "G4_l,2-DICHLOROBENZENE",
       density: 1.3048,
       energy: 106.5,
     },
@@ -5136,9 +5153,9 @@ function Loader( editor ) {
       energy: 103.3,
     },
 
-    "G4_1,2-DICHLOROETHANE": {
+    "G4_l,2-DICHLOROETHANE": {
       id: 149,
-      elementType: "G4_1,2-DICHLOROETHANE",
+      elementType: "G4_l,2-DICHLOROETHANE",
       density: 1.2351,
       energy: 111.9,
     },
@@ -5773,9 +5790,9 @@ function Loader( editor ) {
       energy: 47.1,
     },
 
-    G4_1PROPANE: {
+    G4_lPROPANE: {
       id: 240,
-      elementType: "G4_1PROPANE",
+      elementType: "G4_lPROPANE",
       density: 0.43,
       energy: 52,
     },
@@ -6055,51 +6072,51 @@ function Loader( editor ) {
 
     //HEP and Nuclear Materials
 
-    G4_1H2: {
+    G4_lH2: {
       id: 280,
-      elementType: "G4_1H2",
+      elementType: "G4_lH2",
       density: 0.0708,
       energy: 21.8,
     },
 
-    G4_1N2: {
+    G4_lN2: {
       id: 281,
-      elementType: "G4_1N2",
+      elementType: "G4_lN2",
       density: 0.807,
       energy: 21.8,
     },
 
-    G4_1O2: {
+    G4_lO2: {
       id: 282,
-      elementType: "G4_1O2",
+      elementType: "G4_lO2",
       density: 1.141,
       energy: 95,
     },
 
-    G4_1Ar: {
+    G4_lAr: {
       id: 283,
-      elementType: "G4_1Ar",
+      elementType: "G4_lAr",
       density: 1.1396,
       energy: 188,
     },
 
-    G4_1Br: {
+    G4_lBr: {
       id: 284,
-      elementType: "G4_1Br",
+      elementType: "G4_lBr",
       density: 3.1028,
       energy: 343,
     },
 
-    G4_1Kr: {
+    G4_lKr: {
       id: 285,
-      elementType: "G4_1Kr",
+      elementType: "G4_lKr",
       density: 2.418,
       energy: 352,
     },
 
-    G4_1Xe: {
+    G4_lXe: {
       id: 286,
-      elementType: "G4_1Xe",
+      elementType: "G4_lXe",
       density: 2.953,
       energy: 482,
     },

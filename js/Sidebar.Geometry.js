@@ -97,21 +97,21 @@ function SidebarGeometry( editor ) {
 
 	// uuid
 
-	const geometryUUIDRow = new UIRow();
-	const geometryUUID = new UIInput().setWidth( '102px' ).setFontSize( '12px' ).setDisabled( true );
-	const geometryUUIDRenew = new UIButton( strings.getKey( 'sidebar/geometry/new' ) ).setMarginLeft( '7px' ).onClick( function () {
+	// const geometryUUIDRow = new UIRow();
+	// const geometryUUID = new UIInput().setWidth( '102px' ).setFontSize( '12px' ).setDisabled( true );
+	// const geometryUUIDRenew = new UIButton( strings.getKey( 'sidebar/geometry/new' ) ).setMarginLeft( '7px' ).onClick( function () {
 
-		geometryUUID.setValue( THREE.MathUtils.generateUUID() );
+	// 	geometryUUID.setValue( THREE.MathUtils.generateUUID() );
 
-		editor.execute( new SetGeometryValueCommand( editor, editor.selected, 'uuid', geometryUUID.getValue() ) );
+	// 	editor.execute( new SetGeometryValueCommand( editor, editor.selected, 'uuid', geometryUUID.getValue() ) );
 
-	} );
+	// } );
 
-	geometryUUIDRow.add( new UIText( strings.getKey( 'sidebar/geometry/uuid' ) ).setWidth( '90px' ) );
-	geometryUUIDRow.add( geometryUUID );
-	geometryUUIDRow.add( geometryUUIDRenew );
+	// geometryUUIDRow.add( new UIText( strings.getKey( 'sidebar/geometry/uuid' ) ).setWidth( '90px' ) );
+	// geometryUUIDRow.add( geometryUUID );
+	// geometryUUIDRow.add( geometryUUIDRenew );
 
-	container.add( geometryUUIDRow );
+	// container.add( geometryUUIDRow );
 
 	// name
 
@@ -182,7 +182,7 @@ function SidebarGeometry( editor ) {
 
 			geometryType.setValue( geometry.type );
 
-			geometryUUID.setValue( geometry.uuid );
+			// geometryUUID.setValue( geometry.uuid );
 			geometryName.setValue( geometry.name );
 
 			//

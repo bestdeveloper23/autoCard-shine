@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { UIButton, UIInput, UIPanel, UIRow, UISelect, UIText, UITextArea, UINumber } from './libs/ui.js';
+import { UIButton, UIInput, UIPanel, UIRow, UISelect, UIText, UITextArea, UINumber, UIDiv } from './libs/ui.js';
 
 import { SetMaterialCommand } from './commands/SetMaterialCommand.js';
 import { SetMaterialValueCommand } from './commands/SetMaterialValueCommand.js';
@@ -12,6 +12,8 @@ import { SidebarMaterialMapProperty } from './Sidebar.Material.MapProperty.js';
 import { SidebarMaterialNumberProperty } from './Sidebar.Material.NumberProperty.js';
 import { SidebarMaterialRangeValueProperty } from './Sidebar.Material.RangeValueProperty.js';
 import { SidebarMaterialProgram } from './Sidebar.Material.Program.js';
+import { PeriodicTable } from './PeriodTable.js';
+
 
 function SidebarMaterial(editor) {
 
@@ -51,25 +53,26 @@ function SidebarMaterial(editor) {
 
 	// uuid
 
-	const materialUUIDRow = new UIRow();
-	const materialUUID = new UIInput().setWidth('102px').setFontSize('12px').setDisabled(true);
-	const materialUUIDRenew = new UIButton(strings.getKey('sidebar/material/new')).setMarginLeft('7px');
-	materialUUIDRenew.onClick(function () {
+	// const materialUUIDRow = new UIRow();
+	// const materialUUID = new UIInput().setWidth('102px').setFontSize('12px').setDisabled(true);
+	// const materialUUIDRenew = new UIButton(strings.getKey('sidebar/material/new')).setMarginLeft('7px');
+	// materialUUIDRenew.onClick(function () {
 
-		materialUUID.setValue(THREE.MathUtils.generateUUID());
-		update();
+	// 	materialUUID.setValue(THREE.MathUtils.generateUUID());
+	// 	update();
 
-	});
+	// });
 
-	materialUUIDRow.add(new UIText(strings.getKey('sidebar/material/uuid')).setWidth('90px'));
-	materialUUIDRow.add(materialUUID);
-	materialUUIDRow.add(materialUUIDRenew);
+	// materialUUIDRow.add(new UIText(strings.getKey('sidebar/material/uuid')).setWidth('90px'));
+	// materialUUIDRow.add(materialUUID);
+	// materialUUIDRow.add(materialUUIDRenew);
 
-	container.add(materialUUIDRow);
+	// container.add(materialUUIDRow);
 
 	// name
 
 	const materialNameRow = new UIRow();
+
 	// const materialName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
 	const materialName = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
 
@@ -78,12 +81,23 @@ function SidebarMaterial(editor) {
 		options.push(element.elementType);
 	});
 
-	materialName.setOptions(options);
+	
+	const materialBasicRow = new UIRow();
 
-	materialNameRow.add(new UIText(strings.getKey('sidebar/material/name')).setWidth('90px'));
+	const basicMaterialButton = new UIButton("Basic Material");
+
+	materialName.setOptions(options);
+	materialName.dom.style.marginLeft = '90px';
+
+	materialBasicRow.add(new UIText(strings.getKey('sidebar/material/element')).setWidth('90px'));
+	materialBasicRow.add(basicMaterialButton);
+
 	materialNameRow.add(materialName);
 
+	container.add(materialBasicRow);
 	container.add(materialNameRow);
+
+
 
 	// density
 
@@ -434,6 +448,22 @@ function SidebarMaterial(editor) {
 
 	container.add(materialUserDataRow);
 
+
+	
+	const priodicElement = new UIRow();
+	priodicElement.dom.style.display = 'none';
+	priodicElement.add(PeriodicTable(materialDensity, materialEnergy, onChangeProperty, basicMaterialButton, priodicElement, materialName));
+
+	container.add(priodicElement);
+
+	// select basicMaterial element
+	
+	basicMaterialButton.onClick(() => {
+		priodicElement.dom.style.display = 'grid';
+	})
+
+
+
 	//
 
 	function update() {
@@ -448,11 +478,11 @@ function SidebarMaterial(editor) {
 
 		if (material) {
 
-			if (material.uuid !== undefined && material.uuid !== materialUUID.getValue()) {
+			// if (material.uuid !== undefined && material.uuid !== materialUUID.getValue()) {
 
-				editor.execute(new SetMaterialValueCommand(editor, currentObject, 'uuid', materialUUID.getValue(), currentMaterialSlot));
+			// 	editor.execute(new SetMaterialValueCommand(editor, currentObject, 'uuid', materialUUID.getValue(), currentMaterialSlot));
 
-			}
+			// }
 
 			if (material.type !== materialClass.getValue()) {
 
@@ -549,11 +579,11 @@ function SidebarMaterial(editor) {
 
 		material = editor.getObjectMaterial(currentObject, currentMaterialSlot);
 
-		if (material.uuid !== undefined) {
+		// if (material.uuid !== undefined) {
 
-			materialUUID.setValue(material.uuid);
+		// 	materialUUID.setValue(material.uuid);
 
-		}
+		// }
 
 		if (material.newmaterial !== undefined) {
 
@@ -647,15 +677,29 @@ function SidebarMaterial(editor) {
 
 	});
 
-	function onChangeProperty() {
-		const selectedMaterialID = Number(materialName.getValue());
-		const materialElement = materialTypeOptions[selectedMaterialID];
-		materialDensity.setValue(materialElement.density);
-		materialEnergy.setValue(materialElement.energy);
-		console.log(editor.selected)
-		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
-		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
-		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
+	function onChangeProperty(basic = false, id = 0) {
+		console.log(basic);
+		if(basic === true) {
+			console.log(basic)
+			const materialElement = materialTypeOptions[id];
+			materialDensity.setValue(materialElement.density);
+			materialEnergy.setValue(materialElement.energy);
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
+		} else {
+			const selectedMaterialID = Number(materialName.getValue());
+			console.log(selectedMaterialID);
+			const materialElement = materialTypeOptions[selectedMaterialID];
+			materialDensity.setValue(materialElement.density);
+			materialEnergy.setValue(materialElement.energy);
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
+			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
+
+			console.log(materialElement);
+		}
+		
 	}
 
 	signals.materialChanged.add(refreshUI);
@@ -1607,7 +1651,7 @@ const materialTypeOptions =
 		},
 		{
 			id: 147,
-			elementType: 'G4_1,2-DICHLOROBENZENE',
+			elementType: 'G4_l,2-DICHLOROBENZENE',
 			density: 1.3048,
 			energy: 106.5
 		},
@@ -1619,7 +1663,7 @@ const materialTypeOptions =
 		},
 		{
 			id: 149,
-			elementType: 'G4_1,2-DICHLOROETHANE',
+			elementType: 'G4_l,2-DICHLOROETHANE',
 			density: 1.2351,
 			energy: 111.9
 		},
@@ -2165,7 +2209,7 @@ const materialTypeOptions =
 		},
 		{
 			id: 240,
-			elementType: 'G4_1PROPANE',
+			elementType: 'G4_lPROPANE',
 			density: 0.43,
 			energy: 52
 		},
@@ -2408,43 +2452,43 @@ const materialTypeOptions =
 
 		{
 			id: 280,
-			elementType: 'G4_1H2',
+			elementType: 'G4_lH2',
 			density: 0.0708,
 			energy: 21.8
 		},
 		{
 			id: 281,
-			elementType: 'G4_1N2',
+			elementType: 'G4_lN2',
 			density: 0.807,
 			energy: 21.8
 		},
 		{
 			id: 282,
-			elementType: 'G4_1O2',
+			elementType: 'G4_lO2',
 			density: 1.141,
 			energy: 95
 		},
 		{
 			id: 283,
-			elementType: 'G4_1Ar',
+			elementType: 'G4_lAr',
 			density: 1.1396,
 			energy: 188
 		},
 		{
 			id: 284,
-			elementType: 'G4_1Br',
+			elementType: 'G4_lBr',
 			density: 3.1028,
 			energy: 343
 		},
 		{
 			id: 285,
-			elementType: 'G4_1Kr',
+			elementType: 'G4_lKr',
 			density: 2.418,
 			energy: 352
 		},
 		{
 			id: 286,
-			elementType: 'G4_1Xe',
+			elementType: 'G4_lXe',
 			density: 2.953,
 			energy: 482
 		},

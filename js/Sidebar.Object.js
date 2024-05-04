@@ -76,23 +76,23 @@ function SidebarObject( editor ) {
 
 	container.add( objectTypeRow );
 
-	// uuid
+	// // uuid
 
-	const objectUUIDRow = new UIRow();
-	const objectUUID = new UIInput().setWidth( '102px' ).setFontSize( '12px' ).setDisabled( true );
-	const objectUUIDRenew = new UIButton( strings.getKey( 'sidebar/object/new' ) ).setMarginLeft( '7px' ).onClick( function () {
+	// const objectUUIDRow = new UIRow();
+	// const objectUUID = new UIInput().setWidth( '102px' ).setFontSize( '12px' ).setDisabled( true );
+	// const objectUUIDRenew = new UIButton( strings.getKey( 'sidebar/object/new' ) ).setMarginLeft( '7px' ).onClick( function () {
 
-		objectUUID.setValue( THREE.MathUtils.generateUUID() );
+	// 	objectUUID.setValue( THREE.MathUtils.generateUUID() );
 
-		editor.execute( new SetUuidCommand( editor, editor.selected, objectUUID.getValue() ) );
+	// 	editor.execute( new SetUuidCommand( editor, editor.selected, objectUUID.getValue() ) );
 
-	} );
+	// } );
 
-	objectUUIDRow.add( new UIText( strings.getKey( 'sidebar/object/uuid' ) ).setWidth( '90px' ) );
-	objectUUIDRow.add( objectUUID );
-	objectUUIDRow.add( objectUUIDRenew );
+	// objectUUIDRow.add( new UIText( strings.getKey( 'sidebar/object/uuid' ) ).setWidth( '90px' ) );
+	// objectUUIDRow.add( objectUUID );
+	// objectUUIDRow.add( objectUUIDRenew );
 
-	container.add( objectUUIDRow );
+	// container.add( objectUUIDRow );
 
 	// type
 
@@ -880,7 +880,7 @@ function SidebarObject( editor ) {
 
 		if ( object.source !== undefined ) {
 			objectNameRow.setDisplay( 'none' );
-			objectUUIDRow.setDisplay( 'none' );
+			// objectUUIDRow.setDisplay( 'none' );
 			objectTypeRow.setDisplay( 'none' );
 		}
 		if ( object.name === "RadiatinSource" ) {
@@ -982,7 +982,7 @@ function SidebarObject( editor ) {
 
 		objectType.setValue( object.type );
 
-		objectUUID.setValue( object.uuid );
+		// objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );
 
 		if( object.source !== undefined ) {
