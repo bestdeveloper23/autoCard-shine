@@ -78,14 +78,28 @@ function Viewport(editor, measureValue) {
 	signals.measureEventChanged.add((measurement) => {
 		measurement ? (measurementEventAvailability = true) : (measurementEventAvailability = false);
 		if( measurement ) {
+
 			editor.addObject(editor.markers[0]);
 			editor.addObject(editor.markers[1]);
 			editor.addObject(editor.measurementLine);
+
 		} else {
+
 			editor.removeObject(editor.markers[0]);
 			editor.removeObject(editor.markers[1]);
 			editor.removeObject(editor.measurementLine);
+
 			measureValue.setValue('');
+
+			editor.measurementPoints[0].set(0, 0, 0);
+			editor.measurementPoints[1].set(0, 0, 0);
+
+			setLine(editor.measurementPoints[0], editor.measurementPoints[0]);
+
+			editor.markers[0].position.set(0, 0, 0);
+			editor.markers[1].position.set(0, 0, 0);
+			
+			editor.clicks = 0;
 		}
 	})
 
