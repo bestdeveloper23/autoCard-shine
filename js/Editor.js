@@ -42,6 +42,7 @@ function Editor() {
 
 		transformModeChanged: new Signal(),
 		booleanEventChanged: new Signal(),
+		measureEventChanged: new Signal(),
 		snapChanged: new Signal(),
 		spaceChanged: new Signal(),
 		rendererCreated: new Signal(),
@@ -131,6 +132,27 @@ function Editor() {
 	this.addCamera( this.camera );
 
 	this.booleanEvent = null;
+	this.measureEvent = null;
+	this.measurementPoints = [
+		new THREE.Vector3(),
+		new THREE.Vector3()
+	];
+	this.markers = [
+		new THREE.Mesh(
+			new THREE.SphereGeometry(0.05, 10, 20),
+			new THREE.MeshBasicMaterial({
+			  color: 0xff5555
+			})
+		),
+		new THREE.Mesh(
+			new THREE.SphereGeometry(0.05, 10, 20),
+			new THREE.MeshBasicMaterial({
+				color: 0xff5555
+			})
+		)
+	]
+	this.clicks = 0;
+	this.measurementLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineBasicMaterial({color: 0xff5555}));
 
 }
 

@@ -1,10 +1,11 @@
-import { UIPanel, UIButton, UICheckbox } from './libs/ui.js';
+import { UIPanel, UIButton, UICheckbox, UIText } from './libs/ui.js';
 
 import translateImg from '../images/translate.svg';
 import rotateImg from '../images/rotate.svg';
 import mergeImg from '../images/merge.svg';
 import subtractImg from '../images/subtract.svg';
 import excludeImg from '../images/exclude.svg';
+import measureImg from '../images/measure.svg';
 
 function Toolbar( editor ) {
 
@@ -115,19 +116,46 @@ function Toolbar( editor ) {
 	} );
 	container.add( exclude );
 
+
+	const measureIcon = document.createElement( 'img' );
+	measureIcon.title = strings.getKey( 'toolbar/measure' );
+	measureIcon.src = measureImg;
+
+	const measure = new UIButton();
+	measure.dom.appendChild( measureIcon );
+	measure.onClick( function () {
+
+		if (editor.booleanEvent === 'measure'){
+			signals.booleanEventChanged.dispatch();
+			signals.measureEventChanged.dispatch();
+		} else {
+			signals.booleanEventChanged.dispatch( 'measure' );
+			signals.measureEventChanged.dispatch( 'measure' );
+		}
+
+	} );
+	container.add( measure );
+
+	const measureValue = new UIText();
+	measureValue.dom.style.paddingLeft = "5px";
+	measureValue.dom.style.paddingRight = "5px";
+	// measureValue.setValue( editor.measureValue );
+	container.add( measureValue );
+
+
 	//
 
 	signals.transformModeChanged.add( function ( mode ) {
 
 		translate.dom.classList.remove( 'selected' );
 		rotate.dom.classList.remove( 'selected' );
-		scale.dom.classList.remove( 'selected' );
+		// scale.dom.classList.remove( 'selected' );
 
 		switch ( mode ) {
 
 			case 'translate': translate.dom.classList.add( 'selected' ); break;
 			case 'rotate': rotate.dom.classList.add( 'selected' ); break;
-			case 'scale': scale.dom.classList.add( 'selected' ); break;
+			// case 'scale': scale.dom.classList.add( 'selected' ); break;
 
 		}
 
@@ -138,19 +166,21 @@ function Toolbar( editor ) {
 		merge.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
 		subtract.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
 		exclude.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
-		console.log("booleanEvent is changed!", merge.dom.classList, booleanType);
+		measure.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
+		console.log("booleanEvent is changed!", measure.dom.classList, booleanType);
 		if(booleanType){
 			switch (booleanType) {
 				case 'merge': merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;
 				case 'subtract': subtract.dom.classList.add( 'selected' ); editor.booleanEvent = 'subtract'; break;
 				case 'exclude': exclude.dom.classList.add( 'selected' ); editor.booleanEvent = 'exclude'; break;
+				case 'measure': measure.dom.classList.add( 'selected' ); editor.booleanEvent = 'measure'; break;
 			}	
 		}
 		
-	})
+	});
 
-
-	return container;
+	this.container = container;
+	this.measureValue = measureValue;
 
 }
 

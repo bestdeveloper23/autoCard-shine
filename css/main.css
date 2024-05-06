@@ -508,6 +508,7 @@ select:hover {
   height: 32px;
   background: #eee;
   text-align: center;
+  z-index: 2;
 }
 
 #toolbar button,

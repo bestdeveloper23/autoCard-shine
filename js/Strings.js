@@ -509,6 +509,7 @@ function Strings( config ) {
 			'toolbar/merge': 'Unite',
 			'toolbar/subtract': 'Subtract',
 			'toolbar/exclude': 'Intersect',
+			'toolbar/measure': 'Measure',
 
 			'viewport/info/objects': 'Objects',
 			'viewport/info/vertices': 'Vertices',

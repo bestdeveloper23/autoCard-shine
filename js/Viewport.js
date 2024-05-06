@@ -19,7 +19,7 @@ import { SetScaleCommand } from './commands/SetScaleCommand.js';
 
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-function Viewport(editor) {
+function Viewport(editor, measureValue) {
 
 	const signals = editor.signals;
 
@@ -72,6 +72,22 @@ function Viewport(editor) {
 	let objectPositionOnDown = null;
 	let objectRotationOnDown = null;
 	let objectScaleOnDown = null;
+
+	let measurementEventAvailability = false;
+
+	signals.measureEventChanged.add((measurement) => {
+		measurement ? (measurementEventAvailability = true) : (measurementEventAvailability = false);
+		if( measurement ) {
+			editor.addObject(editor.markers[0]);
+			editor.addObject(editor.markers[1]);
+			editor.addObject(editor.measurementLine);
+		} else {
+			editor.removeObject(editor.markers[0]);
+			editor.removeObject(editor.markers[1]);
+			editor.removeObject(editor.measurementLine);
+			measureValue.setValue('');
+		}
+	})
 
 	const transformControls = new TransformControls(camera, container.dom);
 	transformControls.addEventListener('change', function () {
@@ -163,6 +179,7 @@ function Viewport(editor) {
 
 	// events
 
+	
 	function updateAspectRatio() {
 
 		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
@@ -198,6 +215,8 @@ function Viewport(editor) {
 	const onUpPosition = new THREE.Vector2();
 	const onDoubleClickPosition = new THREE.Vector2();
 
+	const mousePosition = new THREE.Vector2();
+
 	function getMousePosition(dom, x, y) {
 
 		const rect = dom.getBoundingClientRect();
@@ -218,10 +237,39 @@ function Viewport(editor) {
 
 	}
 
+	function setLine(vectorA, vectorB) {
+		editor.measurementLine.geometry.attributes.position.setXYZ(0, vectorA.x, vectorA.y, vectorA.z);
+		editor.measurementLine.geometry.attributes.position.setXYZ(1, vectorB.x, vectorB.y, vectorB.z);
+		editor.measurementLine.geometry.attributes.position.needsUpdate = true;
+	}
+
 	function onMouseDown(event) {
 
 		// event.preventDefault();
+		if ( measurementEventAvailability ) {
+			const array = getMousePosition(container.dom, event.clientX, event.clientY);
+			mousePosition.fromArray(array);
+				
+			const intersects = getIntersects(mousePosition);
 
+			if (intersects.length > 0) {
+
+				editor.addObject(editor.measurementLine);
+				const intersect = intersects[0];
+
+				editor.measurementPoints[editor.clicks].copy(intersect.point);
+				editor.markers[editor.clicks].position.copy(intersect.point);
+				setLine(intersect.point, intersect.point);
+				editor.clicks++;
+				if (editor.clicks > 1){
+					var distance = editor.measurementPoints[0].distanceTo(editor.measurementPoints[1]);
+					measureValue.setValue(distance);
+					setLine(editor.measurementPoints[0], editor.measurementPoints[1]);
+					editor.clicks = 0;
+				}
+			}
+				
+		}
 		if (event.target !== renderer.domElement) return;
 
 		const array = getMousePosition(container.dom, event.clientX, event.clientY);

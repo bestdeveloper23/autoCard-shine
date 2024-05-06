@@ -10,10 +10,16 @@ class Selector {
 		this.signals = signals;
 
 		this.booleanEventAvailability = false;
+		this.measurementEventAvailability = false;
 		// events
 		signals.booleanEventChanged.add((booleanType) => {
 			booleanType ? (this.booleanEventAvailability = true) : (this.booleanEventAvailability = false);
-	});
+		});
+
+		signals.measureEventChanged.add((measurement) => {
+			measurement ? (this.measurementEventAvailability = true) : (this.measurementEventAvailability = false);
+			console.log(measurement);
+		})
 
 		// signals
 
@@ -65,39 +71,42 @@ class Selector {
 
 			if(this.booleanEventAvailability){
 				console.log("boolean operation detected", this.booleanEventAvailability);
+				if(this.editor.booleanEvent !== 'measure'){
 				
-				const MeshCSG1 = CSG.fromMesh(originalObject)
-				const MeshCSG2 = CSG.fromMesh(object)
-				let aCSG;
-				switch (this.editor.booleanEvent) {
-					case 'merge' : aCSG = MeshCSG1.union(MeshCSG2); break;
-					case 'subtract' : aCSG = MeshCSG1.subtract(MeshCSG2); break;
-					case 'exclude' : aCSG = MeshCSG1.intersect(MeshCSG2); break;
+					const MeshCSG1 = CSG.fromMesh(originalObject)
+					const MeshCSG2 = CSG.fromMesh(object)
+					let aCSG;
+					switch (this.editor.booleanEvent) {
+						case 'merge' : aCSG = MeshCSG1.union(MeshCSG2); break;
+						case 'subtract' : aCSG = MeshCSG1.subtract(MeshCSG2); break;
+						case 'exclude' : aCSG = MeshCSG1.intersect(MeshCSG2); break;
+					}
+	
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4())
+	
+					// add childrens for boolean operation handling
+					if(!finalMesh.childrenObject) finalMesh.childrenObject = [];
+					finalMesh.childrenObject.push(originalObject, object);
+	
+					// remove old objects from scene
+					this.editor.removeObject(originalObject)
+					this.editor.removeObject(object);
+					
+					switch (this.editor.booleanEvent) {
+						case 'merge' : finalMesh.name = "united_object"; break;
+						case 'subtract' : finalMesh.name = "subtracted_object"; break;
+						case 'exclude' : finalMesh.name = "intersected_object"; break;
+					}
+					this.editor.addObject(finalMesh);
+					
+					this.booleanEventAvailability = false;
+					this.signals.booleanEventChanged.dispatch();
+					this.editor.booleanEvent = null;
+					this.originalObject = object;	
 				}
-
-				const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4())
-
-				// add childrens for boolean operation handling
-				if(!finalMesh.childrenObject) finalMesh.childrenObject = [];
-				finalMesh.childrenObject.push(originalObject, object);
-
-				// remove old objects from scene
-				this.editor.removeObject(originalObject)
-				this.editor.removeObject(object);
 				
-				switch (this.editor.booleanEvent) {
-					case 'merge' : finalMesh.name = "united_object"; break;
-					case 'subtract' : finalMesh.name = "subtracted_object"; break;
-					case 'exclude' : finalMesh.name = "intersected_object"; break;
-				}
-				this.editor.addObject(finalMesh);
-				
-				this.booleanEventAvailability = false;
-				this.signals.booleanEventChanged.dispatch();
-				this.editor.booleanEvent = null;
-				this.originalObject = object;
 			}
-
+			
 	}
 
 	deselect() {

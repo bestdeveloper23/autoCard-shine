@@ -82,11 +82,11 @@
       window.THREE = THREE; // Expose THREE to APP Scripts and Console
       window.VRButton = VRButton; // Expose VRButton to APP Scripts
 
-      const viewport = new Viewport( editor );
-      document.body.appendChild( viewport.dom );
-
       const toolbar = new Toolbar( editor );
-      document.body.appendChild( toolbar.dom );
+      document.body.appendChild( toolbar.container.dom );
+
+      const viewport = new Viewport( editor, toolbar.measureValue );
+      document.body.appendChild( viewport.dom );
 
       const script = new Script( editor );
       document.body.appendChild( script.dom );
