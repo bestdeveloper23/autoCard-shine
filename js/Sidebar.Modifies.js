@@ -82,7 +82,7 @@ function SidebarModifies( editor ) {
 	const replicaCountRow = new UIRow();
 	const replicaCount = new UIInteger().setWidth( '150px' ).setFontSize( '12px' );
 
-	replicaCountRow.add( new UIText( strings.getKey( 'sidebar/modify/replicas/radius' ) ).setWidth( '90px' ) );
+	replicaCountRow.add( new UIText( strings.getKey( 'sidebar/modify/replicas/count' ) ).setWidth( '90px' ) );
 	replicaCountRow.add( replicaCount );
     replicaCount.setValue(2);
 

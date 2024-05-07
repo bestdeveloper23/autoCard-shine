@@ -12,7 +12,7 @@ function SidebarModify( editor ) {
 	container.setId( 'modifies' );
 
 	container.addTab( 'scripts', strings.getKey( 'sidebar/script' ), new SidebarScript( editor ) );
-	container.addTab( 'modify', strings.getKey( 'sidebar/modify' ), new SidebarModifies( editor ) );
+	container.addTab( 'modify', strings.getKey( 'sidebar/replicas' ), new SidebarModifies( editor ) );
 	container.select( 'scripts' );
 
 	return container;
