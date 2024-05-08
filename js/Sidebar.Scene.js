@@ -224,121 +224,121 @@ function SidebarScene( editor ) {
 
 	// environment
 
-	const environmentRow = new UIRow();
+	// const environmentRow = new UIRow();
 
-	const environmentType = new UISelect().setOptions( {
+	// const environmentType = new UISelect().setOptions( {
 
-		'None': '',
-		'Equirectangular': 'Equirect',
-		'ModelViewer': 'ModelViewer'
+	// 	'None': '',
+	// 	'Equirectangular': 'Equirect',
+	// 	'ModelViewer': 'ModelViewer'
 
-	} ).setWidth( '150px' );
-	environmentType.setValue( 'None' );
-	environmentType.onChange( function () {
+	// } ).setWidth( '150px' );
+	// environmentType.setValue( 'None' );
+	// environmentType.onChange( function () {
 
-		onEnvironmentChanged();
-		refreshEnvironmentUI();
+	// 	onEnvironmentChanged();
+	// 	refreshEnvironmentUI();
 
-	} );
+	// } );
 
-	environmentRow.add( new UIText( strings.getKey( 'sidebar/scene/environment' ) ).setWidth( '90px' ) );
-	environmentRow.add( environmentType );
+	// environmentRow.add( new UIText( strings.getKey( 'sidebar/scene/environment' ) ).setWidth( '90px' ) );
+	// environmentRow.add( environmentType );
 
-	const environmentEquirectangularTexture = new UITexture().setMarginLeft( '8px' ).onChange( onEnvironmentChanged );
-	environmentEquirectangularTexture.setDisplay( 'none' );
-	environmentRow.add( environmentEquirectangularTexture );
+	// const environmentEquirectangularTexture = new UITexture().setMarginLeft( '8px' ).onChange( onEnvironmentChanged );
+	// environmentEquirectangularTexture.setDisplay( 'none' );
+	// environmentRow.add( environmentEquirectangularTexture );
 
-	container.add( environmentRow );
+	// container.add( environmentRow );
 
-	function onEnvironmentChanged() {
+	// function onEnvironmentChanged() {
 
-		signals.sceneEnvironmentChanged.dispatch(
-			environmentType.getValue(),
-			environmentEquirectangularTexture.getValue()
-		);
+	// 	signals.sceneEnvironmentChanged.dispatch(
+	// 		environmentType.getValue(),
+	// 		environmentEquirectangularTexture.getValue()
+	// 	);
 
-	}
+	// }
 
-	function refreshEnvironmentUI() {
+	// function refreshEnvironmentUI() {
 
-		const type = environmentType.getValue();
+	// 	const type = environmentType.getValue();
 
-		environmentType.setWidth( type !== 'Equirectangular' ? '150px' : '110px' );
-		environmentEquirectangularTexture.setDisplay( type === 'Equirectangular' ? '' : 'none' );
+	// 	environmentType.setWidth( type !== 'Equirectangular' ? '150px' : '110px' );
+	// 	environmentEquirectangularTexture.setDisplay( type === 'Equirectangular' ? '' : 'none' );
 
-	}
+	// }
 
 	// fog
 
-	function onFogChanged() {
+	// function onFogChanged() {
 
-		signals.sceneFogChanged.dispatch(
-			fogType.getValue(),
-			fogColor.getHexValue(),
-			fogNear.getValue(),
-			fogFar.getValue(),
-			fogDensity.getValue()
-		);
+	// 	signals.sceneFogChanged.dispatch(
+	// 		fogType.getValue(),
+	// 		fogColor.getHexValue(),
+	// 		fogNear.getValue(),
+	// 		fogFar.getValue(),
+	// 		fogDensity.getValue()
+	// 	);
 
-	}
+	// }
 
-	function onFogSettingsChanged() {
+	// function onFogSettingsChanged() {
 
-		signals.sceneFogSettingsChanged.dispatch(
-			fogType.getValue(),
-			fogColor.getHexValue(),
-			fogNear.getValue(),
-			fogFar.getValue(),
-			fogDensity.getValue()
-		);
+	// 	signals.sceneFogSettingsChanged.dispatch(
+	// 		fogType.getValue(),
+	// 		fogColor.getHexValue(),
+	// 		fogNear.getValue(),
+	// 		fogFar.getValue(),
+	// 		fogDensity.getValue()
+	// 	);
 
-	}
+	// }
 
-	const fogTypeRow = new UIRow();
-	const fogType = new UISelect().setOptions( {
+	// const fogTypeRow = new UIRow();
+	// const fogType = new UISelect().setOptions( {
 
-		'None': '',
-		'Fog': 'Linear',
-		'FogExp2': 'Exponential'
+	// 	'None': '',
+	// 	'Fog': 'Linear',
+	// 	'FogExp2': 'Exponential'
 
-	} ).setWidth( '150px' );
-	fogType.onChange( function () {
+	// } ).setWidth( '150px' );
+	// fogType.onChange( function () {
 
-		onFogChanged();
-		refreshFogUI();
+	// 	onFogChanged();
+	// 	refreshFogUI();
 
-	} );
+	// } );
 
-	fogTypeRow.add( new UIText( strings.getKey( 'sidebar/scene/fog' ) ).setWidth( '90px' ) );
-	fogTypeRow.add( fogType );
+	// fogTypeRow.add( new UIText( strings.getKey( 'sidebar/scene/fog' ) ).setWidth( '90px' ) );
+	// fogTypeRow.add( fogType );
 
-	container.add( fogTypeRow );
+	// container.add( fogTypeRow );
 
-	// fog color
+	// // fog color
 
-	const fogPropertiesRow = new UIRow();
-	fogPropertiesRow.setDisplay( 'none' );
-	fogPropertiesRow.setMarginLeft( '90px' );
-	container.add( fogPropertiesRow );
+	// const fogPropertiesRow = new UIRow();
+	// fogPropertiesRow.setDisplay( 'none' );
+	// fogPropertiesRow.setMarginLeft( '90px' );
+	// container.add( fogPropertiesRow );
 
-	const fogColor = new UIColor().setValue( '#aaaaaa' );
-	fogColor.onInput( onFogSettingsChanged );
-	fogPropertiesRow.add( fogColor );
+	// const fogColor = new UIColor().setValue( '#aaaaaa' );
+	// fogColor.onInput( onFogSettingsChanged );
+	// fogPropertiesRow.add( fogColor );
 
-	// fog near
+	// // fog near
 
-	const fogNear = new UINumber( 0.1 ).setWidth( '40px' ).setRange( 0, Infinity ).onChange( onFogSettingsChanged );
-	fogPropertiesRow.add( fogNear );
+	// const fogNear = new UINumber( 0.1 ).setWidth( '40px' ).setRange( 0, Infinity ).onChange( onFogSettingsChanged );
+	// fogPropertiesRow.add( fogNear );
 
-	// fog far
+	// // fog far
 
-	const fogFar = new UINumber( 50 ).setWidth( '40px' ).setRange( 0, Infinity ).onChange( onFogSettingsChanged );
-	fogPropertiesRow.add( fogFar );
+	// const fogFar = new UINumber( 50 ).setWidth( '40px' ).setRange( 0, Infinity ).onChange( onFogSettingsChanged );
+	// fogPropertiesRow.add( fogFar );
 
-	// fog density
+	// // fog density
 
-	const fogDensity = new UINumber( 0.05 ).setWidth( '40px' ).setRange( 0, 0.1 ).setStep( 0.001 ).setPrecision( 5 ).onChange( onFogSettingsChanged );
-	fogPropertiesRow.add( fogDensity );
+	// const fogDensity = new UINumber( 0.05 ).setWidth( '40px' ).setRange( 0, 0.1 ).setStep( 0.001 ).setPrecision( 5 ).onChange( onFogSettingsChanged );
+	// fogPropertiesRow.add( fogDensity );
 
 	//
 
@@ -417,51 +417,51 @@ function SidebarScene( editor ) {
 
 		}
 
-		if ( scene.environment ) {
+		// if ( scene.environment ) {
 
-			if ( scene.environment.mapping === THREE.EquirectangularReflectionMapping ) {
+		// 	if ( scene.environment.mapping === THREE.EquirectangularReflectionMapping ) {
 
-				environmentType.setValue( 'Equirectangular' );
-				environmentEquirectangularTexture.setValue( scene.environment );
+		// 		environmentType.setValue( 'Equirectangular' );
+		// 		environmentEquirectangularTexture.setValue( scene.environment );
 
-			} else if ( scene.environment.isRenderTargetTexture === true ) {
+		// 	} else if ( scene.environment.isRenderTargetTexture === true ) {
 
-				environmentType.setValue( 'ModelViewer' );
+		// 		environmentType.setValue( 'ModelViewer' );
 
-			}
+		// 	}
 
-		} else {
+		// } else {
 
-			environmentType.setValue( 'None' );
+		// 	environmentType.setValue( 'None' );
 
-		}
+		// }
 
-		if ( scene.fog ) {
+		// if ( scene.fog ) {
 
-			fogColor.setHexValue( scene.fog.color.getHex() );
+		// 	fogColor.setHexValue( scene.fog.color.getHex() );
 
-			if ( scene.fog.isFog ) {
+		// 	if ( scene.fog.isFog ) {
 
-				fogType.setValue( 'Fog' );
-				fogNear.setValue( scene.fog.near );
-				fogFar.setValue( scene.fog.far );
+		// 		fogType.setValue( 'Fog' );
+		// 		fogNear.setValue( scene.fog.near );
+		// 		fogFar.setValue( scene.fog.far );
 
-			} else if ( scene.fog.isFogExp2 ) {
+		// 	} else if ( scene.fog.isFogExp2 ) {
 
-				fogType.setValue( 'FogExp2' );
-				fogDensity.setValue( scene.fog.density );
+		// 		fogType.setValue( 'FogExp2' );
+		// 		fogDensity.setValue( scene.fog.density );
 
-			}
+		// 	}
 
-		} else {
+		// } else {
 
-			fogType.setValue( 'None' );
+		// 	fogType.setValue( 'None' );
 
-		}
+		// }
 
 		refreshBackgroundUI();
-		refreshEnvironmentUI();
-		refreshFogUI();
+		// refreshEnvironmentUI();
+		// refreshFogUI();
 
 	}
 

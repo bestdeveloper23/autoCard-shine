@@ -812,6 +812,7 @@ function Loader( editor ) {
 			default:
 
 				console.error( 'Unsupported file format (' + extension + ').' );
+        alert( 'Unsupported file format (' + extension + ').' );
 
 				break;
 

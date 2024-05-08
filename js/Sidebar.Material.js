@@ -118,273 +118,273 @@ function SidebarMaterial(editor) {
 	container.add(energyRow);
 	// program
 
-	const materialProgram = new SidebarMaterialProgram(editor, 'vertexShader');
-	container.add(materialProgram);
+	// const materialProgram = new SidebarMaterialProgram(editor, 'vertexShader');
+	// container.add(materialProgram);
 
 	// color
 
 	const materialColor = new SidebarMaterialColorProperty(editor, 'color', strings.getKey('sidebar/material/color'));
 	container.add(materialColor);
 
-	// specular
+	// // specular
 
-	const materialSpecular = new SidebarMaterialColorProperty(editor, 'specular', strings.getKey('sidebar/material/specular'));
-	container.add(materialSpecular);
+	// const materialSpecular = new SidebarMaterialColorProperty(editor, 'specular', strings.getKey('sidebar/material/specular'));
+	// container.add(materialSpecular);
 
-	// shininess
+	// // shininess
 
-	const materialShininess = new SidebarMaterialNumberProperty(editor, 'shininess', strings.getKey('sidebar/material/shininess'));
-	container.add(materialShininess);
+	// const materialShininess = new SidebarMaterialNumberProperty(editor, 'shininess', strings.getKey('sidebar/material/shininess'));
+	// container.add(materialShininess);
 
-	// emissive
+	// // emissive
 
-	const materialEmissive = new SidebarMaterialColorProperty(editor, 'emissive', strings.getKey('sidebar/material/emissive'));
-	container.add(materialEmissive);
+	// const materialEmissive = new SidebarMaterialColorProperty(editor, 'emissive', strings.getKey('sidebar/material/emissive'));
+	// container.add(materialEmissive);
 
-	// reflectivity
+	// // reflectivity
 
-	const materialReflectivity = new SidebarMaterialNumberProperty(editor, 'reflectivity', strings.getKey('sidebar/material/reflectivity'));
-	container.add(materialReflectivity);
+	// const materialReflectivity = new SidebarMaterialNumberProperty(editor, 'reflectivity', strings.getKey('sidebar/material/reflectivity'));
+	// container.add(materialReflectivity);
 
-	// roughness
+	// // roughness
 
-	const materialRoughness = new SidebarMaterialNumberProperty(editor, 'roughness', strings.getKey('sidebar/material/roughness'), [0, 1]);
-	container.add(materialRoughness);
+	// const materialRoughness = new SidebarMaterialNumberProperty(editor, 'roughness', strings.getKey('sidebar/material/roughness'), [0, 1]);
+	// container.add(materialRoughness);
 
-	// metalness
+	// // metalness
 
-	const materialMetalness = new SidebarMaterialNumberProperty(editor, 'metalness', strings.getKey('sidebar/material/metalness'), [0, 1]);
-	container.add(materialMetalness);
+	// const materialMetalness = new SidebarMaterialNumberProperty(editor, 'metalness', strings.getKey('sidebar/material/metalness'), [0, 1]);
+	// container.add(materialMetalness);
 
-	// clearcoat
+	// // clearcoat
 
-	const materialClearcoat = new SidebarMaterialNumberProperty(editor, 'clearcoat', strings.getKey('sidebar/material/clearcoat'), [0, 1]);
-	container.add(materialClearcoat);
+	// const materialClearcoat = new SidebarMaterialNumberProperty(editor, 'clearcoat', strings.getKey('sidebar/material/clearcoat'), [0, 1]);
+	// container.add(materialClearcoat);
 
-	// clearcoatRoughness
+	// // clearcoatRoughness
 
-	const materialClearcoatRoughness = new SidebarMaterialNumberProperty(editor, 'clearcoatRoughness', strings.getKey('sidebar/material/clearcoatroughness'), [0, 1]);
-	container.add(materialClearcoatRoughness);
+	// const materialClearcoatRoughness = new SidebarMaterialNumberProperty(editor, 'clearcoatRoughness', strings.getKey('sidebar/material/clearcoatroughness'), [0, 1]);
+	// container.add(materialClearcoatRoughness);
 
-	// iridescence
+	// // iridescence
 
-	const materialIridescence = new SidebarMaterialNumberProperty(editor, 'iridescence', strings.getKey('sidebar/material/iridescence'), [0, 1]);
-	container.add(materialIridescence);
+	// const materialIridescence = new SidebarMaterialNumberProperty(editor, 'iridescence', strings.getKey('sidebar/material/iridescence'), [0, 1]);
+	// container.add(materialIridescence);
 
-	// iridescenceIOR
+	// // iridescenceIOR
 
-	const materialIridescenceIOR = new SidebarMaterialNumberProperty(editor, 'iridescenceIOR', strings.getKey('sidebar/material/iridescenceIOR'), [1, 5]);
-	container.add(materialIridescenceIOR);
+	// const materialIridescenceIOR = new SidebarMaterialNumberProperty(editor, 'iridescenceIOR', strings.getKey('sidebar/material/iridescenceIOR'), [1, 5]);
+	// container.add(materialIridescenceIOR);
 
-	// iridescenceThicknessMax
+	// // iridescenceThicknessMax
 
-	const materialIridescenceThicknessMax = new SidebarMaterialRangeValueProperty(editor, 'iridescenceThicknessRange', strings.getKey('sidebar/material/iridescenceThicknessMax'), false, [0, Infinity], 0, 10, 1, 'nm');
-	container.add(materialIridescenceThicknessMax);
+	// const materialIridescenceThicknessMax = new SidebarMaterialRangeValueProperty(editor, 'iridescenceThicknessRange', strings.getKey('sidebar/material/iridescenceThicknessMax'), false, [0, Infinity], 0, 10, 1, 'nm');
+	// container.add(materialIridescenceThicknessMax);
 
-	// sheen
+	// // sheen
 
-	const materialSheen = new SidebarMaterialNumberProperty(editor, 'sheen', strings.getKey('sidebar/material/sheen'), [0, 1]);
-	container.add(materialSheen);
+	// const materialSheen = new SidebarMaterialNumberProperty(editor, 'sheen', strings.getKey('sidebar/material/sheen'), [0, 1]);
+	// container.add(materialSheen);
 
-	// sheen roughness
+	// // sheen roughness
 
-	const materialSheenRoughness = new SidebarMaterialNumberProperty(editor, 'sheenRoughness', strings.getKey('sidebar/material/sheenroughness'), [0, 1]);
-	container.add(materialSheenRoughness);
+	// const materialSheenRoughness = new SidebarMaterialNumberProperty(editor, 'sheenRoughness', strings.getKey('sidebar/material/sheenroughness'), [0, 1]);
+	// container.add(materialSheenRoughness);
 
-	// sheen color
+	// // sheen color
 
-	const materialSheenColor = new SidebarMaterialColorProperty(editor, 'sheenColor', strings.getKey('sidebar/material/sheencolor'));
-	container.add(materialSheenColor);
+	// const materialSheenColor = new SidebarMaterialColorProperty(editor, 'sheenColor', strings.getKey('sidebar/material/sheencolor'));
+	// container.add(materialSheenColor);
 
-	// transmission
+	// // transmission
 
-	const materialTransmission = new SidebarMaterialNumberProperty(editor, 'transmission', strings.getKey('sidebar/material/transmission'), [0, 1]);
-	container.add(materialTransmission);
+	// const materialTransmission = new SidebarMaterialNumberProperty(editor, 'transmission', strings.getKey('sidebar/material/transmission'), [0, 1]);
+	// container.add(materialTransmission);
 
-	// attenuation distance
+	// // attenuation distance
 
-	const materialAttenuationDistance = new SidebarMaterialNumberProperty(editor, 'attenuationDistance', strings.getKey('sidebar/material/attenuationDistance'));
-	container.add(materialAttenuationDistance);
+	// const materialAttenuationDistance = new SidebarMaterialNumberProperty(editor, 'attenuationDistance', strings.getKey('sidebar/material/attenuationDistance'));
+	// container.add(materialAttenuationDistance);
 
-	// attenuation tint
+	// // attenuation tint
 
-	const materialAttenuationColor = new SidebarMaterialColorProperty(editor, 'attenuationColor', strings.getKey('sidebar/material/attenuationColor'));
-	container.add(materialAttenuationColor);
+	// const materialAttenuationColor = new SidebarMaterialColorProperty(editor, 'attenuationColor', strings.getKey('sidebar/material/attenuationColor'));
+	// container.add(materialAttenuationColor);
 
-	// thickness
+	// // thickness
 
-	const materialThickness = new SidebarMaterialNumberProperty(editor, 'thickness', strings.getKey('sidebar/material/thickness'));
-	container.add(materialThickness);
+	// const materialThickness = new SidebarMaterialNumberProperty(editor, 'thickness', strings.getKey('sidebar/material/thickness'));
+	// container.add(materialThickness);
 
-	// vertex colors
+	// // vertex colors
 
-	const materialVertexColors = new SidebarMaterialBooleanProperty(editor, 'vertexColors', strings.getKey('sidebar/material/vertexcolors'));
-	container.add(materialVertexColors);
+	// const materialVertexColors = new SidebarMaterialBooleanProperty(editor, 'vertexColors', strings.getKey('sidebar/material/vertexcolors'));
+	// container.add(materialVertexColors);
 
-	// depth packing
+	// // depth packing
 
-	const materialDepthPackingOptions = {
-		[THREE.BasicDepthPacking]: 'Basic',
-		[THREE.RGBADepthPacking]: 'RGBA'
-	};
+	// const materialDepthPackingOptions = {
+	// 	[THREE.BasicDepthPacking]: 'Basic',
+	// 	[THREE.RGBADepthPacking]: 'RGBA'
+	// };
 
-	const materialDepthPacking = new SidebarMaterialConstantProperty(editor, 'depthPacking', strings.getKey('sidebar/material/depthPacking'), materialDepthPackingOptions);
-	container.add(materialDepthPacking);
+	// const materialDepthPacking = new SidebarMaterialConstantProperty(editor, 'depthPacking', strings.getKey('sidebar/material/depthPacking'), materialDepthPackingOptions);
+	// container.add(materialDepthPacking);
 
-	// map
+	// // map
 
-	const materialMap = new SidebarMaterialMapProperty(editor, 'map', strings.getKey('sidebar/material/map'));
-	container.add(materialMap);
+	// const materialMap = new SidebarMaterialMapProperty(editor, 'map', strings.getKey('sidebar/material/map'));
+	// container.add(materialMap);
 
-	// specular map
+	// // specular map
 
-	const materialSpecularMap = new SidebarMaterialMapProperty(editor, 'specularMap', strings.getKey('sidebar/material/specularmap'));
-	container.add(materialSpecularMap);
+	// const materialSpecularMap = new SidebarMaterialMapProperty(editor, 'specularMap', strings.getKey('sidebar/material/specularmap'));
+	// container.add(materialSpecularMap);
 
-	// emissive map
+	// // emissive map
 
-	const materialEmissiveMap = new SidebarMaterialMapProperty(editor, 'emissiveMap', strings.getKey('sidebar/material/emissivemap'));
-	container.add(materialEmissiveMap);
+	// const materialEmissiveMap = new SidebarMaterialMapProperty(editor, 'emissiveMap', strings.getKey('sidebar/material/emissivemap'));
+	// container.add(materialEmissiveMap);
 
-	// matcap map
+	// // matcap map
 
-	const materialMatcapMap = new SidebarMaterialMapProperty(editor, 'matcap', strings.getKey('sidebar/material/matcap'));
-	container.add(materialMatcapMap);
+	// const materialMatcapMap = new SidebarMaterialMapProperty(editor, 'matcap', strings.getKey('sidebar/material/matcap'));
+	// container.add(materialMatcapMap);
 
-	// alpha map
+	// // alpha map
 
-	const materialAlphaMap = new SidebarMaterialMapProperty(editor, 'alphaMap', strings.getKey('sidebar/material/alphamap'));
-	container.add(materialAlphaMap);
+	// const materialAlphaMap = new SidebarMaterialMapProperty(editor, 'alphaMap', strings.getKey('sidebar/material/alphamap'));
+	// container.add(materialAlphaMap);
 
-	// bump map
+	// // bump map
 
-	const materialBumpMap = new SidebarMaterialMapProperty(editor, 'bumpMap', strings.getKey('sidebar/material/bumpmap'));
-	container.add(materialBumpMap);
+	// const materialBumpMap = new SidebarMaterialMapProperty(editor, 'bumpMap', strings.getKey('sidebar/material/bumpmap'));
+	// container.add(materialBumpMap);
 
-	// normal map
+	// // normal map
 
-	const materialNormalMap = new SidebarMaterialMapProperty(editor, 'normalMap', strings.getKey('sidebar/material/normalmap'));
-	container.add(materialNormalMap);
+	// const materialNormalMap = new SidebarMaterialMapProperty(editor, 'normalMap', strings.getKey('sidebar/material/normalmap'));
+	// container.add(materialNormalMap);
 
-	// clearcoat map
+	// // clearcoat map
 
-	const materialClearcoatMap = new SidebarMaterialMapProperty(editor, 'clearcoatMap', strings.getKey('sidebar/material/clearcoatmap'));
-	container.add(materialClearcoatMap);
+	// const materialClearcoatMap = new SidebarMaterialMapProperty(editor, 'clearcoatMap', strings.getKey('sidebar/material/clearcoatmap'));
+	// container.add(materialClearcoatMap);
 
-	// clearcoat normal map
+	// // clearcoat normal map
 
-	const materialClearcoatNormalMap = new SidebarMaterialMapProperty(editor, 'clearcoatNormalMap', strings.getKey('sidebar/material/clearcoatnormalmap'));
-	container.add(materialClearcoatNormalMap);
+	// const materialClearcoatNormalMap = new SidebarMaterialMapProperty(editor, 'clearcoatNormalMap', strings.getKey('sidebar/material/clearcoatnormalmap'));
+	// container.add(materialClearcoatNormalMap);
 
-	// clearcoat roughness map
+	// // clearcoat roughness map
 
-	const materialClearcoatRoughnessMap = new SidebarMaterialMapProperty(editor, 'clearcoatRoughnessMap', strings.getKey('sidebar/material/clearcoatroughnessmap'));
-	container.add(materialClearcoatRoughnessMap);
+	// const materialClearcoatRoughnessMap = new SidebarMaterialMapProperty(editor, 'clearcoatRoughnessMap', strings.getKey('sidebar/material/clearcoatroughnessmap'));
+	// container.add(materialClearcoatRoughnessMap);
 
-	// displacement map
+	// // displacement map
 
-	const materialDisplacementMap = new SidebarMaterialMapProperty(editor, 'displacementMap', strings.getKey('sidebar/material/displacementmap'));
-	container.add(materialDisplacementMap);
+	// const materialDisplacementMap = new SidebarMaterialMapProperty(editor, 'displacementMap', strings.getKey('sidebar/material/displacementmap'));
+	// container.add(materialDisplacementMap);
 
-	// roughness map
+	// // roughness map
 
-	const materialRoughnessMap = new SidebarMaterialMapProperty(editor, 'roughnessMap', strings.getKey('sidebar/material/roughnessmap'));
-	container.add(materialRoughnessMap);
+	// const materialRoughnessMap = new SidebarMaterialMapProperty(editor, 'roughnessMap', strings.getKey('sidebar/material/roughnessmap'));
+	// container.add(materialRoughnessMap);
 
-	// metalness map
+	// // metalness map
 
-	const materialMetalnessMap = new SidebarMaterialMapProperty(editor, 'metalnessMap', strings.getKey('sidebar/material/metalnessmap'));
-	container.add(materialMetalnessMap);
+	// const materialMetalnessMap = new SidebarMaterialMapProperty(editor, 'metalnessMap', strings.getKey('sidebar/material/metalnessmap'));
+	// container.add(materialMetalnessMap);
 
-	// iridescence map
+	// // iridescence map
 
-	const materialIridescenceMap = new SidebarMaterialMapProperty(editor, 'iridescenceMap', strings.getKey('sidebar/material/iridescencemap'));
-	container.add(materialIridescenceMap);
+	// const materialIridescenceMap = new SidebarMaterialMapProperty(editor, 'iridescenceMap', strings.getKey('sidebar/material/iridescencemap'));
+	// container.add(materialIridescenceMap);
 
-	// sheen color map
+	// // sheen color map
 
-	const materialSheenColorMap = new SidebarMaterialMapProperty(editor, 'sheenColorMap', strings.getKey('sidebar/material/sheencolormap'));
-	container.add(materialSheenColorMap);
+	// const materialSheenColorMap = new SidebarMaterialMapProperty(editor, 'sheenColorMap', strings.getKey('sidebar/material/sheencolormap'));
+	// container.add(materialSheenColorMap);
 
-	// sheen roughness map
+	// // sheen roughness map
 
-	const materialSheenRoughnessMap = new SidebarMaterialMapProperty(editor, 'sheenRoughnessMap', strings.getKey('sidebar/material/sheenroughnessmap'));
-	container.add(materialSheenRoughnessMap);
+	// const materialSheenRoughnessMap = new SidebarMaterialMapProperty(editor, 'sheenRoughnessMap', strings.getKey('sidebar/material/sheenroughnessmap'));
+	// container.add(materialSheenRoughnessMap);
 
-	// iridescence thickness map
+	// // iridescence thickness map
 
-	const materialIridescenceThicknessMap = new SidebarMaterialMapProperty(editor, 'iridescenceThicknessMap', strings.getKey('sidebar/material/iridescencethicknessmap'));
-	container.add(materialIridescenceThicknessMap);
+	// const materialIridescenceThicknessMap = new SidebarMaterialMapProperty(editor, 'iridescenceThicknessMap', strings.getKey('sidebar/material/iridescencethicknessmap'));
+	// container.add(materialIridescenceThicknessMap);
 
-	// env map
+	// // env map
 
-	const materialEnvMap = new SidebarMaterialMapProperty(editor, 'envMap', strings.getKey('sidebar/material/envmap'));
-	container.add(materialEnvMap);
+	// const materialEnvMap = new SidebarMaterialMapProperty(editor, 'envMap', strings.getKey('sidebar/material/envmap'));
+	// container.add(materialEnvMap);
 
-	// light map
+	// // light map
 
-	const materialLightMap = new SidebarMaterialMapProperty(editor, 'lightMap', strings.getKey('sidebar/material/lightmap'));
-	container.add(materialLightMap);
+	// const materialLightMap = new SidebarMaterialMapProperty(editor, 'lightMap', strings.getKey('sidebar/material/lightmap'));
+	// container.add(materialLightMap);
 
-	// ambient occlusion map
+	// // ambient occlusion map
 
-	const materialAOMap = new SidebarMaterialMapProperty(editor, 'aoMap', strings.getKey('sidebar/material/aomap'));
-	container.add(materialAOMap);
+	// const materialAOMap = new SidebarMaterialMapProperty(editor, 'aoMap', strings.getKey('sidebar/material/aomap'));
+	// container.add(materialAOMap);
 
-	// gradient map
+	// // gradient map
 
-	const materialGradientMap = new SidebarMaterialMapProperty(editor, 'gradientMap', strings.getKey('sidebar/material/gradientmap'));
-	container.add(materialGradientMap);
+	// const materialGradientMap = new SidebarMaterialMapProperty(editor, 'gradientMap', strings.getKey('sidebar/material/gradientmap'));
+	// container.add(materialGradientMap);
 
-	// transmission map
+	// // transmission map
 
-	const transmissionMap = new SidebarMaterialMapProperty(editor, 'transmissionMap', strings.getKey('sidebar/material/transmissionmap'));
-	container.add(transmissionMap);
+	// const transmissionMap = new SidebarMaterialMapProperty(editor, 'transmissionMap', strings.getKey('sidebar/material/transmissionmap'));
+	// container.add(transmissionMap);
 
-	// thickness map
+	// // thickness map
 
-	const thicknessMap = new SidebarMaterialMapProperty(editor, 'thicknessMap', strings.getKey('sidebar/material/thicknessmap'));
-	container.add(thicknessMap);
+	// const thicknessMap = new SidebarMaterialMapProperty(editor, 'thicknessMap', strings.getKey('sidebar/material/thicknessmap'));
+	// container.add(thicknessMap);
 
-	// side
+	// // side
 
-	const materialSideOptions = {
-		0: 'Front',
-		1: 'Back',
-		2: 'Double'
-	};
+	// const materialSideOptions = {
+	// 	0: 'Front',
+	// 	1: 'Back',
+	// 	2: 'Double'
+	// };
 
-	const materialSide = new SidebarMaterialConstantProperty(editor, 'side', strings.getKey('sidebar/material/side'), materialSideOptions);
-	container.add(materialSide);
+	// const materialSide = new SidebarMaterialConstantProperty(editor, 'side', strings.getKey('sidebar/material/side'), materialSideOptions);
+	// container.add(materialSide);
 
-	// size
+	// // size
 
-	const materialSize = new SidebarMaterialNumberProperty(editor, 'size', strings.getKey('sidebar/material/size'), [0, Infinity]);
-	container.add(materialSize);
+	// const materialSize = new SidebarMaterialNumberProperty(editor, 'size', strings.getKey('sidebar/material/size'), [0, Infinity]);
+	// container.add(materialSize);
 
-	// sizeAttenuation
+	// // sizeAttenuation
 
-	const materialSizeAttenuation = new SidebarMaterialBooleanProperty(editor, 'sizeAttenuation', strings.getKey('sidebar/material/sizeAttenuation'));
-	container.add(materialSizeAttenuation);
+	// const materialSizeAttenuation = new SidebarMaterialBooleanProperty(editor, 'sizeAttenuation', strings.getKey('sidebar/material/sizeAttenuation'));
+	// container.add(materialSizeAttenuation);
 
-	// flatShading
+	// // flatShading
 
-	const materialFlatShading = new SidebarMaterialBooleanProperty(editor, 'flatShading', strings.getKey('sidebar/material/flatShading'));
-	container.add(materialFlatShading);
+	// const materialFlatShading = new SidebarMaterialBooleanProperty(editor, 'flatShading', strings.getKey('sidebar/material/flatShading'));
+	// container.add(materialFlatShading);
 
-	// blending
+	// // blending
 
-	const materialBlendingOptions = {
-		0: 'No',
-		1: 'Normal',
-		2: 'Additive',
-		3: 'Subtractive',
-		4: 'Multiply',
-		5: 'Custom'
-	};
+	// const materialBlendingOptions = {
+	// 	0: 'No',
+	// 	1: 'Normal',
+	// 	2: 'Additive',
+	// 	3: 'Subtractive',
+	// 	4: 'Multiply',
+	// 	5: 'Custom'
+	// };
 
-	const materialBlending = new SidebarMaterialConstantProperty(editor, 'blending', strings.getKey('sidebar/material/blending'), materialBlendingOptions);
-	container.add(materialBlending);
+	// const materialBlending = new SidebarMaterialConstantProperty(editor, 'blending', strings.getKey('sidebar/material/blending'), materialBlendingOptions);
+	// container.add(materialBlending);
 
 	// opacity
 
@@ -398,55 +398,55 @@ function SidebarMaterial(editor) {
 
 	// forceSinglePass
 
-	const materialForceSinglePass = new SidebarMaterialBooleanProperty(editor, 'forceSinglePass', strings.getKey('sidebar/material/forcesinglepass'));
-	container.add(materialForceSinglePass);
+	// const materialForceSinglePass = new SidebarMaterialBooleanProperty(editor, 'forceSinglePass', strings.getKey('sidebar/material/forcesinglepass'));
+	// container.add(materialForceSinglePass);
 
-	// alpha test
+	// // alpha test
 
-	const materialAlphaTest = new SidebarMaterialNumberProperty(editor, 'alphaTest', strings.getKey('sidebar/material/alphatest'), [0, 1]);
-	container.add(materialAlphaTest);
+	// const materialAlphaTest = new SidebarMaterialNumberProperty(editor, 'alphaTest', strings.getKey('sidebar/material/alphatest'), [0, 1]);
+	// container.add(materialAlphaTest);
 
-	// depth test
+	// // depth test
 
-	const materialDepthTest = new SidebarMaterialBooleanProperty(editor, 'depthTest', strings.getKey('sidebar/material/depthtest'));
-	container.add(materialDepthTest);
+	// const materialDepthTest = new SidebarMaterialBooleanProperty(editor, 'depthTest', strings.getKey('sidebar/material/depthtest'));
+	// container.add(materialDepthTest);
 
-	// depth write
+	// // depth write
 
-	const materialDepthWrite = new SidebarMaterialBooleanProperty(editor, 'depthWrite', strings.getKey('sidebar/material/depthwrite'));
-	container.add(materialDepthWrite);
+	// const materialDepthWrite = new SidebarMaterialBooleanProperty(editor, 'depthWrite', strings.getKey('sidebar/material/depthwrite'));
+	// container.add(materialDepthWrite);
 
-	// wireframe
+	// // wireframe
 
-	const materialWireframe = new SidebarMaterialBooleanProperty(editor, 'wireframe', strings.getKey('sidebar/material/wireframe'));
-	container.add(materialWireframe);
+	// const materialWireframe = new SidebarMaterialBooleanProperty(editor, 'wireframe', strings.getKey('sidebar/material/wireframe'));
+	// container.add(materialWireframe);
 
-	// userData
+	// // userData
 
-	const materialUserDataRow = new UIRow();
-	const materialUserData = new UITextArea().setWidth('150px').setHeight('40px').setFontSize('12px').onChange(update);
-	materialUserData.onKeyUp(function () {
+	// const materialUserDataRow = new UIRow();
+	// const materialUserData = new UITextArea().setWidth('150px').setHeight('40px').setFontSize('12px').onChange(update);
+	// materialUserData.onKeyUp(function () {
 
-		try {
+	// 	try {
 
-			JSON.parse(materialUserData.getValue());
+	// 		JSON.parse(materialUserData.getValue());
 
-			materialUserData.dom.classList.add('success');
-			materialUserData.dom.classList.remove('fail');
+	// 		materialUserData.dom.classList.add('success');
+	// 		materialUserData.dom.classList.remove('fail');
 
-		} catch (error) {
+	// 	} catch (error) {
 
-			materialUserData.dom.classList.remove('success');
-			materialUserData.dom.classList.add('fail');
+	// 		materialUserData.dom.classList.remove('success');
+	// 		materialUserData.dom.classList.add('fail');
 
-		}
+	// 	}
 
-	});
+	// });
 
-	materialUserDataRow.add(new UIText(strings.getKey('sidebar/material/userdata')).setWidth('90px'));
-	materialUserDataRow.add(materialUserData);
+	// materialUserDataRow.add(new UIText(strings.getKey('sidebar/material/userdata')).setWidth('90px'));
+	// materialUserDataRow.add(materialUserData);
 
-	container.add(materialUserDataRow);
+	// container.add(materialUserDataRow);
 
 
 	
@@ -629,18 +629,18 @@ function SidebarMaterial(editor) {
 
 		setRowVisibility();
 
-		try {
+		// try {
 
-			materialUserData.setValue(JSON.stringify(material.userData, null, '  '));
+		// 	materialUserData.setValue(JSON.stringify(material.userData, null, '  '));
 
-		} catch (error) {
+		// } catch (error) {
 
-			console.log(error);
+		// 	console.log(error);
 
-		}
+		// }
 
-		materialUserData.setBorderColor('transparent');
-		materialUserData.setBackgroundColor('');
+		// materialUserData.setBorderColor('transparent');
+		// materialUserData.setBackgroundColor('');
 
 	}
 

@@ -432,50 +432,50 @@ function SidebarObject( editor ) {
 
 	// shadow
 
-	const objectShadowRow = new UIRow();
+	// const objectShadowRow = new UIRow();
 
-	objectShadowRow.add( new UIText( strings.getKey( 'sidebar/object/shadow' ) ).setWidth( '90px' ) );
+	// objectShadowRow.add( new UIText( strings.getKey( 'sidebar/object/shadow' ) ).setWidth( '90px' ) );
 
-	const objectCastShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/cast' ) ).onChange( update );
-	objectShadowRow.add( objectCastShadow );
+	// const objectCastShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/cast' ) ).onChange( update );
+	// objectShadowRow.add( objectCastShadow );
 
-	const objectReceiveShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/receive' ) ).onChange( update );
-	objectShadowRow.add( objectReceiveShadow );
+	// const objectReceiveShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/receive' ) ).onChange( update );
+	// objectShadowRow.add( objectReceiveShadow );
 
-	container.add( objectShadowRow );
+	// container.add( objectShadowRow );
 
-	// shadow bias
+	// // shadow bias
 
-	const objectShadowBiasRow = new UIRow();
+	// const objectShadowBiasRow = new UIRow();
 
-	objectShadowBiasRow.add( new UIText( strings.getKey( 'sidebar/object/shadowBias' ) ).setWidth( '90px' ) );
+	// objectShadowBiasRow.add( new UIText( strings.getKey( 'sidebar/object/shadowBias' ) ).setWidth( '90px' ) );
 
-	const objectShadowBias = new UINumber( 0 ).setPrecision( 5 ).setStep( 0.0001 ).setNudge( 0.00001 ).onChange( update );
-	objectShadowBiasRow.add( objectShadowBias );
+	// const objectShadowBias = new UINumber( 0 ).setPrecision( 5 ).setStep( 0.0001 ).setNudge( 0.00001 ).onChange( update );
+	// objectShadowBiasRow.add( objectShadowBias );
 
-	container.add( objectShadowBiasRow );
+	// container.add( objectShadowBiasRow );
 
-	// shadow normal offset
+	// // shadow normal offset
 
-	const objectShadowNormalBiasRow = new UIRow();
+	// const objectShadowNormalBiasRow = new UIRow();
 
-	objectShadowNormalBiasRow.add( new UIText( strings.getKey( 'sidebar/object/shadowNormalBias' ) ).setWidth( '90px' ) );
+	// objectShadowNormalBiasRow.add( new UIText( strings.getKey( 'sidebar/object/shadowNormalBias' ) ).setWidth( '90px' ) );
 
-	const objectShadowNormalBias = new UINumber( 0 ).onChange( update );
-	objectShadowNormalBiasRow.add( objectShadowNormalBias );
+	// const objectShadowNormalBias = new UINumber( 0 ).onChange( update );
+	// objectShadowNormalBiasRow.add( objectShadowNormalBias );
 
-	container.add( objectShadowNormalBiasRow );
+	// container.add( objectShadowNormalBiasRow );
 
-	// shadow radius
+	// // shadow radius
 
-	const objectShadowRadiusRow = new UIRow();
+	// const objectShadowRadiusRow = new UIRow();
 
-	objectShadowRadiusRow.add( new UIText( strings.getKey( 'sidebar/object/shadowRadius' ) ).setWidth( '90px' ) );
+	// objectShadowRadiusRow.add( new UIText( strings.getKey( 'sidebar/object/shadowRadius' ) ).setWidth( '90px' ) );
 
-	const objectShadowRadius = new UINumber( 1 ).onChange( update );
-	objectShadowRadiusRow.add( objectShadowRadius );
+	// const objectShadowRadius = new UINumber( 1 ).onChange( update );
+	// objectShadowRadiusRow.add( objectShadowRadius );
 
-	container.add( objectShadowRadiusRow );
+	// container.add( objectShadowRadiusRow );
 
 	// visible
 
@@ -489,50 +489,50 @@ function SidebarObject( editor ) {
 
 	// frustumCulled
 
-	const objectFrustumCulledRow = new UIRow();
-	const objectFrustumCulled = new UICheckbox().onChange( update );
+	// const objectFrustumCulledRow = new UIRow();
+	// const objectFrustumCulled = new UICheckbox().onChange( update );
 
-	objectFrustumCulledRow.add( new UIText( strings.getKey( 'sidebar/object/frustumcull' ) ).setWidth( '90px' ) );
-	objectFrustumCulledRow.add( objectFrustumCulled );
+	// objectFrustumCulledRow.add( new UIText( strings.getKey( 'sidebar/object/frustumcull' ) ).setWidth( '90px' ) );
+	// objectFrustumCulledRow.add( objectFrustumCulled );
 
-	container.add( objectFrustumCulledRow );
+	// container.add( objectFrustumCulledRow );
 
 	// renderOrder
 
-	const objectRenderOrderRow = new UIRow();
-	const objectRenderOrder = new UIInteger().setWidth( '50px' ).onChange( update );
+	// const objectRenderOrderRow = new UIRow();
+	// const objectRenderOrder = new UIInteger().setWidth( '50px' ).onChange( update );
 
-	objectRenderOrderRow.add( new UIText( strings.getKey( 'sidebar/object/renderorder' ) ).setWidth( '90px' ) );
-	objectRenderOrderRow.add( objectRenderOrder );
+	// objectRenderOrderRow.add( new UIText( strings.getKey( 'sidebar/object/renderorder' ) ).setWidth( '90px' ) );
+	// objectRenderOrderRow.add( objectRenderOrder );
 
-	container.add( objectRenderOrderRow );
+	// container.add( objectRenderOrderRow );
 
-	// user data
+	// // user data
 
-	const objectUserDataRow = new UIRow();
-	const objectUserData = new UITextArea().setWidth( '150px' ).setHeight( '40px' ).setFontSize( '12px' ).onChange( update );
-	objectUserData.onKeyUp( function () {
+	// const objectUserDataRow = new UIRow();
+	// const objectUserData = new UITextArea().setWidth( '150px' ).setHeight( '40px' ).setFontSize( '12px' ).onChange( update );
+	// objectUserData.onKeyUp( function () {
 
-		try {
+	// 	try {
 
-			JSON.parse( objectUserData.getValue() );
+	// 		JSON.parse( objectUserData.getValue() );
 
-			objectUserData.dom.classList.add( 'success' );
-			objectUserData.dom.classList.remove( 'fail' );
+	// 		objectUserData.dom.classList.add( 'success' );
+	// 		objectUserData.dom.classList.remove( 'fail' );
 
-		} catch ( error ) {
+	// 	} catch ( error ) {
 
-			objectUserData.dom.classList.remove( 'success' );
-			objectUserData.dom.classList.add( 'fail' );
+	// 		objectUserData.dom.classList.remove( 'success' );
+	// 		objectUserData.dom.classList.add( 'fail' );
 
-		}
+	// 	}
 
-	} );
+	// } );
 
-	objectUserDataRow.add( new UIText( strings.getKey( 'sidebar/object/userdata' ) ).setWidth( '90px' ) );
-	objectUserDataRow.add( objectUserData );
+	// objectUserDataRow.add( new UIText( strings.getKey( 'sidebar/object/userdata' ) ).setWidth( '90px' ) );
+	// objectUserDataRow.add( objectUserData );
 
-	container.add( objectUserDataRow );
+	// container.add( objectUserDataRow );
 
 
 	//
@@ -851,9 +851,9 @@ function SidebarObject( editor ) {
 			'angle': objectAngleRow,
 			'penumbra': objectPenumbraRow,
 			'decay': objectDecayRow,
-			'castShadow': objectShadowRow,
-			'receiveShadow': objectReceiveShadow,
-			'shadow': [ objectShadowBiasRow, objectShadowNormalBiasRow, objectShadowRadiusRow ]
+			// 'castShadow': objectShadowRow,
+			// 'receiveShadow': objectReceiveShadow,
+			// 'shadow': [ objectShadowBiasRow, objectShadowNormalBiasRow, objectShadowRadiusRow ]
 		};
 
 		for ( const property in properties ) {
@@ -1140,42 +1140,42 @@ function SidebarObject( editor ) {
 
 		}
 
-		if ( object.castShadow !== undefined ) {
+		// if ( object.castShadow !== undefined ) {
 
-			objectCastShadow.setValue( object.castShadow );
+		// 	objectCastShadow.setValue( object.castShadow );
 
-		}
+		// }
 
-		if ( object.receiveShadow !== undefined ) {
+		// if ( object.receiveShadow !== undefined ) {
 
-			objectReceiveShadow.setValue( object.receiveShadow );
+		// 	objectReceiveShadow.setValue( object.receiveShadow );
 
-		}
+		// }
 
-		if ( object.shadow !== undefined ) {
+		// if ( object.shadow !== undefined ) {
 
-			objectShadowBias.setValue( object.shadow.bias );
-			objectShadowNormalBias.setValue( object.shadow.normalBias );
-			objectShadowRadius.setValue( object.shadow.radius );
+		// 	objectShadowBias.setValue( object.shadow.bias );
+		// 	objectShadowNormalBias.setValue( object.shadow.normalBias );
+		// 	objectShadowRadius.setValue( object.shadow.radius );
 
-		}
+		// }
 
 		objectVisible.setValue( object.visible );
-		objectFrustumCulled.setValue( object.frustumCulled );
-		objectRenderOrder.setValue( object.renderOrder );
+		// objectFrustumCulled.setValue( object.frustumCulled );
+		// objectRenderOrder.setValue( object.renderOrder );
 
-		try {
+		// try {
 
-			objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+		// 	objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
 
-		} catch ( error ) {
+		// } catch ( error ) {
 
-			console.log( error );
+		// 	console.log( error );
 
-		}
+		// }
 
-		objectUserData.setBorderColor( 'transparent' );
-		objectUserData.setBackgroundColor( '' );
+		// objectUserData.setBorderColor( 'transparent' );
+		// objectUserData.setBackgroundColor( '' );
 
 		updateTransformRows( object );
 

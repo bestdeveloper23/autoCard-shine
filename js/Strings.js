@@ -118,13 +118,15 @@ function Strings( config ) {
 			'sidebar/animations/stop': 'Stop',
 			'sidebar/animations/timescale': 'Time Scale',
 
-			'sidebar/scene': 'Scene',
+			'sidebar/scene': 'Experiment',
 			'sidebar/scene/background': 'Background',
 			'sidebar/scene/environment': 'Environment',
 			'sidebar/scene/fog': 'Fog',
 
-			'sidebar/properties/object': 'Object',
-			'sidebar/properties/geometry': 'Geometry',
+			// 'sidebar/properties/object': 'Object',
+			'sidebar/properties/object': 'Volume',
+			// 'sidebar/properties/geometry': 'Geometry',
+			'sidebar/properties/geometry': 'Solid',
 			'sidebar/properties/material': 'Material',
 			'sidebar/properties/script': 'Script',
 
