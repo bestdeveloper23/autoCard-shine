@@ -1,4 +1,4 @@
-import { UIDiv } from "./libs/ui";
+import { UIDiv, UIButton } from "./libs/ui";
 
 function PeriodicTable (density, energy, onChange, button, container, materialName) {
     const periodicTableContainer = new UIDiv();
@@ -54,6 +54,14 @@ function PeriodicTable (density, energy, onChange, button, container, materialNa
         blankRow4,
         blankRow5
     )
+
+    const closeButton = new UIButton('X');
+    closeButton.addClass('closeButton');
+    periodicTableContainer.add(closeButton);
+
+    closeButton.dom.addEventListener('click', () => {
+        container.dom.style.display = 'none';
+    })
 
     return periodicTableContainer;
 
