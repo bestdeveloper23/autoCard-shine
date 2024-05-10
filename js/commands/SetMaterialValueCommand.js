@@ -35,6 +35,8 @@ class SetMaterialValueCommand extends Command {
 		this.editor.signals.objectChanged.dispatch( this.object );
 		this.editor.signals.materialChanged.dispatch( this.material );
 
+		this.editor.signals.sceneGraphChanged.dispatch();
+
 	}
 
 	undo() {
@@ -44,6 +46,7 @@ class SetMaterialValueCommand extends Command {
 
 		this.editor.signals.objectChanged.dispatch( this.object );
 		this.editor.signals.materialChanged.dispatch( this.material );
+		this.editor.signals.sceneGraphChanged.dispatch();
 
 	}
 

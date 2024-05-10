@@ -101,7 +101,7 @@ function SidebarMaterial(editor) {
 	materialNameRow1.add( new UIText( strings.getKey( 'sidebar/material/name' ) ).setWidth( '90px' ) );
 	materialNameRow1.add( materialName1 );
 
-	container.add( materialNameRow1 );
+	// container.add( materialNameRow1 );
 
 	const materialNameRow = new UIRow();
 
@@ -758,19 +758,23 @@ function SidebarMaterial(editor) {
 	function onChangeProperty(basic = false, id = 0) {
 		console.log(basic);
 		if(basic === true) {
-			console.log(basic)
+			
 			const materialElement = materialTypeOptions[id];
 			materialDensity.setValue(materialElement.density);
 			materialEnergy.setValue(materialElement.energy);
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
+			console.log(materialElement.elementType)
+			editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialElement.elementType, currentMaterialSlot ) );
+			
+
 			// editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'elementTypes', 'BasicMaterial', currentMaterialSlot));
 
 			
 		} else {
 			const selectedMaterialID = Number(materialName.getValue());
-			console.log(selectedMaterialID);
+			
 			const materialElement = compoundMaterialOptions[selectedMaterialID];
 			materialDensity.setValue(materialElement.density);
 			materialEnergy.setValue(materialElement.energy);
@@ -780,6 +784,7 @@ function SidebarMaterial(editor) {
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
 			// editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'elementTypes', 'CompoundMaterial', currentMaterialSlot));
 
+			editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialElement.elementType, currentMaterialSlot ) );
 			
 		}
 		
