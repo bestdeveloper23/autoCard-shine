@@ -99,7 +99,15 @@ function SidebarScene( editor ) {
 
 	function buildHTML( object ) {
 
-		let html = `<span class="type ${ getObjectType( object ) }"></span> ${ escapeHTML( object.name ) }`;
+		let html = '';
+		if ( object.name === 'Scene' ){
+			html = `<span class="type ${ getObjectType( object ) }"></span> ${ escapeHTML( 'World' ) }`;
+		} else if ( object.name === 'Camera' ) {
+			html = `<span class="type ${ getObjectType( object ) }"></span> ${ escapeHTML( 'Source' ) }`;
+		} else {
+			html = `<span class="type ${ getObjectType( object ) }"></span> ${ escapeHTML( object.name ) }`;
+		}
+		
 
 		if ( object.isMesh ) {
 

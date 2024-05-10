@@ -134,41 +134,41 @@ function SidebarGeometry( editor ) {
 
 	// buffergeometry
 
-	container.add( new SidebarGeometryBufferGeometry( editor ) );
+	// container.add( new SidebarGeometryBufferGeometry( editor ) );
 
-	// Size
+	// // Size
 
-	const geometryBoundingBox = new UIText().setFontSize( '12px' );
+	// const geometryBoundingBox = new UIText().setFontSize( '12px' );
 
-	const geometryBoundingBoxRow = new UIRow();
-	geometryBoundingBoxRow.add( new UIText( strings.getKey( 'sidebar/geometry/bounds' ) ).setWidth( '90px' ) );
-	geometryBoundingBoxRow.add( geometryBoundingBox );
-	container.add( geometryBoundingBoxRow );
+	// const geometryBoundingBoxRow = new UIRow();
+	// geometryBoundingBoxRow.add( new UIText( strings.getKey( 'sidebar/geometry/bounds' ) ).setWidth( '90px' ) );
+	// geometryBoundingBoxRow.add( geometryBoundingBox );
+	// container.add( geometryBoundingBoxRow );
 
-	// Helpers
+	// // Helpers
 
-	const helpersRow = new UIRow().setPaddingLeft( '90px' );
-	container.add( helpersRow );
+	// const helpersRow = new UIRow().setPaddingLeft( '90px' );
+	// container.add( helpersRow );
 
-	const vertexNormalsButton = new UIButton( strings.getKey( 'sidebar/geometry/show_vertex_normals' ) );
-	vertexNormalsButton.onClick( function () {
+	// const vertexNormalsButton = new UIButton( strings.getKey( 'sidebar/geometry/show_vertex_normals' ) );
+	// vertexNormalsButton.onClick( function () {
 
-		const object = editor.selected;
+	// 	const object = editor.selected;
 
-		if ( editor.helpers[ object.id ] === undefined ) {
+	// 	if ( editor.helpers[ object.id ] === undefined ) {
 
-			editor.addHelper( object, new VertexNormalsHelper( object ) );
+	// 		editor.addHelper( object, new VertexNormalsHelper( object ) );
 
-		} else {
+	// 	} else {
 
-			editor.removeHelper( object );
+	// 		editor.removeHelper( object );
 
-		}
+	// 	}
 
-		signals.sceneGraphChanged.dispatch();
+	// 	signals.sceneGraphChanged.dispatch();
 
-	} );
-	helpersRow.add( vertexNormalsButton );
+	// } );
+	// helpersRow.add( vertexNormalsButton );
 
 	async function build() {
 
@@ -207,16 +207,16 @@ function SidebarGeometry( editor ) {
 
 			}
 
-			if ( geometry.boundingBox === null ) geometry.computeBoundingBox();
+			// if ( geometry.boundingBox === null ) geometry.computeBoundingBox();
 
-			const boundingBox = geometry.boundingBox;
-			const x = Math.floor( ( boundingBox.max.x - boundingBox.min.x ) * 1000 ) / 1000;
-			const y = Math.floor( ( boundingBox.max.y - boundingBox.min.y ) * 1000 ) / 1000;
-			const z = Math.floor( ( boundingBox.max.z - boundingBox.min.z ) * 1000 ) / 1000;
+			// const boundingBox = geometry.boundingBox;
+			// const x = Math.floor( ( boundingBox.max.x - boundingBox.min.x ) * 1000 ) / 1000;
+			// const y = Math.floor( ( boundingBox.max.y - boundingBox.min.y ) * 1000 ) / 1000;
+			// const z = Math.floor( ( boundingBox.max.z - boundingBox.min.z ) * 1000 ) / 1000;
 
-			geometryBoundingBox.setInnerHTML( `${x}<br/>${y}<br/>${z}` );
+			// geometryBoundingBox.setInnerHTML( `${x}<br/>${y}<br/>${z}` );
 
-			helpersRow.setDisplay( geometry.hasAttribute( 'normal' ) ? '' : 'none' );
+			// helpersRow.setDisplay( geometry.hasAttribute( 'normal' ) ? '' : 'none' );
 
 		} else {
 

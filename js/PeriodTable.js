@@ -2,7 +2,6 @@ import { UIDiv } from "./libs/ui";
 
 function PeriodicTable (density, energy, onChange, button, container, materialName) {
     const periodicTableContainer = new UIDiv();
-    console.log(periodicTableContainer)
     periodicTableContainer.addClass('periodicTable');
     periodicTableContainer.setId('displayTable');
 
@@ -29,6 +28,7 @@ function PeriodicTable (density, energy, onChange, button, container, materialNa
             energy.setValue(element.energy);
             materialName.setValue(0);
             onChange(true, element.id-1);
+            button.setInnerHTML(`G4_${element.symbol}`);
             container.dom.style.display = 'none';
         });
 

@@ -757,67 +757,67 @@ function SidebarObject( editor ) {
 
 			}
 
-			if ( object.frustumCulled !== objectFrustumCulled.getValue() ) {
+			// if ( object.frustumCulled !== objectFrustumCulled.getValue() ) {
 
-				editor.execute( new SetValueCommand( editor, object, 'frustumCulled', objectFrustumCulled.getValue() ) );
+			// 	editor.execute( new SetValueCommand( editor, object, 'frustumCulled', objectFrustumCulled.getValue() ) );
 
-			}
+			// }
 
-			if ( object.renderOrder !== objectRenderOrder.getValue() ) {
+			// if ( object.renderOrder !== objectRenderOrder.getValue() ) {
 
-				editor.execute( new SetValueCommand( editor, object, 'renderOrder', objectRenderOrder.getValue() ) );
+			// 	editor.execute( new SetValueCommand( editor, object, 'renderOrder', objectRenderOrder.getValue() ) );
 
-			}
+			// }
 
-			if ( object.castShadow !== undefined && object.castShadow !== objectCastShadow.getValue() ) {
+			// if ( object.castShadow !== undefined && object.castShadow !== objectCastShadow.getValue() ) {
 
-				editor.execute( new SetValueCommand( editor, object, 'castShadow', objectCastShadow.getValue() ) );
+			// 	editor.execute( new SetValueCommand( editor, object, 'castShadow', objectCastShadow.getValue() ) );
 
-			}
+			// }
 
-			if ( object.receiveShadow !== objectReceiveShadow.getValue() ) {
+			// if ( object.receiveShadow !== objectReceiveShadow.getValue() ) {
 
-				if ( object.material !== undefined ) object.material.needsUpdate = true;
-				editor.execute( new SetValueCommand( editor, object, 'receiveShadow', objectReceiveShadow.getValue() ) );
+			// 	if ( object.material !== undefined ) object.material.needsUpdate = true;
+			// 	editor.execute( new SetValueCommand( editor, object, 'receiveShadow', objectReceiveShadow.getValue() ) );
 
-			}
+			// }
 
-			if ( object.shadow !== undefined ) {
+			// if ( object.shadow !== undefined ) {
 
-				if ( object.shadow.bias !== objectShadowBias.getValue() ) {
+			// 	if ( object.shadow.bias !== objectShadowBias.getValue() ) {
 
-					editor.execute( new SetValueCommand( editor, object.shadow, 'bias', objectShadowBias.getValue() ) );
+			// 		editor.execute( new SetValueCommand( editor, object.shadow, 'bias', objectShadowBias.getValue() ) );
 
-				}
+			// 	}
 
-				if ( object.shadow.normalBias !== objectShadowNormalBias.getValue() ) {
+			// 	if ( object.shadow.normalBias !== objectShadowNormalBias.getValue() ) {
 
-					editor.execute( new SetValueCommand( editor, object.shadow, 'normalBias', objectShadowNormalBias.getValue() ) );
+			// 		editor.execute( new SetValueCommand( editor, object.shadow, 'normalBias', objectShadowNormalBias.getValue() ) );
 
-				}
+			// 	}
 
-				if ( object.shadow.radius !== objectShadowRadius.getValue() ) {
+			// 	if ( object.shadow.radius !== objectShadowRadius.getValue() ) {
 
-					editor.execute( new SetValueCommand( editor, object.shadow, 'radius', objectShadowRadius.getValue() ) );
+			// 		editor.execute( new SetValueCommand( editor, object.shadow, 'radius', objectShadowRadius.getValue() ) );
 
-				}
+			// 	}
 
-			}
+			// }
 
-			try {
+			// try {
 
-				const userData = JSON.parse( objectUserData.getValue() );
-				if ( JSON.stringify( object.userData ) != JSON.stringify( userData ) ) {
+			// 	const userData = JSON.parse( objectUserData.getValue() );
+			// 	if ( JSON.stringify( object.userData ) != JSON.stringify( userData ) ) {
 
-					editor.execute( new SetValueCommand( editor, object, 'userData', userData ) );
+			// 		editor.execute( new SetValueCommand( editor, object, 'userData', userData ) );
 
-				}
+			// 	}
 
-			} catch ( exception ) {
+			// } catch ( exception ) {
 
-				console.warn( exception );
+			// 	console.warn( exception );
 
-			}
+			// }
 
 		}
 

@@ -45,33 +45,33 @@ function GeometryParametersPanel( editor, object ) {
 
 	// widthSegments
 
-	const widthSegmentsRow = new UIRow();
-	const widthSegments = new UIInteger( parameters.widthSegments ).setRange( 1, Infinity ).onChange( update );
+	// const widthSegmentsRow = new UIRow();
+	// const widthSegments = new UIInteger( parameters.widthSegments ).setRange( 1, Infinity ).onChange( update );
 
-	widthSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/widthseg' ) ).setWidth( '90px' ) );
-	widthSegmentsRow.add( widthSegments );
+	// widthSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/widthseg' ) ).setWidth( '90px' ) );
+	// widthSegmentsRow.add( widthSegments );
 
-	container.add( widthSegmentsRow );
+	// container.add( widthSegmentsRow );
 
-	// heightSegments
+	// // heightSegments
 
-	const heightSegmentsRow = new UIRow();
-	const heightSegments = new UIInteger( parameters.heightSegments ).setRange( 1, Infinity ).onChange( update );
+	// const heightSegmentsRow = new UIRow();
+	// const heightSegments = new UIInteger( parameters.heightSegments ).setRange( 1, Infinity ).onChange( update );
 
-	heightSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/heightseg' ) ).setWidth( '90px' ) );
-	heightSegmentsRow.add( heightSegments );
+	// heightSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/heightseg' ) ).setWidth( '90px' ) );
+	// heightSegmentsRow.add( heightSegments );
 
-	container.add( heightSegmentsRow );
+	// container.add( heightSegmentsRow );
 
-	// depthSegments
+	// // depthSegments
 
-	const depthSegmentsRow = new UIRow();
-	const depthSegments = new UIInteger( parameters.depthSegments ).setRange( 1, Infinity ).onChange( update );
+	// const depthSegmentsRow = new UIRow();
+	// const depthSegments = new UIInteger( parameters.depthSegments ).setRange( 1, Infinity ).onChange( update );
 
-	depthSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/depthseg' ) ).setWidth( '90px' ) );
-	depthSegmentsRow.add( depthSegments );
+	// depthSegmentsRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/depthseg' ) ).setWidth( '90px' ) );
+	// depthSegmentsRow.add( depthSegments );
 
-	container.add( depthSegmentsRow );
+	// container.add( depthSegmentsRow );
 
 	//
 
@@ -83,9 +83,12 @@ function GeometryParametersPanel( editor, object ) {
 			width.getValue(),
 			height.getValue(),
 			depth.getValue(),
-			widthSegments.getValue(),
-			heightSegments.getValue(),
-			depthSegments.getValue()
+			1,
+			1,
+			1
+			// widthSegments.getValue(),
+			// heightSegments.getValue(),
+			// depthSegments.getValue()
 		) ) );
 
 	}

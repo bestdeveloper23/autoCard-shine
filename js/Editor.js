@@ -150,10 +150,12 @@ function Editor() {
 				color: 0xff5555
 			})
 		)
-	]
+	];
+	this.markers[0].name = "ruler end 1";
+	this.markers[1].name = "ruler end 2";
 	this.clicks = 0;
 	this.measurementLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineBasicMaterial({color: 0xff5555}));
-
+	this.measurementLine.name = "ruler";
 }
 
 Editor.prototype = {
@@ -679,6 +681,9 @@ Editor.prototype = {
 		this.deselect();
 
 		this.signals.editorCleared.dispatch();
+		
+		this.signals.booleanEventChanged.dispatch();
+		this.signals.measureEventChanged.dispatch();
 
 	},
 

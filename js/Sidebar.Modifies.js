@@ -261,7 +261,9 @@ const replicaTypeOption = {
 const replicaAxisOption = {
     'X': 'X',
     'Y': 'Y',
-    'Z': 'Z'
+    'Z': 'Z',
+    'Rho': 'Rho',
+    'Phi': 'Phi'
 }
 
 
