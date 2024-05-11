@@ -68,13 +68,13 @@ function SidebarObject( editor ) {
 
 	// type
 
-	const objectTypeRow = new UIRow();
-	const objectType = new UIText();
+	// const objectTypeRow = new UIRow();
+	// const objectType = new UIText();
 
-	objectTypeRow.add( new UIText( strings.getKey( 'sidebar/object/type' ) ).setWidth( '90px' ) );
-	objectTypeRow.add( objectType );
+	// objectTypeRow.add( new UIText( strings.getKey( 'sidebar/object/type' ) ).setWidth( '90px' ) );
+	// objectTypeRow.add( objectType );
 
-	container.add( objectTypeRow );
+	// container.add( objectTypeRow );
 
 	// // uuid
 
@@ -881,10 +881,10 @@ function SidebarObject( editor ) {
 		if ( object.source !== undefined ) {
 			objectNameRow.setDisplay( 'none' );
 			// objectUUIDRow.setDisplay( 'none' );
-			objectTypeRow.setDisplay( 'none' );
+			// objectTypeRow.setDisplay( 'none' );
 		}
 		if ( object.name === "RadiatinSource" ) {
-			objectTypeRow.setDisplay( 'none' );
+			// objectTypeRow.setDisplay( 'none' );
 			object.source = "Point";
 			object.planeshape = "Circle";
 			object.volumeshape = "Sphere";
@@ -900,16 +900,16 @@ function SidebarObject( editor ) {
 
 		if ( object.source === 'Plane' ) {
 			planesourceShapeRow.setDisplay( 'flex' );
-			objectTypeRow.setDisplay( 'none' );
+			// objectTypeRow.setDisplay( 'none' );
 		} else if ( object.source === 'Surface' || object.source === 'Volume' ) {
 			volumesourceShapeRow.setDisplay( 'flex' );
-			objectTypeRow.setDisplay( 'none' );
+			// objectTypeRow.setDisplay( 'none' );
 		} else if( object.source === 'Point' || object.source === 'Beam' ) {
 			planesourceShapeRow.setDisplay( 'none' );
 			volumesourceShapeRow.setDisplay( 'none' );
-			objectTypeRow.setDisplay( 'none' );
+			// objectTypeRow.setDisplay( 'none' );
 		} else {
-			objectTypeRow.setDisplay( 'flex' );
+			// objectTypeRow.setDisplay( 'flex' );
 		}
 
 		if ( object.isLight ) {
@@ -980,7 +980,7 @@ function SidebarObject( editor ) {
 
 	function updateUI( object ) {
 
-		objectType.setValue( object.type );
+		// objectType.setValue( object.type );
 
 		// objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );

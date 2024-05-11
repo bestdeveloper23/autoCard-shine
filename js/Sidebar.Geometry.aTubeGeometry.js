@@ -94,7 +94,7 @@ function GeometryParametersPanel(editor, object) {
     let bCSG;
     bCSG = MeshCSG1.subtract(MeshCSG2);
 
-    if (DPhi > 270) {
+    if (DPhi > 270 && DPhi < 360) {
         let v_DPhi = 360 - DPhi;
 
         boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -118,7 +118,7 @@ function GeometryParametersPanel(editor, object) {
         bCSG = bCSG.subtract(MeshCSG3);
         aCSG = aCSG.subtract(bCSG);
 
-    } else {
+    } else if(DPhi <= 270){
 
         boxmesh.rotateZ(SPhi / 180 * Math.PI);
         boxmesh.updateMatrix();

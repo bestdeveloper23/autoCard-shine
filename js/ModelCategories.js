@@ -248,7 +248,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -272,7 +272,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270) {
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -293,7 +293,6 @@ function ModelCategory(editor) {
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
-
         }
 
         const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
@@ -351,7 +350,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI * (-1));
@@ -375,7 +374,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -523,7 +522,7 @@ function ModelCategory(editor) {
         boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
         let bCSG = aCSG;
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -547,7 +546,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -694,7 +693,7 @@ function ModelCategory(editor) {
         boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
         let bCSG = aCSG;
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -718,7 +717,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -800,7 +799,7 @@ function ModelCategory(editor) {
         bCSG = MeshCSG2.subtract(MeshCSG1);
 
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -824,7 +823,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -907,7 +906,7 @@ function ModelCategory(editor) {
         bCSG = MeshCSG2.subtract(MeshCSG1);
 
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
@@ -931,7 +930,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateZ(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -1149,70 +1148,57 @@ function ModelCategory(editor) {
     item.dom.setAttribute('item-type', 'TrapeZoid');
     item.onClick(function () {
 
+        const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
+        const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
+        const maxwidth = Math.max(dx1, dy1, dx2, dy2);
+        const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+
+        const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+
+        let MeshCSG1 = CSG.fromMesh(mesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+        let alpha = Math.atan((dx1 - dx2) / 2 / dz);
+        let phi = Math.atan((dy1 - dy2) / 2 / dz);
+
+        boxmesh.geometry.translate(maxdis, maxdis, 0);
+        boxmesh.rotation.set(0, 0, phi);
+        boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(-2 * maxdis, 0, 0);
+        boxmesh.rotation.set(0, 0, -phi);
+        boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(maxdis, 0, maxdis);
+        boxmesh.rotation.set(-alpha, 0, 0);
+        boxmesh.position.set(0, -dz / 2, dy1 / 2);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 0, -2 * maxdis);
+        boxmesh.rotation.set(alpha, 0, 0);
+        boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aTrapeZoidGeometry';
         
-        const x1 = 2, y1 = 2, z = 5, x2 = 1, y2 = 1;
-        
-        var trd = new THREE.BufferGeometry();
-
-        const points = [
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(x2, y2, z),//0
-
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(-x2, -y2, z),//2
-
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(-x1, -y1, -z),//6
-
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(x1, y1, -z),//4
-
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(x1, -y1, -z),//7
-
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(x2, y2, z),//0
-
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(-x1, -y1, -z),//6
-
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(-x2, y2, z),//1
-
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(x1, y1, -z),//4
-
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(-x2, y2, z),//1
-
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(x1, -y1, -z),//7
-
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(-x2, -y2, z),//2
-        ]
-
-        trd.setFromPoints(points);
-
-        const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
-        trd.parameters = param;
-        trd.type = 'aTrapeZoidGeometry';
-        const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
-        finalMesh.updateMatrix();
-        finalMesh.name = 'TrapeZoid';
-
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
@@ -1228,7 +1214,7 @@ function ModelCategory(editor) {
         var mouseSceneY = -((mouseY - rect.top) / rect.height) * 2 + 1;
 
         // Update the cube's position based on the mouse position
-        var mouseScenePosition = new THREE.THREE.Vector3(mouseSceneX, mouseSceneY, 0);
+        var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
 
         mouseScenePosition.unproject(camera);
         var direction = mouseScenePosition.sub(camera.position).normalize();
@@ -1236,66 +1222,64 @@ function ModelCategory(editor) {
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
 
-        const x1 = 2, y1 = 2, z = 5, x2 = 1, y2 = 1;
-        
-        var trd = new THREE.BufferGeometry();
+        var mouseScenePosition = new THREE.Vector3(mouseSceneX, mouseSceneY, 0);
 
-        const points = [
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(x2, y2, z),//0
+        mouseScenePosition.unproject(camera);
+        var direction = mouseScenePosition.sub(camera.position).normalize();
+        var distance = -camera.position.y / direction.y;
+        var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(-x2, -y2, z),//2
 
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(-x1, -y1, -z),//6
+        const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
+        const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
+        const maxwidth = Math.max(dx1, dy1, dx2, dy2);
+        const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(x1, y1, -z),//4
+        const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(x1, -y1, -z),//7
+        let MeshCSG1 = CSG.fromMesh(mesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
 
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(x2, y2, z),//0
+        let alpha = Math.atan((dx1 - dx2) / 2 / dz);
+        let phi = Math.atan((dy1 - dy2) / 2 / dz);
 
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(-x1, -y1, -z),//6
+        boxmesh.geometry.translate(maxdis, maxdis, 0);
+        boxmesh.rotation.set(0, 0, phi);
+        boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        let aCSG = MeshCSG1.subtract(MeshCSG3);
 
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(-x2, y2, z),//1
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(-2 * maxdis, 0, 0);
+        boxmesh.rotation.set(0, 0, -phi);
+        boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
-            new THREE.Vector3(-x2, y2, z),//1
-            new THREE.Vector3(-x1, y1, -z),//5
-            new THREE.Vector3(x1, y1, -z),//4
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(maxdis, 0, maxdis);
+        boxmesh.rotation.set(-alpha, 0, 0);
+        boxmesh.position.set(0, -dz / 2, dy1 / 2);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
-            new THREE.Vector3(x1, y1, -z),//4
-            new THREE.Vector3(x2, y2, z),//0
-            new THREE.Vector3(-x2, y2, z),//1
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 0, -2 * maxdis);
+        boxmesh.rotation.set(alpha, 0, 0);
+        boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
-            new THREE.Vector3(-x2, -y2, z),//2
-            new THREE.Vector3(x2, -y2, z),//3
-            new THREE.Vector3(x1, -y1, -z),//7
-
-            new THREE.Vector3(x1, -y1, -z),//7
-            new THREE.Vector3(-x1, -y1, -z),//6
-            new THREE.Vector3(-x2, -y2, z),//2
-        ]
-
-        trd.setFromPoints(points);
-
-        const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
-        trd.parameters = param;
-        trd.type = 'aTrapeZoidGeometry';
-        const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
+        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
+        finalMesh.geometry.parameters = param;
+        finalMesh.geometry.type = 'aTrapeZoidGeometry';
         finalMesh.position.copy(position);
         finalMesh.updateMatrix();
         finalMesh.name = 'TrapeZoid';
@@ -1492,7 +1476,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
@@ -1516,7 +1500,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateY(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -1596,7 +1580,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
@@ -1620,7 +1604,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateY(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -2470,7 +2454,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
@@ -2494,7 +2478,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateY(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
@@ -2580,7 +2564,7 @@ function ModelCategory(editor) {
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
 
-        if (DPhi > 270) {
+        if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
             boxmesh.rotateY((SPhi + 90) / 180 * Math.PI * (-1));
@@ -2604,7 +2588,7 @@ function ModelCategory(editor) {
             bCSG = bCSG.subtract(MeshCSG3);
             aCSG = aCSG.subtract(bCSG);
 
-        } else {
+        } else if(DPhi <= 270){
 
             boxmesh.rotateY(SPhi / 180 * Math.PI);
             boxmesh.updateMatrix();
