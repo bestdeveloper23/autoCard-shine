@@ -1438,7 +1438,7 @@ function ModelCategory(editor) {
     options.add(item);
 
 
-    // Tors model
+    // Torus model
 
     item = new UIDiv();
     item.setClass('Category-item');
@@ -1449,15 +1449,15 @@ function ModelCategory(editor) {
     item.dom.setAttribute('item-type', 'Torus');
     item.onClick(function () {
 
-        const pRMin = 1, pRMax = 1.5, pRtor = 5, SPhi = 0, DPhi = 90;
+        const pRMin = 0.1, pRMax = 0.2, pRtor = 1, SPhi = 0, DPhi = 90;
 
 
-        const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+        const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 16);
         const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
         tormesh1.rotateX(Math.PI / 2);
         tormesh1.updateMatrix();
 
-        const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+        const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 16);
         const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
         tormesh2.rotateX(Math.PI / 2);
         tormesh2.updateMatrix();
@@ -1553,15 +1553,15 @@ function ModelCategory(editor) {
         var distance = -camera.position.y / direction.y;
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-        const pRMin = 1, pRMax = 1.5, pRtor = 5, SPhi = 0, DPhi = 90;
+        const pRMin = 0.1, pRMax = 0.2, pRtor = 1, SPhi = 0, DPhi = 90;
 
 
-        const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+        const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 16);
         const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
         tormesh1.rotateX(Math.PI / 2);
         tormesh1.updateMatrix();
 
-        const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+        const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 16);
         const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
         tormesh2.rotateX(Math.PI / 2);
         tormesh1.updateMatrix();

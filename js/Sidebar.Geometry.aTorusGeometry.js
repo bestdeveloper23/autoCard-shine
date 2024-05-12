@@ -70,12 +70,12 @@ function GeometryParametersPanel(editor, object) {
 
   const pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pRtor = torRadius.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue();
 
-  const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+  const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 16);
   const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
   tormesh1.rotateX(Math.PI / 2);
   tormesh1.updateMatrix();
 
-  const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+  const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 16);
   const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
   tormesh2.rotateX(Math.PI / 2);
   tormesh2.updateMatrix();
@@ -150,8 +150,10 @@ function GeometryParametersPanel(editor, object) {
   finalMesh.name = 'aTorus';
 
   // set Range 
-  maxRadius.setRange(pRMin + 0.001, Infinity);
+  maxRadius.setRange(pRMin + 0.001, pRtor - 0.001);
   minRadius.setRange(0.001, pRMax - 0.001);
+  torRadius.setRange(pRMax + 0.001, Infinity);
+  
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 
