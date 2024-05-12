@@ -252,6 +252,12 @@ function Strings( config ) {
 			'sidebar/geometry/shape_geometry/extrude': 'Extrude',
 
 			'sidebar/geometry/sphere_geometry/radius': 'Radius',
+			'sidebar/geometry/sphere_geometry/radiusOut': 'RMax',
+			'sidebar/geometry/sphere_geometry/radiusIn': 'RMin',
+			'sidebar/geometry/sphere_geometry/startPhi': 'SPhi',
+			'sidebar/geometry/sphere_geometry/deltaPhi': 'DPhi',
+			'sidebar/geometry/sphere_geometry/startTheta': 'STheta',
+			'sidebar/geometry/sphere_geometry/deltaTheta': 'DTheta',
 			'sidebar/geometry/sphere_geometry/widthsegments': 'Width segments',
 			'sidebar/geometry/sphere_geometry/heightsegments': 'Height segments',
 			'sidebar/geometry/sphere_geometry/phistart': 'Phi start',
