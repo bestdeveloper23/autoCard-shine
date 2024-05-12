@@ -70,10 +70,10 @@ function GeometryParametersPanel( editor, object ) {
 
 
         var radiusOut = radius1I.getValue(), radiusIn = radius2I.getValue(), stereo1 = stereo1I.getValue(), stereo2 = stereo2I.getValue(), pDz = heightI.getValue();
-        const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
-        const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
-        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
-        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+        const c_z1 = Math.tan(stereo1 * Math.PI / 90);
+        const c_z2 = Math.tan(stereo2 * Math.PI / 90);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 16, 8, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 16, 8, false, 0, Math.PI * 2);
 
         let positionAttribute = cylindergeometry1.getAttribute('position');
         let positionAttribute2 = cylindergeometry2.getAttribute('position');
@@ -141,6 +141,11 @@ function GeometryParametersPanel( editor, object ) {
         finalMesh.updateMatrix();
 
 		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
+
+        radius1I.setRange(radiusIn + 0.001, Infinity);
+        radius2I.setRange(0.001, radiusOut - 0.001);
+        stereo1I.setRange(stereo2 + 0.001, Infinity);
+        stereo2I.setRange(0.001, stereo1 - 0.001);
 
 	}
 

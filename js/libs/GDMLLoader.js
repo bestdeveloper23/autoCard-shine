@@ -2824,58 +2824,82 @@ class GDMLLoader extends Loader {
                 var y2 = solid.getAttribute('y2');
                 var z = solid.getAttribute('z');
 
-                var trd = new BufferGeometry();
+                const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
+                const maxwidth = Math.max(dx1, dy1, dx2, dy2);
+                const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
 
-                const points = [
-                    new Vector3(-x2, -y2, z),//2
-                    new Vector3(-x2, y2, z),//1
-                    new Vector3(x2, y2, z),//0
+                const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
 
-                    new Vector3(x2, y2, z),//0
-                    new Vector3(x2, -y2, z),//3
-                    new Vector3(-x2, -y2, z),//2
+                let MeshCSG1 = CSG.fromMesh(mesh);
+                let MeshCSG3;
 
-                    new Vector3(x1, y1, -z),//4
-                    new Vector3(-x1, y1, -z),//5
-                    new Vector3(-x1, -y1, -z),//6
+                let alpha = Math.atan((dy1 - dy2) / 2 / dz);
+                let phi = Math.atan((dx1 - dx2) / 2 / dz);
 
-                    new Vector3(-x1, -y1, -z),//6
-                    new Vector3(x1, -y1, -z),//7
-                    new Vector3(x1, y1, -z),//4
+                let aCSG;
 
-                    new Vector3(x2, y2, z),//0
-                    new Vector3(x1, y1, -z),//4
-                    new Vector3(x1, -y1, -z),//7
+                boxmesh.geometry.translate(maxdis, maxdis, 0);
+                boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+                if (dx1 < maxwidth && phi > 0) {
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = MeshCSG1.subtract(MeshCSG3);
+                }
+                boxmesh.rotation.set(0, 0, phi);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                if (dx1 < maxwidth && phi > 0) {
+                aCSG = aCSG.subtract(MeshCSG3);
+                } else
+                aCSG = MeshCSG1.subtract(MeshCSG3);
 
-                    new Vector3(x1, -y1, -z),//7
-                    new Vector3(x2, -y2, z),//3
-                    new Vector3(x2, y2, z),//0
+                boxmesh.rotation.set(0, 0, 0);
+                boxmesh.geometry.translate(-2 * maxdis, 0, 0);
+                boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+                if (dx1 < maxwidth && phi > 0) {
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+                }
+                boxmesh.rotation.set(0, 0, -phi);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
 
-                    new Vector3(-x2, y2, z),//1
-                    new Vector3(-x2, -y2, z),//2
-                    new Vector3(-x1, -y1, -z),//6
+                boxmesh.rotation.set(0, 0, 0);
+                boxmesh.geometry.translate(maxdis, 0, maxdis);
+                boxmesh.position.set(0, -dz / 2, dy1 / 2);
+                if (dy1 < maxwidth && alpha > 0) {
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+                }
+                boxmesh.rotation.set(-alpha, 0, 0);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
 
-                    new Vector3(-x1, -y1, -z),//6
-                    new Vector3(-x1, y1, -z),//5
-                    new Vector3(-x2, y2, z),//1
+                boxmesh.rotation.set(0, 0, 0);
+                boxmesh.geometry.translate(0, 0, -2 * maxdis);
+                boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+                if (dy1 < maxwidth && alpha > 0) {
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+                }
+                boxmesh.rotation.set(alpha, 0, 0);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
 
-                    new Vector3(-x2, y2, z),//1
-                    new Vector3(-x1, y1, -z),//5
-                    new Vector3(x1, y1, -z),//4
-
-                    new Vector3(x1, y1, -z),//4
-                    new Vector3(x2, y2, z),//0
-                    new Vector3(-x2, y2, z),//1
-
-                    new Vector3(-x2, -y2, z),//2
-                    new Vector3(x2, -y2, z),//3
-                    new Vector3(x1, -y1, -z),//7
-
-                    new Vector3(x1, -y1, -z),//7
-                    new Vector3(-x1, -y1, -z),//6
-                    new Vector3(-x2, -y2, z),//2
-                ]
-
+                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+                const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
+                finalMesh.geometry.parameters = param;
+                finalMesh.geometry.type = 'aTrapeZoidGeometry';
+                finalMesh.updateMatrix();
+                finalMesh.name = 'TrapeZoid';
                 // trd.vertices.push(new Vector3(x2, y2, z));//0
                 // trd.vertices.push(new Vector3(-x2, y2, z));//1
                 // trd.vertices.push(new Vector3(-x2, -y2, z));//2
@@ -2903,12 +2927,6 @@ class GDMLLoader extends Loader {
                 // trd.faces.push(new Face3(2, 3, 7));
                 // trd.faces.push(new Face3(7, 6, 2));
 
-                trd.setFromPoints(points);
-
-                const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
-                trd.parameters = param;
-                trd.type = 'aTrapeZoidGeometry';
-                
                 // trd.computeVertexNormals();
                 // geometries[name] = trd;
 
@@ -2919,8 +2937,7 @@ class GDMLLoader extends Loader {
                     wireframe: false
                 });
 
-                var newMesh = new Mesh(trd, material);
-                meshes[name] = newMesh;
+                meshes[name] = finalMesh;
 
                 return meshes[name];
             }

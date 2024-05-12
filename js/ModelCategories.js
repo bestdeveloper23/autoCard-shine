@@ -2952,11 +2952,11 @@ function ModelCategory(editor) {
 
         // we need to new each geometry module
 
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 30, stereo2 = 30, pDz = 6;
-        const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
-        const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
-        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
-        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 2;
+        const c_z1 = Math.tan(stereo1 * Math.PI / 90);
+        const c_z2 = Math.tan(stereo2 * Math.PI / 90);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 16, 8, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 16, 8, false, 0, Math.PI * 2);
 
         let positionAttribute = cylindergeometry1.getAttribute('position');
         let positionAttribute2 = cylindergeometry2.getAttribute('position');
@@ -3047,11 +3047,11 @@ function ModelCategory(editor) {
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
 
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 30, stereo2 = 30, pDz = 6;
-        const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
-        const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
-        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
-        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 2;
+        const c_z1 = Math.tan(stereo1 * Math.PI / 90);
+        const c_z2 = Math.tan(stereo2 * Math.PI / 90);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 16, 8, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 16, 8, false, 0, Math.PI * 2);
 
         let positionAttribute = cylindergeometry1.getAttribute('position');
         let positionAttribute2 = cylindergeometry2.getAttribute('position');

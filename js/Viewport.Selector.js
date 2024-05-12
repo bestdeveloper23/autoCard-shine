@@ -18,7 +18,6 @@ class Selector {
 
 		signals.measureEventChanged.add((measurement) => {
 			measurement ? (this.measurementEventAvailability = true) : (this.measurementEventAvailability = false);
-			console.log(measurement);
 		})
 
 		// signals
@@ -67,7 +66,6 @@ class Selector {
 		this.editor.config.setKey( 'selected', uuid );
 
 		this.signals.objectSelected.dispatch( object );
-		console.log("boolean operation detected ", this.booleanEventAvailability);
 
 			if(this.booleanEventAvailability){
 				console.log("boolean operation detected", this.booleanEventAvailability);
