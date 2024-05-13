@@ -107,7 +107,12 @@ function GeometryParametersPanel(editor, object) {
         let MeshCSG3 = CSG.fromMesh(boxmesh);
 
         let aCSG;
-        aCSG = MeshCSG1.subtract(MeshCSG2);
+		if(pRMin !== 0) {
+			aCSG = MeshCSG1.subtract(MeshCSG2);
+		} else {
+			aCSG = MeshCSG1;
+		}
+        
 
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
