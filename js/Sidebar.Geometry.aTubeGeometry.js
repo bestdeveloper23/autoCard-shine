@@ -37,7 +37,7 @@ function GeometryParametersPanel(editor, object) {
  // height
 
  const heightRow = new UIRow();
- const height = new UINumber(parameters.pDz).setRange(0.001, Infinity).onChange(update);
+ const height = new UINumber(parameters.pDz).setRange(0, Infinity).onChange(update);
 
  heightRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/height')).setWidth('90px'));
  heightRow.add(height);
@@ -150,7 +150,7 @@ function GeometryParametersPanel(editor, object) {
     finalMesh.name = 'Tubs';
   // set Range 
   maxRadius.setRange(pRMin + 0.001, Infinity);
-  minRadius.setRange(0.001, pRMax - 0.001);
+  minRadius.setRange(0.00, pRMax - 0.001);
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 

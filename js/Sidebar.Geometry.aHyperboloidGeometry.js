@@ -143,9 +143,9 @@ function GeometryParametersPanel( editor, object ) {
 		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
 
         radius1I.setRange(radiusIn + 0.001, Infinity);
-        radius2I.setRange(0.001, radiusOut - 0.001);
+        radius2I.setRange(0, radiusOut - 0.001);
         stereo1I.setRange(stereo2 + 0.001, Infinity);
-        stereo2I.setRange(0.001, stereo1 - 0.001);
+        stereo2I.setRange(0, stereo1 - 0.001);
 
 	}
 

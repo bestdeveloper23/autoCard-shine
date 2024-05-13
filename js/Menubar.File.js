@@ -2874,22 +2874,47 @@ function MenubarFile( editor ) {
 					break;
 			}
 	
-			let macro = `# Macro test2.g4mac`;
+			let macro = '';
 			macro += `/gps/particle ${object.energykind}\n`
-			macro += `/gps/energy ${object.energysize}\n`
+			macro += `/gps/energy ${object.energysize} keV\n`
 			macro += `/gps/pos/centre ${position.x} ${position.y} ${position.z} m\n`
 			macro += `/gps/pos/type ${object.source}\n`
-			if(sourceShape) macro += `/gps/pos/shape ${sourceShape}\n`
-			macro += `/gps/pos/halfx ${object.halfX}\n`
-			macro += `/gps/pos/halfy ${object.halfY}\n`
-			macro += `/gps/pos/halfz ${object.halfZ}\n`
-			macro += `/gps/pos/inner_radius ${object.innerradius}\n`
-			macro += `/gps/pos/outer_radius ${object.outerradius}\n`
+			if(sourceShape) 
+			{
+				macro += `/gps/pos/shape ${sourceShape}\n`
+				macro += `/gps/pos/halfx ${object.halfX}\n`
+				macro += `/gps/pos/halfy ${object.halfY}\n`
+				macro += `/gps/pos/halfz ${object.halfZ}\n`
+				macro += `/gps/pos/inner_radius ${object.innerradius}\n`
+				macro += `/gps/pos/outer_radius ${object.outerradius}\n`
+			}
 	
-			downloadGeant4File( macro, 'box.mac')
+			downloadGeant4File( macro, 'run.mac')
 	
 		} else {
-			alert( 'The added source could not be found.');
+			
+			let macro = '';
+				
+			macro += `# print macro commands on screen\n`;
+			macro += `/control/verbose 1\n`;
+			macro += `# uncomment the following line if you use https://github.com/jintonic/gears\n`;
+			macro += `#/geometry/source detector.tg\n\n`;
+
+			macro += `# initialize geometry and physics\n`;
+			macro += `/run/initialize\n\n`;
+
+			macro += `# change particle and its energy here\n`;
+			macro += `/gps/particle gamma\n`;
+			macro += `/gps/energy 2.6 MeV\n\n`;
+
+			macro += `# visualize geometry and events for debugging\n`;
+			macro += `/vis/open\n`;
+			macro += `/vis/drawVolume\n`;
+			macro += `/vis/scene/add/trajectories\n`;
+			macro += `/vis/scene/endOfEventAction accumulate 10\n`;
+			macro += `/run/beamOn 10\n`;
+
+			downloadGeant4File( macro, 'run.mac')
 		}
 		
 	} );

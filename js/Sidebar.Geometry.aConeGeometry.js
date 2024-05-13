@@ -176,9 +176,9 @@ function GeometryParametersPanel(editor, object) {
    finalMesh.name = 'Cone';
 
   maxRadius1.setRange(pRmin1 + 0.001, Infinity);
-  minRadius1.setRange(0.001, pRmax1 - 0.001);
+  minRadius1.setRange(0, pRmax1 - 0.001);
   maxRadius2.setRange(pRmin2 + 0.001, Infinity);
-  minRadius2.setRange(0.001, pRmax2 - 0.001);
+  minRadius2.setRange(0, pRmax2 - 0.001);
 
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 

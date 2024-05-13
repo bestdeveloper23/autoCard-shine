@@ -151,7 +151,7 @@ function GeometryParametersPanel(editor, object) {
 
   // set Range 
   maxRadius.setRange(pRMin + 0.001, pRtor - 0.001);
-  minRadius.setRange(0.001, pRMax - 0.001);
+  minRadius.setRange(0, pRMax - 0.001);
   torRadius.setRange(pRMax + 0.001, Infinity);
   
 
