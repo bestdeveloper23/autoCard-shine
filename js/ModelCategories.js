@@ -190,7 +190,12 @@ function ModelCategory(editor) {
         let MeshCSG3 = CSG.fromMesh(boxmesh);
 
         let aCSG;
-        aCSG = MeshCSG1.subtract(MeshCSG2);
+        if(pRMin === 0) {
+            aCSG = MeshCSG1;
+        } else {
+            aCSG = MeshCSG1.subtract(MeshCSG2);
+        }
+        
 
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
@@ -309,7 +314,12 @@ function ModelCategory(editor) {
         let MeshCSG3 = CSG.fromMesh(boxmesh);
 
         let aCSG;
-        aCSG = MeshCSG1.subtract(MeshCSG2);
+        if(pRMin === 0) {
+            aCSG = MeshCSG1;
+        } else {
+            aCSG = MeshCSG1.subtract(MeshCSG2);
+        }
+        
 
         let bCSG;
         bCSG = MeshCSG1.subtract(MeshCSG2);
