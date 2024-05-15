@@ -10,10 +10,10 @@ function Strings( config ) {
 			'menubar/file/new': 'New',
 			'menubar/file/import': 'Import',
 			'menubar/file/export/geant4': 'Export Geant4',
-			'menubar/file/export/geant4_scene': 'Export Scene with tg',
+			'menubar/file/export/geant4_scene': 'Export to Text Geometry',
 			'menubar/file/export/gdml': 'Export GDML',
-			'menubar/file/export/gdml_scene': 'Export Scene with gdml',
-			'menubar/file/export/mac': 'Export Macro',
+			'menubar/file/export/gdml_scene': 'Export to GDML',
+			'menubar/file/export/mac': 'Generate Geant4 macro',
 			'menubar/file/export/geometry': 'Export Geometry',
 			'menubar/file/export/object': 'Export Object',
 			'menubar/file/export/scene': 'Export Scene',
@@ -112,6 +112,11 @@ function Strings( config ) {
 			'menubar/help/icons': 'Icon Pack',
 			'menubar/help/about': 'About',
 			'menubar/help/manual': 'Manual',
+
+
+			'sidebar/left/solids': 'Solids',
+			'sidebar/left/sources': 'Sources',
+
 
 			'sidebar/animations': 'Animations',
 			'sidebar/animations/play': 'Play',

@@ -111,7 +111,7 @@ function MenubarFile( editor ) {
 
 	options.add( new UIHorizontalRule() );
 
-	// Export GT
+	// Export TG
 
 	option = new UIRow();
 	option.setClass( 'option' );
@@ -587,9 +587,9 @@ function MenubarFile( editor ) {
 		
 
 	} );
-	options.add( option );
+	// options.add( option );
 
-	// Export GT Scene
+	// Export TG Scene
 
 	option = new UIRow();
 	option.setClass( 'option' );
@@ -1004,7 +1004,7 @@ function MenubarFile( editor ) {
 			sceneText += `${placeText}`;
 			sceneText += `:vis world OFF`;
 
-			downloadGeant4File(sceneText, 'scene.tg')
+			downloadGeant4File(sceneText, 'detector.tg')
 		} else {
 			alert( 'The added model could not be found.');
 		}
@@ -2365,7 +2365,7 @@ function MenubarFile( editor ) {
 		
 
 	} );
-	options.add( option );
+	// options.add( option );
 
 	// Export GDML scene
 	
@@ -2874,9 +2874,11 @@ function MenubarFile( editor ) {
 					break;
 			}
 	
+			console.log(object)
 			let macro = '';
+			
 			macro += `/gps/particle ${object.energykind}\n`
-			macro += `/gps/energy ${object.energysize} keV\n`
+			macro += `/gps/energy ${object.energysize} ${object.energyunit}\n`
 			macro += `/gps/pos/centre ${position.x} ${position.y} ${position.z} m\n`
 			macro += `/gps/pos/type ${object.source}\n`
 			if(sourceShape) 
@@ -2923,105 +2925,105 @@ function MenubarFile( editor ) {
 
 	// Export Geometry	
 
-	option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/geometry' ) );
-	option.onClick( function () {
+	// option = new UIRow();
+	// option.setClass( 'option' );
+	// option.setTextContent( strings.getKey( 'menubar/file/export/geometry' ) );
+	// option.onClick( function () {
 
-		const object = editor.selected;
+	// 	const object = editor.selected;
 
-		if ( object === null ) {
+	// 	if ( object === null ) {
 
-			alert( 'No object selected.' );
-			return;
+	// 		alert( 'No object selected.' );
+	// 		return;
 
-		}
+	// 	}
 
-		const geometry = object.geometry;
+	// 	const geometry = object.geometry;
 
-		if ( geometry === undefined ) {
+	// 	if ( geometry === undefined ) {
 
-			alert( 'The selected object doesn\'t have geometry.' );
-			return;
+	// 		alert( 'The selected object doesn\'t have geometry.' );
+	// 		return;
 
-		}
+	// 	}
 
-		let output = geometry.toJSON();
+	// 	let output = geometry.toJSON();
 
-		try {
+	// 	try {
 
-			output = JSON.stringify( output, null, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+	// 		output = JSON.stringify( output, null, '\t' );
+	// 		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
 
-		} catch ( e ) {
+	// 	} catch ( e ) {
 
-			output = JSON.stringify( output );
+	// 		output = JSON.stringify( output );
 
-		}
+	// 	}
 
-		saveString( output, 'geometry.json' );
+	// 	saveString( output, 'geometry.json' );
 
-	} );
-	options.add( option );
+	// } );
+	// options.add( option );
 
-	// Export Object
+	// // Export Object
 
-	option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/object' ) );
-	option.onClick( function () {
+	// option = new UIRow();
+	// option.setClass( 'option' );
+	// option.setTextContent( strings.getKey( 'menubar/file/export/object' ) );
+	// option.onClick( function () {
 
-		const object = editor.selected;
+	// 	const object = editor.selected;
 
-		if ( object === null ) {
+	// 	if ( object === null ) {
 
-			alert( 'No object selected' );
-			return;
+	// 		alert( 'No object selected' );
+	// 		return;
 
-		}
+	// 	}
 
-		let output = object.toJSON();
+	// 	let output = object.toJSON();
 
-		try {
+	// 	try {
 
-			output = JSON.stringify( output, null, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+	// 		output = JSON.stringify( output, null, '\t' );
+	// 		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
 
-		} catch ( e ) {
+	// 	} catch ( e ) {
 
-			output = JSON.stringify( output );
+	// 		output = JSON.stringify( output );
 
-		}
+	// 	}
 
-		saveString( output, 'model.json' );
+	// 	saveString( output, 'model.json' );
 
-	} );
-	options.add( option );
+	// } );
+	// options.add( option );
 
-	// Export Scene
+	// // Export Scene
 
-	option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/file/export/scene' ) );
-	option.onClick( function () {
+	// option = new UIRow();
+	// option.setClass( 'option' );
+	// option.setTextContent( strings.getKey( 'menubar/file/export/scene' ) );
+	// option.onClick( function () {
 
-		let output = editor.scene.toJSON();
+	// 	let output = editor.scene.toJSON();
 
-		try {
+	// 	try {
 
-			output = JSON.stringify( output, null, '\t' );
-			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+	// 		output = JSON.stringify( output, null, '\t' );
+	// 		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
 
-		} catch ( e ) {
+	// 	} catch ( e ) {
 
-			output = JSON.stringify( output );
+	// 		output = JSON.stringify( output );
 
-		}
+	// 	}
 
-		saveString( output, 'scene.json' );
+	// 	saveString( output, 'scene.json' );
 
-	} );
-	options.add( option );
+	// } );
+	// options.add( option );
 
 	//
 

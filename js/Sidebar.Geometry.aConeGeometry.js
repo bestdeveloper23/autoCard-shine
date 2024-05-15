@@ -91,6 +91,9 @@ function GeometryParametersPanel(editor, object) {
   var pRmin1 = minRadius1.getValue(), pRmax1 = maxRadius1.getValue(), pRmin2 = minRadius2.getValue(), pRmax2 = maxRadius2.getValue(),
    pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue();
 
+   if (pRmin1 === 0 && pRmin2 !== 0) {
+        pRmin1 = 0.00001;
+   }
   
    const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
    const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
@@ -112,12 +115,16 @@ function GeometryParametersPanel(editor, object) {
    let MeshCSG3 = CSG.fromMesh(boxmesh);
 
    let aCSG;
-
-   aCSG = MeshCSG2.subtract(MeshCSG1);
-
+        
    let bCSG;
 
-   bCSG = MeshCSG2.subtract(MeshCSG1);
+   if(pRmin1 === 0 && pRmin2 === 0 ) {
+        aCSG = MeshCSG2;
+        bCSG = MeshCSG2;
+   } else {
+       aCSG = MeshCSG2.subtract(MeshCSG1);
+       bCSG = MeshCSG2.subtract(MeshCSG1);
+   }
 
 
    if (DPhi > 270 && DPhi < 360) {

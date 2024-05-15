@@ -130,7 +130,14 @@ function GeometryParametersPanel( editor, object ) {
         const MeshCSG1 = CSG.fromMesh(cylindermesh);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
 
-        let aCSG = MeshCSG1.subtract(MeshCSG2);
+        let aCSG;
+        if(radiusIn === 0 ) {
+            aCSG = MeshCSG1;
+        } else {
+            aCSG = MeshCSG1.subtract(MeshCSG2);
+        }
+        
+
 
         const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 

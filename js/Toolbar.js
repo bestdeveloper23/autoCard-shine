@@ -167,7 +167,6 @@ function Toolbar( editor ) {
 		subtract.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
 		exclude.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
 		measure.dom.classList.remove( 'selected' ); editor.booleanEvent = null;
-		console.log("booleanEvent is changed!", measure.dom.classList, booleanType);
 		if(booleanType){
 			switch (booleanType) {
 				case 'merge': merge.dom.classList.add( 'selected' ); editor.booleanEvent = 'merge'; break;

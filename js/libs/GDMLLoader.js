@@ -22,13 +22,14 @@ class GDMLLoader extends Loader {
                 onLoad(scope.parse(text, path));
 
             } catch (e) {
-
+                
                 if (onError) {
-
+                    
+                    alert(e)
                     onError(e);
 
                 } else {
-
+                    alert(e)
                     console.error(e);
 
                 }

@@ -10,7 +10,7 @@ import { SetRotationCommand } from './commands/SetRotationCommand.js';
 import { SetScaleCommand } from './commands/SetScaleCommand.js';
 import { SetColorCommand } from './commands/SetColorCommand.js';
 
-import { SOURCE } from '/js/libs/nucleardata/radiation.js'
+import { SOURCE } from './libs/nucleardata/radiation.js';
 
 function SidebarObject( editor ) {
 
@@ -135,7 +135,6 @@ function SidebarObject( editor ) {
 	});
 
 	planesourceShape.setOptions(planeshapeoption);
-	planesourceShape.setValue(0);
 
 	planesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
 	planesourceShapeRow.add(planesourceShape);
@@ -153,7 +152,6 @@ function SidebarObject( editor ) {
 	});
 
 	volumesourceShape.setOptions(volumeshapeoption);
-	volumesourceShape.setValue(0);
 
 	volumesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
 	volumesourceShapeRow.add(volumesourceShape);
@@ -197,7 +195,7 @@ function SidebarObject( editor ) {
 	});
 
 	energyunit.setOptions(unitoptions);
-	energyunit.setValue(0);
+	energyunit.setValue(1);
 
 	energyRow.add(energyunit);
 
@@ -557,42 +555,55 @@ function SidebarObject( editor ) {
 
 			if( object.source !== undefined ) {
 
-				object.source = SOURCE.type[newsourcename];
-				
+				object.source = SOURCE.type[Number(newsourcename)];
+				// editor.execute( new SetValueCommand( editor, object, 'source', SOURCE.type[Number(newsourcename)] ) );
+				object.updateProjectionMatrix();
+
 			}
 
-			const newplaneshape = planesourceShape.getValue();
 			if( object.planeshape !== undefined ) {
 
-				object.planeshape = SOURCE.shape.plane[newplaneshape];
+				const newplaneshape = planesourceShape.getValue();
+				object.planeshape = SOURCE.shape.plane[Number(newplaneshape)];
+				// editor.execute( new SetValueCommand( editor, object, 'planeshape', SOURCE.shape.plane[Number(newplaneshape)] ) );
+				object.updateProjectionMatrix();
 				
 			}
 
-			const newvolumeshape = volumesourceShape.getValue();
-			if( object.energy !== undefined ) {
+			if( object.volumeshape !== undefined ) {
 
-				object.planeshape = SOURCE.shape.volume[newvolumeshape];
+				const newvolumeshape = volumesourceShape.getValue();
+				object.volumeshape = SOURCE.shape.volume[Number(newvolumeshape)];
+				// editor.execute( new SetValueCommand( editor, object, 'volumeshape', SOURCE.shape.volume[Number(newvolumeshape)] ) );
+				object.updateProjectionMatrix();
 				
 			}
 
-			const newKind = energykind.getValue();
-			if( object.energy !== undefined ) {
+			if( object.energykind !== undefined ) {
 
-				object.energykind = SOURCE.particle[newKind];
+				const newKind = energykind.getValue();
+				object.energykind = SOURCE.particle[Number(newKind)];
+				// editor.execute( new SetValueCommand( editor, object, 'energykind', SOURCE.particle[Number(newKind)] ) );
+				object.updateProjectionMatrix();
 				
 			}
 
-			const newSize = energysize.getValue();
-			if( object.energy !== undefined ) {
+			
+			if( object.energysize !== undefined ) {
 
+				const newSize = energysize.getValue();
 				object.energysize = newSize;
+				// editor.execute( new SetValueCommand( editor, object, 'energysize', newSize ) );
+				object.updateProjectionMatrix();
 				
 			}
 			
-			const newUnit = energyunit.getValue();
-			if( object.energy !== undefined ) {
+			if( object.energyunit !== undefined ) {
 
-				object.energyunit = SOURCE.unit[newUnit];
+				const newUnit = energyunit.getValue();
+				object.energyunit = SOURCE.unit[Number(newUnit)];
+				// editor.execute( new SetValueCommand( editor, object, 'energyunit', SOURCE.unit[Number(newUnit)] ) );
+				object.updateProjectionMatrix();
 				
 			}
 
@@ -883,19 +894,22 @@ function SidebarObject( editor ) {
 			// objectUUIDRow.setDisplay( 'none' );
 			// objectTypeRow.setDisplay( 'none' );
 		}
-		if ( object.name === "RadiatinSource" ) {
+
+		if ( object.name === "RadiationSource" ) {
 			// objectTypeRow.setDisplay( 'none' );
-			object.source = "Point";
-			object.planeshape = "Circle";
-			object.volumeshape = "Sphere";
-			object.energysize = 1;
-			object.energyunit = "eV";
-			object.energykind = "B+";
-			object.halfX = 1;
-			object.halfY = 1;
-			object.halfZ = 1;
-			object.innerradius = 1;
-			object.outerradius = 1;
+			
+			// object.source = "Point";
+			// object.planeshape = "Circle";
+			// object.volumeshape = "Sphere";
+			// object.energysize = 1;
+			// object.energyunit = "keV";
+			// object.energykind = "B+";
+			// object.halfX = 1;
+			// object.halfY = 1;
+			// object.halfZ = 1;
+			// object.innerradius = 1;
+			// object.outerradius = 1;
+		
 		}
 
 		if ( object.source === 'Plane' ) {
@@ -990,11 +1004,13 @@ function SidebarObject( editor ) {
 		}
 		
 		if( object.planeshape !== undefined ) {
-			planesourceShape.setValue( SOURCE.shape.plane.indexOf(object.planeshape) );
+			const index = SOURCE.shape.plane.indexOf(object.planeshape);
+			planesourceShape.setValue( index );
 		}
 
 		if( object.volumeshape !== undefined ) {
-			volumesourceShape.setValue( SOURCE.shape.volume.indexOf(object.volumeshape) );
+			const index = SOURCE.shape.volume.indexOf(object.volumeshape);
+			volumesourceShape.setValue( index );
 		}
 
 		if( object.energysize !== undefined ) {
@@ -1002,11 +1018,11 @@ function SidebarObject( editor ) {
 		}
 
 		if( object.energyunit !== undefined ) {
-			energyunit.setValue( object.energyunit );
+			energyunit.setValue( SOURCE.unit.indexOf(object.energyunit) );
 		}
 		
 		if( object.energykind !== undefined ) {
-			energyunit.setValue( SOURCE.unit.indexOf(object.energykind) );
+			energykind.setValue( SOURCE.particle.indexOf(object.energykind) );
 		}
 		
 		if( object.halfX !== undefined ) {

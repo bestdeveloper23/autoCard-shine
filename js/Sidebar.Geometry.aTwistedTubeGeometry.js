@@ -94,10 +94,16 @@ function GeometryParametersPanel(editor, object) {
   let MeshCSG3 = CSG.fromMesh(boxmesh);
 
   let aCSG;
-  aCSG = MeshCSG1.subtract(MeshCSG2);
-
+        
   let bCSG;
-  bCSG = MeshCSG1.subtract(MeshCSG2);
+
+  if(pRMin !== 0) {
+      aCSG = MeshCSG1.subtract(MeshCSG2);
+      bCSG = MeshCSG1.subtract(MeshCSG2);
+  } else {
+      aCSG = MeshCSG1;
+      bCSG = MeshCSG1;
+  }
 
   if (DPhi > 270 && DPhi < 360) {
    let v_DPhi = 360 - DPhi;

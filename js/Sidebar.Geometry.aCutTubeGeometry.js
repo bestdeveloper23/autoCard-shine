@@ -144,8 +144,14 @@ function GeometryParametersPanel(editor, object) {
     const MeshCSG2 = CSG.fromMesh(cylindermesh2);
     let MeshCSG3 = CSG.fromMesh(boxmesh1);
 
+    
     let aCSG;
-    aCSG = MeshCSG1.subtract(MeshCSG2);
+        
+    if(pRMin !== 0) {
+        aCSG = MeshCSG1.subtract(MeshCSG2);
+    } else {
+        aCSG = MeshCSG1;
+    }
 
 
     if (CutTube_vectorVertical(pHighNorm) === false) {
