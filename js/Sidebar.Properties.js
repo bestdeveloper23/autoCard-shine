@@ -7,6 +7,7 @@ import { SidebarMaterial } from './Sidebar.Material.js';
 function SidebarProperties( editor ) {
 
 	const strings = editor.strings;
+	const signals = editor.signals;
 
 	const container = new UITabbedPanel();
 	container.setId( 'properties' );
@@ -15,6 +16,23 @@ function SidebarProperties( editor ) {
 	container.addTab( 'geometry', strings.getKey( 'sidebar/properties/geometry' ), new SidebarGeometry( editor ) );
 	container.addTab( 'material', strings.getKey( 'sidebar/properties/material' ), new SidebarMaterial( editor ) );
 	container.select( 'object' );
+
+	signals.objectSelected.add( function ( object ) {
+
+		if ( object !== null && object.name !== 'RadiationSource' ) {
+
+			container.setDisplay( 'block' );
+
+			updateRows( object );
+			updateUI( object );
+
+		} else {
+
+			container.setDisplay( 'none' );
+
+		}
+
+	} );
 
 	return container;
 

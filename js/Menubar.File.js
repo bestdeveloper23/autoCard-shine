@@ -643,7 +643,7 @@ function MenubarFile( editor ) {
 			switch (object.name) {
 				case "Box":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n`
+					solidText1 += `:solid ${object.name}_${object.uuid} BOX ${object.geometry.parameters.width/2}*m ${object.geometry.parameters.depth/2}*m ${object.geometry.parameters.height/2}*m\n`
 					
 					break;
 
@@ -655,7 +655,7 @@ function MenubarFile( editor ) {
 
 				case "Tubs":
 					
-					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz/2}m ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
@@ -2814,7 +2814,7 @@ function MenubarFile( editor ) {
 			sceneText += `  </setup>\n`;
 			sceneText += `</gdml>`;
 	
-			downloadGeant4File(sceneText, 'scene.gdml');
+			downloadGeant4File(sceneText, 'detector.gdml');
 		} 
 		else {
 			alert( 'The added model could not be found.');

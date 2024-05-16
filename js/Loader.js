@@ -1067,7 +1067,6 @@ function Loader( editor ) {
   
           solidText[solidName] = rowtext;
           // set the new mesh 
-          console.log(solidName, solidType)
   
           switch (solidType) {
             case "BOX":
@@ -2134,7 +2133,6 @@ function Loader( editor ) {
                 indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
       
                 // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
-                console.log(vertices)
                 const geometry = new THREE.PolyhedronGeometry(vertices, indices);
                 const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                 geometry.parameters = param;
@@ -2357,7 +2355,6 @@ function Loader( editor ) {
   
           solidText[solidName] = rowtext;
           // set the new mesh 
-          console.log(solidName, solidType)
   
           switch (solidType) {
             case "BOX":
@@ -3448,7 +3445,6 @@ function Loader( editor ) {
                 indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
       
                 // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
-                console.log(vertices)
                 const geometry = new THREE.PolyhedronGeometry(vertices, indices);
                 const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                 geometry.parameters = param;
@@ -3687,14 +3683,12 @@ function Loader( editor ) {
                 let rotationY = rotation.y / 180 * Math.PI;
                 let rotationZ = rotation.z / 180 * Math.PI;
   
-                console.log(rotationX, rotationY, rotationZ, rotation)
                 secondchild.position.set(positionX, positionY, positionZ);
                 secondchild.rotation.set(rotationX, rotationY, rotationZ);
                 secondchild.updateMatrix();
   
                 var mesh;
                           
-                console.log(firstchild);
                 let aCSG = CSG.fromMesh(firstchild);
                 let bCSG = CSG.fromMesh(secondchild);
   
@@ -3707,7 +3701,6 @@ function Loader( editor ) {
   
                 if(meshRotation) {
                   mesh.rotation.copy(meshRotation);
-                  console.log(meshRotation);
                 }
   
                 const meshName = solidName.split('_')[0];
@@ -3764,7 +3757,6 @@ function Loader( editor ) {
   
                 if(meshRotation) {
                   mesh.rotation.copy(meshRotation);
-                  console.log(meshRotation);
                 }
   
                 const meshName = solidName.split('_')[0];
@@ -3822,7 +3814,6 @@ function Loader( editor ) {
   
                 if(meshRotation) {
                   mesh.rotation.copy(meshRotation);
-                  console.log(meshRotation);
                 }
                 
                 const meshName = solidName.split('_')[0];
@@ -3903,14 +3894,12 @@ function Loader( editor ) {
                     let rotationY = rotation.y / 180 * Math.PI;
                     let rotationZ = rotation.z / 180 * Math.PI;
   
-                    console.log(rotationX, rotationY, rotationZ, rotation)
                     secondchild.position.set(positionX, positionY, positionZ);
                     secondchild.rotation.set(rotationX, rotationY, rotationZ);
                     secondchild.updateMatrix();
   
                     var mesh;
                               
-                    console.log(firstchild);
                     let aCSG = CSG.fromMesh(firstchild);
                     let bCSG = CSG.fromMesh(secondchild);
   

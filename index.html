@@ -68,6 +68,7 @@
       import { Menubar } from '/js/Menubar.js';
       import { Resizer } from '/js/Resizer.js';
       import { VRButton } from 'three/addons/webxr/VRButton.js';
+      import { SidebarLeft } from '/js/Sidebar.Left.js';
 
       window.URL = window.URL || window.webkitURL;
       window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -94,8 +95,11 @@
       const player = new Player( editor );
       document.body.appendChild( player.dom );
 
-      const modelcategory = new ModelCategory( editor );
-      document.body.appendChild( modelcategory.dom );
+      // const modelcategory = new ModelCategory( editor );
+      // document.body.appendChild( modelcategory.dom );
+
+      const sidebarLeft = new SidebarLeft( editor );
+      document.body.appendChild( sidebarLeft.dom );
 
       const sidebar = new Sidebar( editor );
       document.body.appendChild( sidebar.dom );

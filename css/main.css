@@ -66,15 +66,15 @@ input {
   position: absolute;
   top: 32px;
   left: 0;
-  width: 260px;
+  width: 270px;
   height: calc(100vh - 32px);
   overflow: auto;
   background: #eee;
 }
 
 #Category .Category-widget{
-  width: calc(100% + 20px);
-  height: calc(100% - 21px);
+  /* width: calc(100% + 20px); */
+  /* height: calc(100% - 21px); */
   display: block;
   color: #888;
   padding: 10px;
