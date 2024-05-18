@@ -34,6 +34,8 @@ class Selector {
 
 					this.select( object.userData.object );
 
+				} else if ( object.parent.name === 'RadiationSource') {
+					this.select( object.parent );
 				} else {
 
 					this.select( object );
@@ -68,7 +70,6 @@ class Selector {
 		this.signals.objectSelected.dispatch( object );
 
 			if(this.booleanEventAvailability){
-				console.log("boolean operation detected", this.booleanEventAvailability);
 				if(this.editor.booleanEvent !== 'measure'){
 				
 					const MeshCSG1 = CSG.fromMesh(originalObject)
@@ -91,9 +92,21 @@ class Selector {
 					this.editor.removeObject(object);
 					
 					switch (this.editor.booleanEvent) {
-						case 'merge' : finalMesh.name = "united_object"; break;
-						case 'subtract' : finalMesh.name = "subtracted_object"; break;
-						case 'exclude' : finalMesh.name = "intersected_object"; break;
+						case 'merge' : {
+							finalMesh.name = "united_object"; 
+							finalMesh.geometry.type = "unitedGeometry";
+							break;
+						}
+						case 'subtract' : {
+							finalMesh.name = "subtracted_object"; 
+							finalMesh.geometry.type = "subtractedGeometry";
+							break;
+						}
+						case 'exclude' : {
+							finalMesh.name = "intersected_object"; 
+							finalMesh.geometry.type = "intersectedGeometry";
+							break;
+						}
 					}
 					this.editor.addObject(finalMesh);
 					

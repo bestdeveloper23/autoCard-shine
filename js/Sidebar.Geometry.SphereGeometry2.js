@@ -170,7 +170,6 @@ function GeometryParametersPanel(editor, object) {
 
         var deltaphi = pSTheta / 180 * 2 * pRMax;
 
-		console.log(deltaphi);
         boxmesh2.translateY(deltaphi);
         boxmesh2.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh2);
@@ -181,7 +180,6 @@ function GeometryParametersPanel(editor, object) {
         boxmesh2.updateMatrix();
         MeshCSG3 = CSG.fromMesh(boxmesh2);
         aCSG = aCSG.subtract(MeshCSG3);
-		console.log(deltaphi, pDTheta, pRMax)
         
         const mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         mesh.rotateX(Math.PI/2);

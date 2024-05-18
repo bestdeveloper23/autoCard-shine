@@ -52,7 +52,6 @@ function GeometryParametersPanel( editor, object ) {
 		const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
 		const cylindermesh = new THREE.Mesh(cylindergeometry, new THREE.MeshStandardMaterial());
 		
-		console.log(xSemiAxis, semiAxisY, ratioZ)
 		cylindermesh.scale.z = ratioZ;
 		cylindermesh.updateMatrix();
 		const aCSG = CSG.fromMesh(cylindermesh);

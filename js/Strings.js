@@ -83,8 +83,21 @@ function Strings( config ) {
 			'menubar/add/ahyperboloid': 'Hyperboloid',
 			'menubar/add/polyhedra': 'Polyhedra',
 
-			'menubar/add/source' : 'Source',
-
+			'menubar/add/source/point' : 'Point',
+			'menubar/add/source/planeCircle' : 'planeCircle',
+			'menubar/add/source/planeAnnulus' : 'Annulus',
+			'menubar/add/source/planeElipse' : 'Elipse',
+			'menubar/add/source/planeSquare' : 'Square',
+			'menubar/add/source/planeRectangle' : 'Rectangle',
+			'menubar/add/source/beam' : 'Beam',
+			'menubar/add/source/surfaceSphere' : 'Sphere',
+			'menubar/add/source/surfaceElipsoid' : 'Elipsoid',
+			'menubar/add/source/surfaceCylinder' : 'Cylinder',
+			'menubar/add/source/surfacePara' : 'Para',
+			'menubar/add/source/volumeSphere' : 'Sphere',
+			'menubar/add/source/volumeElipsoid' : 'Elipsoid',
+			'menubar/add/source/volumeCylinder' : 'Cylinder',
+			'menubar/add/source/volumePara' : 'Para',
 
 			'menubar/status/autosave': 'autosave',
 

@@ -352,7 +352,6 @@ function Viewport(editor, measureValue) {
 		if (event.keyCode == 48) {
 			if (editor.selected) {
 				let uuid = editor.selected.uuid;
-				console.log(editor.selected);
 				editor.selected.position.set(0, 0, 0);
 				renderer.render(scene, editor.viewportCamera);
 
@@ -396,7 +395,6 @@ function Viewport(editor, measureValue) {
 	});
 
 	signals.transformModeChanged.add(function (mode) {
-		console.log("mode chaned to ", mode);
 		transformControls.setMode(mode);
 
 	});
@@ -502,7 +500,13 @@ function Viewport(editor, measureValue) {
 
 			}
 
-			transformControls.attach(object);
+
+			if(object.parent.name !== 'RadiationSource') {
+				transformControls.attach(object);
+			} else {
+				transformControls.attach(object.parent);
+			}
+
 
 		}
 

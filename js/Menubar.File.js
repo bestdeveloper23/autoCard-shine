@@ -152,137 +152,137 @@ function MenubarFile( editor ) {
 				let rotateY = rotateY2 - rotateY1;
 				let rotateZ = rotateZ2 - rotateZ1;
 
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+				return `:rotm ${object.name}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			} else {
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+				return `:rotm ${object.name}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			}
 			
 		}
 
 		function getSolidText( object ) {
 			let solidText1 = '';
-			switch (object.name) {
-				case "Box":
+			switch (object.geometry.type) {
+				case "BoxGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm ${object.geometry.parameters.height/2*100}*cm\n`
 					
 					break;
 
-				case "Sphere":
+				case "SphereGeometry2":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} SPHERE ${object.geometry.parameters.radius/2*100}*cm ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
 					
 					break;
 
-				case "Tubs":
+				case "aTubeGeometry":
 					
-					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
-					
-					break;
-
-				case "CTubs":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "Cone":
+				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "Parallelepiped":
+				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1/2*100}*cm ${object.geometry.parameters.pRMin2/2*100}*cm ${object.geometry.parameters.pRMax1/2*100}*cm ${object.geometry.parameters.pRMax2/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "TrapeZoid":
-					
-					solidText1 += `:solid ${object.name}_${object.uuid} TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n`
-					
-					break;
+				case "aParallGeometry":
 
-				case "aTrapeZoidP": 
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx/2*100}*cm ${object.geometry.parameters.dy/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
 					
 					break;
 
-				case "aTorus":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
+				case "aTrapeZoidGeometry":
+					
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz/2*100}*cm\n`
 					
 					break;
-				
-				case "EllipeCylnder":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n`
+				case "aTrapeZoidPGeometry": 
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm ${object.geometry.parameters.phi}\n`
+					
+					break;
+
+				case "aTorusGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TORUS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
 					
 					break;
 				
-				case "Ellipsoid":
+				case "aEllipticalCylinderGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n`
-					
-					break;
-
-				case "aEllipticalCone":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n`
-					
-					break;
-
-				case "TwistedBox":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n`
-					
-					break;
-
-				case "TwistedTrapeZoid":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n`
-					
-					break;
-
-				case "TwistedTrapeZoidP":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n`
-					
-					break;
-
-				case "TwistedTubs":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n`
-					
-					break;
-
-				case "Tetrahedra":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
-					
-					break;
-
-				case "Hyperboloid":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
-					
-					break;
-
-				case "Polycone":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
-					
-					break;
-
-				case "Polyhedra":
-					
-					solidText1 += `:solid ${object.name}_${object.uuid} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.semiAxisY/2*100}*cm ${object.geometry.parameters.Dz/2*100}*cm\n`
 					
 					break;
 				
-				case "united_object":
+				case "aEllipsoidGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPSOID ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.zSemiAxis/2*100}*cm ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n`
+					
+					break;
+
+				case "aEllipticalConeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.zTopCut}\n`
+					
+					break;
+
+				case "aTwistedBoxGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm\n`
+					
+					break;
+
+				case "aTwistedTrdGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.twistedangle}\n`
+					
+					break;
+
+				case "aTwistedTrapGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm\n`
+					
+					break;
+
+				case "aTwistedTubeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pDPhi}\n`
+					
+					break;
+
+				case "aTetrahedraGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
+					
+					break;
+
+				case "aHyperboloidGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn/2*100}*cm ${object.geometry.parameters.radiusOut/2*100}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2*100}*cm\n`
+					
+					break;
+
+				case "aPolyconeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+					
+					break;
+
+				case "aPolyhedraGeometry":
+					
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+					
+					break;
+				
+				case "unitedGeometry":
 
 					{
 						const positionX1 = object.childrenObject[0].position.x;
@@ -297,11 +297,11 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 
-						solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} UNION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
 					}
 					break;
 
-				case "subtracted_object":
+				case "subtractedGeometry":
 
 					{
 						const positionX1 = object.childrenObject[0].position.x;
@@ -316,12 +316,12 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 	
-						solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} SUBTRACTION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
 					}
 					
 					break;
 					
-				case "intersected_object":
+				case "intersectedGeometry":
 
 					{
 						const positionX1 = object.childrenObject[0].position.x;
@@ -336,7 +336,7 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 	
-						solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} INTERSECTION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
 					}
 					
 					break;
@@ -355,7 +355,7 @@ function MenubarFile( editor ) {
 
 
 		if ( object !== null && object.isMesh != undefined ) {
-			var txt = `:volu world BOX 10. 10. 10. G4_AIR\n\n`;
+			var txt = `:volu world BOX 5*m 5*m 5*m G4_AIR\n\n`;
 			const rotated = object.rotation;
 			const rotateX = rotated.x * 180 / Math.PI;
 			const rotateY = rotated.y * 180 / Math.PI;
@@ -365,7 +365,7 @@ function MenubarFile( editor ) {
 			const rotateY1 = object.childrenObject[0].rotation.y * 180 / Math.PI;
 			const rotateZ1 = object.childrenObject[0].rotation.z * 180 / Math.PI;
 	
-			if(object.name === "united_object" || object.name === "subtracted_object" || object.name === "intersected_object") {
+			if(object.geometry.type === "unitedGeometry" || object.geometry.type === "subtractedGeometry" || object.geometry.type === "intersectedGeometry") {
 				txt += `:rotm r000 ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n`;
 			}
 			else {
@@ -375,175 +375,175 @@ function MenubarFile( editor ) {
 	
 			traversebooleanObjects(object, function ( child ) {
 
-				if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
+				if( child.geometry.type === "unitedGeometry" || child.geometry.type === "subtractedGeometry" || child.geometry.type === "intersectedGeometry"){
 					rotationText += getRotationText(child, true);
 				}
 				solidText += getSolidText(child);
 	
 			} );
-			switch (object.name) {
-				case "united_object":
+			switch (object.geometry.type) {
+				case "unitedGeometry":
 					{
 						txt += `${rotationText}\n`;
 						txt += `${solidText}\n`;
 						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
-						downloadGeant4File( txt, 'united_object.tg');
+						downloadGeant4File( txt, 'unitedGeometry.tg');
 					}
 					
 					break;
 				
-				case "subtracted_object":
+				case "subtractedGeometry":
 					{
 						txt += `${rotationText}\n`;
 						txt += `${solidText}\n`;
 						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`;
 						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
-						downloadGeant4File( txt, 'subtracted_object.tg');	
+						downloadGeant4File( txt, 'subtractedGeometry.tg');	
 					}
 					
 					break;
 					
-				case "intersected_object":
+				case "intersectedGeometry":
 					{
 						txt += `${rotationText}\n`;
 						txt += `${solidText}\n`;
 						txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 						txt += `:place mybox 1 world r000 ${object.childrenObject[0].position.x.toFixed(5)} ${object.childrenObject[0].position.y.toFixed(5)} ${object.childrenObject[0].position.z.toFixed(5)}\n`
-						downloadGeant4File( txt, 'intersected_object.tg');
+						downloadGeant4File( txt, 'intersectedGeometry.tg');
 					}
 
 					break;
 
-				case "Box":
+				case "BoxGeometry":
 
-					txt += `\n:solid box BOX ${object.geometry.parameters.width} ${object.geometry.parameters.depth} ${object.geometry.parameters.height}\n\n`
+					txt += `\n:solid box BOX ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm ${object.geometry.parameters.height/2*100}*cm\n\n`
 					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'box.tg');
 					break;
 
-				case "Sphere":
+				case "SphereGeometry2":
 
-					txt += `\n:solid mysphere SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
+					txt += `\n:solid mysphere SPHERE ${object.geometry.parameters.radius/2*100}*cm ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n\n`
 					txt += `:volu mysphere mysphere ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mysphere 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'sphere.tg');
 					break;
 
-				case "Tubs":
+				case "aTubeGeometry":
 					
-					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'tub.tg');
 					break;
 
-				case "CTubs":
+				case "aCutTubeGeometry":
 
-					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
-					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}\n\n`
+					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin/2*100}*cm\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ctub.tg');
 					break;
 
-				case "Cone":
+				case "aConeGeometry":
 
-					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1/2*100}*cm ${object.geometry.parameters.pRMin2/2*100}*cm ${object.geometry.parameters.pRMax1/2*100}*cm ${object.geometry.parameters.pRMax2/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mycone mycone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'cone.tg');
 					break;
 
-				case "Parallelepiped":
+				case "aParallGeometry":
 
-					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
+					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx/2*100}*cm ${object.geometry.parameters.dy/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mypara mypara ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'parallelepiped.tg');
 					break;
 
-				case "TrapeZoid":
+				case "aTrapeZoidGeometry":
 					
-					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n\n`
+					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm\n\n`
 					txt += `:volu mytrd mytrd ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n\n`
 					downloadGeant4File( txt, 'trapzoid.tg');
 					break;
 
-				case "aTrapeZoidP": 
+				case "aTrapeZoidPGeometry": 
 
-					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n\n`
+					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mytrdp mytrdp ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'trapezoidp.tg');
 					break;
 
-				case "aTorus":
+				case "aTorusGeometry":
 
-					txt += `\n:solid mytorus TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
+					txt += `\n:solid mytorus TORUS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n\n`
 					txt += `:volu mytorus mytorus ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytorus 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'torus.tg');
 					break;
 				
-				case "EllipeCylnder":
+				case "aEllipticalCylinderGeometry":
 
-					txt += `\n:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n\n`
+					txt += `\n:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.semiAxisY/2*100}*cm ${object.geometry.parameters.Dz/2*100}*cm\n\n`
 					txt += `:volu myellipT myellipT ${object.manager.name.elementType}\n\n`
 					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipeTub.tg');
 					break;
 				
-				case "Ellipsoid":
+				case "aEllipsoidGeometry":
 
-					txt += `\n:solid myellipsoid ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n\n`
+					txt += `\n:solid myellipsoid ELLIPSOID ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.zSemiAxis/2*100}*cm ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipsoid myellipsoid ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myellipsoid 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipsoid.tg');
 					break;
 
-				case "aEllipticalCone":
+				case "aEllipticalConeGeometry":
 
-					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n\n`
+					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.zTopCut}\n\n`
 					txt += `:volu myellipticalcone myellipticalcone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'ellipticalcone.tg');
 					break;
 
-				case "TwistedBox":
+				case "aTwistedBoxGeometry":
 
-					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n\n`
+					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm\n\n`
 					txt += `:volu mytbox mytbox ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedbox.tg');
 					break;
 
-				case "TwistedTrapeZoid":
+				case "aTwistedTrdGeometry":
 
-					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n\n`
+					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.twistedangle}\n\n`
 					txt += `:volu myttrd myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtrapzoid.tg');
 					break;
 
-				case "TwistedTrapeZoidP":
+				case "aTwistedTrapGeometry":
 
-					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n\n`
+					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm\n\n`
 					txt += `:volu myttrap myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtrapezoidp.tg');
 					break;
 
-				case "TwistedTubs":
+				case "aTwistedTubeGeometry":
 
-					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu myttubs myttubs ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'twistedtub.tg');
 					break;
 
-				case "Tetrahedra":
+				case "aTetrahedraGeometry":
 
 					txt += `\n:solid mytetra TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n\n`
 					txt += `:volu mytetra mytetra ${object.material.newmaterial?.elementType}\n\n`
@@ -551,15 +551,15 @@ function MenubarFile( editor ) {
 					downloadGeant4File( txt, 'tetrahedra.tg');
 					break;
 
-				case "Hyperboloid":
+				case "aHyperboloidGeometry":
 
-					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n\n`
+					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn/2*100}*cm ${object.geometry.parameters.radiusOut/2*100}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2*100}*cm\n\n`
 					txt += `:volu myhyperboloid myhyperboloid ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(5)} ${object.position.y.toFixed(5)} ${object.position.z.toFixed(5)}\n`
 					downloadGeant4File( txt, 'hyperboloid.tg');
 					break;
 
-				case "Polycone":
+				case "aPolyconeGeometry":
 
 					txt += `\n:solid myploycone POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu myploycone mypolycone ${object.material.newmaterial?.elementType}\n\n`
@@ -567,7 +567,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( txt, 'polycone.tg');
 					break;
 
-				case "Polyhedra":
+				case "aPolyhedraGeometry":
 					
 					txt += `\n:solid mypolyhedra POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n\n`
 					txt += `:volu mypolyhedra mypolyhedra ${object.material.newmaterial?.elementType}\n\n`
@@ -629,139 +629,138 @@ function MenubarFile( editor ) {
 				let rotateX = rotateX2 - rotateX1;
 				let rotateY = rotateY2 - rotateY1;
 				let rotateZ = rotateZ2 - rotateZ1;
-				console.log(rotateX1)
 
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_${object.uuid}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+				return `:rotm ${object.name}_rot ${rotateX1.toFixed(5)} ${rotateY1.toFixed(5)} ${rotateZ1.toFixed(5)}\n:rotm ${object.name}_rot_rel ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			} else {
-				return `:rotm ${object.name}_${object.uuid}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
+				return `:rotm ${object.name}_rot ${rotateX.toFixed(5)} ${rotateY.toFixed(5)} ${rotateZ.toFixed(5)}\n`
 			}
 			
 		}
 
 		function getSolidText( object ) {
 			let solidText1 = '';
-			switch (object.name) {
-				case "Box":
+			switch (object.geometry.type) {
+				case "BoxGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} BOX ${object.geometry.parameters.width/2}*m ${object.geometry.parameters.depth/2}*m ${object.geometry.parameters.height/2}*m\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm ${object.geometry.parameters.height/2*100}*cm\n`
 					
 					break;
 
-				case "Sphere":
+				case "SphereGeometry2":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} SPHERE ${object.geometry.parameters.radius} ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} SPHERE ${object.geometry.parameters.radius/2*100}*cm ${object.geometry.parameters.phiStart} ${object.geometry.parameters.phiLength} ${object.geometry.parameters.thetaStart} ${object.geometry.parameters.thetaLength}\n`
 					
 					break;
 
-				case "Tubs":
+				case "aTubeGeometry":
 					
-					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz/2}m ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
-					
-					break;
-
-				case "CTubs":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TUBS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "Cone":
+				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} CONS ${object.geometry.parameters.pRMin1} ${object.geometry.parameters.pRMin2} ${object.geometry.parameters.pRMax1} ${object.geometry.parameters.pRMax2} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "Parallelepiped":
+				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} PARA ${object.geometry.parameters.dx} ${object.geometry.parameters.dy} ${object.geometry.parameters.dz} ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1/2*100}*cm ${object.geometry.parameters.pRMin2/2*100}*cm ${object.geometry.parameters.pRMax1/2*100}*cm ${object.geometry.parameters.pRMax2/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
-				case "TrapeZoid":
-					
-					solidText1 += `:solid ${object.name}_${object.uuid} TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}\n`
-					
-					break;
+				case "aParallGeometry":
 
-				case "aTrapeZoidP": 
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TRAP ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx/2*100}*cm ${object.geometry.parameters.dy/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
 					
 					break;
 
-				case "aTorus":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TORUS ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
+				case "aTrapeZoidGeometry":
+					
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm\n`
 					
 					break;
-				
-				case "EllipeCylnder":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.semiAxisY} ${object.geometry.parameters.Dz}\n`
+				case "aTrapeZoidPGeometry": 
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm ${object.geometry.parameters.phi}\n`
+					
+					break;
+
+				case "aTorusGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TORUS ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pRTor} ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.sDPhi}\n`
 					
 					break;
 				
-				case "Ellipsoid":
+				case "aEllipticalCylinderGeometry":
 
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPSOID ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.zSemiAxis} ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n`
-					
-					break;
-
-				case "aEllipticalCone":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis} ${object.geometry.parameters.ySemiAxis} ${object.geometry.parameters.height} ${object.geometry.parameters.zTopCut}\n`
-					
-					break;
-
-				case "TwistedBox":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width} ${object.geometry.parameters.height} ${object.geometry.parameters.depth}\n`
-					
-					break;
-
-				case "TwistedTrapeZoid":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRD ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz} ${object.geometry.parameters.twistedangle}\n`
-					
-					break;
-
-				case "TwistedTrapeZoidP":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1} ${object.geometry.parameters.dx2} ${object.geometry.parameters.dy1} ${object.geometry.parameters.dz} ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2} ${object.geometry.parameters.dx3} ${object.geometry.parameters.dx4}\n`
-					
-					break;
-
-				case "TwistedTubs":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin} ${object.geometry.parameters.pRMax} ${object.geometry.parameters.pDz} ${object.geometry.parameters.pDPhi}\n`
-					
-					break;
-
-				case "Tetrahedra":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
-					
-					break;
-
-				case "Hyperboloid":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} HYPE ${object.geometry.parameters.radiusIn} ${object.geometry.parameters.radiusOut} ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}\n`
-					
-					break;
-
-				case "Polycone":
-
-					solidText1 += `:solid ${object.name}_${object.uuid} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
-					
-					break;
-
-				case "Polyhedra":
-					
-					solidText1 += `:solid ${object.name}_${object.uuid} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z} ${object.geometry.parameters.rOuter}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.semiAxisY/2*100}*cm ${object.geometry.parameters.Dz/2*100}*cm\n`
 					
 					break;
 				
-				case "united_object":
+				case "aEllipsoidGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPSOID ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.zSemiAxis/2*100}*cm ${object.geometry.parameters.zBottomCut} ${object.geometry.parameters.zTopCut}\n`
+					
+					break;
+
+				case "aEllipticalConeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis/2*100}*cm ${object.geometry.parameters.ySemiAxis/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.zTopCut}\n`
+					
+					break;
+
+				case "aTwistedBoxGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2*100}*cm ${object.geometry.parameters.height/2*100}*cm ${object.geometry.parameters.depth/2*100}*cm\n`
+					
+					break;
+
+				case "aTwistedTrdGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.twistedangle}\n`
+					
+					break;
+
+				case "aTwistedTrapGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2*100}*cm ${object.geometry.parameters.dx2/2*100}*cm ${object.geometry.parameters.dy1/2*100}*cm ${object.geometry.parameters.dz/2*100}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2*100}*cm ${object.geometry.parameters.dx3/2*100}*cm ${object.geometry.parameters.dx4/2*100}*cm\n`
+					
+					break;
+
+				case "aTwistedTubeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin/2*100}*cm ${object.geometry.parameters.pRMax/2*100}*cm ${object.geometry.parameters.pDz/2*100}*cm ${object.geometry.parameters.pDPhi}\n`
+					
+					break;
+
+				case "aTetrahedraGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
+					
+					break;
+
+				case "aHyperboloidGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn/2*100}*cm ${object.geometry.parameters.radiusOut/2*100}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2*100}*cm\n`
+					
+					break;
+
+				case "aPolyconeGeometry":
+
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z/2*100}*cm ${object.geometry.parameters.rOuter}\n`
+					
+					break;
+
+				case "aPolyhedraGeometry":
+					
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z/2*100}*cm ${object.geometry.parameters.rOuter}\n`
+					
+					break;
+				
+				case "unitedGeometry":
 
 					{
 						
@@ -777,12 +776,12 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 
-						solidText1 += `:solid ${object.name}_${object.uuid} UNION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} UNION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
 					}
 					
 					break;
 
-				case "subtracted_object":
+				case "subtractedGeometry":
 
 					{
 						
@@ -798,12 +797,12 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 						
-						solidText1 += `:solid ${object.name}_${object.uuid} SUBTRACTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`	
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} SUBTRACTION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`	
 					}
 					
 					break;
 					
-				case "intersected_object":
+				case "intersectedGeometry":
 
 					{
 						
@@ -819,7 +818,7 @@ function MenubarFile( editor ) {
 						const positionY = positionY2 - positionY1;
 						const positionZ = positionZ2 - positionZ1;
 
-						solidText1 += `:solid ${object.name}_${object.uuid} INTERSECTION ${object.childrenObject[0].name}_${object.childrenObject[0].uuid} ${object.childrenObject[1].name}_${object.childrenObject[1].uuid} ${object.name}_${object.uuid}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
+						solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} INTERSECTION ${object.childrenObject[0].geometry.name} ${object.childrenObject[1].geometry.name} ${object.name}_rot_rel ${positionX} ${positionY} ${positionZ}\n`
 
 					}
 					
@@ -837,162 +836,191 @@ function MenubarFile( editor ) {
 		
 		var solidText = ''
 		var voluText ='';
+		var colorText = '';
 		var placeText = '';
 		var rotationText = '';
 
 		if(modelCount > 0) {
-			for (let i=0; i<modelCount; i++) {
-				//:solid base TUBS 5*cm 14*cm 5*cm 0 360
-				const children = editor.scene.children[i];
+			let i = 0;
+			editor.scene.traverse(function (children) {
 
-				switch (children.name) {
-					case "Box":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}_${children.uuid} BOX ${children.geometry.parameters.width} ${children.geometry.parameters.depth} ${children.geometry.parameters.height}\n`
-						break;
+				if (children.isMesh) {
 	
-					case "Sphere":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} SPHERE ${children.geometry.parameters.radius} ${children.geometry.parameters.phiStart} ${children.geometry.parameters.phiLength} ${children.geometry.parameters.thetaStart} ${children.geometry.parameters.thetaLength}\n`
-						break;
-	
-					case "Tubs":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}_${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
-						break;
-	
-					case "CTubs":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TUBS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
-						break;
-	
-					case "Cone":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} CONS ${children.geometry.parameters.pRMin1} ${children.geometry.parameters.pRMin2} ${children.geometry.parameters.pRMax1} ${children.geometry.parameters.pRMax2} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
-						break;
-	
-					case "Parallelepiped":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} PARA ${children.geometry.parameters.dx} ${children.geometry.parameters.dy} ${children.geometry.parameters.dz} ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
-						break;
-	
-					case "TrapeZoid":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}_${children.uuid} TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz}\n`
-						break;
-	
-					case "aTrapeZoidP": 
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TRAP ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4} ${children.geometry.parameters.phi}\n`
-						break;
-	
-					case "aTorus":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TORUS ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pRTor} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.sDPhi}\n`
-						break;
-					
-					case "EllipeCylnder":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.semiAxisY} ${children.geometry.parameters.Dz}\n`
-						break;
-					
-					case "Ellipsoid":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} ELLIPSOID ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.zSemiAxis} ${children.geometry.parameters.zBottomCut} ${children.geometry.parameters.zTopCut}\n`
-						break;
-	
-					case "aEllipticalCone":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis} ${children.geometry.parameters.ySemiAxis} ${children.geometry.parameters.height} ${children.geometry.parameters.zTopCut}\n`
-						break;
-	
-					case "TwistedBox":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width} ${children.geometry.parameters.height} ${children.geometry.parameters.depth}\n`
-						break;
-	
-					case "TwistedTrapeZoid":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TRD ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dz} ${children.geometry.parameters.twistedangle}\n`
-						break;
-	
-					case "TwistedTrapeZoidP":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1} ${children.geometry.parameters.dx2} ${children.geometry.parameters.dy1} ${children.geometry.parameters.dz} ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2} ${children.geometry.parameters.dx3} ${children.geometry.parameters.dx4}\n`
-						break;
-	
-					case "TwistedTubs":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin} ${children.geometry.parameters.pRMax} ${children.geometry.parameters.pDz} ${children.geometry.parameters.pDPhi}\n`
-						break;
-	
-					case "Tetrahedra":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
-						break;
-	
-					case "Hyperboloid":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} HYPE ${children.geometry.parameters.radiusIn} ${children.geometry.parameters.radiusOut} ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}\n`
-						break;
-	
-					case "Polycone":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`									
-						solidText += `:solid ${children.name}_${children.uuid} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
-						break;
-	
-					case "Polyhedra":
-						rotationText += `:rotm ${children.name}_${children.uuid}_rot ${children.rotation.x} ${children.rotation.y} ${children.rotation.z}\n`											
-						solidText += `:solid ${children.name}_${children.uuid} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
-						break;
-	
-					case "united_object":
-						traversebooleanObjects(children, function (child) {
-							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child, true);
-							}
-							solidText += getSolidText(child);
-						});
-						break;
+					// for (let i=0; i<modelCount; i++) {
+						//:solid base TUBS 5*cm 14*cm 5*cm 0 360
+						// const children = editor.scene.children[i];
 		
-					case "subtracted_object":
-						traversebooleanObjects(children, function (child) {
-							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child, true);
-							}
-							solidText += getSolidText(child);
-						});
-						break;
-							
-					case "intersected_object":
-						traversebooleanObjects(children, function (child) {
-							if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
-								rotationText += getRotationText(child, true);
-							}
-							solidText += getSolidText(child);
-						});
-						break;
-
-					default:
-	
-						break;
-				}
-				//:volu gear1 bas5 G4_STAINLESS-STEEL
-				voluText += `:volu ${children.name}-volu-${children.uuid} ${children.name}_${children.uuid} ${children.material.newmaterial?.elementType}\n`
-
-				//:place gear1 1 world r000 -2*cm -8*cm 0
-				if(children.name === "united_object" || children.name === "subtracted_object" || children.name === "intersected_object") {
-					placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.childrenObject[0].position.x} ${children.childrenObject[0].position.y} ${children.childrenObject[0].position.z}\n`
-				}
-				else {
-					placeText += `:place ${children.name}-volu-${children.uuid} ${i+1} world ${children.name}_${children.uuid}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
-				}
-
+						switch (children.geometry.type) {
+							case "BoxGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} BOX ${children.geometry.parameters.width/2*100}*cm ${children.geometry.parameters.depth/2*100}*cm ${children.geometry.parameters.height/2*100}*cm\n`
+								break;
 			
-				//:vis world OFF
-			}
+							case "SphereGeometry2":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} SPHERE ${children.geometry.parameters.radius/2*100}*cm ${children.geometry.parameters.phiStart} ${children.geometry.parameters.phiLength} ${children.geometry.parameters.thetaStart} ${children.geometry.parameters.thetaLength}\n`
+								break;
+			
+							case "aTubeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin/2*100}*cm ${children.geometry.parameters.pRMax/2*100}*cm ${children.geometry.parameters.pDz/2*100}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								break;
+			
+							case "aCutTubeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin/2*100}*cm ${children.geometry.parameters.pRMax/2*100}*cm ${children.geometry.parameters.pDz/2*100}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								break;
+			
+							case "aConeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin1/2*100}*cm ${children.geometry.parameters.pRMin2/2*100}*cm ${children.geometry.parameters.pRMax1/2*100}*cm ${children.geometry.parameters.pRMax2/2*100}*cm ${children.geometry.parameters.pDz/2*100}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								break;
+			
+							case "aParallGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} PARA ${children.geometry.parameters.dx/2*100}*cm ${children.geometry.parameters.dy/2*100}*cm ${children.geometry.parameters.dz/2*100}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
+								break;
+			
+							case "aTrapeZoidGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRD ${children.geometry.parameters.dx1/2*100}*cm ${children.geometry.parameters.dx2/2*100}*cm ${children.geometry.parameters.dy1/2*100}*cm ${children.geometry.parameters.dy2/2*100}*cm ${children.geometry.parameters.dz/2*100}*cm\n`
+								break;
+			
+							case "aTrapeZoidPGeometry": 
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.dz/2*100}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1/2*100}*cm ${children.geometry.parameters.dx1/2*100}*cm ${children.geometry.parameters.dx2/2*100}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2/2*100}*cm ${children.geometry.parameters.dx3/2*100}*cm ${children.geometry.parameters.dx4/2*100}*cm ${children.geometry.parameters.phi}\n`
+								break;
+			
+							case "aTorusGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TORUS ${children.geometry.parameters.pRMin/2*100}*cm ${children.geometry.parameters.pRMax/2*100}*cm ${children.geometry.parameters.pRTor} ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.sDPhi}\n`
+								break;
+							
+							case "aEllipticalCylinderGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis/2*100}*cm ${children.geometry.parameters.semiAxisY/2*100}*cm ${children.geometry.parameters.Dz/2*100}*cm\n`
+								break;
+							
+							case "aEllipsoidGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPSOID ${children.geometry.parameters.xSemiAxis/2*100}*cm ${children.geometry.parameters.ySemiAxis/2*100}*cm ${children.geometry.parameters.zSemiAxis/2*100}*cm ${children.geometry.parameters.zBottomCut} ${children.geometry.parameters.zTopCut}\n`
+								break;
+			
+							case "aEllipticalConeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis/2*100}*cm ${children.geometry.parameters.ySemiAxis/2*100}*cm ${children.geometry.parameters.height/2*100}*cm ${children.geometry.parameters.zTopCut}\n`
+								break;
+			
+							case "aTwistedBoxGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width/2*100}*cm ${children.geometry.parameters.height/2*100}*cm ${children.geometry.parameters.depth/2*100}*cm\n`
+								break;
+			
+							case "aTwistedTrdGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRD ${children.geometry.parameters.dx1/2*100}*cm ${children.geometry.parameters.dx2/2*100}*cm ${children.geometry.parameters.dy1/2*100}*cm ${children.geometry.parameters.dy2/2*100}*cm ${children.geometry.parameters.dz/2*100}*cm ${children.geometry.parameters.twistedangle}\n`
+								break;
+			
+							case "aTwistedTrapGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1/2*100}*cm ${children.geometry.parameters.dx2/2*100}*cm ${children.geometry.parameters.dy1/2*100}*cm ${children.geometry.parameters.dz/2*100}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2/2*100}*cm ${children.geometry.parameters.dx3/2*100}*cm ${children.geometry.parameters.dx4/2*100}*cm\n`
+								break;
+			
+							case "aTwistedTubeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin/2*100}*cm ${children.geometry.parameters.pRMax/2*100}*cm ${children.geometry.parameters.pDz/2*100}*cm ${children.geometry.parameters.pDPhi}\n`
+								break;
+			
+							case "aTetrahedraGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
+								break;
+			
+							case "aHyperboloidGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} HYPE ${children.geometry.parameters.radiusIn/2*100}*cm ${children.geometry.parameters.radiusOut/2*100}*cm ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz/2*100}*cm\n`
+								break;
+			
+							case "aPolyconeGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+								break;
+			
+							case "aPolyhedraGeometry":
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+								break;
+			
+							case "unitedGeometry":
+								traversebooleanObjects(children, function (child) {
+									if( child.geometry.type === "unitedGeometry" || child.geometry.type === "subtractedGeometry" || child.geometry.type === "intersectedGeometry"){
+										rotationText += getRotationText(child, true);
+									}
+									solidText += getSolidText(child);
+								});
+								break;
+				
+							case "subtractedGeometry":
+								traversebooleanObjects(children, function (child) {
+									if( child.geometry.type === "unitedGeometry" || child.geometry.type === "subtractedGeometry" || child.geometry.type === "intersectedGeometry"){
+										rotationText += getRotationText(child, true);
+									}
+									solidText += getSolidText(child);
+								});
+								break;
+									
+							case "intersectedGeometry":
+								traversebooleanObjects(children, function (child) {
+									if( child.geometry.type === "unitedGeometry" || child.geometry.type === "subtractedGeometry" || child.geometry.type === "intersectedGeometry"){
+										rotationText += getRotationText(child, true);
+									}
+									solidText += getSolidText(child);
+								});
+								break;
+		
+							default:
+			
+								break;
+						}
+						//:volu gear1 bas5 G4_STAINLESS-STEEL
+						if(children.geometry.type !== "aGenericTrapGeometry" && children.geometry.type !== "aParaboloidGeometry"){
+							voluText += `:volu ${children.name} ${children.geometry.name ? children.geometry.name : children.name} ${children.material.newmaterial?.elementType}\n`
+						}
+						
+						colorText += `:color ${children.name} ${children.material.color.r} ${children.material.color.g} ${children.material.color.b}\n`
+						console.log(children.material.color.r)
 
-			var sceneText = `:volu world BOX 10 10 10 G4_AIR\n\n`;
+		
+						//:place gear1 1 world r000 -2*cm -8*cm 0
+						if(children.geometry.type === "unitedGeometry" || children.geometry.type === "subtractedGeometry" || children.geometry.type === "intersectedGeometry") {
+							if (children.parent.isMesh) {
+								placeText += `:place ${children.name} ${i+1} ${children.parent.name} ${children.name}_rot ${children.childrenObject[0].position.x} ${children.childrenObject[0].position.y} ${children.childrenObject[0].position.z}\n`
+							} else {
+								placeText += `:place ${children.name} ${i+1} world ${children.name}_rot ${children.childrenObject[0].position.x} ${children.childrenObject[0].position.y} ${children.childrenObject[0].position.z}\n`
+							}
+							
+						}
+						else {
+							if (children.parent.isMesh) {
+								placeText += `:place ${children.name} ${i+1} ${children.parent.name} ${children.name}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`	
+							} else {
+								placeText += `:place ${children.name} ${i+1} world ${children.name}_rot ${children.position.x} ${children.position.y} ${children.position.z}\n`
+							}
+							
+						}
+		
+					
+						//:vis world OFF
+					// }	
+
+					i++;
+	
+				}
+	
+			});
+
+
+			var sceneText = `:volu world BOX 5*m 5*m 5*m G4_AIR\n\n`;
 
 			sceneText += `:rotm r000 0 0 0\n`;
 			sceneText += `${rotationText}\n`;
@@ -1001,8 +1029,10 @@ function MenubarFile( editor ) {
 
 			sceneText += `${voluText}\n`;
 
+			sceneText += `${colorText}\n`;
+
 			sceneText += `${placeText}`;
-			sceneText += `:vis world OFF`;
+			sceneText += `:vis world OFF\n`;
 
 			downloadGeant4File(sceneText, 'detector.tg')
 		} else {
@@ -1050,88 +1080,88 @@ function MenubarFile( editor ) {
 
 		function getSolidText( children ) {
 			let solidsText = '';
-			switch (children.name) {
-				case "Box":
+			switch (children.geometry.type) {
+				case "BoxGeometry":
 					
 					solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 					break;
 
-				case "Sphere":
+				case "SphereGeometry2":
 					
 					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Tubs":
+				case "aTubeGeometry":
 					
 					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "CTubs":
+				case "aCutTubeGeometry":
 					
 					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Cone":
+				case "aConeGeometry":
 					
 					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Parallelepiped":
+				case "aParallGeometry":
 					
 					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TrapeZoid":
+				case "aTrapeZoidGeometry":
 					
 					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aTrapeZoidP": 
+				case "aTrapeZoidPGeometry": 
 					
 					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aTorus":
+				case "aTorusGeometry":
 					
 					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
-				case "EllipeCylnder":
+				case "aEllipticalCylinderGeometry":
 					
 					solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
-				case "Ellipsoid":
+				case "aEllipsoidGeometry":
 					
 					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" zcut1="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aEllipticalCone":
+				case "aEllipticalConeGeometry":
 					
 					solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedBox":
+				case "aTwistedBoxGeometry":
 					
 					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTrapeZoid":
+				case "aTwistedTrdGeometry":
 					
 					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTrapeZoidP":
+				case "aTwistedTrapGeometry":
 					
 					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTubs":
+				case "aTwistedTubeGeometry":
 					
 					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Tetrahedra":
+				case "aTetrahedraGeometry":
 					
 					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 					break;
@@ -1141,12 +1171,12 @@ function MenubarFile( editor ) {
 					solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Hyperboloid":
+				case "aHyperboloidGeometry":
 					
 					solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Polycone":
+				case "aPolyconeGeometry":
 					
 					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
@@ -1157,7 +1187,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </polycone>\n`;
 					break;
 
-				case "Polyhedra":
+				case "aPolyhedraGeometry":
 					
 					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
@@ -1168,7 +1198,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </polyhedra>\n`;
 					break;
 				
-				case "united_object":
+				case "unitedGeometry":
 
 					solidsText += `      <union name="${children.name}_${children.uuid}">\n`;
 					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -1178,7 +1208,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </union>\n`;
 					break;
 
-				case "subtracted_object":
+				case "subtractedGeometry":
 
 					solidsText += `      <subtraction name="${children.name}_${children.uuid}">\n`;
 					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -1188,7 +1218,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </union>\n`;
 					break;
 					
-				case "intersected_object":
+				case "intersectedGeometry":
 
 					solidsText += `      <intersection name="${children.name}_${children.uuid}">\n`;
 					solidsText += `        <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -1220,15 +1250,15 @@ function MenubarFile( editor ) {
 	
 			traversebooleanObjects(object, function ( child ) {
 	
-				if( child.name === "united_object" || child.name === "subtracted_object" || child.name === "intersected_object"){
+				if( child.geometry.type === "unitedGeometry" || child.geometry.type === "subtractedGeometry" || child.geometry.type === "intersectedGeometry"){
 					rotationText += getRotationText(child);
 					positionText += getPositionText(child)
 				}
 				solidText += getSolidText(child);
 	
 			} );
-			switch (object.name) {
-				case "Box":
+			switch (object.geometry.type) {
+				case "BoxGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1275,7 +1305,7 @@ function MenubarFile( editor ) {
 	
 					break;
 			
-				case "Sphere":
+				case "SphereGeometry2":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1321,7 +1351,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'spehre.gdml')
 					break;
 		
-				case "Tubs":
+				case "aTubeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1367,7 +1397,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Tube.gdml')
 					break;
 							
-				case "CTubs":
+				case "aCutTubeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1413,7 +1443,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Ctube.gdml')
 					break;
 												
-				case "Cone":
+				case "aConeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1459,7 +1489,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Cone.gdml')
 					break;
 																	
-				case "Parallelepiped":
+				case "aParallGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1505,7 +1535,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Parallelepiped.gdml')
 					break;
 																						
-				case "TrapeZoid":
+				case "aTrapeZoidGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1551,7 +1581,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Trapezoid.gdml')
 					break;
 																											
-				case "aTrapeZoidP":
+				case "aTrapeZoidPGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1597,7 +1627,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Trapezoid.gdml')
 					break;
 																										
-				case "aTorus":
+				case "aTorusGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1643,7 +1673,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Torus.gdml')
 					break;
 																																
-				case "EllipeCylnder":
+				case "aEllipticalCylinderGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1689,7 +1719,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'EllipeTube.gdml')
 					break;
 																																						
-				case "Ellipsoid":
+				case "aEllipsoidGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1735,7 +1765,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Ellipsoid.gdml')
 					break;
 																																												
-				case "aEllipticalCone":
+				case "aEllipticalConeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1781,7 +1811,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'EllipticalCone.gdml')
 					break;
 																																																
-				case "TwistedBox":
+				case "aTwistedBoxGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1827,7 +1857,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'TwistedBox.gdml')
 					break;
 																																																				
-				case "TwistedTrapeZoid":
+				case "aTwistedTrdGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1873,7 +1903,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'TwistedTrapeZoid.gdml')
 					break;
 																																																								
-				case "TwistedTrapeZoidP":
+				case "aTwistedTrapGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1919,7 +1949,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'TwistedTrapeZoidP.gdml')
 					break;
 																																																												
-				case "TwistedTubs":
+				case "aTwistedTubeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -1965,7 +1995,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'TwistedTubs.gdml')
 					break;
 																																																																
-				case "Tetrahedra":
+				case "aTetrahedraGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -2057,7 +2087,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Paraboloid.gdml')
 					break;
 
-				case "Hyperboloid":
+				case "aHyperboloidGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -2103,7 +2133,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Hyperboloid.gdml')
 					break;
 																																																														
-				case "Polycone":
+				case "aPolyconeGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -2155,7 +2185,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Polycone.gdml')
 					break;
 																																																																			
-				case "Polyhedra":
+				case "aPolyhedraGeometry":
 					var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 					gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 					gdml += `  <define>\n`;
@@ -2207,7 +2237,7 @@ function MenubarFile( editor ) {
 					downloadGeant4File( gdml, 'Polyhedra.gdml')
 					break;
 					
-					case "united_object":
+					case "unitedGeometry":
 						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 						gdml += `  <define>\n`;
@@ -2253,10 +2283,10 @@ function MenubarFile( editor ) {
 						gdml += `  </setup>\n`;
 						gdml += `</gdml>\n`;
 						
-						downloadGeant4File( gdml, 'united_object.gdml')
+						downloadGeant4File( gdml, 'unitedGeometry.gdml')
 						break;
 					
-						case "subtracted_object":
+						case "subtractedGeometry":
 							var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 							gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 							gdml += `  <define>\n`;
@@ -2302,10 +2332,10 @@ function MenubarFile( editor ) {
 							gdml += `  </setup>\n`;
 							gdml += `</gdml>\n`;
 							
-							downloadGeant4File( gdml, 'subtracted_object.gdml')
+							downloadGeant4File( gdml, 'subtractedGeometry.gdml')
 							break;
 											
-					case "intersected_object":
+					case "intersectedGeometry":
 						var gdml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
 						gdml += `<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">\n`;
 						gdml += `  <define>\n`;
@@ -2351,7 +2381,7 @@ function MenubarFile( editor ) {
 						gdml += `  </setup>\n`;
 						gdml += `</gdml>\n`;
 						
-						downloadGeant4File( gdml, 'intersected_object.gdml')
+						downloadGeant4File( gdml, 'intersectedGeometry.gdml')
 						break;
 	
 				default:
@@ -2402,88 +2432,88 @@ function MenubarFile( editor ) {
 
 		function getSolidText( children ) {
 			let solidsText = '';
-			switch (children.name) {
-				case "Box":
+			switch (children.geometry.type) {
+				case "BoxGeometry":
 					
 					solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 					break;
 
-				case "Sphere":
+				case "SphereGeometry2":
 					
 					solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Tubs":
+				case "aTubeGeometry":
 					
 					solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "CTubs":
+				case "aCutTubeGeometry":
 					
 					solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Cone":
+				case "aConeGeometry":
 					
 					solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Parallelepiped":
+				case "aParallGeometry":
 					
 					solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TrapeZoid":
+				case "aTrapeZoidGeometry":
 					
 					solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aTrapeZoidP": 
+				case "aTrapeZoidPGeometry": 
 					
 					solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aTorus":
+				case "aTorusGeometry":
 					
 					solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
-				case "EllipeCylnder":
+				case "aEllipticalCylinderGeometry":
 					
 					solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 				
-				case "Ellipsoid":
+				case "aEllipsoidGeometry":
 					
 					solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "aEllipticalCone":
+				case "aEllipticalConeGeometry":
 					
 					solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedBox":
+				case "aTwistedBoxGeometry":
 					
 					solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTrapeZoid":
+				case "aTwistedTrdGeometry":
 					
 					solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTrapeZoidP":
+				case "aTwistedTrapGeometry":
 					
 					solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "TwistedTubs":
+				case "aTwistedTubeGeometry":
 					
 					solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Tetrahedra":
+				case "aTetrahedraGeometry":
 					
 					solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 					break;
@@ -2493,12 +2523,12 @@ function MenubarFile( editor ) {
 					solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Hyperboloid":
+				case "aHyperboloidGeometry":
 					
 					solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 					break;
 
-				case "Polycone":
+				case "aPolyconeGeometry":
 					
 					solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
@@ -2509,7 +2539,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </polycone>\n`;
 					break;
 
-				case "Polyhedra":
+				case "aPolyhedraGeometry":
 					
 					solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 
@@ -2520,7 +2550,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </polyhedra>\n`;
 					break;
 				
-				case "united_object":
+				case "unitedGeometry":
 
 					solidsText += `      <union name="${children.name}_${children.uuid}">\n`;
 					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -2530,7 +2560,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </union>\n`;
 					break;
 
-				case "subtracted_object":
+				case "subtractedGeometry":
 
 					solidsText += `      <subtraction name="${children.name}_${children.uuid}">\n`;
 					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -2540,7 +2570,7 @@ function MenubarFile( editor ) {
 					solidsText += `      </union>\n`;
 					break;
 					
-				case "intersected_object":
+				case "intersectedGeometry":
 
 					solidsText += `      <intersection name="${children.name}_${children.uuid}">\n`;
 					solidsText += `      <first ref="${children.childrenObject[0].name}_${children.childrenObject[0].uuid}">\n`;
@@ -2592,88 +2622,88 @@ function MenubarFile( editor ) {
 		if(modelCount > 0) {
 			for (let i=0; i<modelCount; i++) {
 				const children = editor.scene.children[i];
-				switch (children.name) {
-					case "Box":
+				switch (children.geometry.type) {
+					case "BoxGeometry":
 						
 						solidsText += `      <box name="${children.name}_${children.uuid}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" lunit="m"/>\n`;
 						break;
 	
-					case "Sphere":
+					case "SphereGeometry2":
 						
 						solidsText += `      <sphere name="${children.name}_${children.uuid}" rmin="${0}" rmax="${children.geometry.parameters.radius}" deltaphi="${children.geometry.parameters.phiLength}" deltatheta="${children.geometry.parameters.thetaLength}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Tubs":
+					case "aTubeGeometry":
 						
 						solidsText += `      <tube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "CTubs":
+					case "aCutTubeGeometry":
 						
 						solidsText += `      <cutTube name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" lowX="${children.geometry.parameters.pLowNorm.x}" lowY="${children.geometry.parameters.pLowNorm.y}" lowZ="${children.geometry.parameters.pLowNorm.z}" highX="${children.geometry.parameters.pHighNorm.x}" highY="${children.geometry.parameters.pHighNorm.y}" highZ="${children.geometry.parameters.pHighNorm.z}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Cone":
+					case "aConeGeometry":
 						
 						solidsText += `      <cone name="${children.name}_${children.uuid}" rmin1="${children.geometry.parameters.pRMin1}" rmin2="${children.geometry.parameters.pRMin2}" rmax1="${children.geometry.parameters.pRMax1}" rmax2="${children.geometry.parameters.pRMax2}" z="${children.geometry.parameters.pDz}" deltaphi="${children.geometry.parameters.pDPhi}" startphi="${children.geometry.parameters.pSPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Parallelepiped":
+					case "aParallGeometry":
 						
 						solidsText += `      <para name="${children.name}_${children.uuid}" x="${children.geometry.parameters.dx}" y="${children.geometry.parameters.dy}" z="${children.geometry.parameters.dz}" alpha="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "TrapeZoid":
+					case "aTrapeZoidGeometry":
 						
 						solidsText += `      <trd name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "aTrapeZoidP": 
+					case "aTrapeZoidPGeometry": 
 						
 						solidsText += `      <trap name="${children.name}_${children.uuid}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" alpha1="${children.geometry.parameters.alpha}" alpha2="${children.geometry.parameters.alpha}" theta="${children.geometry.parameters.theta}" phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "aTorus":
+					case "aTorusGeometry":
 						
 						solidsText += `      <torus name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.pRMin}" rmax="${children.geometry.parameters.pRMax}" rtor="${children.geometry.parameters.pRTor}" starttheta="${children.geometry.parameters.pSPhi}" deltatheta="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 					
-					case "EllipeCylnder":
+					case "aEllipticalCylinderGeometry":
 						
 						solidsText += `      <eltube name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.semiAxisY}" dz="${children.geometry.parameters.Dz}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 					
-					case "Ellipsoid":
+					case "aEllipsoidGeometry":
 						
 						solidsText += `      <ellipsoid name="${children.name}_${children.uuid}" ax="${children.geometry.parameters.xSemiAxis}" by="${children.geometry.parameters.ySemiAxis}" cz="${children.geometry.parameters.zSemiAxis}" zcut2="${children.geometry.parameters.zBottomCut}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "aEllipticalCone":
+					case "aEllipticalConeGeometry":
 						
 						solidsText += `      <elcone name="${children.name}_${children.uuid}" dx="${children.geometry.parameters.xSemiAxis}" dy="${children.geometry.parameters.ySemiAxis}" zmax="${children.geometry.parameters.height}" zcut="${children.geometry.parameters.zTopCut}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "TwistedBox":
+					case "aTwistedBoxGeometry":
 						
 						solidsText += `      <twistedbox name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.angle}" x="${children.geometry.parameters.width}" y="${children.geometry.parameters.height}" z="${children.geometry.parameters.depth}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "TwistedTrapeZoid":
+					case "aTwistedTrdGeometry":
 						
 						solidsText += `      <twistedtrd name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "TwistedTrapeZoidP":
+					case "aTwistedTrapGeometry":
 						
 						solidsText += `      <twistedtrap name="${children.name}_${children.uuid}" PhiTwist="${children.geometry.parameters.twistedangle}" x1="${children.geometry.parameters.dx1}" x2="${children.geometry.parameters.dx2}" y1="${children.geometry.parameters.dy1}" y2="${children.geometry.parameters.dy2}" z="${children.geometry.parameters.dz}" x3="${children.geometry.parameters.dx3}" x4="${children.geometry.parameters.dx4}" Alph="${children.geometry.parameters.alpha}" Theta="${children.geometry.parameters.theta}" Phi="${children.geometry.parameters.phi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "TwistedTubs":
+					case "aTwistedTubeGeometry":
 						
 						solidsText += `      <twistedtubs name="${children.name}_${children.uuid}" twistedangle="${children.geometry.parameters.twistedangle}" endinnerrad="${children.geometry.parameters.pRMin}" endouterrad="${children.geometry.parameters.pRMax}" zlen="${children.geometry.parameters.pDz}" phi="${children.geometry.parameters.pDPhi}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Tetrahedra":
+					case "aTetrahedraGeometry":
 						
 						solidsText += `      <tet name="${children.name}_${children.uuid}" vertex1="${children.geometry.parameters.anchor}" vertex2="${children.geometry.parameters.p2}" vertex3="${children.geometry.parameters.p3}" vertex4="${children.geometry.parameters.p4}"/>\n`; // Adjust size as needed
 						break;
@@ -2683,12 +2713,12 @@ function MenubarFile( editor ) {
 						solidsText += `      <paraboloid name="${children.name}_${children.uuid}" rhi="${children.geometry.parameters.R2}" rlo="${children.geometry.parameters.R1}" dz="${children.geometry.parameters.pDz}" aunit="deg" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Hyperboloid":
+					case "aHyperboloidGeometry":
 						
 						solidsText += `      <hype name="${children.name}_${children.uuid}" rmin="${children.geometry.parameters.radiusIn}" rmax="${children.geometry.parameters.radiusOut}" z="${children.geometry.parameters.pDz}" inst="${children.geometry.parameters.stereo1}" outst="${children.geometry.parameters.stereo2}" lunit="m"/>\n`; // Adjust size as needed
 						break;
 	
-					case "Polycone":
+					case "aPolyconeGeometry":
 						
 						solidsText += `      <polycone name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
@@ -2699,7 +2729,7 @@ function MenubarFile( editor ) {
 						solidsText += `      </polycone>\n`;
 						break;
 	
-					case "Polyhedra":
+					case "aPolyhedraGeometry":
 						
 						solidsText += `      <polyhedra name="${children.name}_${children.uuid}" startphi="${children.geometry.parameters.SPhi}" deltaphi="${children.geometry.parameters.DPhi}" numsides="${children.geometry.parameters.numSide}" aunit="deg" lunit="m">\n`; // Adjust size as needed
 	
@@ -2710,7 +2740,7 @@ function MenubarFile( editor ) {
 						solidsText += `      </polyhedra>\n`;
 						break;
 	
-					case "united_object":
+					case "unitedGeometry":
 	
 						traversebooleanObjects(children, function ( child ) {
 	
@@ -2721,7 +2751,7 @@ function MenubarFile( editor ) {
 						} );
 						break;
 	
-						case "subtracted_object":
+						case "subtractedGeometry":
 	
 						traversebooleanObjects(children, function ( child ) {
 	
@@ -2732,7 +2762,7 @@ function MenubarFile( editor ) {
 						} );
 						break;
 	
-						case "intersected_object":
+						case "intersectedGeometry":
 	
 						traversebooleanObjects(children, function ( child ) {
 	
@@ -2760,7 +2790,7 @@ function MenubarFile( editor ) {
 					}
 				}
 				// position and rotation properties
-				if(children.name != "united_object" && children.name != "subtracted_object" && children.name != "intersected_object"){
+				if(children.name != "unitedGeometry" && children.name != "subtractedGeometry" && children.name != "intersectedGeometry"){
 					positionText += `    <position name="${children.name}_${children.uuid}_pos" unit="m" x="${children.position.x.toFixed(4)}" y="${children.position.y.toFixed(4)}" z="${children.position.z.toFixed(4)}"/>\n`;
 					rotationText += `    <rotation name="${children.name}_${children.uuid}_rot" unit="m" x="${children.rotation.x.toFixed(4)}" y="${children.rotation.y.toFixed(4)}" z="${children.rotation.z.toFixed(4)}"/>\n`;	
 				}
@@ -2874,7 +2904,6 @@ function MenubarFile( editor ) {
 					break;
 			}
 	
-			console.log(object)
 			let macro = '';
 			
 			macro += `/gps/particle ${object.energykind}\n`

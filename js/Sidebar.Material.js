@@ -56,7 +56,7 @@ function SidebarMaterial(editor) {
 
 	const materialTypeRow = new UIRow();
 	const materialType = new UISelect().setWidth('150px').setFontSize('12px').onChange((event) => {
-		console.log(event.target.value);
+		
 		editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'elementTypes', event.target.value, currentMaterialSlot));
 	});
 
@@ -94,7 +94,7 @@ function SidebarMaterial(editor) {
 	const materialName1 = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
 
 		editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialName1.getValue(), currentMaterialSlot ) );
-		console.log(material)
+		
 
 	} );
 
@@ -627,18 +627,6 @@ function SidebarMaterial(editor) {
 
 		// }
 
-		if (material.newmaterial !== undefined && material.elementTypes !== undefined) {
-
-			if( material.elementTypes === 'BasicMaterial' ){
-				console.log("I am clicked!!", material.newmaterial.id);
-				// materialName.setValue(material.newmaterial.id - 1);
-				// basicMaterialButton.setInnerHTML(compoundMaterialOptions[material.newmaterial.id-1]);
-			} else if( material.elementTypes === 'CompoundMaterial' ) {
-				console.log("I am clicked!!", material.newmaterial.id);
-				// materialName.setValue(material.newmaterial.id - 99);
-			}
-
-		}
 
 		if ( material.name !== undefined ) {
 
@@ -756,7 +744,6 @@ function SidebarMaterial(editor) {
 	});
 
 	function onChangeProperty(basic = false, id = 0) {
-		console.log(basic);
 		if(basic === true) {
 			
 			const materialElement = materialTypeOptions[id];
@@ -765,7 +752,7 @@ function SidebarMaterial(editor) {
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'newmaterial', materialElement, currentMaterialSlot));
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'density', String(materialElement.density), currentMaterialSlot));
 			editor.execute(new SetMaterialValueCommand(editor, editor.selected, 'energy', String(materialElement.energy), currentMaterialSlot));
-			console.log(materialElement.elementType)
+			
 			editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialElement.elementType, currentMaterialSlot ) );
 			
 

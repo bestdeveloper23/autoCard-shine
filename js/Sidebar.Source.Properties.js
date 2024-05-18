@@ -271,7 +271,7 @@ function SidebarSource( editor ) {
 			if( object.source !== undefined ) {
 
 				object.source = SOURCE.type[Number(newsourcename)];
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 
 			}
 
@@ -279,7 +279,7 @@ function SidebarSource( editor ) {
 
 				const newplaneshape = planesourceShape.getValue();
 				object.planeshape = SOURCE.shape.plane[Number(newplaneshape)];
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 				
 			}
 
@@ -287,7 +287,7 @@ function SidebarSource( editor ) {
 
 				const newvolumeshape = volumesourceShape.getValue();
 				object.volumeshape = SOURCE.shape.volume[Number(newvolumeshape)];
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 				
 			}
 
@@ -295,7 +295,7 @@ function SidebarSource( editor ) {
 
 				const newKind = energykind.getValue();
 				object.energykind = SOURCE.particle[Number(newKind)];
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 				
 			}
 
@@ -304,7 +304,7 @@ function SidebarSource( editor ) {
 
 				const newSize = energysize.getValue();
 				object.energysize = newSize;
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 				
 			}
 			
@@ -312,7 +312,7 @@ function SidebarSource( editor ) {
 
 				const newUnit = energyunit.getValue();
 				object.energyunit = SOURCE.unit[Number(newUnit)];
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 				
 			}
 
@@ -368,7 +368,7 @@ function SidebarSource( editor ) {
 			if ( object.fov !== undefined && Math.abs( object.fov - objectFov.getValue() ) >= 0.01 ) {
 
 				editor.execute( new SetValueCommand( editor, object, 'fov', objectFov.getValue() ) );
-				object.updateProjectionMatrix();
+				// object.updateProjectionMatrix();
 
 			}
 
@@ -377,7 +377,7 @@ function SidebarSource( editor ) {
 				editor.execute( new SetValueCommand( editor, object, 'near', objectNear.getValue() ) );
 				if ( object.isOrthographicCamera ) {
 
-					object.updateProjectionMatrix();
+					// object.updateProjectionMatrix();
 
 				}
 
@@ -388,7 +388,7 @@ function SidebarSource( editor ) {
 				editor.execute( new SetValueCommand( editor, object, 'far', objectFar.getValue() ) );
 				if ( object.isOrthographicCamera ) {
 
-					object.updateProjectionMatrix();
+					// object.updateProjectionMatrix();
 
 				}
 

@@ -23,8 +23,8 @@ function SidebarProperties( editor ) {
 
 			container.setDisplay( 'block' );
 
-			updateRows( object );
-			updateUI( object );
+			// updateRows( object );
+			// updateUI( object );
 
 		} else {
 
