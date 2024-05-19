@@ -689,8 +689,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Beam';
-        source.planeshape = "Cylinder";
-        source.volumeshape = "Sphere";
+        // source.planeshape = "Cylinder";
+        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -741,8 +741,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Beam';
-        source.planeshape = "Cylinder";
-        source.volumeshape = "Sphere";
+        // source.planeshape = "Cylinder";
+        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -873,7 +873,7 @@ function BasicSources(editor) {
     options.add(item);
 
 
-    // Surface Elipsoid model
+    // Surface Ellipsoid model
 
     item = new UIDiv();
 
@@ -897,8 +897,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        source.planeshape = "Square";
-        source.volumeshape = "Elipsoid";
+        // source.planeshape = "Square";
+        source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -949,8 +949,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        source.planeshape = "Square";
-        source.volumeshape = "Elipsoid";
+        // source.planeshape = "Square";
+        source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -1105,7 +1105,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1157,7 +1157,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1209,7 +1209,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1261,7 +1261,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1289,7 +1289,7 @@ function BasicSources(editor) {
     options.add(item);
 
 
-    // Volume Elipsoid model
+    // Volume Ellipsoid model
 
     item = new UIDiv();
 
@@ -1313,8 +1313,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
-        source.volumeshape = "Elipsoid";
+        // source.planeshape = "Square";
+        source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -1365,8 +1365,8 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
-        source.volumeshape = "Elipsoid";
+        // source.planeshape = "Square";
+        source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -1416,7 +1416,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Cylinder";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1468,7 +1468,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Cylinder";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1519,7 +1519,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1571,7 +1571,7 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        source.planeshape = "Square";
+        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";

@@ -256,6 +256,10 @@ function SidebarSource( editor ) {
 
 		if ( object !== null ) {
 
+			// if(object.source === "Point") {
+				
+			// }
+
 			const newsourcename = sourceType.getValue();			
 			if ( newsourcename == 1 ) {
 				planesourceShapeRow.setDisplay( 'flex' );
