@@ -22,6 +22,7 @@ function GeometryParametersPanel(editor, object) {
 
     sphiRow.add(new UIText(strings.getKey('sidebar/geometry/apolyhedra_geometry/sphi')).setWidth('90px'));
     sphiRow.add(sphiI);
+    sphiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
     container.add(sphiRow);
 
@@ -32,6 +33,7 @@ function GeometryParametersPanel(editor, object) {
 
     dphiRow.add(new UIText(strings.getKey('sidebar/geometry/apolyhedra_geometry/dphi')).setWidth('90px'));
     dphiRow.add(dphiI);
+    dphiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
     container.add(dphiRow);
 

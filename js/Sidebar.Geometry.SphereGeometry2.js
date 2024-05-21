@@ -46,6 +46,7 @@ function GeometryParametersPanel(editor, object) {
 	
 	startPhiRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/startPhi')).setWidth('90px'));
 	startPhiRow.add(startPhi);
+    startPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add(startPhiRow);
 
@@ -56,6 +57,7 @@ function GeometryParametersPanel(editor, object) {
 	
 	deltaPhiRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/deltaPhi')).setWidth('90px'));
 	deltaPhiRow.add(deltaPhi);
+    deltaPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add(deltaPhiRow);
 
@@ -67,6 +69,7 @@ function GeometryParametersPanel(editor, object) {
 	
 	startThetaRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/startTheta')).setWidth('90px'));
 	startThetaRow.add(startTheta);
+    startThetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add(startThetaRow);
 
@@ -78,6 +81,7 @@ function GeometryParametersPanel(editor, object) {
 	
 	deltaThetaRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/deltaTheta')).setWidth('90px'));
 	deltaThetaRow.add(deltaTheta);
+    deltaThetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add(deltaThetaRow);
 

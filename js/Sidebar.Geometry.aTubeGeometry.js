@@ -56,6 +56,7 @@ function GeometryParametersPanel(editor, object) {
  const pSPhi = new UINumber(parameters.pSPhi).setStep(5).onChange(update);
  pSPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pSPhi')).setWidth('90px'));
  pSPhiRow.add(pSPhi);
+ pSPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
  container.add(pSPhiRow);
 
@@ -65,6 +66,7 @@ function GeometryParametersPanel(editor, object) {
  const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 360).onChange(update);
  pDPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pDPhi')).setWidth('90px'));
  pDPhiRow.add(pDPhi);
+ pDPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
  container.add(pDPhiRow);
 

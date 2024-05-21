@@ -80,6 +80,7 @@ function GeometryParametersPanel(editor, object) {
 
  twistedAngleRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/twistedangle')).setWidth('90px'));
  twistedAngleRow.add(angleI);
+ twistedAngleRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
  container.add(twistedAngleRow);
 

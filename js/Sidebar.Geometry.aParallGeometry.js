@@ -56,6 +56,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	alphaRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/alpha' ) ).setWidth( '90px' ) );
 	alphaRow.add( alphaI );
+  alphaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add( alphaRow );
 
@@ -66,6 +67,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	thetaRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/theta' ) ).setWidth( '90px' ) );
 	thetaRow.add( thetaI );
+  thetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add( thetaRow );
 
@@ -76,7 +78,8 @@ function GeometryParametersPanel( editor, object ) {
 
 	phiRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/phi' ) ).setWidth( '90px' ) );
 	phiRow.add( phiI );
-
+  phiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+  
 	container.add( phiRow );
 
 	//

@@ -56,6 +56,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	twistedangleRow.add( new UIText( strings.getKey( 'sidebar/geometry/atwistedbox_geometry/angle' ) ).setWidth( '90px' ) );
 	twistedangleRow.add( twistedangleI );
+	twistedangleRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
 	container.add( twistedangleRow );
 
