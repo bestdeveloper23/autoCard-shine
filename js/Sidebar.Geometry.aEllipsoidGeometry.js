@@ -22,7 +22,7 @@ function GeometryParametersPanel( editor, object ) {
 	xSemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/xSemiAxis' ) ).setWidth( '90px' ) );
 	xSemiAxisRow.add( xSemiAxisI );
 
-  xSemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  xSemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( xSemiAxisRow );
 
@@ -34,7 +34,7 @@ function GeometryParametersPanel( editor, object ) {
 	ySemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/ySemiAxis' ) ).setWidth( '90px' ) );
 	ySemiAxisRow.add( ySemiAxisI );
 
-  ySemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  ySemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( ySemiAxisRow );
 
@@ -47,7 +47,7 @@ function GeometryParametersPanel( editor, object ) {
 	zSemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/zSemiAxis' ) ).setWidth( '90px' ) );
 	zSemiAxisRow.add( zSemiAxisI );
 
-  zSemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  zSemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( zSemiAxisRow );
 
@@ -59,7 +59,7 @@ function GeometryParametersPanel( editor, object ) {
 	dzTopCutRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/ztopcut' ) ).setWidth( '90px' ) );
 	dzTopCutRow.add( dzTopCutI );
 
-  dzTopCutRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  dzTopCutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( dzTopCutRow );
 
@@ -71,7 +71,7 @@ function GeometryParametersPanel( editor, object ) {
 	dzBottomCutRow.add( new UIText( strings.getKey( 'sidebar/geometry/aellipsoid_geometry/zbottomcut' ) ).setWidth( '90px' ) );
 	dzBottomCutRow.add( dzBottomCutI );
 
-  dzBottomCutRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  dzBottomCutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( dzBottomCutRow );
 

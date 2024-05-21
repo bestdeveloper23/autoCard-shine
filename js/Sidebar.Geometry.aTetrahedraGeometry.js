@@ -25,7 +25,7 @@ function GeometryParametersPanel(editor, object) {
  anchorRow.add(anchorY);
  anchorRow.add(anchorZ);
 
- anchorRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ anchorRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(anchorRow);
 
@@ -41,7 +41,7 @@ function GeometryParametersPanel(editor, object) {
  point2Row.add(point2Y);
  point2Row.add(point2Z);
 
- point2Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ point2Row.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(point2Row);
 
@@ -57,7 +57,7 @@ function GeometryParametersPanel(editor, object) {
  point3Row.add(point3Y);
  point3Row.add(point3Z);
 
- point3Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ point3Row.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(point3Row);
 
@@ -73,7 +73,7 @@ function GeometryParametersPanel(editor, object) {
  point4Row.add(point4Y);
  point4Row.add(point4Z);
 
- point4Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ point4Row.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(point4Row);
 

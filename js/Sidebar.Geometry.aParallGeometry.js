@@ -21,7 +21,7 @@ function GeometryParametersPanel( editor, object ) {
 	widthRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/dx' ) ).setWidth( '90px' ) );
 	widthRow.add( width );
 
-  widthRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  widthRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( widthRow );
 
@@ -33,7 +33,7 @@ function GeometryParametersPanel( editor, object ) {
 	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/dy' ) ).setWidth( '90px' ) );
 	heightRow.add( height );
 
-  heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( heightRow );
 
@@ -45,7 +45,7 @@ function GeometryParametersPanel( editor, object ) {
 	depthRow.add( new UIText( strings.getKey( 'sidebar/geometry/aparall_geometry/dz' ) ).setWidth( '90px' ) );
 	depthRow.add( depth );
 
-  depthRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+  depthRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add( depthRow );
 

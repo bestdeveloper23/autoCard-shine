@@ -22,7 +22,7 @@ function GeometryParametersPanel(editor, object) {
  maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/maxradius')).setWidth('90px'));
  maxRadiusRow.add(maxRadius);
 
- maxRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ maxRadiusRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(maxRadiusRow);
 
@@ -34,7 +34,7 @@ function GeometryParametersPanel(editor, object) {
  minRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/minradius')).setWidth('90px'));
  minRadiusRow.add(minRadius);
 
- minRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ minRadiusRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(minRadiusRow);
 
@@ -46,7 +46,7 @@ function GeometryParametersPanel(editor, object) {
  torRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/torusradius')).setWidth('90px'));
  torRadiusRow.add(torRadius);
 
- torRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ torRadiusRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
  
  container.add(torRadiusRow);
 

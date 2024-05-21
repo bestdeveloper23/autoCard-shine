@@ -22,7 +22,7 @@ function GeometryParametersPanel(editor, object) {
 	radiusOutRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/radiusOut')).setWidth('90px'));
 	radiusOutRow.add(radiusOut);
 
-    radiusOutRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+    radiusOutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
 	container.add(radiusOutRow);
 
@@ -35,7 +35,7 @@ function GeometryParametersPanel(editor, object) {
 	radiusInRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/radiusIn')).setWidth('90px'));
 	radiusInRow.add(radiusIn);
 
-    radiusInRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+    radiusInRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
     
 	container.add(radiusInRow);
 

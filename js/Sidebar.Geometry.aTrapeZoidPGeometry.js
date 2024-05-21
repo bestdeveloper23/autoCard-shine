@@ -21,7 +21,7 @@ function GeometryParametersPanel(editor, object) {
  widthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx1')).setWidth('90px'));
  widthRow1.add(width1);
 
- widthRow1.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ widthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(widthRow1);
 
@@ -31,7 +31,7 @@ function GeometryParametersPanel(editor, object) {
  widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx2')).setWidth('90px'));
  widthRow2.add(width2);
 
- widthRow2.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(widthRow2);
 
@@ -43,7 +43,7 @@ function GeometryParametersPanel(editor, object) {
  depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy1')).setWidth('90px'));
  depthRow1.add(depth1);
 
- depthRow1.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ depthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(depthRow1);
 
@@ -55,7 +55,7 @@ function GeometryParametersPanel(editor, object) {
  widthRow3.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx3')).setWidth('90px'));
  widthRow3.add(width3);
 
- widthRow3.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ widthRow3.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(widthRow3);
 
@@ -67,7 +67,7 @@ function GeometryParametersPanel(editor, object) {
  widthRow4.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx4')).setWidth('90px'));
  widthRow4.add(width4);
 
- widthRow4.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ widthRow4.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(widthRow4);
 
@@ -81,7 +81,7 @@ function GeometryParametersPanel(editor, object) {
  depthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy2')).setWidth('90px'));
  depthRow2.add(depth2);
 
- depthRow2.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ depthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(depthRow2);
 
@@ -93,7 +93,7 @@ function GeometryParametersPanel(editor, object) {
  heightRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dz')).setWidth('90px'));
  heightRow.add(height);
 
- heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(heightRow);
 

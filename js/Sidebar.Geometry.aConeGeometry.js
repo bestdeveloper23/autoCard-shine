@@ -22,7 +22,7 @@ function GeometryParametersPanel(editor, object) {
  maxRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/maxradius1')).setWidth('90px'));
  maxRadiusRow1.add(maxRadius1);
 
- maxRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ maxRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(maxRadiusRow1);
 
@@ -34,7 +34,7 @@ function GeometryParametersPanel(editor, object) {
  minRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius1')).setWidth('90px'));
  minRadiusRow1.add(minRadius1);
 
- minRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ minRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
  
  container.add(minRadiusRow1);
 
@@ -46,7 +46,7 @@ function GeometryParametersPanel(editor, object) {
  maxRadiusRow2.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/maxradius2')).setWidth('90px'));
  maxRadiusRow2.add(maxRadius2);
 
- maxRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ maxRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(maxRadiusRow2);
 
@@ -58,7 +58,7 @@ function GeometryParametersPanel(editor, object) {
  minRadiusRow2.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius2')).setWidth('90px'));
  minRadiusRow2.add(minRadius2);
 
- minRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ minRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(minRadiusRow2);
 
@@ -70,7 +70,7 @@ function GeometryParametersPanel(editor, object) {
  heightRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/height')).setWidth('90px'));
  heightRow.add(height);
 
- heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
  container.add(heightRow);
 

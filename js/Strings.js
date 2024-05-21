@@ -147,8 +147,8 @@ function Strings( config ) {
 			'sidebar/properties/geometry': 'Solid',
 			'sidebar/properties/material': 'Material',
 			'sidebar/properties/script': 'Script',
-			'sidebar/properties/unit': 'cm',
-			
+			'sidebar/properties/demensionunit': 'cm',
+			'sidebar/properties/angleunit': '°',
 
 			'sidebar/object/type': 'Type',
 			'sidebar/object/new': 'New',
