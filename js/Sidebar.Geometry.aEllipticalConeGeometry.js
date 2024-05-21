@@ -56,7 +56,7 @@ function GeometryParametersPanel(editor, object) {
  const zTopCutRow = new UIRow();
  const zTopCutI = new UINumber(parameters.zTopCut).setRange(0, parameters.height - 0.01).onChange(update);
 
- zTopCutRow.add(new UIText(strings.getKey('sidebar/geometry/aellipticalcone_geometry/height')).setWidth('90px'));
+ zTopCutRow.add(new UIText(strings.getKey('sidebar/geometry/aellipticalcone_geometry/topcut')).setWidth('90px'));
  zTopCutRow.add(zTopCutI);
 
  zTopCutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
@@ -84,7 +84,7 @@ function GeometryParametersPanel(editor, object) {
   finalMesh.updateMatrix();
 
   dzI.setRange(zTopCut + 0.01, Infinity);
-  zTopCutI.setRange(0, zTopCut - 0.01);
+  zTopCutI.setRange(0, height - 0.01);
   
   finalMesh.geometry.name = object.geometry.name;
 
