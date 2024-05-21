@@ -79,17 +79,11 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-		editor.execute( new SetGeometryCommand( editor, object, new THREE.BoxGeometry(
-			width.getValue(),
-			height.getValue(),
-			depth.getValue(),
-			1,
-			1,
-			1
-			// widthSegments.getValue(),
-			// heightSegments.getValue(),
-			// depthSegments.getValue()
-		) ) );
+		const geometry = new THREE.BoxGeometry(width.getValue(), height.getValue(), depth.getValue(), 1, 1, 1);
+
+		geometry.name = object.geometry.name;
+
+		editor.execute( new SetGeometryCommand( editor, object, geometry ) );
 
 	}
 

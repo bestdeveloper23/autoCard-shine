@@ -143,6 +143,8 @@ function GeometryParametersPanel( editor, object ) {
   finalMesh.updateMatrix();
   finalMesh.name = 'Ellipsoid';
 
+  finalMesh.geometry.name = object.geometry.name;
+  
 		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
 
 	}

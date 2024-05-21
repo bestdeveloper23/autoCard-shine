@@ -60,24 +60,25 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-  const twistedangle = twistedangleI.getValue(), pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue();
+		const twistedangle = twistedangleI.getValue(), pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue();
 
-  
-  const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
-  geometry.type = 'aTwistedBoxGeometry';
-  const positionAttribute = geometry.getAttribute('position');
+		
+		const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
+		geometry.type = 'aTwistedBoxGeometry';
+		const positionAttribute = geometry.getAttribute('position');
 
-  let vec3 = new THREE.Vector3();
-  let axis_vector = new THREE.Vector3(0, 1, 0);
-  for (let i = 0; i < positionAttribute.count; i++) {
-   vec3.fromBufferAttribute(positionAttribute, i);
-   vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
-   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-   
-  }
- 
-  const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
-  geometry.parameters = param;
+		let vec3 = new THREE.Vector3();
+		let axis_vector = new THREE.Vector3(0, 1, 0);
+		for (let i = 0; i < positionAttribute.count; i++) {
+		vec3.fromBufferAttribute(positionAttribute, i);
+		vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
+		geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+		
+		}
+		
+		const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+		geometry.parameters = param;
+		geometry.name = object.geometry.name;
 
 		editor.execute( new SetGeometryCommand( editor, object, geometry));
 

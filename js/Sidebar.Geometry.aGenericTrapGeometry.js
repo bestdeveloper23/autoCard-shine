@@ -146,6 +146,8 @@ function GeometryParametersPanel(editor, object) {
         const param = { 'pDz': pDz, 'px': px, 'py': py };
         geometry.parameters = param;
         geometry.type = 'aGenericTrapGeometry';
+        geometry.name = object.geometry.name;
+
         editor.execute(new SetGeometryCommand(editor, object, geometry));
 
     }

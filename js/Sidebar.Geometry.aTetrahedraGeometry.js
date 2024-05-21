@@ -85,6 +85,8 @@ function GeometryParametersPanel(editor, object) {
   geometry.parameters = param;
   geometry.type = 'aTetrahedraGeometry';
 
+  geometry.name = object.geometry.name;
+
   editor.execute(new SetGeometryCommand(editor, object, geometry));
 
  }

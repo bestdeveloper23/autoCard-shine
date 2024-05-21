@@ -64,6 +64,8 @@ function GeometryParametersPanel( editor, object ) {
 		finalMesh.name = 'EllipeCylnder';
 		finalMesh.updateMatrix();
 
+		finalMesh.geometry.name = object.geometry.name;
+
 		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
 
 	}

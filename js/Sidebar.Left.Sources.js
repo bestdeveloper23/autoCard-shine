@@ -784,7 +784,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshStandardMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -836,7 +836,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshStandardMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -1200,7 +1200,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshStandardMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -1214,10 +1214,10 @@ function BasicSources(editor) {
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        source.halfX = 1;
-        source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
+        // source.halfX = 1;
+        // source.halfY = 1;
+        // source.halfZ = 1;
+        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
@@ -1252,7 +1252,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshStandardMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -1266,10 +1266,10 @@ function BasicSources(editor) {
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        source.halfX = 1;
-        source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
+        // source.halfX = 1;
+        // source.halfY = 1;
+        // source.halfZ = 1;
+        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {

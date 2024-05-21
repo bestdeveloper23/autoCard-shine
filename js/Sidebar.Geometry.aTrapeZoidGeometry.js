@@ -215,6 +215,8 @@ function GeometryParametersPanel(editor, object) {
     finalMesh.updateMatrix();
     finalMesh.name = 'TrapeZoid';
 
+    finalMesh.geometry.name = object.geometry.name;
+    
     editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
   }
 

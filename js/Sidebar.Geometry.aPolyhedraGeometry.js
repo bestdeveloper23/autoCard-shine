@@ -97,6 +97,8 @@ function GeometryParametersPanel(editor, object) {
         finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
 
+        finalMesh.geometry.name = object.geometry.name;
+        
         editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 
     }

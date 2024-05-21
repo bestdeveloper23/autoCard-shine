@@ -189,6 +189,8 @@ function GeometryParametersPanel(editor, object) {
         mesh.geometry.type = 'SphereGeometry2';
 		mesh.updateMatrix();
 
+        mesh.geometry.name = object.geometry.name;
+
 		editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));
 
 		radiusIn.setRange(0, radiusOut.getValue());

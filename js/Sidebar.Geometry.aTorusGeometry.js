@@ -160,7 +160,8 @@ function GeometryParametersPanel(editor, object) {
   minRadius.setRange(0, pRMax - 0.001);
   torRadius.setRange(pRMax + 0.001, Infinity);
   
-
+  finalMesh.geometry.name = object.geometry.name;
+  
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 
  }

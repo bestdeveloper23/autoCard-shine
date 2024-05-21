@@ -9,8 +9,12 @@ import { SetPositionCommand } from './commands/SetPositionCommand.js';
 import { SetRotationCommand } from './commands/SetRotationCommand.js';
 import { SetScaleCommand } from './commands/SetScaleCommand.js';
 import { SetColorCommand } from './commands/SetColorCommand.js';
+import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
+
+import { CSG } from './libs/CSGMesh.js';
 
 import { SOURCE } from './libs/nucleardata/radiation.js';
+
 
 function SidebarSource( editor ) {
 
@@ -256,10 +260,6 @@ function SidebarSource( editor ) {
 
 		if ( object !== null ) {
 
-			// if(object.source === "Point") {
-				
-			// }
-
 			const newsourcename = sourceType.getValue();			
 			if ( newsourcename == 1 ) {
 				planesourceShapeRow.setDisplay( 'flex' );
@@ -323,6 +323,10 @@ function SidebarSource( editor ) {
 			const newHalfX = sourceX.getValue();
 			if( object.halfX !== undefined ) {
 
+				if(object.source === "Plane" && object.planeshape === "Circle") {
+					const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
+				}
+
 				object.halfX = newHalfX;
 				
 			}
@@ -337,6 +341,26 @@ function SidebarSource( editor ) {
 			const newHalfZ = sourceX.getValue();
 			if( object.halfZ !== undefined ) {
 
+				if ( object.source === "Surface" && object.volumeshape === "Cylinder") {
+
+					const radius = sourceOuterRadius.getValue();
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if ( object.source === "Volume" && object.volumeshape === "Cylinder") {
+
+					const radius = sourceOuterRadius.getValue();
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if ( object.source === "Surface" && object.volumeshape === "Ellipsoid") {
+					console.log("Here");
+				}
+
 				object.halfZ = newHalfZ;
 				
 			}
@@ -344,15 +368,100 @@ function SidebarSource( editor ) {
 			const newInRadius = sourceInRadius.getValue();
 			if( object.innerradius !== undefined ) {
 
+				if( object.source === "Plane" && object.planeshape === "Annulus") {
+
+					const outerRadius = newInRadius;
+					const innerRadius = sourceOuterRadius.getValue();
+					
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius, outerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+
+					const sourceModelMaterial = new THREE.MeshStandardMaterial();
+					const secondModelMaterial = new THREE.MeshStandardMaterial();
+
+					const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+					const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
+
+					let CSGMesh1 = CSG.fromMesh(firstModel);
+					let secondMesh = CSG.fromMesh(secondModel);
+
+					CSGMesh1 = CSGMesh1.subtract(secondMesh);
+
+					const sourceModel = CSG.toMesh(CSGMesh1, new THREE.Matrix4());
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				}
+
 				object.innerradius = newInRadius;
+				sourceInRadius.setRange(0, sourceOuterRadius.getValue() - 0.00001);
 				
 			}
 
 			const newOutRadius = sourceOuterRadius.getValue();
 			if( object.outerradius !== undefined ) {
 
+				if(object.source === "Plane" && object.planeshape === "Circle") {
+					const sourceModelGeometry = new THREE.CylinderGeometry(newOutRadius, newOutRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if( object.source === "Plane" && object.planeshape === "Annulus") {
+
+					const outerRadius = newOutRadius;
+					const innerRadius = sourceInRadius.getValue();
+					
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius, outerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+
+					const sourceModelMaterial = new THREE.MeshStandardMaterial();
+					const secondModelMaterial = new THREE.MeshStandardMaterial();
+
+					const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+					const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
+
+					let CSGMesh1 = CSG.fromMesh(firstModel);
+					let secondMesh = CSG.fromMesh(secondModel);
+
+					CSGMesh1 = CSGMesh1.subtract(secondMesh);
+
+					const sourceModel = CSG.toMesh(CSGMesh1, new THREE.Matrix4());
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if ( object.source === "Surface" && object.volumeshapes === "Sphere") {
+
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if ( object.source === "Volume" && object.volumeshape === "Sphere") {
+
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if ( object.source === "Surface" && object.volumeshape === "Cylinder") {
+
+					const radius = newOutRadius;
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if ( object.source === "Volume" && object.volumeshape === "Cylinder") {
+
+					const radius = newOutRadius;
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				}
+
 				object.outerradius = newOutRadius;
 				
+				sourceInRadius.setRange(sourceInRadius.getValue() + 0.00001, Infinity);
+
 			}
 
 			const newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );

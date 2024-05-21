@@ -94,6 +94,9 @@ function GeometryParametersPanel(editor, object) {
         const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aParaboloidGeometry';
+
+        finalMesh.geometry.name = object.geometry.name;
+        
         editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 
     }

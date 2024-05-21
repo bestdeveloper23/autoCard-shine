@@ -260,7 +260,7 @@ function MenubarFile( editor ) {
 
 				case "aTetrahedraGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor[0].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[1].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[2].toFixed(7)*100}*cm ${object.geometry.parameters.p2[0].toFixed(7)*100}*cm ${object.geometry.parameters.p2[1].toFixed(7)*100}*cm ${object.geometry.parameters.p2[2].toFixed(7)*100}*cm ${object.geometry.parameters.p3[0].toFixed(7)*100}*cm ${object.geometry.parameters.p3[1].toFixed(7)*100}*cm ${object.geometry.parameters.p3[2].toFixed(7)*100}*cm ${object.geometry.parameters.p4[0].toFixed(7)*100}*cm ${object.geometry.parameters.p4[1].toFixed(7)*100}*cm ${object.geometry.parameters.p4[2].toFixed(7)*100}*cm\n`
 					
 					break;
 
@@ -545,7 +545,7 @@ function MenubarFile( editor ) {
 
 				case "aTetrahedraGeometry":
 
-					txt += `\n:solid mytetra TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n\n`
+					txt += `\n:solid mytetra TET ${object.geometry.parameters.anchor[0].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[1].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[2].toFixed(7)*100}*cm ${object.geometry.parameters.p2[0].toFixed(7)*100}*cm ${object.geometry.parameters.p2[1].toFixed(7)*100}*cm ${object.geometry.parameters.p2[2].toFixed(7)*100}*cm ${object.geometry.parameters.p3[0].toFixed(7)*100}*cm ${object.geometry.parameters.p3[1].toFixed(7)*100}*cm ${object.geometry.parameters.p3[2].toFixed(7)*100}*cm ${object.geometry.parameters.p4[0].toFixed(7)*100}*cm ${object.geometry.parameters.p4[1].toFixed(7)*100}*cm ${object.geometry.parameters.p4[2].toFixed(7)*100}*cm\n\n`
 					txt += `:volu mytetra mytetra ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytetra 1 world r000 ${object.position.x.toFixed(7)*100}*cm ${object.position.y.toFixed(7)*100}*cm ${object.position.z.toFixed(7)*100}*cm\n`
 					downloadGeant4File( txt, 'tetrahedra.tg');
@@ -737,8 +737,8 @@ function MenubarFile( editor ) {
 					break;
 
 				case "aTetrahedraGeometry":
-
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor} ${object.geometry.parameters.p2} ${object.geometry.parameters.p3} ${object.geometry.parameters.p4}\n`
+					
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TET ${object.geometry.parameters.anchor[0].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[1].toFixed(7)*100}*cm ${object.geometry.parameters.anchor[2].toFixed(7)*100}*cm ${object.geometry.parameters.p2[0].toFixed(7)*100}*cm ${object.geometry.parameters.p2[1].toFixed(7)*100}*cm ${object.geometry.parameters.p2[2].toFixed(7)*100}*cm ${object.geometry.parameters.p3[0].toFixed(7)*100}*cm ${object.geometry.parameters.p3[1].toFixed(7)*100}*cm ${object.geometry.parameters.p3[2].toFixed(7)*100}*cm ${object.geometry.parameters.p4[0].toFixed(7)*100}*cm ${object.geometry.parameters.p4[1].toFixed(7)*100}*cm ${object.geometry.parameters.p4[2].toFixed(7)*100}*cm\n`
 					
 					break;
 
@@ -933,7 +933,7 @@ function MenubarFile( editor ) {
 			
 							case "aTetrahedraGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TET ${children.geometry.parameters.anchor} ${children.geometry.parameters.p2} ${children.geometry.parameters.p3} ${children.geometry.parameters.p4}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TET ${children.geometry.parameters.anchor[0].toFixed(7)*100}*cm ${children.geometry.parameters.anchor[1].toFixed(7)*100}*cm ${children.geometry.parameters.anchor[2].toFixed(7)*100}*cm ${children.geometry.parameters.p2[0].toFixed(7)*100}*cm ${children.geometry.parameters.p2[1].toFixed(7)*100}*cm ${children.geometry.parameters.p2[2].toFixed(7)*100}*cm ${children.geometry.parameters.p3[0].toFixed(7)*100}*cm ${children.geometry.parameters.p3[1].toFixed(7)*100}*cm ${children.geometry.parameters.p3[2].toFixed(7)*100}*cm ${children.geometry.parameters.p4[0].toFixed(7)*100}*cm ${children.geometry.parameters.p4[1].toFixed(7)*100}*cm ${children.geometry.parameters.p4[2].toFixed(7)*100}*cm\n`
 								break;
 			
 							case "aHyperboloidGeometry":

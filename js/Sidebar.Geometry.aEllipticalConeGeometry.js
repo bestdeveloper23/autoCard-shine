@@ -77,6 +77,9 @@ function GeometryParametersPanel(editor, object) {
 
   dzI.setRange(zTopCut + 0.01, Infinity);
   zTopCutI.setRange(0, zTopCut - 0.01);
+  
+  finalMesh.geometry.name = object.geometry.name;
+
   editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 
  }
