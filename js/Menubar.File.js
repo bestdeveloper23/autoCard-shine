@@ -1047,7 +1047,7 @@ function MenubarFile( editor ) {
 
 
 			var sceneText = `:volu world BOX 5*m 5*m 5*m G4_AIR\n\n`;
-			sceneText += `:vis world OFF\n`;
+			sceneText += `:vis world OFF\n\n`;
 
 			// sceneText += `:rotm r000 0 0 0\n`;
 			sceneText += `${rotationText}\n`;
