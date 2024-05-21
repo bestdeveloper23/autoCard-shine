@@ -154,6 +154,7 @@ function Strings( config ) {
 			'sidebar/object/new': 'New',
 			'sidebar/object/uuid': 'UUID',
 			'sidebar/object/name': 'Name',
+			'sidebar/object/copynumber': 'Copy number',
 			'sidebar/object/shape': 'Shape',
 			'sidebar/object/position': 'Position',
 			'sidebar/object/rotation': 'Rotation',

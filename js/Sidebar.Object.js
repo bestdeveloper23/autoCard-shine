@@ -125,6 +125,23 @@ function SidebarObject( editor ) {
 
 	container.add( objectNameRow );
 
+
+	// Copy number
+
+	const copyNumberRow = new UIRow();
+	const copyNumber = new UIInteger().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
+		
+		editor.execute( new SetValueCommand( editor, editor.selected, 'copynumber', copyNumber.getValue() ) );
+
+		console.log(editor.selected)
+	} );
+	copyNumber.setValue(1);
+
+	copyNumberRow.add( new UIText( strings.getKey( 'sidebar/object/copynumber' ) ).setWidth( '90px' ) );
+	copyNumberRow.add( copyNumber );
+
+	container.add( copyNumberRow );
+
 	// Source Shape
 
 	const planesourceShapeRow = new UIRow();
@@ -944,6 +961,16 @@ function SidebarObject( editor ) {
 
 		}
 
+		if( object.name === 'RadiationSource' ) {
+
+			copyNumberRow.setDisabled( 'none');
+
+		} else {
+
+			copyNumberRow.setDisabled( 'flex' );
+
+		}
+
 	}
 
 	function updateTransformRows( object ) {
@@ -1004,6 +1031,8 @@ function SidebarObject( editor ) {
 
 		// objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );
+
+		copyNumber.setValue( object.copynumber ? object.copynumber : 1);
 
 		if( object.source !== undefined ) {
 			sourceType.setValue( SOURCE.type.indexOf(object.source) );	
