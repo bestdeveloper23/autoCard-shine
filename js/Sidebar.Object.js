@@ -209,6 +209,7 @@ function SidebarObject( editor ) {
 
 	const sourceX = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceXRow.add(sourceX);
+	sourceXRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add(sourceXRow);
 
 
@@ -219,6 +220,7 @@ function SidebarObject( editor ) {
 
 	const sourceY = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceYRow.add(sourceY);
+	sourceYRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add(sourceYRow);
 
 
@@ -229,6 +231,7 @@ function SidebarObject( editor ) {
 
 	const sourceZ = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceZRow.add(sourceZ);
+	sourceZRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add(sourceZRow);
 
 
@@ -239,6 +242,7 @@ function SidebarObject( editor ) {
 
 	const sourceInRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceInRadiusRow.add(sourceInRadius);
+	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add(sourceInRadiusRow);
 
 
@@ -249,6 +253,7 @@ function SidebarObject( editor ) {
 
 	const sourceOuterRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
 	sourceOuterRadiusRow.add(sourceOuterRadius);
+	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add(sourceOuterRadiusRow);
 
 
@@ -262,6 +267,7 @@ function SidebarObject( editor ) {
 	objectPositionRow.add( new UIText( strings.getKey( 'sidebar/object/position' ) ).setWidth( '90px' ) );
 	objectPositionRow.add( objectPositionX, objectPositionY, objectPositionZ );
 
+	objectPositionRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 	container.add( objectPositionRow );
 
 	// rotation
