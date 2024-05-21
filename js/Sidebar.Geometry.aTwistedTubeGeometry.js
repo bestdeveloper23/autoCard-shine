@@ -22,6 +22,8 @@ function GeometryParametersPanel(editor, object) {
  maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/maxradius')).setWidth('90px'));
  maxRadiusRow.add(maxRadius);
 
+ maxRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
  container.add(maxRadiusRow);
 
  // minRadius
@@ -31,6 +33,8 @@ function GeometryParametersPanel(editor, object) {
 
  minRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/minradius')).setWidth('90px'));
  minRadiusRow.add(minRadius);
+
+ minRadiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
  container.add(minRadiusRow);
 
@@ -42,6 +46,8 @@ function GeometryParametersPanel(editor, object) {
  heightRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/height')).setWidth('90px'));
  heightRow.add(height);
 
+ heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+ 
  container.add(heightRow);
 
  // sphi

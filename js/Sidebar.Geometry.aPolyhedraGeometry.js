@@ -64,6 +64,8 @@ function GeometryParametersPanel(editor, object) {
     radiusRow.add(new UIText(strings.getKey('sidebar/geometry/apolyhedra_geometry/radius')).setWidth('90px'));
     radiusRow.add(radius);
 
+    radiusRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(radiusRow);
 
     // z
@@ -74,6 +76,8 @@ function GeometryParametersPanel(editor, object) {
     zpositionRow.add(new UIText(strings.getKey('sidebar/geometry/apolyhedra_geometry/z')).setWidth('90px'));
     zpositionRow.add(zposition);
 
+    zpositionRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+    
     container.add(zpositionRow);
 
 

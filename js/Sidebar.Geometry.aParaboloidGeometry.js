@@ -22,6 +22,8 @@ function GeometryParametersPanel(editor, object) {
     radius1Row.add(new UIText(strings.getKey('sidebar/geometry/aparaboloid_geometry/r1')).setWidth('90px'));
     radius1Row.add(radius1I);
 
+    radius1Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(radius1Row);
 
     // radius2
@@ -32,6 +34,8 @@ function GeometryParametersPanel(editor, object) {
     radius2Row.add(new UIText(strings.getKey('sidebar/geometry/aparaboloid_geometry/r2')).setWidth('90px'));
     radius2Row.add(radius2I);
 
+    radius2Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(radius2Row);
 
     // height
@@ -41,6 +45,8 @@ function GeometryParametersPanel(editor, object) {
 
     dzRow.add(new UIText(strings.getKey('sidebar/geometry/aparaboloid_geometry/height')).setWidth('90px'));
     dzRow.add(dzI);
+
+    dzRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
     container.add(dzRow);
     //

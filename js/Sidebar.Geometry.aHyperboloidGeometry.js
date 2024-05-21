@@ -22,6 +22,8 @@ function GeometryParametersPanel( editor, object ) {
 	radius1Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusout' ) ).setWidth( '90px' ) );
 	radius1Row.add( radius1I );
 
+    radius1Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
 	container.add( radius1Row );
 
 	// radius2
@@ -31,6 +33,8 @@ function GeometryParametersPanel( editor, object ) {
 
 	radius2Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusin' ) ).setWidth( '90px' ) );
 	radius2Row.add( radius2I );
+
+    radius2Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
 	container.add( radius2Row );
 
@@ -62,6 +66,8 @@ function GeometryParametersPanel( editor, object ) {
 
 	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/height' ) ).setWidth( '90px' ) );
 	heightRow.add( heightI );
+
+    heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
 	container.add( heightRow );
 

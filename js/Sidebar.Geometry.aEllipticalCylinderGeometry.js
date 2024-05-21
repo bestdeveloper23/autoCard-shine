@@ -22,6 +22,8 @@ function GeometryParametersPanel( editor, object ) {
 	xSemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/xSemiAxis' ) ).setWidth( '90px' ) );
 	xSemiAxisRow.add( xSemiAxisI );
 
+	xSemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
 	container.add( xSemiAxisRow );
 
 	// ySemiAxis
@@ -32,6 +34,8 @@ function GeometryParametersPanel( editor, object ) {
 	ySemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/ySemiAxis' ) ).setWidth( '90px' ) );
 	ySemiAxisRow.add( ySemiAxisI );
 
+	ySemiAxisRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
 	container.add( ySemiAxisRow );
 
 	// height
@@ -41,6 +45,8 @@ function GeometryParametersPanel( editor, object ) {
 
 	dzRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/dz' ) ).setWidth( '90px' ) );
 	dzRow.add( dzI );
+
+	dzRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
 	container.add( dzRow );
 	//

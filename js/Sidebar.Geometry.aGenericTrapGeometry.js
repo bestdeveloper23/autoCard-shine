@@ -22,6 +22,8 @@ function GeometryParametersPanel(editor, object) {
     heightRow.add(new UIText(strings.getKey('sidebar/geometry/agenerictrap_geometry/pdz')).setWidth('90px'));
     heightRow.add(heightI);
 
+    heightRow.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(heightRow);
 
     // point1
@@ -33,6 +35,8 @@ function GeometryParametersPanel(editor, object) {
 
     point1Row.add(point1X);
     point1Row.add(point1Z);
+
+    point1Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
     container.add(point1Row);
 
@@ -46,6 +50,8 @@ function GeometryParametersPanel(editor, object) {
     point2Row.add(point2X);
     point2Row.add(point2Z);
 
+    point2Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(point2Row);
 
     // point3
@@ -58,6 +64,8 @@ function GeometryParametersPanel(editor, object) {
     point3Row.add(point3X);
     point3Row.add(point3Z);
 
+    point3Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(point3Row);
 
     // point4
@@ -69,6 +77,8 @@ function GeometryParametersPanel(editor, object) {
 
     point4Row.add(point4X);
     point4Row.add(point4Z);
+
+    point4Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
     container.add(point4Row);
 
@@ -83,6 +93,8 @@ function GeometryParametersPanel(editor, object) {
     point5Row.add(point5X);
     point5Row.add(point5Z);
 
+    point5Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(point5Row);
 
     // point6
@@ -94,6 +106,8 @@ function GeometryParametersPanel(editor, object) {
 
     point6Row.add(point6X);
     point6Row.add(point6Z);
+
+    point6Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
     container.add(point6Row);
 
@@ -107,6 +121,8 @@ function GeometryParametersPanel(editor, object) {
     point7Row.add(point7X);
     point7Row.add(point7Z);
 
+    point7Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
+
     container.add(point7Row);
 
     // point8
@@ -118,6 +134,8 @@ function GeometryParametersPanel(editor, object) {
 
     point8Row.add(point8X);
     point8Row.add(point8Z);
+
+    point8Row.add(new UIText(strings.getKey('sidebar/properties/unit')).setWidth('20px'));
 
     container.add(point8Row);
 
