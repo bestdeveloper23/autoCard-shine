@@ -406,7 +406,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -429,7 +429,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270) {
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -437,7 +437,7 @@ function BasicSolids(editor) {
             let repeatCount = Math.floor((270 - DPhi) / 90);
 
             for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / (-2);
+                let rotateVaule = Math.PI / (-2 );
                 boxmesh.rotateZ(rotateVaule);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -508,7 +508,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI * (-1));
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI * (-1));
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -531,7 +531,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270){
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -680,7 +680,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -703,7 +703,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270){
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -851,7 +851,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -874,7 +874,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270){
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -957,7 +957,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -980,7 +980,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270){
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -1064,7 +1064,7 @@ function BasicSolids(editor) {
         if (DPhi > 270 && DPhi < 360) {
             let v_DPhi = 360 - DPhi;
 
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             bCSG = bCSG.subtract(MeshCSG3);
@@ -1087,7 +1087,7 @@ function BasicSolids(editor) {
 
         } else if(DPhi <= 270){
 
-            boxmesh.rotateZ(SPhi / 180 * Math.PI);
+            boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
             boxmesh.updateMatrix();
             MeshCSG3 = CSG.fromMesh(boxmesh);
             aCSG = aCSG.subtract(MeshCSG3);
@@ -3405,8 +3405,8 @@ function BasicSolids(editor) {
 
         const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
+        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 1, false, (SPhi + 90)/180*Math.PI, DPhi/180*Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, (SPhi + 90)/180*Math.PI, DPhi/180*Math.PI);
 
         const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
@@ -3459,7 +3459,7 @@ function BasicSolids(editor) {
 
         const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, (SPhi + 90) / 180 * Math.PI, DPhi / 180 * Math.PI);
 
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
 
@@ -3502,7 +3502,7 @@ function BasicSolids(editor) {
 
         const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, (SPhi + 90) / 180 * Math.PI, DPhi / 180 * Math.PI);
 
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
 
@@ -3546,7 +3546,7 @@ function BasicSolids(editor) {
 
         const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
 
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, (SPhi + 90) / 180 * Math.PI, DPhi / 180 * Math.PI);
 
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
 

@@ -89,7 +89,7 @@ function GeometryParametersPanel(editor, object) {
         const rOuter = rOuter_string.map(item => parseFloat(item));
         const z = z_string.map(item => parseFloat(item));
 
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, (SPhi + 90) / 180 * Math.PI, DPhi / 180 * Math.PI);
 
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
 

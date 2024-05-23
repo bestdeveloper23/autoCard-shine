@@ -156,11 +156,17 @@ function GeometryParametersPanel(editor, object) {
 
   }
 
-  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  finalMesh.rotateX(Math.PI / 2);
+  finalMesh.updateMatrix();
+  
+  aCSG = CSG.fromMesh(finalMesh);
+  finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
   const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aTorusGeometry';
-  finalMesh.updateMatrix();
+
   finalMesh.name = 'aTorus';
 
   // set Range 
