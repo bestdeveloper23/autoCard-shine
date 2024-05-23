@@ -164,7 +164,7 @@ function MenubarFile( editor ) {
 			switch (object.geometry.type) {
 				case "BoxGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.depth/2}*cm ${object.geometry.parameters.height/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width}*cm ${object.geometry.parameters.depth}*cm ${object.geometry.parameters.height}*cm\n`
 					
 					break;
 
@@ -176,37 +176,37 @@ function MenubarFile( editor ) {
 
 				case "aTubeGeometry":
 					
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aParallGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx/2}*cm ${object.geometry.parameters.dy/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx}*cm ${object.geometry.parameters.dy}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
 					
 					break;
 
 				case "aTrapeZoidGeometry":
 					
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2} ${object.geometry.parameters.dz}*cm\n`
 					
 					break;
 
 				case "aTrapeZoidPGeometry": 
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm ${object.geometry.parameters.phi}\n`
 					
 					break;
 
@@ -218,7 +218,7 @@ function MenubarFile( editor ) {
 				
 				case "aEllipticalCylinderGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz}*cm\n`
 					
 					break;
 				
@@ -230,31 +230,31 @@ function MenubarFile( editor ) {
 
 				case "aEllipticalConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.zTopCut}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.zTopCut}*cm\n`
 					
 					break;
 
 				case "aTwistedBoxGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.depth/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
 					
 					break;
 
 				case "aTwistedTrdGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.twistedangle}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.twistedangle}\n`
 					
 					break;
 
 				case "aTwistedTrapGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm\n`
 					
 					break;
 
 				case "aTwistedTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
@@ -266,7 +266,7 @@ function MenubarFile( editor ) {
 
 				case "aHyperboloidGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}*cm\n`
 					
 					break;
 
@@ -417,7 +417,7 @@ function MenubarFile( editor ) {
 
 				case "BoxGeometry":
 
-					txt += `\n:solid box BOX ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.depth/2}*cm ${object.geometry.parameters.height/2}*cm\n\n`
+					txt += `\n:solid box BOX ${object.geometry.parameters.width}*cm ${object.geometry.parameters.depth}*cm ${object.geometry.parameters.height}*cm\n\n`
 					txt += `:volu mybox box ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mybox 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'box.tg');
@@ -433,7 +433,7 @@ function MenubarFile( editor ) {
 
 				case "aTubeGeometry":
 					
-					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'tub.tg');
@@ -441,7 +441,7 @@ function MenubarFile( editor ) {
 
 				case "aCutTubeGeometry":
 
-					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}*cm\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'ctub.tg');
@@ -449,7 +449,7 @@ function MenubarFile( editor ) {
 
 				case "aConeGeometry":
 
-					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mycone mycone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'cone.tg');
@@ -457,7 +457,7 @@ function MenubarFile( editor ) {
 
 				case "aParallGeometry":
 
-					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx/2}*cm ${object.geometry.parameters.dy/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
+					txt += `\n:solid mypara PARA ${object.geometry.parameters.dx}*cm ${object.geometry.parameters.dy}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mypara mypara ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mypara 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'parallelepiped.tg');
@@ -465,7 +465,7 @@ function MenubarFile( editor ) {
 
 				case "aTrapeZoidGeometry":
 					
-					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dz/2}*cm\n\n`
+					txt += `\n:solid mytrd TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm\n\n`
 					txt += `:volu mytrd mytrd ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrd 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n\n`
 					downloadGeant4File( txt, 'trapzoid.tg');
@@ -473,7 +473,7 @@ function MenubarFile( editor ) {
 
 				case "aTrapeZoidPGeometry": 
 
-					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm ${object.geometry.parameters.phi}\n\n`
+					txt += `\n:solid mytrdp TRAP ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm ${object.geometry.parameters.phi}\n\n`
 					txt += `:volu mytrdp mytrdp ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytrdp 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'trapezoidp.tg');
@@ -489,7 +489,7 @@ function MenubarFile( editor ) {
 				
 				case "aEllipticalCylinderGeometry":
 
-					txt += `\n:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz/2}*cm\n\n`
+					txt += `\n:solid myellipT ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz}*cm\n\n`
 					txt += `:volu myellipT myellipT ${object.manager.name.elementType}\n\n`
 					txt += `:place myellipT 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'ellipeTub.tg');
@@ -505,7 +505,7 @@ function MenubarFile( editor ) {
 
 				case "aEllipticalConeGeometry":
 
-					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.zTopCut}*cm\n\n`
+					txt += `\n:solid myellipticalcone ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.zTopCut}*cm\n\n`
 					txt += `:volu myellipticalcone myellipticalcone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myellipticalcone 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'ellipticalcone.tg');
@@ -513,7 +513,7 @@ function MenubarFile( editor ) {
 
 				case "aTwistedBoxGeometry":
 
-					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.depth/2}*cm\n\n`
+					txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n\n`
 					txt += `:volu mytbox mytbox ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'twistedbox.tg');
@@ -521,7 +521,7 @@ function MenubarFile( editor ) {
 
 				case "aTwistedTrdGeometry":
 
-					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.twistedangle}\n\n`
+					txt += `\n:solid myttrd TWISTED_TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.twistedangle}\n\n`
 					txt += `:volu myttrd myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrd 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'twistedtrapzoid.tg');
@@ -529,7 +529,7 @@ function MenubarFile( editor ) {
 
 				case "aTwistedTrapGeometry":
 
-					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm\n\n`
+					txt += `\n:solid myttrap TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm\n\n`
 					txt += `:volu myttrap myttrap ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttrap 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'twistedtrapezoidp.tg');
@@ -537,7 +537,7 @@ function MenubarFile( editor ) {
 
 				case "aTwistedTubeGeometry":
 
-					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid myttubs TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu myttubs myttubs ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myttubs 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'twistedtub.tg');
@@ -553,7 +553,7 @@ function MenubarFile( editor ) {
 
 				case "aHyperboloidGeometry":
 
-					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2}*cm\n\n`
+					txt += `\n:solid myhyperboloid HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}*cm\n\n`
 					txt += `:volu myhyperboloid myhyperboloid ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place myhyperboloid 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'hyperboloid.tg');
@@ -642,7 +642,7 @@ function MenubarFile( editor ) {
 			switch (object.geometry.type) {
 				case "BoxGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.depth/2}*cm ${object.geometry.parameters.height/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} BOX ${object.geometry.parameters.width}*cm ${object.geometry.parameters.depth}*cm ${object.geometry.parameters.height}*cm\n`
 					
 					break;
 
@@ -654,37 +654,37 @@ function MenubarFile( editor ) {
 
 				case "aTubeGeometry":
 					
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aParallGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx/2}*cm ${object.geometry.parameters.dy/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} PARA ${object.geometry.parameters.dx}*cm ${object.geometry.parameters.dy}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.theta} ${object.geometry.parameters.phi}\n`
 					
 					break;
 
 				case "aTrapeZoidGeometry":
 					
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm\n`
 					
 					break;
 
 				case "aTrapeZoidPGeometry": 
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm ${object.geometry.parameters.phi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TRAP ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.phi} ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.alpha} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm ${object.geometry.parameters.phi}\n`
 					
 					break;
 
@@ -696,7 +696,7 @@ function MenubarFile( editor ) {
 				
 				case "aEllipticalCylinderGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_TUBE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.semiAxisY}*cm ${object.geometry.parameters.Dz}*cm\n`
 					
 					break;
 				
@@ -708,31 +708,31 @@ function MenubarFile( editor ) {
 
 				case "aEllipticalConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.zTopCut}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICAL_CONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.zTopCut}*cm\n`
 					
 					break;
 
 				case "aTwistedBoxGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width/2}*cm ${object.geometry.parameters.height/2}*cm ${object.geometry.parameters.depth/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
 					
 					break;
 
 				case "aTwistedTrdGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.twistedangle}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.twistedangle}\n`
 					
 					break;
 
 				case "aTwistedTrapGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1/2}*cm ${object.geometry.parameters.dx2/2}*cm ${object.geometry.parameters.dy1/2}*cm ${object.geometry.parameters.dz/2}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2/2}*cm ${object.geometry.parameters.dx3/2}*cm ${object.geometry.parameters.dx4/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TRAP ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.theta} ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dx3}*cm ${object.geometry.parameters.dx4}*cm\n`
 					
 					break;
 
 				case "aTwistedTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz/2}*cm ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_TUBS ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
@@ -744,19 +744,19 @@ function MenubarFile( editor ) {
 
 				case "aHyperboloidGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz/2}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} HYPE ${object.geometry.parameters.radiusIn}*cm ${object.geometry.parameters.radiusOut}*cm ${object.geometry.parameters.stereo1} ${object.geometry.parameters.stereo2} ${object.geometry.parameters.pDz}*cm\n`
 					
 					break;
 
 				case "aPolyconeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z/2}*cm ${object.geometry.parameters.rOuter}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYCONE ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z}*cm ${object.geometry.parameters.rOuter}\n`
 					
 					break;
 
 				case "aPolyhedraGeometry":
 					
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z/2}*cm ${object.geometry.parameters.rOuter}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} POLYHEDRA ${object.geometry.parameters.SPhi} ${object.geometry.parameters.DPhi} ${object.geometry.parameters.numSide} ${object.geometry.parameters.numZPlanes} ${object.geometry.parameters.z}*cm ${object.geometry.parameters.rOuter}\n`
 					
 					break;
 				
@@ -853,7 +853,7 @@ function MenubarFile( editor ) {
 						switch (children.geometry.type) {
 							case "BoxGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} BOX ${children.geometry.parameters.width/2}*cm ${children.geometry.parameters.depth/2}*cm ${children.geometry.parameters.height/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} BOX ${children.geometry.parameters.width}*cm ${children.geometry.parameters.depth}*cm ${children.geometry.parameters.height}*cm\n`
 								break;
 			
 							case "SphereGeometry2":
@@ -863,32 +863,32 @@ function MenubarFile( editor ) {
 			
 							case "aTubeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz/2}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aCutTubeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz/2}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aConeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin1}*cm ${children.geometry.parameters.pRMin2}*cm ${children.geometry.parameters.pRMax1}*cm ${children.geometry.parameters.pRMax2}*cm ${children.geometry.parameters.pDz/2}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin1}*cm ${children.geometry.parameters.pRMin2}*cm ${children.geometry.parameters.pRMax1}*cm ${children.geometry.parameters.pRMax2}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aParallGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} PARA ${children.geometry.parameters.dx/2}*cm ${children.geometry.parameters.dy/2}*cm ${children.geometry.parameters.dz/2}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} PARA ${children.geometry.parameters.dx}*cm ${children.geometry.parameters.dy}*cm ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
 								break;
 			
 							case "aTrapeZoidGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`											
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRD ${children.geometry.parameters.dx1/2}*cm ${children.geometry.parameters.dx2/2}*cm ${children.geometry.parameters.dy1/2}*cm ${children.geometry.parameters.dy2/2}*cm ${children.geometry.parameters.dz/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRD ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dz}*cm\n`
 								break;
 			
 							case "aTrapeZoidPGeometry": 
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.dz/2}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1/2}*cm ${children.geometry.parameters.dx1/2}*cm ${children.geometry.parameters.dx2/2}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2/2}*cm ${children.geometry.parameters.dx3/2}*cm ${children.geometry.parameters.dx4/2}*cm ${children.geometry.parameters.phi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.phi}\n`
 								break;
 			
 							case "aTorusGeometry":
@@ -898,7 +898,7 @@ function MenubarFile( editor ) {
 							
 							case "aEllipticalCylinderGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.semiAxisY}*cm ${children.geometry.parameters.Dz/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_TUBE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.semiAxisY}*cm ${children.geometry.parameters.Dz}*cm\n`
 								break;
 							
 							case "aEllipsoidGeometry":
@@ -908,27 +908,27 @@ function MenubarFile( editor ) {
 			
 							case "aEllipticalConeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.ySemiAxis}*cm ${children.geometry.parameters.height/2}*cm ${children.geometry.parameters.zTopCut}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICAL_CONE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.ySemiAxis}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.zTopCut}*cm\n`
 								break;
 			
 							case "aTwistedBoxGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width/2}*cm ${children.geometry.parameters.height/2}*cm ${children.geometry.parameters.depth/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
 								break;
 			
 							case "aTwistedTrdGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRD ${children.geometry.parameters.dx1/2}*cm ${children.geometry.parameters.dx2/2}*cm ${children.geometry.parameters.dy1/2}*cm ${children.geometry.parameters.dy2/2}*cm ${children.geometry.parameters.dz/2}*cm ${children.geometry.parameters.twistedangle}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRD ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.twistedangle}\n`
 								break;
 			
 							case "aTwistedTrapGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1/2}*cm ${children.geometry.parameters.dx2/2}*cm ${children.geometry.parameters.dy1/2}*cm ${children.geometry.parameters.dz/2}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2/2}*cm ${children.geometry.parameters.dx3/2}*cm ${children.geometry.parameters.dx4/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm\n`
 								break;
 			
 							case "aTwistedTubeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz/2}*cm ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_TUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aTetrahedraGeometry":
@@ -938,7 +938,7 @@ function MenubarFile( editor ) {
 			
 							case "aHyperboloidGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} HYPE ${children.geometry.parameters.radiusIn}*cm ${children.geometry.parameters.radiusOut}*cm ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz/2}*cm\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} HYPE ${children.geometry.parameters.radiusIn}*cm ${children.geometry.parameters.radiusOut}*cm ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}*cm\n`
 								break;
 			
 							case "aPolyconeGeometry":
