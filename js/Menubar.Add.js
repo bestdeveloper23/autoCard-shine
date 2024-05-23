@@ -47,7 +47,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.BoxGeometry( 1, 1, 1, 1, 1, 1 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Box';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -63,7 +63,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.CapsuleGeometry( 1, 1, 4, 8 );
-		const material = new THREE.MeshStandardMaterial();
+		const material = new THREE.MeshBasicMaterial();
 		const mesh = new THREE.Mesh( geometry, material );
 		mesh.name = 'Capsule';
 
@@ -80,7 +80,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.CircleGeometry( 1, 32, 0, Math.PI * 2 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Circle';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -96,7 +96,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.CylinderGeometry( 1, 1, 1, 32, 1, false, 0, Math.PI * 2 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Cylinder';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -112,7 +112,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.DodecahedronGeometry( 1, 0 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Dodecahedron';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -128,7 +128,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.IcosahedronGeometry( 1, 0 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Icosahedron';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -144,7 +144,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.LatheGeometry();
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial( { side: THREE.DoubleSide } ) );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { side: THREE.DoubleSide } ) );
 		mesh.name = 'Lathe';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -160,7 +160,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.OctahedronGeometry( 1, 0 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Octahedron';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -176,7 +176,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.PlaneGeometry( 1, 1, 1, 1 );
-		const material = new THREE.MeshStandardMaterial();
+		const material = new THREE.MeshBasicMaterial();
 		const mesh = new THREE.Mesh( geometry, material );
 		mesh.name = 'Plane';
 
@@ -193,7 +193,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.RingGeometry( 0.5, 1, 32, 1, 0, Math.PI * 2 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Ring';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -209,7 +209,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.SphereGeometry( 1, 32, 16, 0, Math.PI * 2, 0, Math.PI );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Sphere';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -240,7 +240,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.TetrahedronGeometry( 1, 0 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Tetrahedron';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -256,7 +256,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.TorusGeometry( 1, 0.4, 12, 48, Math.PI * 2 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Torus';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -272,7 +272,7 @@ function MenubarAdd( editor ) {
 	option.onClick( function () {
 
 		const geometry = new THREE.TorusKnotGeometry( 1, 0.4, 64, 8, 2, 3 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'TorusKnot';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );
@@ -295,7 +295,7 @@ function MenubarAdd( editor ) {
 		] );
 
 		const geometry = new THREE.TubeGeometry( path, 64, 1, 8, false );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial() );
+		const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
 		mesh.name = 'Tube';
 
 		editor.execute( new AddObjectCommand( editor, mesh ) );

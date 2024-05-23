@@ -107,19 +107,19 @@ function GeometryParametersPanel(editor, object) {
         pRmin1 = 0.00001;
    }
   
-   const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+   const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
    cylindermesh1.rotateX(Math.PI / 2);
    cylindermesh1.updateMatrix();
 
-   const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+   const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+   const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
    cylindermesh2.rotateX(Math.PI / 2);
    cylindermesh2.updateMatrix();
 
-   const maxRadius = Math.max(pRmax1, pRmax2);
-   const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
-   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+   const maxRadius = Math.max(pRmax1, pRmax2) * 2;
+   const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz * 2);
+   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
    boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
    const MeshCSG1 = CSG.fromMesh(cylindermesh1);

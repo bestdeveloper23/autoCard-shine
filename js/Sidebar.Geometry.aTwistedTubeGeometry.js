@@ -89,14 +89,14 @@ function GeometryParametersPanel(editor, object) {
 
   var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = twistedangleI.getValue();
 
-  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-  const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshStandardMaterial());
+  const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+  const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshBasicMaterial());
 
-  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-  const spheremesh2 = new THREE.Mesh(spheregeometry2, new THREE.MeshStandardMaterial());
+  const spheregeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+  const spheremesh2 = new THREE.Mesh(spheregeometry2, new THREE.MeshBasicMaterial());
 
-  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+  const boxgeometry = new THREE.BoxGeometry(pRMax, pDz * 2, pRMax, 32, 32, 32);
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
   const MeshCSG1 = CSG.fromMesh(spheremesh1);
   const MeshCSG2 = CSG.fromMesh(spheremesh2);
@@ -162,9 +162,8 @@ function GeometryParametersPanel(editor, object) {
 
   }
 
-  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
-  finalMesh.geometry.parameters = param;
+  let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  
 
   const positionAttribute = finalMesh.geometry.getAttribute('position');
 
@@ -176,9 +175,14 @@ function GeometryParametersPanel(editor, object) {
    finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
   }
 
-  finalMesh.geometry.type = 'aTwistedTubeGeometry';
   finalMesh.rotateX(Math.PI / 2);
   finalMesh.updateMatrix();
+  aCSG = CSG.fromMesh(finalMesh);
+  finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  finalMesh.name = 'TwistedTubs';
+  finalMesh.geometry.type = 'aTwistedTubeGeometry';
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
+  finalMesh.geometry.parameters = param;
 
   // set Range 
   maxRadius.setRange(pRMin + 0.001, Infinity);

@@ -125,26 +125,26 @@ function GeometryParametersPanel(editor, object) {
 
     if (CutTube_vectorVal(pLowNorm) === false || CutTube_vectorVal(pHighNorm) === false) return;
 
-    const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-    const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+    const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2 * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
+    const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
     cylindermesh1.rotateX(Math.PI / 2);
     cylindermesh1.updateMatrix();
 
-    const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-    const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+    const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * 2 * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
+    const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
     cylindermesh2.rotateX(Math.PI / 2);
     cylindermesh2.updateMatrix();
 
-    const maxdis = Math.max(pRMax, pRMin, pDz);
+    const maxdis = Math.max(pRMax, pRMin, pDz * 2);
 
     const boxgeometry1 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-    const boxmesh1 = new THREE.Mesh(boxgeometry1, new THREE.MeshStandardMaterial());
+    const boxmesh1 = new THREE.Mesh(boxgeometry1, new THREE.MeshBasicMaterial());
 
     const boxgeometry2 = new THREE.BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-    const boxmesh2 = new THREE.Mesh(boxgeometry2, new THREE.MeshStandardMaterial());
+    const boxmesh2 = new THREE.Mesh(boxgeometry2, new THREE.MeshBasicMaterial());
 
     const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
-    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
 
     boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);
@@ -181,7 +181,7 @@ function GeometryParametersPanel(editor, object) {
 
     aCSG = aCSG.subtract(MeshCSG3);
 
-    boxmesh2.geometry.translate(0, 0, -Math.sqrt(2) * pDz);
+    boxmesh2.geometry.translate(0, 0, -Math.sqrt(2) * pDz * 2);
     if (!CutTube_vectorVertical(pLowNorm)) {
 
         let rotateX = Math.atan(pLowNorm.z / pLowNorm.y);

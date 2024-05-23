@@ -3,6 +3,7 @@ import { PolyhedronGeometry } from './libs/geometry/PolyhedronGeometry.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
+import { CSG } from './libs/CSGMesh.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -88,14 +89,23 @@ function GeometryParametersPanel(editor, object) {
   const vertices = [], indices = [];
   vertices.push(...anchor, ...p2, ...p3, ...p4);
   indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
+
+  
   const geometry = new PolyhedronGeometry(vertices, indices);
+
+  let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+  mesh.rotateX(Math.PI / 2);
+  mesh.updateMatrix();
+  let aCSG = CSG.fromMesh(mesh);
+  mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
   const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
-  geometry.parameters = param;
-  geometry.type = 'aTetrahedraGeometry';
+  mesh.geometry.parameters = param;
+  mesh.geometry.type = 'aTetrahedraGeometry';
 
-  geometry.name = object.geometry.name;
+  mesh.geometry.name = object.geometry.name;
 
-  editor.execute(new SetGeometryCommand(editor, object, geometry));
+  editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));
 
  }
 

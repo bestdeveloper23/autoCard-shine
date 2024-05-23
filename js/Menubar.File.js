@@ -355,7 +355,7 @@ function MenubarFile( editor ) {
 
 
 		if ( object !== null && object.isMesh != undefined ) {
-			var txt = `:volu world BOX 5*m 5*m 5*m G4_AIR\n\n`;
+			var txt = `:volu world BOX 5*m 5*m 5*m G4_AIR\n`;
 			const rotated = object.rotation;
 			const rotateX = rotated.x * 180 / Math.PI;
 			const rotateY = rotated.y * 180 / Math.PI;
@@ -1013,24 +1013,24 @@ function MenubarFile( editor ) {
 							voluText += `:volu ${children.name} ${children.geometry.name ? children.geometry.name : children.name} ${children.material.newmaterial?.elementType}\n`
 						}
 						
-						colorText += `:color ${children.name} ${children.material.color.r} ${children.material.color.g} ${children.material.color.b}\n`
+						colorText += `:color ${children.name} ${children.material.color.r.toFixed(2)} ${children.material.color.g.toFixed(2)} ${children.material.color.b.toFixed(2)}\n`
 						console.log(children.material.color.r)
 
 		
 						//:place gear1 1 world r000 -2*cm -8*cm 0
 						if(children.geometry.type === "unitedGeometry" || children.geometry.type === "subtractedGeometry" || children.geometry.type === "intersectedGeometry") {
 							if (children.parent.isMesh) {
-								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} ${children.parent.name} ${children.name}_rot ${children.childrenObject[0].position.x.toFixed(7)}*cm ${children.childrenObject[0].position.y.toFixed(7)}*cm ${children.childrenObject[0].position.z.toFixed(7)}*cm\n`
+								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} ${children.parent.name} ${children.name}_rot ${children.childrenObject[0].position.x === 0 ? 0 : children.childrenObject[0].position.x.toFixed(7) + "*cm"} ${children.childrenObject[0].position.y === 0 ? 0 : children.childrenObject[0].position.y.toFixed(7) + "*cm"} ${children.childrenObject[0].position.z === 0 ? 0 : children.childrenObject[0].position.z.toFixed(7) + "*cm"}\n`
 							} else {
-								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} world ${children.name}_rot ${children.childrenObject[0].position.x.toFixed(7)}*cm ${children.childrenObject[0].position.y.toFixed(7)}*cm ${children.childrenObject[0].position.z.toFixed(7)}*cm\n`
+								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} world ${children.name}_rot ${children.childrenObject[0].position.x === 0 ? 0 : children.childrenObject[0].position.x.toFixed(7) + "*cm"} ${children.childrenObject[0].position.y === 0 ? 0 : children.childrenObject[0].position.y.toFixed(7) + "*cm"} ${children.childrenObject[0].position.z === 0 ? 0 : children.childrenObject[0].position.z.toFixed(7) + "*cm"}\n`
 							}
 							
 						}
 						else {
 							if (children.parent.isMesh) {
-								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} ${children.parent.name} ${children.name}_rot ${children.position.x.toFixed(7)}*cm ${children.position.y.toFixed(7)}*cm ${children.position.z.toFixed(7)}*cm\n`	
+								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} ${children.parent.name} ${children.name}_rot ${children.position.x === 0 ? 0 : children.position.x.toFixed(7) + "*cm"} ${children.position.y === 0 ? 0 : children.position.y.toFixed(7) + "*cm"} ${children.position.z === 0 ? 0 : children.position.z.toFixed(7) + "*cm"}\n`
 							} else {
-								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} world ${children.name}_rot ${children.position.x.toFixed(7)}*cm ${children.position.y.toFixed(7)}*cm ${children.position.z.toFixed(7)}*cm\n`
+								placeText += `:place ${children.name} ${children.copynumber ? children.copynumber : 1} world ${children.name}_rot ${children.position.x === 0 ? 0 : children.position.x.toFixed(7) + "*cm"} ${children.position.y === 0 ? 0 : children.position.y.toFixed(7) + "*cm"} ${children.position.z === 0 ? 0 : children.position.z.toFixed(7) + "*cm"}\n`
 							}
 							
 						}
@@ -1046,7 +1046,7 @@ function MenubarFile( editor ) {
 			});
 
 
-			var sceneText = `:volu world BOX 5*m 5*m 5*m G4_AIR\n\n`;
+			var sceneText = `:volu world BOX 5*m 5*m 5*m G4_AIR\n`;
 			sceneText += `:vis world OFF\n\n`;
 
 			// sceneText += `:rotm r000 0 0 0\n`;

@@ -55,9 +55,9 @@ function GeometryParametersPanel(editor, object) {
 
 
         var radius1 = radius1I.getValue(), radius2 = radius2I.getValue(), pDz = dzI.getValue();
-        const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz;
+        const k2 = (Math.pow(radius1, 2) + Math.pow(radius2, 2)) / 2, k1 = (Math.pow(radius2, 2) - Math.pow(radius1, 2)) / pDz * 2;
 
-        const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz, 32, 32, false, 0, Math.PI * 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radius2, radius1, pDz * 2, 32, 32, false, 0, Math.PI * 2);
 
         // cylindergeometry1.translate(0, zTopCut + zBottomCut, 0);
 
@@ -94,9 +94,14 @@ function GeometryParametersPanel(editor, object) {
         }
         cylindergeometry1.attributes.position.needsUpdate = true;
 
-        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 
-        const finalMesh = cylindermesh;
+        
+        cylindermesh.rotateX(Math.PI / 2);
+        cylindermesh.updateMatrix();
+        let aCSG = CSG.fromMesh(cylindermesh);
+        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        finalMesh.name = 'Paraboloid';
         const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aParaboloidGeometry';

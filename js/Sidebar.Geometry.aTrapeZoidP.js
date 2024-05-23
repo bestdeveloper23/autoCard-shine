@@ -147,10 +147,10 @@ function GeometryParametersPanel(editor, object) {
   const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
   const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
   const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-  const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
   const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
   let MeshCSG1 = CSG.fromMesh(mesh);
   let MeshCSG3 = CSG.fromMesh(boxmesh);

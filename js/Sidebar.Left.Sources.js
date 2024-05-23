@@ -37,7 +37,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -89,7 +89,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -141,7 +141,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -193,7 +193,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -247,8 +247,8 @@ function BasicSources(editor) {
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
         const secondModelGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.01, 32, 32, false, 0, Math.PI * 2);
 
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
-        const secondModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const secondModelMaterial = new THREE.MeshBasicMaterial();
 
         const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
         const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
@@ -272,7 +272,7 @@ function BasicSources(editor) {
         // source.halfX = 1;
         // source.halfY = 1;
         // source.halfZ = 1;
-        source.innerradius = 1;
+        source.innerradius = 0.8;
         source.outerradius = 1;
 
         source.children.forEach(child => {
@@ -310,8 +310,8 @@ function BasicSources(editor) {
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
         const secondModelGeometry = new THREE.CylinderGeometry(0.8, 0.8, 0.01, 32, 32, false, 0, Math.PI * 2);
 
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
-        const secondModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const secondModelMaterial = new THREE.MeshBasicMaterial();
 
         const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
         const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
@@ -334,7 +334,7 @@ function BasicSources(editor) {
         // source.halfX = 1;
         // source.halfY = 1;
         // source.halfZ = 1;
-        source.innerradius = 1;
+        source.innerradius = 0.8;
         source.outerradius = 1;
 
         source.children.forEach(child => {
@@ -354,7 +354,7 @@ function BasicSources(editor) {
     options.add(item);
 
 
-    // Elipse model
+    // Ellipse model
 
     item = new UIDiv();
 
@@ -369,25 +369,28 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        var xSemiAxis = 1, semiAxisY = 0.6, Dz = 0.01;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+        const sourceModel = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        sourceModel.scale.z = ratioZ;
+        sourceModel.updateMatrix();
 
         const source = new THREE.Group();
 
         source.name = 'RadiationSource';
 		source.source = 'Plane';
-        source.planeshape = "Elipse";
+        source.planeshape = "Ellipse";
         // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
+        source.halfX = 1;
+        source.halfY = 0.6;
         // source.halfZ = 1;
         // source.innerradius = 1;
-        source.outerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -421,25 +424,30 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        var xSemiAxis = 1, semiAxisY = 0.6, Dz = 0.01;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        cylindermesh.scale.z = ratioZ;
+        cylindermesh.updateMatrix();
+        const aCSG = CSG.fromMesh(cylindermesh);
+		const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
 
         source.name = 'RadiationSource';
 		source.source = 'Plane';
-        source.planeshape = "Elipse";
+        source.planeshape = "Ellipse";
         // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
+        source.halfX = 1;
+        source.halfY = 0.6;
         // source.halfZ = 1;
         // source.innerradius = 1;
-        source.outerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -473,8 +481,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01, 1, 1, 1)
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -525,8 +533,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01, 1, 1, 1)
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -576,8 +584,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1.5, 0.01, 1, 1, 1)
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -591,7 +599,7 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 1.5;
         // source.halfZ = 1;
         // source.innerradius = 1;
         // source.outerradius = 1;
@@ -628,8 +636,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1.5, 0.01, 1, 1, 1)
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -643,7 +651,7 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 1.5;
         // source.halfZ = 1;
         // source.innerradius = 1;
         // source.outerradius = 1;
@@ -681,7 +689,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -733,7 +741,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -784,8 +792,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -836,8 +844,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -888,10 +896,15 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis*2, xSemiAxis*2, Dz, 32, 1, false, 0, Math.PI * 2);
+        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        cylindermesh.scale.z = ratioZ;
+        cylindermesh.updateMatrix();
+        const aCSG = CSG.fromMesh(cylindermesh);
+        const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
 
@@ -903,10 +916,10 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 0.5;
         source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -940,10 +953,15 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis*2, xSemiAxis*2, Dz*2, 32, 1, false, 0, Math.PI * 2);
+        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        cylindermesh.scale.z = ratioZ;
+        cylindermesh.updateMatrix();
+        const aCSG = CSG.fromMesh(cylindermesh);
+        const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
 
@@ -955,10 +973,10 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 0.5;
         source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -992,8 +1010,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 32, false, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1044,8 +1062,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 32, false, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1097,7 +1115,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1149,7 +1167,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1200,8 +1218,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1252,8 +1270,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelGeometry = new THREE.SphereGeometry(1, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1305,7 +1323,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1357,7 +1375,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1408,7 +1426,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1460,7 +1478,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1511,7 +1529,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 
@@ -1563,7 +1581,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshStandardMaterial();
+        const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
 

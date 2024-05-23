@@ -79,17 +79,17 @@ function GeometryParametersPanel(editor, object) {
   const pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pRtor = torRadius.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue();
 
   const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 16);
-  const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+  const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
   tormesh1.rotateX(Math.PI / 2);
   tormesh1.updateMatrix();
 
   const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 16);
-  const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+  const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
   tormesh2.rotateX(Math.PI / 2);
   tormesh2.updateMatrix();
 
   const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
   boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
   const MeshCSG1 = CSG.fromMesh(tormesh1);

@@ -201,9 +201,9 @@ function Strings( config ) {
 			'sidebar/geometry/compute_vertex_normals': 'Compute Vertex Normals',
 			'sidebar/geometry/center': 'Center',
 
-			'sidebar/geometry/box_geometry/width': 'Width',
-			'sidebar/geometry/box_geometry/height': 'Height',
-			'sidebar/geometry/box_geometry/depth': 'Depth',
+			'sidebar/geometry/box_geometry/width': 'Half X',
+			'sidebar/geometry/box_geometry/height': 'Half Y',
+			'sidebar/geometry/box_geometry/depth': 'Half Z',
 			'sidebar/geometry/box_geometry/widthseg': 'Width Seg',
 			'sidebar/geometry/box_geometry/heightseg': 'Height Seg',
 			'sidebar/geometry/box_geometry/depthseg': 'Depth Seg',

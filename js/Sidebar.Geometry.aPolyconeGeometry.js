@@ -84,21 +84,20 @@ function GeometryParametersPanel(editor, object) {
 
         const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 5, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
 
-        const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+        const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
 
-        let MeshCSG1 = CSG.fromMesh(meshOut);
 
-        let aCSG;
-        aCSG = MeshCSG1;
+        let finalMesh = meshOut;
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        let aCSG = CSG.fromMesh(finalMesh);
+        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-        const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
         const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.computeVertexNormals();
         finalMesh.geometry.type = 'aPolyconeGeometry';
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-
+        
         finalMesh.geometry.name = object.geometry.name;
         
         editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));

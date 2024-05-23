@@ -55,20 +55,19 @@ function GeometryParametersPanel( editor, object ) {
 
 		var xSemiAxis = xSemiAxisI.getValue(), semiAxisY = ySemiAxisI.getValue(), Dz = dzI.getValue();
 		const ratioZ = semiAxisY / xSemiAxis;
-		const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-		const cylindermesh = new THREE.Mesh(cylindergeometry, new THREE.MeshStandardMaterial());
+		const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz * 2, 32, 1, false, 0, Math.PI * 2);
+		const cylindermesh = new THREE.Mesh(cylindergeometry, new THREE.MeshBasicMaterial());
 		
 		cylindermesh.scale.z = ratioZ;
-		cylindermesh.updateMatrix();
+		cylindermesh.rotateX(Math.PI / 2);
+        cylindermesh.updateMatrix();
 		const aCSG = CSG.fromMesh(cylindermesh);
 		const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
 		const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
 		finalMesh.geometry.parameters = param;
 		finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
-        finalMesh.rotateX(Math.PI / 2);
 		finalMesh.name = 'EllipeCylnder';
-		finalMesh.updateMatrix();
 
 		finalMesh.geometry.name = object.geometry.name;
 

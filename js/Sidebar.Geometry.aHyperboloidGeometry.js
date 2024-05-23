@@ -130,8 +130,8 @@ function GeometryParametersPanel( editor, object ) {
         cylindergeometry1.attributes.position.needsUpdate = true;
         cylindergeometry2.attributes.position.needsUpdate = true;
 
-        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
-        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
 
         const MeshCSG1 = CSG.fromMesh(cylindermesh);
         const MeshCSG2 = CSG.fromMesh(cylindermesh2);
@@ -145,13 +145,17 @@ function GeometryParametersPanel( editor, object ) {
         
 
 
-        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        aCSG = CSG.fromMesh(finalMesh);
+        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aHyperboloidGeometry';
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
 
         finalMesh.geometry.name = object.geometry.name;
         

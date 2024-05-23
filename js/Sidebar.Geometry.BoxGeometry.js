@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
+import { CSG } from './libs/CSGMesh.js';
 
 function GeometryParametersPanel( editor, object ) {
 
@@ -85,9 +86,19 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-		const geometry = new THREE.BoxGeometry(width.getValue(), height.getValue(), depth.getValue(), 1, 1, 1);
+		const geometry = new THREE.BoxGeometry(width.getValue() * 2, height.getValue() * 2, depth.getValue() * 2, 1, 1, 1);
 
 		geometry.name = object.geometry.name;
+        
+        let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        mesh.rotateX(Math.PI/2);
+        mesh.updateMatrix();
+        let aCSG = CSG.fromMesh(mesh);
+        mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        
+        mesh.geometry.type = "BoxGeometry";
+        const param = {depth: depth.getValue(), depthSegments: 1, height: height.getValue(), heightSegments: 1, width: width.getValue(), widthSegments: 1};
+        mesh.geometry.parameters = param;
 
 		editor.execute( new SetGeometryCommand( editor, object, geometry ) );
 

@@ -143,7 +143,7 @@ function GeometryParametersPanel( editor, object ) {
   }
   cylindergeometry1.attributes.position.needsUpdate = true;
 
-  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 
   const finalMesh = cylindermesh;
   const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };

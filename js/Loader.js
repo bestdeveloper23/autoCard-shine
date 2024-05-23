@@ -215,7 +215,7 @@ function Loader( editor ) {
 
 						if ( geometry.index !== null ) {
 
-							const material = new THREE.MeshStandardMaterial();
+							const material = new THREE.MeshBasicMaterial();
 
 							object = new THREE.Mesh( geometry, material );
 							object.name = filename;
@@ -465,7 +465,7 @@ function Loader( editor ) {
 					const { MD2Loader } = await import( 'three/addons/loaders/MD2Loader.js' );
 
 					const geometry = new MD2Loader().parse( contents );
-					const material = new THREE.MeshStandardMaterial();
+					const material = new THREE.MeshBasicMaterial();
 
 					const mesh = new THREE.Mesh( geometry, material );
 					mesh.mixer = new THREE.AnimationMixer( mesh );
@@ -540,7 +540,7 @@ function Loader( editor ) {
 
 					if ( geometry.index !== null ) {
 
-						const material = new THREE.MeshStandardMaterial();
+						const material = new THREE.MeshBasicMaterial();
 
 						object = new THREE.Mesh( geometry, material );
 						object.name = filename;
@@ -575,7 +575,7 @@ function Loader( editor ) {
 					const { STLLoader } = await import( 'three/addons/loaders/STLLoader.js' );
 
 					const geometry = new STLLoader().parse( contents );
-					const material = new THREE.MeshStandardMaterial();
+					const material = new THREE.MeshBasicMaterial();
 
 					const mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
@@ -717,7 +717,7 @@ function Loader( editor ) {
 					const { VTKLoader } = await import( 'three/addons/loaders/VTKLoader.js' );
 
 					const geometry = new VTKLoader().parse( contents );
-					const material = new THREE.MeshStandardMaterial();
+					const material = new THREE.MeshBasicMaterial();
 
 					const mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
@@ -1103,7 +1103,7 @@ function Loader( editor ) {
   
                 const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
                 geometry.type = 'SphereGeometry2';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const meshName = solidName.split('_')[0];
                 
@@ -1125,17 +1125,17 @@ function Loader( editor ) {
                 const DPhi = Number(wordArray[7]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
   
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -1224,18 +1224,18 @@ function Loader( editor ) {
                 const DPhi = Number(wordArray[9]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
   
                 const maxRadius = Math.max(pRmax1, pRmax2);
                 const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -1326,10 +1326,10 @@ function Loader( editor ) {
   
                 const maxRadius = Math.max(dx, dy, dz);
                 const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -1460,7 +1460,7 @@ function Loader( editor ) {
                 const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
                 trd.parameters = param;
                 trd.type = 'aTrapeZoidGeometry';
-                const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
+                const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
                 finalMesh.updateMatrix();
                 
                 const meshName = solidName.split('_')[0];
@@ -1491,10 +1491,10 @@ function Loader( editor ) {
                  dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -1558,17 +1558,17 @@ function Loader( editor ) {
   
   
                 const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
-                const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+                const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
                 tormesh1.rotateX(Math.PI / 2);
                 tormesh1.updateMatrix();
   
                 const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
-                const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+                const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
                 tormesh2.rotateX(Math.PI / 2);
                 tormesh2.updateMatrix();
   
                 const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
                 const MeshCSG1 = CSG.fromMesh(tormesh1);
@@ -1652,7 +1652,7 @@ function Loader( editor ) {
                 const Dz = Number(wordArray[5]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = semiAxisY / xSemiAxis;
                 cylindermesh.scale.z = ratioZ;
                 cylindermesh.updateMatrix();
@@ -1744,7 +1744,7 @@ function Loader( editor ) {
                 }
                 cylindergeometry1.attributes.position.needsUpdate = true;
   
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   
                 const finalMesh = cylindermesh;
                 const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
@@ -1774,7 +1774,7 @@ function Loader( editor ) {
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
                 cylindergeometry1.translate(0, zTopCut / 2, 0)
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = ySemiAxis / xSemiAxis;
   
                 cylindermesh.scale.z = ratioZ;
@@ -1820,7 +1820,7 @@ function Loader( editor ) {
   
                 const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
                 geometry.parameters = param;
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
   
@@ -1848,10 +1848,10 @@ function Loader( editor ) {
                 const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
                 const maxwidth = Math.max(dx1, dy1, dx2, dy2);
                 const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -1937,10 +1937,10 @@ function Loader( editor ) {
                 const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = theta, phi = theta;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -2016,13 +2016,13 @@ function Loader( editor ) {
                 
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -2137,7 +2137,7 @@ function Loader( editor ) {
                 const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                 geometry.parameters = param;
                 geometry.type = 'aTetrahedraGeometry';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.name = 'Tetrahedra';
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
@@ -2216,8 +2216,8 @@ function Loader( editor ) {
                 cylindergeometry1.attributes.position.needsUpdate = true;
                 cylindergeometry2.attributes.position.needsUpdate = true;
   
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
   
                 const MeshCSG1 = CSG.fromMesh(cylindermesh);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
@@ -2319,7 +2319,7 @@ function Loader( editor ) {
   
                 const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
   
-                const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+                const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(meshOut);
   
@@ -2392,7 +2392,7 @@ function Loader( editor ) {
   
                 const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
                 geometry.type = 'SphereGeometry2';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const meshName = solidName.split('_')[0];
                 
@@ -2416,17 +2416,17 @@ function Loader( editor ) {
                 const DPhi = Number(wordArray[7]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
   
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -2516,18 +2516,18 @@ function Loader( editor ) {
                 const DPhi = Number(wordArray[9]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
   
                 const maxRadius = Math.max(pRmax1, pRmax2);
                 const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -2620,10 +2620,10 @@ function Loader( editor ) {
   
                 const maxRadius = Math.max(dx, dy, dz);
                 const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -2756,7 +2756,7 @@ function Loader( editor ) {
                 const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
                 trd.parameters = param;
                 trd.type = 'aTrapeZoidGeometry';
-                const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
+                const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
                 finalMesh.updateMatrix();
                 
                 const meshName = solidName.split('_')[0];
@@ -2789,10 +2789,10 @@ function Loader( editor ) {
                  dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -2858,17 +2858,17 @@ function Loader( editor ) {
   
   
                 const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
-                const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshStandardMaterial());
+                const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
                 tormesh1.rotateX(Math.PI / 2);
                 tormesh1.updateMatrix();
   
                 const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
-                const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshStandardMaterial());
+                const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
                 tormesh2.rotateX(Math.PI / 2);
                 tormesh2.updateMatrix();
   
                 const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
                 const MeshCSG1 = CSG.fromMesh(tormesh1);
@@ -2954,7 +2954,7 @@ function Loader( editor ) {
                 const Dz = Number(wordArray[5]);
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = semiAxisY / xSemiAxis;
                 cylindermesh.scale.z = ratioZ;
                 cylindermesh.updateMatrix();
@@ -3048,7 +3048,7 @@ function Loader( editor ) {
                 }
                 cylindergeometry1.attributes.position.needsUpdate = true;
   
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   
                 const finalMesh = cylindermesh;
                 const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
@@ -3078,7 +3078,7 @@ function Loader( editor ) {
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
                 cylindergeometry1.translate(0, zTopCut / 2, 0)
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = ySemiAxis / xSemiAxis;
   
                 cylindermesh.scale.z = ratioZ;
@@ -3126,7 +3126,7 @@ function Loader( editor ) {
   
                 const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
                 geometry.parameters = param;
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
   
@@ -3155,10 +3155,10 @@ function Loader( editor ) {
                 const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
                 const maxwidth = Math.max(dx1, dy1, dx2, dy2);
                 const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -3246,10 +3246,10 @@ function Loader( editor ) {
                 const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = theta, phi = theta;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -3327,13 +3327,13 @@ function Loader( editor ) {
                 
   
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
   
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
   
                 boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -3449,7 +3449,7 @@ function Loader( editor ) {
                 const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                 geometry.parameters = param;
                 geometry.type = 'aTetrahedraGeometry';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.name = 'Tetrahedra';
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
@@ -3530,8 +3530,8 @@ function Loader( editor ) {
                 cylindergeometry1.attributes.position.needsUpdate = true;
                 cylindergeometry2.attributes.position.needsUpdate = true;
   
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshStandardMaterial());
+                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
   
                 const MeshCSG1 = CSG.fromMesh(cylindermesh);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
@@ -3635,7 +3635,7 @@ function Loader( editor ) {
   
                 const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
   
-                const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
+                const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
   
                 let MeshCSG1 = CSG.fromMesh(meshOut);
   

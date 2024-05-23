@@ -1,4 +1,4 @@
-import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, PolyhedronGeometry, BufferGeometry, MeshPhongMaterial, MeshBasicMaterial, Mesh, CylinderGeometry, Matrix4, MeshStandardMaterial } from "three";
+import { Loader, LoaderUtils, FileLoader, Group, Vector3, BoxGeometry, Shape, Path, ExtrudeGeometry, SphereGeometry, ConeGeometry, TorusGeometry, PolyhedronGeometry, BufferGeometry, MeshPhongMaterial, Mesh, CylinderGeometry, Matrix4, MeshBasicMaterial } from "three";
 import { CSG } from "./CSGMesh";
 import { PolyconeGeometry } from "./geometry/PolyconeGeometry";
 
@@ -404,18 +404,18 @@ class GDMLLoader extends Loader {
                     var pRmin1 = 0.5, pRmax1 = 1, pRmin2 = 2, pRmax2 = 2.5, pDz = 4, SPhi = 0, DPhi = 270
 
                     const cylindergeometry1 = new CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                     cylindermesh1.rotateX(Math.PI / 2);
                     cylindermesh1.updateMatrix();
 
                     const cylindergeometry2 = new CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshBasicMaterial());
                     cylindermesh2.rotateX(Math.PI / 2);
                     cylindermesh2.updateMatrix();
 
                     const maxRadius = Math.max(pRmax1, pRmax2);
                     const boxgeometry = new BoxGeometry(maxRadius, maxRadius, pDz);
-                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                    const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
 
                     boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
                     const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -518,17 +518,17 @@ class GDMLLoader extends Loader {
 
 
                     const torgeometry1 = new TorusGeometry(pRtor, pRMax, 16, 48);
-                    const tormesh1 = new Mesh(torgeometry1, new MeshStandardMaterial());
+                    const tormesh1 = new Mesh(torgeometry1, new MeshBasicMaterial());
                     tormesh1.rotateX(Math.PI / 2);
                     tormesh1.updateMatrix();
 
                     const torgeometry2 = new TorusGeometry(pRtor, pRMin, 16, 48);
-                    const tormesh2 = new Mesh(torgeometry2, new MeshStandardMaterial());
+                    const tormesh2 = new Mesh(torgeometry2, new MeshBasicMaterial());
                     tormesh2.rotateX(Math.PI / 2);
                     tormesh2.updateMatrix();
 
                     const boxgeometry = new BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                    const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
 
                     boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
                     const MeshCSG1 = CSG.fromMesh(tormesh1);
@@ -678,7 +678,7 @@ class GDMLLoader extends Loader {
                         const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                         geometry.parameters = param;
                         geometry.type = 'aTetrahedraGeometry';
-                        const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                        const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                         mesh.name = 'Tetrahedra';
                         mesh.rotateX(Math.PI / 2);
                         mesh.updateMatrix();
@@ -816,7 +816,7 @@ class GDMLLoader extends Loader {
                     // var xSemiAxis = 1, semiAxisY = 2, Dz = 4;
 
                     const cylindergeometry1 = new CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-                    const cylindermesh = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    const cylindermesh = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                     const ratioZ = semiAxisY / xSemiAxis;
                     cylindermesh.scale.z = ratioZ;
                     cylindermesh.updateMatrix();
@@ -1700,25 +1700,25 @@ class GDMLLoader extends Loader {
                     if (CutTube_vectorVal(pLowNorm) === false || CutTube_vectorVal(pHighNorm) === false) return;
             
                     const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                    const cylindermesh1 = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                     cylindermesh1.rotateX(Math.PI / 2);
                     cylindermesh1.updateMatrix();
             
                     const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                    const cylindermesh2 = new Mesh(cylindergeometry2, new MeshBasicMaterial());
                     cylindermesh2.rotateX(Math.PI / 2);
                     cylindermesh2.updateMatrix();
             
                     const maxdis = Math.max(pRMax, pRMin, pDz);
             
                     const boxgeometry1 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                    const boxmesh1 = new Mesh(boxgeometry1, new MeshStandardMaterial());
+                    const boxmesh1 = new Mesh(boxgeometry1, new MeshBasicMaterial());
             
                     const boxgeometry2 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                    const boxmesh2 = new Mesh(boxgeometry2, new MeshStandardMaterial());
+                    const boxmesh2 = new Mesh(boxgeometry2, new MeshBasicMaterial());
             
                     const boxgeometry = new BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
-                    const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                    const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
             
             
                     boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);
@@ -2518,18 +2518,18 @@ class GDMLLoader extends Loader {
                 var pRmin1 = 0.5, pRmax1 = 1, pRmin2 = 2, pRmax2 = 2.5, pDz = 4, SPhi = 0, DPhi = 270
 
                 const cylindergeometry1 = new CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                const cylindermesh1 = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
 
                 const cylindergeometry2 = new CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                const cylindermesh2 = new Mesh(cylindergeometry2, new MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
 
                 const maxRadius = Math.max(pRmax1, pRmax2);
                 const boxgeometry = new BoxGeometry(maxRadius, maxRadius, pDz);
-                const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
 
                 boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
@@ -2633,17 +2633,17 @@ class GDMLLoader extends Loader {
 
 
                 const torgeometry1 = new TorusGeometry(pRtor, pRMax, 16, 48);
-                const tormesh1 = new Mesh(torgeometry1, new MeshStandardMaterial());
+                const tormesh1 = new Mesh(torgeometry1, new MeshBasicMaterial());
                 tormesh1.rotateX(Math.PI / 2);
                 tormesh1.updateMatrix();
 
                 const torgeometry2 = new TorusGeometry(pRtor, pRMin, 16, 48);
-                const tormesh2 = new Mesh(torgeometry2, new MeshStandardMaterial());
+                const tormesh2 = new Mesh(torgeometry2, new MeshBasicMaterial());
                 tormesh2.rotateX(Math.PI / 2);
                 tormesh2.updateMatrix();
 
                 const boxgeometry = new BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-                const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
 
                 boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
                 const MeshCSG1 = CSG.fromMesh(tormesh1);
@@ -2803,7 +2803,7 @@ class GDMLLoader extends Loader {
                     const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
                     geometry.parameters = param;
                     geometry.type = 'aTetrahedraGeometry';
-                    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                     mesh.name = 'Tetrahedra';
                     mesh.rotateX(Math.PI / 2);
                     mesh.updateMatrix();
@@ -2828,10 +2828,10 @@ class GDMLLoader extends Loader {
                 const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
                 const maxwidth = Math.max(dx1, dy1, dx2, dy2);
                 const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
                 const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3;
@@ -2969,7 +2969,7 @@ class GDMLLoader extends Loader {
                 // var xSemiAxis = 1, semiAxisY = 2, Dz = 4;
 
                 const cylindergeometry1 = new CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                const cylindermesh = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                 const ratioZ = semiAxisY / xSemiAxis;
                 cylindermesh.scale.z = ratioZ;
                 cylindermesh.updateMatrix();
@@ -3814,25 +3814,25 @@ class GDMLLoader extends Loader {
                 if (CutTube_vectorVal(pLowNorm) === false || CutTube_vectorVal(pHighNorm) === false) return;
         
                 const cylindergeometry1 = new CylinderGeometry(pRMax, pRMax, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh1 = new Mesh(cylindergeometry1, new MeshStandardMaterial());
+                const cylindermesh1 = new Mesh(cylindergeometry1, new MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
         
                 const cylindergeometry2 = new CylinderGeometry(pRMin, pRMin, pDz * Math.sqrt(2) * 2, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh2 = new Mesh(cylindergeometry2, new MeshStandardMaterial());
+                const cylindermesh2 = new Mesh(cylindergeometry2, new MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
         
                 const maxdis = Math.max(pRMax, pRMin, pDz);
         
                 const boxgeometry1 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                const boxmesh1 = new Mesh(boxgeometry1, new MeshStandardMaterial());
+                const boxmesh1 = new Mesh(boxgeometry1, new MeshBasicMaterial());
         
                 const boxgeometry2 = new BoxGeometry(2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis, 2 * Math.sqrt(2) * maxdis);
-                const boxmesh2 = new Mesh(boxgeometry2, new MeshStandardMaterial());
+                const boxmesh2 = new Mesh(boxgeometry2, new MeshBasicMaterial());
         
                 const boxgeometry = new BoxGeometry(pRMax, pRMax, 2 * Math.sqrt(2) * maxdis);
-                const boxmesh = new Mesh(boxgeometry, new MeshStandardMaterial());
+                const boxmesh = new Mesh(boxgeometry, new MeshBasicMaterial());
         
         
                 boxmesh1.geometry.translate(0, 0, Math.sqrt(2) * maxdis);

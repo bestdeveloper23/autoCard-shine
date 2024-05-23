@@ -67,21 +67,24 @@ function GeometryParametersPanel(editor, object) {
  function update() {
 
   var xSemiAxis = xSemiAxisI.getValue(), ySemiAxis = ySemiAxisI.getValue(), height = dzI.getValue(), zTopCut = zTopCutI.getValue();
-  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
-  cylindergeometry1.translate(0, zTopCut / 2, 0)
-  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshStandardMaterial());
+  const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / (height + zTopCut)), xSemiAxis, zTopCut * 2, 32, 32, false, 0, Math.PI * 2);
+//   cylindergeometry1.translate(0, zTopCut / 2, 0)
+  const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   const ratioZ = ySemiAxis / xSemiAxis;
 
   cylindermesh.scale.z = ratioZ;
   cylindermesh.updateMatrix();
-  const aCSG = CSG.fromMesh(cylindermesh);
-  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  let finalMesh = cylindermesh;
 
+  
+  finalMesh.rotateX(Math.PI / 2);
+  finalMesh.updateMatrix();
+  let aCSG = CSG.fromMesh(finalMesh);
+  finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
   finalMesh.geometry.parameters = param;
   finalMesh.geometry.type = 'aEllipticalConeGeometry';
-  finalMesh.rotateX(Math.PI / 2);
-  finalMesh.updateMatrix();
+  
 
   dzI.setRange(zTopCut + 0.01, Infinity);
   zTopCutI.setRange(0, height - 0.01);

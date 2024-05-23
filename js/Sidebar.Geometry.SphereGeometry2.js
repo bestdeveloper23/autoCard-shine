@@ -100,10 +100,10 @@ function GeometryParametersPanel(editor, object) {
         const geometryBox = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
         const geometryBox2 = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
 
-        let meshOut = new THREE.Mesh(geometryOut, new THREE.MeshStandardMaterial());
-        let meshIn = new THREE.Mesh(geometryIn, new THREE.MeshStandardMaterial());
-        let boxmesh = new THREE.Mesh(geometryBox, new THREE.MeshStandardMaterial());
-        let boxmesh2 = new THREE.Mesh(geometryBox2, new THREE.MeshStandardMaterial());
+        let meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
+        let meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
+        let boxmesh = new THREE.Mesh(geometryBox, new THREE.MeshBasicMaterial());
+        let boxmesh2 = new THREE.Mesh(geometryBox2, new THREE.MeshBasicMaterial());
 
         boxmesh.geometry.translate(pRMax * 2, pRMax * 2, 0);
         boxmesh2.geometry.translate(0, -pRMax * 2 - pRMax, 0);
@@ -189,13 +189,16 @@ function GeometryParametersPanel(editor, object) {
         MeshCSG3 = CSG.fromMesh(boxmesh2);
         aCSG = aCSG.subtract(MeshCSG3);
         
-        const mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        let mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         mesh.rotateX(Math.PI/2);
-        
+        mesh.updateMatrix();
+        aCSG = CSG.fromMesh(mesh);
+        mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
 		const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pSTheta': pSTheta, 'pDTheta': pDTheta };
         mesh.geometry.parameters = param;
         mesh.geometry.type = 'SphereGeometry2';
-		mesh.updateMatrix();
+		
 
         mesh.geometry.name = object.geometry.name;
 

@@ -140,7 +140,7 @@ function GeometryParametersPanel(editor, object) {
     //     const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
     //     trd.parameters = param;
     //     trd.type = 'aTrapeZoidGeometry';
-    //     const finalMesh = new THREE.Mesh(trd, new THREE.MeshStandardMaterial())
+    //     const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
     //     finalMesh.updateMatrix();
     //     finalMesh.name = 'TrapeZoid';
 
@@ -148,13 +148,13 @@ function GeometryParametersPanel(editor, object) {
     if (dx1 * dy1 * dx2 * dy2 * dz === 0) {
       return;
     }
-    const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
-    const maxwidth = Math.max(dx1, dy1, dx2, dy2);
-    const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth);
-    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+    const maxdis = Math.max(dx1, dy1, dx2, dy2, dz) * 2;
+    const maxwidth = Math.max(dx1, dy1, dx2, dy2) * 2;
+    const geometry = new THREE.BoxGeometry(maxwidth, dz * 2, maxwidth);
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
     const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2);
-    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshStandardMaterial());
+    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
     let MeshCSG1 = CSG.fromMesh(mesh);
     let MeshCSG3;
@@ -165,7 +165,7 @@ function GeometryParametersPanel(editor, object) {
     let aCSG;
 
     boxmesh.geometry.translate(maxdis, maxdis, 0);
-    boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+    boxmesh.position.set(0 + dx1, -dz, 0);
     if (dx1 < maxwidth && phi > 0) {
       boxmesh.updateMatrix();
       MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -181,7 +181,7 @@ function GeometryParametersPanel(editor, object) {
 
     boxmesh.rotation.set(0, 0, 0);
     boxmesh.geometry.translate(-2 * maxdis, 0, 0);
-    boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+    boxmesh.position.set(0 - dx1, -dz, 0);
     if (dx1 < maxwidth && phi > 0) {
       boxmesh.updateMatrix();
       MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -194,7 +194,7 @@ function GeometryParametersPanel(editor, object) {
 
     boxmesh.rotation.set(0, 0, 0);
     boxmesh.geometry.translate(maxdis, 0, maxdis);
-    boxmesh.position.set(0, -dz / 2, dy1 / 2);
+    boxmesh.position.set(0, -dz, dy1);
     if (dy1 < maxwidth && alpha > 0) {
       boxmesh.updateMatrix();
       MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -207,7 +207,7 @@ function GeometryParametersPanel(editor, object) {
 
     boxmesh.rotation.set(0, 0, 0);
     boxmesh.geometry.translate(0, 0, -2 * maxdis);
-    boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+    boxmesh.position.set(0, -dz, -dy1);
     if (dy1 < maxwidth && alpha > 0) {
       boxmesh.updateMatrix();
       MeshCSG3 = CSG.fromMesh(boxmesh);
