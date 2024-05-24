@@ -186,6 +186,35 @@ function SidebarSource( editor ) {
 	container.add(sourceOuterRadiusRow);
 
 
+	// Alpha
+
+	const alphaRow = new UIRow();
+	alphaRow.add(new UIText(strings.getKey('sidebar/object/alpha')).setWidth('120px'));
+
+	const alpha = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	alphaRow.add(alpha);
+	container.add(alphaRow);
+
+
+	// theta
+
+	const thetaRow = new UIRow();
+	thetaRow.add(new UIText(strings.getKey('sidebar/object/theta')).setWidth('120px'));
+
+	const theta = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	thetaRow.add(theta);
+	container.add(thetaRow);
+
+
+	// phi
+
+	const phiRow = new UIRow();
+	phiRow.add(new UIText(strings.getKey('sidebar/object/phi')).setWidth('120px'));
+
+	const phi = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	phiRow.add(phi);
+	container.add(phiRow);
+
 	// position
 
 	const objectPositionRow = new UIRow();
@@ -316,6 +345,30 @@ function SidebarSource( editor ) {
 
 				const newUnit = energyunit.getValue();
 				object.energyunit = SOURCE.unit[Number(newUnit)];
+				// object.updateProjectionMatrix();
+				
+			}
+
+			if( object.alpha !== undefined ) {
+
+				const newAlpha = alpha.getValue();
+				object.alpha = newAlpha;
+				// object.updateProjectionMatrix();
+				
+			}
+
+			if( object.theta !== undefined ) {
+
+				const newTheta = theta.getValue();
+				object.theta = newTheta;
+				// object.updateProjectionMatrix();
+				
+			}
+
+			if( object.phi !== undefined ) {
+
+				const newPhi = phi.getValue();
+				object.phi = newPhi;
 				// object.updateProjectionMatrix();
 				
 			}
@@ -807,6 +860,18 @@ function SidebarSource( editor ) {
 			
 		if( object.outerradius !== undefined ) {
 			sourceOuterRadius.setValue( object.outerradius );
+		}
+
+		if( object.alpha !== undefined ) {
+			alpha.setValue( object.alpha );
+		}
+
+		if( object.theta !== undefined ) {
+			theta.setValue( object.theta );
+		}
+
+		if( object.phi !== undefined ) {
+			phi.setValue( object.phi );
 		}
 
 		const newsourcename = sourceType.getValue();

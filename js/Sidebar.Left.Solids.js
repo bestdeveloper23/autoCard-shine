@@ -1136,7 +1136,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Parallelediped');
     item.onClick(function () {
 
-        const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
         const maxRadius = Math.max(dx, dy, dz) * 2;
         const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
         const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
@@ -1192,10 +1192,10 @@ function BasicSolids(editor) {
         aCSG = aCSG.subtract(MeshCSG3);
 
         let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());        
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-        aCSG = CSG.fromMesh(finalMesh);
-        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        // finalMesh.rotateX(Math.PI / 2);
+        // finalMesh.updateMatrix();
+        // aCSG = CSG.fromMesh(finalMesh);
+        // finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
         finalMesh.geometry.parameters = param;
@@ -1225,7 +1225,7 @@ function BasicSolids(editor) {
         var distance = -camera.position.y / direction.y;
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-        const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
         const maxRadius = Math.max(dx, dy, dz) * 2;
         const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
         const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
@@ -1281,10 +1281,10 @@ function BasicSolids(editor) {
         aCSG = aCSG.subtract(MeshCSG3);
 
         let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());        
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-        aCSG = CSG.fromMesh(finalMesh);
-        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        // finalMesh.rotateX(Math.PI / 2);
+        // finalMesh.updateMatrix();
+        // aCSG = CSG.fromMesh(finalMesh);
+        // finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
         finalMesh.geometry.parameters = param;
@@ -1357,7 +1357,13 @@ function BasicSolids(editor) {
         MeshCSG3 = CSG.fromMesh(boxmesh);
         aCSG = aCSG.subtract(MeshCSG3);
 
-        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        aCSG = CSG.fromMesh(finalMesh);
+        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        
         const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aTrapeZoidGeometry';
@@ -1439,12 +1445,18 @@ function BasicSolids(editor) {
         MeshCSG3 = CSG.fromMesh(boxmesh);
         aCSG = aCSG.subtract(MeshCSG3);
 
-        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        aCSG = CSG.fromMesh(finalMesh);
+        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
         const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
         finalMesh.geometry.parameters = param;
         finalMesh.geometry.type = 'aTrapeZoidGeometry';
         finalMesh.position.copy(position);
-        finalMesh.updateMatrix();
+        
         finalMesh.name = 'TrapeZoid';
 
 

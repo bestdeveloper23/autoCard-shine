@@ -145,10 +145,10 @@ function GeometryParametersPanel( editor, object ) {
   
   let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-  finalMesh.rotateX(Math.PI / 2);
-  finalMesh.updateMatrix();
-  aCSG = CSG.fromMesh(finalMesh);
-  finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+  // finalMesh.rotateX(Math.PI / 2);
+  // finalMesh.updateMatrix();
+  // aCSG = CSG.fromMesh(finalMesh);
+  // finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
   const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
   finalMesh.geometry.parameters = param;

@@ -191,6 +191,9 @@ function Strings( config ) {
 			'sidebar/object/halfz': 'Half Z',
 			'sidebar/object/inradius': 'Inner Radius',
 			'sidebar/object/outradius': 'Outer Radius',
+			'sidebar/object/alpha': 'Alpha',
+			'sidebar/object/theta': 'Theta',
+			'sidebar/object/phi': 'Phi',
 
 			'sidebar/geometry/type': 'Type',
 			'sidebar/geometry/new': 'New',

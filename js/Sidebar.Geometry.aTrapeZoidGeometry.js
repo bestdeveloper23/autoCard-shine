@@ -218,7 +218,13 @@ function GeometryParametersPanel(editor, object) {
     MeshCSG3 = CSG.fromMesh(boxmesh);
     aCSG = aCSG.subtract(MeshCSG3);
 
-    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+    let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+    finalMesh.rotateX(Math.PI / 2);
+    finalMesh.updateMatrix();
+    aCSG = CSG.fromMesh(finalMesh);
+    finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        
     const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2 };
     finalMesh.geometry.parameters = param;
     finalMesh.geometry.type = 'aTrapeZoidGeometry';
