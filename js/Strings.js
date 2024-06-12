@@ -100,6 +100,8 @@ function Strings( config ) {
 			'menubar/add/source/volumePara' : 'Para',
 
 			'menubar/status/autosave': 'autosave',
+			'menubar/status/login': 'Log in with Google',
+			'menubar/status/logout': 'Log out',
 
 			'menubar/play': 'Play',
 			'menubar/play/stop': 'Stop',

@@ -94,7 +94,7 @@ class PolyconeGeometry extends BufferGeometry {
 
                         const u = x / radialSegments;
 
-                        const theta = u * thetaLength + thetaStart;
+                        const theta = (-1) * (u * thetaLength) - thetaStart + Math.PI;
 
                         const sinTheta = Math.sin(theta);
                         const cosTheta = Math.cos(theta);
@@ -229,7 +229,7 @@ class PolyconeGeometry extends BufferGeometry {
             for (let x = 0; x <= radialSegments; x++) {
 
                 const u = x / radialSegments;
-                const theta = u * thetaLength + thetaStart;
+                const theta = (-1) * (u * thetaLength) - thetaStart + Math.PI;
 
                 const cosTheta = Math.cos(theta);
                 const sinTheta = Math.sin(theta);

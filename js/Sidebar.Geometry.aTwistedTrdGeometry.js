@@ -91,7 +91,7 @@ function GeometryParametersPanel(editor, object) {
 
   // we need to new each geometry module
 
-  const dx1 = width1.getValue(), dy1 = depth1.getValue(), dz = height.getValue(), dx2 = width2.getValue(), dy2 = depth2.getValue(), twistedangle = angleI.getValue();
+  const dx1 = width1.getValue(), dy1 = depth1.getValue(), dz = height.getValue(), dx2 = width2.getValue(), dy2 = depth2.getValue(), twistedangle = - angleI.getValue();
   if (dx1 * dy1 * dx2 * dy2 * dz === 0) {
    return;
   }
@@ -185,7 +185,7 @@ function GeometryParametersPanel(editor, object) {
   finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
   finalMesh.geometry.name = object.geometry.name;
-  const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
+  const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': - twistedangle };
   finalMesh.geometry.parameters = param;
 
   finalMesh.geometry.type = 'aTwistedTrdGeometry';

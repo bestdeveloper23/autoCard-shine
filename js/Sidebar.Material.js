@@ -676,7 +676,9 @@ function SidebarMaterial(editor) {
 				materialNameRow.dom.style.display = 'none';
 				if(material.newmaterial) {
 					basicMaterialButton.setInnerHTML(materialTypeOptions[material.newmaterial.id-1].elementType);
-					materialName.setValue(0);
+					materialName.setValue(-1);
+				} else {
+					basicMaterialButton.setInnerHTML('Select...');
 				}
 				
 			} else if (material.elementTypes === 'CompoundMaterial') {
@@ -686,6 +688,8 @@ function SidebarMaterial(editor) {
 				if(material.newmaterial) {
 					materialName.setValue(material.newmaterial.id-99);
 					basicMaterialButton.setInnerHTML('Select...');
+				} else {
+					materialName.setValue(-1);
 				}
 			}
 		}
@@ -1485,7 +1489,7 @@ const materialTypeOptions =
 		},
 		{
 			id: 106,
-			elementType: 'G4_ALUMIUM_OXIDE',
+			elementType: 'G4_ALUMINUM_OXIDE',
 			density: 3.97,
 			energy: 145.2
 		},
@@ -2813,7 +2817,7 @@ const compoundMaterialOptions = [
 	},
 	{
 		id: 106,
-		elementType: 'G4_ALUMIUM_OXIDE',
+		elementType: 'G4_ALUMINUM_OXIDE',
 		density: 3.97,
 		energy: 145.2
 	},

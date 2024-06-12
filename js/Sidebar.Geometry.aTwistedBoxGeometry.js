@@ -68,7 +68,7 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-		const twistedangle = twistedangleI.getValue(), pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue();
+		const twistedangle = - twistedangleI.getValue(), pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue();
 
 		
 		const geometry = new THREE.BoxGeometry(pDx * 2, pDy * 2, pDz * 2, 32, 32, 32);
@@ -91,7 +91,7 @@ function GeometryParametersPanel( editor, object ) {
         let aCSG = CSG.fromMesh(mesh);
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-		const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+		const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': - twistedangle };
 		mesh.geometry.parameters = param;
 		mesh.geometry.name = object.geometry.name;
 		mesh.geometry.type = 'aTwistedBoxGeometry';

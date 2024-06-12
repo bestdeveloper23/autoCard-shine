@@ -182,13 +182,13 @@ function MenubarFile( editor ) {
 
 				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CUTTUB ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
@@ -441,7 +441,7 @@ function MenubarFile( editor ) {
 
 				case "aCutTubeGeometry":
 
-					txt += `\n:solid mytub TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mytub CUTTUB ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mytub mytub ${object.geometry.parameters.pRMin}*cm\n\n`
 					txt += `:place mytub 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'ctub.tg');
@@ -449,7 +449,7 @@ function MenubarFile( editor ) {
 
 				case "aConeGeometry":
 
-					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
+					txt += `\n:solid mycone CONS ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n\n`
 					txt += `:volu mycone mycone ${object.material.newmaterial?.elementType}\n\n`
 					txt += `:place mycone 1 world r000 ${object.position.x.toFixed(7)}*cm ${object.position.y.toFixed(7)}*cm ${object.position.z.toFixed(7)}*cm\n`
 					downloadGeant4File( txt, 'cone.tg');
@@ -660,13 +660,13 @@ function MenubarFile( editor ) {
 
 				case "aCutTubeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TUBS ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CUTTUB ${object.geometry.parameters.pRMin}*cm ${object.geometry.parameters.pRMax}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
 				case "aConeGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} CONS ${object.geometry.parameters.pRMin2}*cm ${object.geometry.parameters.pRMax2}*cm ${object.geometry.parameters.pRMin1}*cm ${object.geometry.parameters.pRMax1}*cm ${object.geometry.parameters.pDz}*cm ${object.geometry.parameters.pSPhi} ${object.geometry.parameters.pDPhi}\n`
 					
 					break;
 
@@ -868,12 +868,12 @@ function MenubarFile( editor ) {
 			
 							case "aCutTubeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CUTTUB ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aConeGeometry":
 								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin1}*cm ${children.geometry.parameters.pRMin2}*cm ${children.geometry.parameters.pRMax1}*cm ${children.geometry.parameters.pRMax2}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin2}*cm ${children.geometry.parameters.pRMax2}*cm ${children.geometry.parameters.pRMin1}*cm ${children.geometry.parameters.pRMax1}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 								break;
 			
 							case "aParallGeometry":

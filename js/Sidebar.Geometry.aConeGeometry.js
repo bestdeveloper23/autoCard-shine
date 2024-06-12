@@ -14,29 +14,19 @@ function GeometryParametersPanel(editor, object) {
  const geometry = object.geometry;
  const parameters = geometry.parameters;
 
- // maxRadius1
 
- const maxRadiusRow1 = new UIRow();
- const maxRadius1 = new UINumber(parameters.pRMax1).setRange(parameters.pRMin1 + 0.001, Infinity).onChange(update);
+  // minRadius2
 
- maxRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/maxradius1')).setWidth('90px'));
- maxRadiusRow1.add(maxRadius1);
-
- maxRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
-
- container.add(maxRadiusRow1);
-
- // minRadius1
-
- const minRadiusRow1 = new UIRow();
- const minRadius1 = new UINumber(parameters.pRMin1).setRange(0, parameters.pRMax1 - 0.001).onChange(update);
-
- minRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius1')).setWidth('90px'));
- minRadiusRow1.add(minRadius1);
-
- minRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+  const minRadiusRow2 = new UIRow();
+  const minRadius2 = new UINumber(parameters.pRMin2).setRange(0, parameters.pRMax2 - 0.001).onChange(update);
  
- container.add(minRadiusRow1);
+  minRadiusRow2.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius2')).setWidth('90px'));
+  minRadiusRow2.add(minRadius2);
+ 
+  minRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+ 
+  container.add(minRadiusRow2);
+
 
  // maxRadius2
 
@@ -50,17 +40,32 @@ function GeometryParametersPanel(editor, object) {
 
  container.add(maxRadiusRow2);
 
- // minRadius2
+ 
+ // minRadius1
 
- const minRadiusRow2 = new UIRow();
- const minRadius2 = new UINumber(parameters.pRMin2).setRange(0, parameters.pRMax2 - 0.001).onChange(update);
+ const minRadiusRow1 = new UIRow();
+ const minRadius1 = new UINumber(parameters.pRMin1).setRange(0, parameters.pRMax1 - 0.001).onChange(update);
 
- minRadiusRow2.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius2')).setWidth('90px'));
- minRadiusRow2.add(minRadius2);
+ minRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/minradius1')).setWidth('90px'));
+ minRadiusRow1.add(minRadius1);
 
- minRadiusRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+ minRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+ 
+ container.add(minRadiusRow1);
 
- container.add(minRadiusRow2);
+
+ // maxRadius1
+
+ const maxRadiusRow1 = new UIRow();
+ const maxRadius1 = new UINumber(parameters.pRMax1).setRange(parameters.pRMin1 + 0.001, Infinity).onChange(update);
+
+ maxRadiusRow1.add(new UIText(strings.getKey('sidebar/geometry/acone_geometry/maxradius1')).setWidth('90px'));
+ maxRadiusRow1.add(maxRadius1);
+
+ maxRadiusRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+
+ container.add(maxRadiusRow1);
+
 
  // height
 
@@ -101,7 +106,7 @@ function GeometryParametersPanel(editor, object) {
   // we need to new each geometry module
 
   var pRmin1 = minRadius1.getValue(), pRmax1 = maxRadius1.getValue(), pRmin2 = minRadius2.getValue(), pRmax2 = maxRadius2.getValue(),
-   pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue();
+   pDz = height.getValue(), SPhi = - pSPhi.getValue(), DPhi = pDPhi.getValue();
 
    if (pRmin1 === 0 && pRmin2 !== 0) {
         pRmin1 = 0.00001;
@@ -142,7 +147,7 @@ function GeometryParametersPanel(editor, object) {
    if (DPhi > 270 && DPhi < 360) {
        let v_DPhi = 360 - DPhi;
 
-       boxmesh.rotateZ((SPhi) / 180 * Math.PI);
+       boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
        boxmesh.updateMatrix();
        MeshCSG3 = CSG.fromMesh(boxmesh);
        bCSG = bCSG.subtract(MeshCSG3);
@@ -150,13 +155,13 @@ function GeometryParametersPanel(editor, object) {
        let repeatCount = Math.floor((270 - v_DPhi) / 90);
 
        for (let i = 0; i < repeatCount; i++) {
-           let rotateVaule = Math.PI / 2;
+           let rotateVaule = - Math.PI / 2;
            boxmesh.rotateZ(rotateVaule);
            boxmesh.updateMatrix();
            MeshCSG3 = CSG.fromMesh(boxmesh);
            bCSG = bCSG.subtract(MeshCSG3);
        }
-       let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+       let rotateVaule = (-1) * (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
        boxmesh.rotateZ(rotateVaule);
        boxmesh.updateMatrix();
        MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -165,7 +170,7 @@ function GeometryParametersPanel(editor, object) {
 
    } else if(DPhi <= 270){
 
-       boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
+       boxmesh.rotateZ((SPhi) / 180 * Math.PI);
        boxmesh.updateMatrix();
        MeshCSG3 = CSG.fromMesh(boxmesh);
        aCSG = aCSG.subtract(MeshCSG3);
@@ -173,13 +178,13 @@ function GeometryParametersPanel(editor, object) {
        let repeatCount = Math.floor((270 - DPhi) / 90);
 
        for (let i = 0; i < repeatCount; i++) {
-           let rotateVaule = Math.PI / (-2);
+           let rotateVaule = Math.PI / (2);
            boxmesh.rotateZ(rotateVaule);
            boxmesh.updateMatrix();
            MeshCSG3 = CSG.fromMesh(boxmesh);
            aCSG = aCSG.subtract(MeshCSG3);
        }
-       let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+       let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
        boxmesh.rotateZ(rotateVaule);
        boxmesh.updateMatrix();
        MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -188,7 +193,7 @@ function GeometryParametersPanel(editor, object) {
    }
 
    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-   const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+   const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': - SPhi, 'pDPhi': DPhi };
    finalMesh.geometry.parameters = param;
    finalMesh.geometry.type = 'aConeGeometry';
    finalMesh.updateMatrix();

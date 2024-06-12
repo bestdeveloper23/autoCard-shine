@@ -153,7 +153,7 @@ function GeometryParametersPanel(editor, object) {
   const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(),
    pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(),
    pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(),
-   pAlpha = alphaI.getValue(), twistedangle = angleI.getValue();
+   pAlpha = alphaI.getValue(), twistedangle = - angleI.getValue();
 
   const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
   const maxWidth = Math.max(dx, pDx2, pDx3, pDx4) * 2;
@@ -199,7 +199,7 @@ function GeometryParametersPanel(editor, object) {
 
 
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
+  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': - twistedangle };
   finalMesh.geometry.parameters = param;
 
   const positionAttribute = finalMesh.geometry.getAttribute('position');

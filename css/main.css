@@ -574,6 +574,148 @@ select:hover {
   color: #888;
 }
 
+.overlayModal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  background: rgba(30, 30, 30, 0.9);
+  padding: 16px;
+}
+
+.loginModalContainer {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 32px;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.2);
+  border-radius: 16px;
+  max-width: 385px;
+  padding: 48px;
+  box-shadow: 0 16px 128px rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+}
+
+.displayLogin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 20px;
+  width: 100%;
+}
+
+.displayForm {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 30px;
+  width: 100%;
+}
+
+.rowfull {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+.loginFormInput {
+  border-radius: 12px !important;
+  border: 1.5px solid #e7e7e9 !important;
+  padding: 10px 20px !important;
+  width: 100%;
+  font-size: 14px;
+} 
+
+.loginFormInputPIN {
+  border-radius: 12px !important;
+  border: 1.5px solid #e7e7e9 !important;
+  padding: 10px 10px !important;
+  font-size: 24px;
+  text-align: center;
+}
+
+.pincontainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.pinInputcontainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.inlinesizeFit {
+  inline-size: fit-content;
+}
+
+.loginformButton {
+  border-radius: 8px;
+  border: 1px solid #e7e7e9;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-transform: initial;
+}
+
+.loginformButton:hover {
+  border: 1px solid #888;
+}
+
+.registercontainer {
+  font-size: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.signButton {
+  border-radius: 8px;
+  margin: 4px;
+  margin-right: 15px;
+}
+
+.closeLoginForm {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  transition: .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeLoginForm:hover {
+  background-color: #f00;
+}
+
+.rememberbox {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+
 /* */
 
 @media all and (max-width: 600px) {
@@ -616,6 +758,14 @@ select:hover {
     width: 100%;
     top: calc(100% - 320px);
     bottom: 0;
+  }
+
+  .loginModalContainer {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 32px;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.2);
+    border-radius: 16px;
   }
 
 }

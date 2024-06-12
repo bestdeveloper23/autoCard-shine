@@ -87,7 +87,7 @@ function GeometryParametersPanel(editor, object) {
 
   // we need to new each geometry module
 
-  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = twistedangleI.getValue();
+  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = - pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = - twistedangleI.getValue();
 
   const spheregeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2, 32, 32, false, 0, Math.PI * 2);
   const spheremesh1 = new THREE.Mesh(spheregeometry1, new THREE.MeshBasicMaterial());
@@ -117,7 +117,7 @@ function GeometryParametersPanel(editor, object) {
   if (DPhi > 270 && DPhi < 360) {
    let v_DPhi = 360 - DPhi;
 
-   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+   boxmesh.rotateY((SPhi + 180) / 180 * Math.PI);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
    bCSG = bCSG.subtract(MeshCSG3);
@@ -125,13 +125,13 @@ function GeometryParametersPanel(editor, object) {
    let repeatCount = Math.floor((270 - v_DPhi) / 90);
 
    for (let i = 0; i < repeatCount; i++) {
-    let rotateVaule = Math.PI / (2);
+    let rotateVaule = - Math.PI / (2);
     boxmesh.rotateY(rotateVaule);
     boxmesh.updateMatrix();
     MeshCSG3 = CSG.fromMesh(boxmesh);
     bCSG = bCSG.subtract(MeshCSG3);
    }
-   let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+   let rotateVaule = (-1) * (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
    boxmesh.rotateY(rotateVaule);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -140,7 +140,7 @@ function GeometryParametersPanel(editor, object) {
 
   } else if (DPhi <= 270) {
 
-   boxmesh.rotateY(SPhi / 180 * Math.PI);
+   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
    aCSG = aCSG.subtract(MeshCSG3);
@@ -148,13 +148,13 @@ function GeometryParametersPanel(editor, object) {
    let repeatCount = Math.floor((270 - DPhi) / 90);
 
    for (let i = 0; i < repeatCount; i++) {
-    let rotateVaule = Math.PI / (-2);
+    let rotateVaule = Math.PI / (2);
     boxmesh.rotateY(rotateVaule);
     boxmesh.updateMatrix();
     MeshCSG3 = CSG.fromMesh(boxmesh);
     aCSG = aCSG.subtract(MeshCSG3);
    }
-   let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+   let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
    boxmesh.rotateY(rotateVaule);
    boxmesh.updateMatrix();
    MeshCSG3 = CSG.fromMesh(boxmesh);
@@ -181,7 +181,7 @@ function GeometryParametersPanel(editor, object) {
   finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
   finalMesh.name = 'TwistedTubs';
   finalMesh.geometry.type = 'aTwistedTubeGeometry';
-  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
+  const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': - SPhi, 'pDPhi': DPhi, 'twistedangle': - twistedangle };
   finalMesh.geometry.parameters = param;
 
   // set Range 

@@ -4847,9 +4847,9 @@ function Loader( editor ) {
       energy: 71.9,
     },
 
-    G4_ALUMIUM_OXIDE: {
+    G4_ALUMINUM_OXIDE: {
       id: 106,
-      elementType: "G4_ALUMIUM_OXIDE",
+      elementType: "G4_ALUMINUM_OXIDE",
       density: 3.97,
       energy: 145.2,
     },

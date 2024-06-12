@@ -898,7 +898,7 @@ function BasicSources(editor) {
 
         const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis*2, xSemiAxis*2, Dz, 32, 1, false, 0, Math.PI * 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
         let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
         const ratioZ = semiAxisY / xSemiAxis;
         cylindermesh.scale.z = ratioZ;
@@ -955,7 +955,7 @@ function BasicSources(editor) {
 
         const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis*2, xSemiAxis*2, Dz*2, 32, 1, false, 0, Math.PI * 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
         let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
         const ratioZ = semiAxisY / xSemiAxis;
         cylindermesh.scale.z = ratioZ;
@@ -1115,7 +1115,7 @@ function BasicSources(editor) {
         const pointSource = new THREE.PerspectiveCamera();
 
                     
-        const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
         const maxRadius = Math.max(dx, dy, dz) * 2;
         const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
         const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
@@ -1171,10 +1171,10 @@ function BasicSources(editor) {
         aCSG = aCSG.subtract(MeshCSG3);
 
         let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
-        sourceModel.rotateX(Math.PI / 2);
-        sourceModel.updateMatrix();
-        aCSG = CSG.fromMesh(sourceModel);
-        sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+        // sourceModel.rotateX(Math.PI / 2);
+        // sourceModel.updateMatrix();
+        // aCSG = CSG.fromMesh(sourceModel);
+        // sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
         sourceModel.geometry.parameters = param;
@@ -1194,9 +1194,12 @@ function BasicSources(editor) {
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        source.halfZ = 2;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
+        source.alpha = alpha;
+        source.theta = theta;
+        source.phi = phi;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -1230,7 +1233,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const dx = 1, dy = 2, dz = 1, alpha = -10, theta = 10, phi = -10;
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
         const maxRadius = Math.max(dx, dy, dz) * 2;
         const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
         const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
@@ -1286,10 +1289,10 @@ function BasicSources(editor) {
         aCSG = aCSG.subtract(MeshCSG3);
 
         let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
-        sourceModel.rotateX(Math.PI / 2);
-        sourceModel.updateMatrix();
-        aCSG = CSG.fromMesh(sourceModel);
-        sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+        // sourceModel.rotateX(Math.PI / 2);
+        // sourceModel.updateMatrix();
+        // aCSG = CSG.fromMesh(sourceModel);
+        // sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
         sourceModel.geometry.parameters = param;
@@ -1309,10 +1312,13 @@ function BasicSources(editor) {
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
-
+        source.halfZ = 2;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
+        source.alpha = alpha;
+        source.theta = theta;
+        source.phi = phi;
+        
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
@@ -1449,10 +1455,15 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        cylindermesh.scale.z = ratioZ;
+        cylindermesh.updateMatrix();
+        const aCSG = CSG.fromMesh(cylindermesh);
+        const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
 
@@ -1464,10 +1475,10 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 0.5;
         source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -1501,10 +1512,15 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const ratioZ = semiAxisY / xSemiAxis;
+        cylindermesh.scale.z = ratioZ;
+        cylindermesh.updateMatrix();
+        const aCSG = CSG.fromMesh(cylindermesh);
+        const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
 
@@ -1516,10 +1532,10 @@ function BasicSources(editor) {
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
-        source.halfY = 1;
+        source.halfY = 0.5;
         source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -1552,7 +1568,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        
+        const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 2, 32, 32, false, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -1566,10 +1583,10 @@ function BasicSources(editor) {
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        source.halfX = 1;
-        source.halfY = 1;
+        // source.halfX = 1;
+        // source.halfY = 1;
         source.halfZ = 1;
-        source.innerradius = 1;
+        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
@@ -1604,7 +1621,8 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        
+        const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 2, 32, 32, false, 0, Math.PI * 2);
         const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -1618,10 +1636,10 @@ function BasicSources(editor) {
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        source.halfX = 1;
-        source.halfY = 1;
+        // source.halfX = 1;
+        // source.halfY = 1;
         source.halfZ = 1;
-        source.innerradius = 1;
+        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
@@ -1655,10 +1673,73 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
+        const maxRadius = Math.max(dx, dy, dz) * 2;
+        const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+        let MeshCSG1 = CSG.fromMesh(mesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+        boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0 + dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0 - dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0, 0, dz);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0, 0, -dz);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+        boxmesh.position.set(0, dy, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+        boxmesh.position.set(0, - dy, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+        // sourceModel.rotateX(Math.PI / 2);
+        // sourceModel.updateMatrix();
+        // aCSG = CSG.fromMesh(sourceModel);
+        // sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+        sourceModel.geometry.parameters = param;
+        sourceModel.geometry.type = 'aParallGeometry';
+        
+        sourceModel.name = 'Parallelepiped';
+
 
         const source = new THREE.Group();
 
@@ -1671,9 +1752,12 @@ function BasicSources(editor) {
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        source.halfZ = 2;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
+        source.alpha = alpha;
+        source.theta = theta;
+        source.phi = phi;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -1707,10 +1791,72 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.SphereGeometry(0.01, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const sourceModelMaterial = new THREE.MeshBasicMaterial();
+        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
+        const maxRadius = Math.max(dx, dy, dz) * 2;
+        const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
-        const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+        const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+        let MeshCSG1 = CSG.fromMesh(mesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+        boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0 + dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0 - dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0, 0, dz);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+        boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+        boxmesh.position.set(0, 0, -dz);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+        boxmesh.position.set(0, dy, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+        boxmesh.position.set(0, - dy, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
+
+        let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+        // sourceModel.rotateX(Math.PI / 2);
+        // sourceModel.updateMatrix();
+        // aCSG = CSG.fromMesh(sourceModel);
+        // sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+        sourceModel.geometry.parameters = param;
+        sourceModel.geometry.type = 'aParallGeometry';
+        
+        sourceModel.name = 'Parallelepiped';
 
         const source = new THREE.Group();
 
@@ -1723,9 +1869,12 @@ function BasicSources(editor) {
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 1;
-        source.halfZ = 1;
-        source.innerradius = 1;
-        source.outerradius = 1;
+        source.halfZ = 2;
+        // source.innerradius = 1;
+        // source.outerradius = 1;
+        source.alpha = alpha;
+        source.theta = theta;
+        source.phi = phi;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;

@@ -1304,4 +1304,16 @@ class ListboxItem extends UIDiv {
 
 }
 
-export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIDivider, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UIProgress, UITabbedPanel, UIListbox, ListboxItem };
+class UILink extends UIElement {
+	constructor( value, link ) {
+
+		super( document.createElement( 'a' ) );
+
+		this.dom.className = 'hyperlink';
+		this.dom.textContent = value;
+		this.dom.setAttribute('href', link);
+
+	}
+}
+
+export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIDivider, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UIProgress, UITabbedPanel, UIListbox, ListboxItem, UILink };

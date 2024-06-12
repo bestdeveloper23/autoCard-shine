@@ -6,6 +6,8 @@ function Config() {
 		'language': 'en',
 
 		'autosave': true,
+		'loginstatus': true,
+		'useremail': '',
 
 		'project/title': '',
 		'project/editable': false,
