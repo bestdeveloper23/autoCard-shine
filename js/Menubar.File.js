@@ -598,7 +598,7 @@ function MenubarFile( editor ) {
 
 		const loginStatus = localStorage.getItem('loginStatus');
 
-		if(!loginStatus || loginStatus === undefined) {
+		if(loginStatus === undefined || loginStatus === 'false') {
 			alert( 'To export files, you must first sign up.');
 			return;
 		}
@@ -2437,7 +2437,9 @@ function MenubarFile( editor ) {
 	option.setTextContent( strings.getKey( 'menubar/file/export/gdml_scene' ) );
 	option.onClick( async function () {
 
-		if(!loginStatus || loginStatus === undefined) {
+		const loginStatus = localStorage.getItem('loginStatus');
+
+		if(loginStatus === undefined || loginStatus === 'false') {
 			alert( 'To export files, you must first sign up.');
 			return;
 		}
@@ -2899,7 +2901,9 @@ function MenubarFile( editor ) {
 	option.setTextContent( strings.getKey( 'menubar/file/export/mac' ) );
 	option.onClick( async function () {
 
-		if(!loginStatus || loginStatus === undefined) {
+		const loginStatus = localStorage.getItem('loginStatus');
+		
+		if(loginStatus === undefined || loginStatus === 'false') {
 			alert( 'To export files, you must first sign up.');
 			return;
 		}

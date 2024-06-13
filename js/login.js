@@ -48,6 +48,7 @@ function MenubarLogin( editor ) {
     const InputforGmailLabel = new UIText('Gmail: ');
     const InputforGmail = new UIInput('');
     InputforGmail.addClass('loginFormInput');
+    InputforGmail.setId('gmailInput');
 
     InputforGmailDIv.addClass('rowfull')
     InputforGmailDIv.add(InputforGmailLabel, InputforGmail);
@@ -71,19 +72,18 @@ function MenubarLogin( editor ) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
 
             const userEmail = InputforGmail.getValue();
 
             if (data && data.length > 0) {
                 const emails = data.map(row => row.email);
                 if (emails.includes(userEmail)) {
-                    console.log(userEmail)
+
                   loginWelcomeMessage.dom.style.display = 'block';
                   generateAndSendCode(userEmail);
                 
                 } else {
-                    console.log(userEmail)
+                    
                     loginWelcomeMessage.setValue('Unregistered user, please register first!');
                     
                     loginWelcomeMessage.dom.style.display = 'block';
@@ -217,17 +217,21 @@ function MenubarLogin( editor ) {
         document.getElementById('verification-message').style.display = 'none';
         document.querySelector('.pincontainer').style.display = 'none';
         document.getElementById('LoginFormID').style.display = 'none';
-        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+        document.getElementById('gmailInput').textContent = '';
 
-        // Convert HTMLCollection to an array using the spread operator
-        [...pincodearray].forEach(pinInput => {
-            pinInput.setValue('');
-        });
-        
         localStorage.setItem('loginStatus', false);
         localStorage.setItem('verificationCode', '');
         localStorage.setItem('tempUserEmail', '');
         localStorage.setItem('userEmail', '');
+
+        
+        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+
+        // Convert HTMLCollection to an array using the spread operator
+        [...pincodearray].forEach(pinInput => {
+            pinInput.textContent = '';
+        });
+        
     }
   }
   
@@ -241,14 +245,14 @@ function MenubarLogin( editor ) {
   }
   
   function sendEmail(email, code) {
-    console.log('Sending email')
+
     emailjs.send('service_82gn40c', 'template_iokrqmk', {
       to_email: email,
       reply_to: 'request2shine@gmail.com',
       verification_code: code
     })
     .then((response) => {
-      console.log('Email sent successfully', response.status, response);
+
       document.querySelector('.pincontainer').style.display = 'flex';
       document.getElementById('verification-message').style.display = 'block';
     }, (error) => {
@@ -269,9 +273,6 @@ function MenubarLogin( editor ) {
         inputCode += pinInput.value;
     });
 
-    console.log(inputCode);
-
-
     const storedCode = localStorage.getItem('verificationCode');
     if (inputCode === storedCode) {
       const email = localStorage.getItem('tempUserEmail');
@@ -288,7 +289,7 @@ function MenubarLogin( editor ) {
   
   function handleClientLoad() {
     emailjs.init("ZdZOsOOaG3vBGigqs"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
-    if(localStorage.getItem('loginStatus')) {
+    if(localStorage.getItem('loginStatus') === 'true') {
         updateSigninStatus(true);
     } else {
        updateSigninStatus(false);
