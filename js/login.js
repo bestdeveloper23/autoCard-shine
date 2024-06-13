@@ -1,10 +1,6 @@
 import { UIButton, UILink, UIDiv, UIInput, UIPanel, UIText } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 
-// import { initClient, handleAuthClick, generateAndSendCode, handleSignoutClick, verifyCode, updateSigninStatus, checkUserEmail } from './libs/googleApi/googleApi.js';
-const googleClientId = '908824484688-15acjgvnmg8th61o106blq1328qja3f7.apps.googleusercontent.com';
-const googleApiKey = 'AIzaSyCL0Drj6JUZ5li-flemULQgFarda-rLCjY';
-
 function MenubarLogin( editor ) {
 
 	const strings = editor.strings;
@@ -83,7 +79,7 @@ function MenubarLogin( editor ) {
                   generateAndSendCode(userEmail);
                 
                 } else {
-                    
+
                     loginWelcomeMessage.setValue('Unregistered user, please register first!');
                     
                     loginWelcomeMessage.dom.style.display = 'block';
