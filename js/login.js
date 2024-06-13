@@ -1,7 +1,9 @@
 import { UIButton, UILink, UIDiv, UIInput, UIPanel, UIText } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 
-import { initClient, handleAuthClick, generateAndSendCode, handleSignoutClick, verifyCode, updateSigninStatus, checkUserEmail } from './libs/googleApi/googleApi.js';
+// import { initClient, handleAuthClick, generateAndSendCode, handleSignoutClick, verifyCode, updateSigninStatus, checkUserEmail } from './libs/googleApi/googleApi.js';
+const googleClientId = '908824484688-15acjgvnmg8th61o106blq1328qja3f7.apps.googleusercontent.com';
+const googleApiKey = 'AIzaSyCL0Drj6JUZ5li-flemULQgFarda-rLCjY';
 
 function MenubarLogin( editor ) {
 
@@ -14,7 +16,6 @@ function MenubarLogin( editor ) {
     const LoginButton = new UIButton('Log in with Google');
     LoginButton.setId('login-button');
     LoginButton.dom.addEventListener('click', () => {
-        handleAuthClick;
         loginModalBackground.dom.style.display = 'block';
     });
 
@@ -22,7 +23,6 @@ function MenubarLogin( editor ) {
     LogoutButton.setId('logout-button');
 
     LogoutButton.dom.addEventListener('click', () => {
-        handleAuthClick;
         updateSigninStatus(false);
         loginModalBackground.dom.style.display = 'none';
     });
@@ -31,6 +31,8 @@ function MenubarLogin( editor ) {
 
     const loginModalBackground = new UIDiv();
     loginModalBackground.addClass('overlayModal');
+    loginModalBackground.setId('LoginFormID')
+    loginModalBackground.dom.style.display = 'none';
 
     const loginModal = new UIDiv();
     loginModal.addClass('loginModalContainer');
@@ -53,7 +55,7 @@ function MenubarLogin( editor ) {
     
     const loginWelcomeMessage = new UIText('A PIN has sent to you, \n please check your gmail.');
     loginWelcomeMessage.dom.style.display = 'none';
-    loginWelcomeMessage.addClass('welcome-message');
+    loginWelcomeMessage.setId('verification-message');
 
 
 // Sending verification code
@@ -70,14 +72,6 @@ function MenubarLogin( editor ) {
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            // const emailList = document.getElementById('email-list');
-            // emailList.innerHTML = ''; // Clear the list
-            // data.forEach(item => {
-            // const emailItem = document.createElement('div');
-            // emailItem.textContent = `Email: ${item.email}, Timestamp: ${item.timestamp}`;
-            // emailList.appendChild(emailItem);
-            // });
-
 
             const userEmail = InputforGmail.getValue();
 
@@ -85,17 +79,21 @@ function MenubarLogin( editor ) {
                 const emails = data.map(row => row.email);
                 if (emails.includes(userEmail)) {
                     console.log(userEmail)
-                  localStorage.setItem('userEmail', userEmail);
-                  loginWelcomeMessage.dom.display = 'block';
+                  loginWelcomeMessage.dom.style.display = 'block';
                   generateAndSendCode(userEmail);
+                
                 } else {
-                //   generateAndSendCode(userEmail);
                     console.log(userEmail)
-                    loginWelcomeMessage.setValue('Unregistered user, register first!');
+                    loginWelcomeMessage.setValue('Unregistered user, please register first!');
+                    
+                    loginWelcomeMessage.dom.style.display = 'block';
                 }
             } else {
                 loginWelcomeMessage.setValue('Error: This Gmail user is not registered.\nPlease register first.');
+                loginWelcomeMessage.dom.style.display = 'block';
             }
+
+            loginWelcomeMessage.dom.style.display = 'block';
         })
         .catch(error => {
             console.error('Error!', error.message);
@@ -108,6 +106,7 @@ function MenubarLogin( editor ) {
     const PINDiv = new UIDiv();
 
     PINDiv.addClass('pincontainer');
+    
     const InputforPINLabel = new UIText('PIN: ');
     // InputforPINLabel.dom.style.display = 'none';
 
@@ -198,42 +197,106 @@ function MenubarLogin( editor ) {
 
     container.add(loginModalBackground);
 
-	// const autosave = new UIBoolean( editor.config.getKey( 'autosave' ), strings.getKey( 'menubar/status/autosave' ) );
-	// autosave.text.setColor( '#888' );
-	// autosave.onChange( function () {
-
-	// 	const value = this.getValue();
-
-	// 	editor.config.setKey( 'autosave', value );
-
-	// 	if ( value === true ) {
-
-	// 		editor.signals.sceneGraphChanged.dispatch();
-
-	// 	}
-
-	// } );
-	// container.add( autosave );
-
-	// editor.signals.savingStarted.add( function () {
-
-	// 	autosave.text.setTextDecoration( 'underline' );
-
-	// } );
-
-	// editor.signals.savingFinished.add( function () {
-
-	// 	autosave.text.setTextDecoration( 'none' );
-
-	// } );
-
-	// const version = new UIText( 'r' + THREE.REVISION );
-	// version.setClass( 'title' );
-	// version.setOpacity( 0.5 );
-	// container.add( version );
+    SubmitLogin.dom.addEventListener('click', () => {
+        verifyCode();
+    })
 
 	return container;
 
 }
+
+  
+  function updateSigninStatus(isSignedIn) {
+    if (isSignedIn) {
+      document.getElementById('login-button').style.display = 'none';
+      document.getElementById('logout-button').style.display = 'block';
+
+    } else {
+        document.getElementById('login-button').style.display = 'block';
+        document.getElementById('logout-button').style.display = 'none';
+        document.getElementById('verification-message').style.display = 'none';
+        document.querySelector('.pincontainer').style.display = 'none';
+        document.getElementById('LoginFormID').style.display = 'none';
+        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+
+        // Convert HTMLCollection to an array using the spread operator
+        [...pincodearray].forEach(pinInput => {
+            pinInput.setValue('');
+        });
+        
+        localStorage.setItem('loginStatus', false);
+        localStorage.setItem('verificationCode', '');
+        localStorage.setItem('tempUserEmail', '');
+        localStorage.setItem('userEmail', '');
+    }
+  }
+  
+  
+  function generateAndSendCode(email) {
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+    localStorage.setItem('verificationCode', code);
+    localStorage.setItem('tempUserEmail', email);
+  
+    sendEmail(email, code);
+  }
+  
+  function sendEmail(email, code) {
+    console.log('Sending email')
+    emailjs.send('service_82gn40c', 'template_iokrqmk', {
+      to_email: email,
+      reply_to: 'request2shine@gmail.com',
+      verification_code: code
+    })
+    .then((response) => {
+      console.log('Email sent successfully', response.status, response);
+      document.querySelector('.pincontainer').style.display = 'flex';
+      document.getElementById('verification-message').style.display = 'block';
+    }, (error) => {
+      console.error('Failed to send email', error);
+      document.getElementById('verification-message').innerText = 'Failed to send email';
+      document.getElementById('verification-message').style.display = 'block';
+    });
+  
+  }
+  
+  
+  function verifyCode() {
+    let inputCode = '';
+    const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+
+    // Convert HTMLCollection to an array using the spread operator
+    [...pincodearray].forEach(pinInput => {
+        inputCode += pinInput.value;
+    });
+
+    console.log(inputCode);
+
+
+    const storedCode = localStorage.getItem('verificationCode');
+    if (inputCode === storedCode) {
+      const email = localStorage.getItem('tempUserEmail');
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('loginStatus', true);
+      document.getElementById('verification-message').innerText = 'Verification successful!';
+      updateSigninStatus(true);
+      document.getElementById('LoginFormID').style.display = 'none';
+    } else {
+      document.getElementById('verification-message').innerText = 'Incorrect code. Please try again.';
+    }
+  }
+  
+  
+  function handleClientLoad() {
+    emailjs.init("ZdZOsOOaG3vBGigqs"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
+    if(localStorage.getItem('loginStatus')) {
+        updateSigninStatus(true);
+    } else {
+       updateSigninStatus(false);
+    }
+    
+  }
+  
+  document.addEventListener('DOMContentLoaded', handleClientLoad);
+  
 
 export { MenubarLogin };

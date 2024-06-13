@@ -54,7 +54,7 @@ export function checkUserEmail() {
   }).then(function(response) {
     const values = response.result.values;
     if (values && values.length > 0) {
-      const emails = values.map(row => row[0]);
+      const emails = values.map(row => row.email);
       if (emails.includes(email)) {
         localStorage.setItem('userEmail', email);
         document.getElementById('welcome-message').innerText = `Welcome back, ${profile.getName()}!`;
@@ -78,42 +78,21 @@ export function generateAndSendCode(email) {
 }
 
 function sendEmail(email, code) {
-  const smtpServer = 'smtp-relay.brevo.com';
-  const smtpUsername = 'request2shine@gmail.com';
-  const smtpPassword = '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';
-  const fromEmail = 'request2shine@gmail.com'
-  const subject = 'Verification Code';
-  
-  const emailBody = `
-    Hello,<br><br>
-
-    Thank you for signing up. Please use the following code to verify your email:<br><br>
-
-    <strong>${code}</strong><br><br>
-
-    If you did not sign up for this account, please ignore this email.<br><br>
-
-    Best regards,<br>
-    Shine team
-  `;
-
-  Email.send({
-    Host: smtpServer,
-    Username: smtpUsername,
-    Password: smtpPassword,
-    To: email,
-    From: fromEmail,
-    Subject: subject,
-    Body: 'emailBody',
-    ReplyTo: 'request2shine@gmail.com' // Set your reply-to email here
+  console.log('Sending email')
+  emailjs.send('service_82gn40c', 'template_iokrqmk', {
+    to_email: email,
+    reply_to: 'request2shine@gmail.com',
+    verification_code: code
   })
-  .then((message) => {
-    console.log(`Email sent to ${email} successfully`, message);
-  })
-  .catch((error) => {
-    console.error(`Failed to send email to ${email}`, error);
+  .then((response) => {
+    console.log('Email sent successfully', response.status, response);
+  }, (error) => {
+    console.error('Failed to send email', error);
   });
+
 }
+
+
 
 export function verifyCode() {
   const inputCode = document.getElementById('verification-code').value;
@@ -151,8 +130,8 @@ function addToSheet(email) {
   });
 }
 
-// function handleClientLoad() {
-//   emailjs.init("ZdZOsOOaG3vBGigqs"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
-// }
+function handleClientLoad() {
+  emailjs.init("ZdZOsOOaG3vBGigqs"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
+}
 
-// document.addEventListener('DOMContentLoaded', handleClientLoad);
+document.addEventListener('DOMContentLoaded', handleClientLoad);

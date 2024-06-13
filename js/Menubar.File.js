@@ -596,6 +596,13 @@ function MenubarFile( editor ) {
 	option.setTextContent( strings.getKey( 'menubar/file/export/geant4_scene' ) );
 	option.onClick( async function () {
 
+		const loginStatus = localStorage.getItem('loginStatus');
+
+		if(!loginStatus || loginStatus === undefined) {
+			alert( 'To export files, you must first sign up.');
+			return;
+		}
+
 		function traversebooleanObjects(object, callback ) {
 
 			callback( object );
@@ -2430,6 +2437,11 @@ function MenubarFile( editor ) {
 	option.setTextContent( strings.getKey( 'menubar/file/export/gdml_scene' ) );
 	option.onClick( async function () {
 
+		if(!loginStatus || loginStatus === undefined) {
+			alert( 'To export files, you must first sign up.');
+			return;
+		}
+
 		function traversebooleanObjects(object, callback ) {
 
 			callback( object );
@@ -2886,6 +2898,11 @@ function MenubarFile( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( strings.getKey( 'menubar/file/export/mac' ) );
 	option.onClick( async function () {
+
+		if(!loginStatus || loginStatus === undefined) {
+			alert( 'To export files, you must first sign up.');
+			return;
+		}
 
 		var object = null;
 		editor.scene.traverse( function ( node ) {
