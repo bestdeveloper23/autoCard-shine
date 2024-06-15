@@ -63,7 +63,7 @@ function GeometryParametersPanel(editor, object) {
  // deltaphi
 
  const pDPhiRow = new UIRow();
- const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.001, 360).onChange(update);
+ const pDPhi = new UINumber(parameters.pDPhi).setStep(5).setRange(0.0001, 360).onChange(update);
  pDPhiRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/pDPhi')).setWidth('90px'));
  pDPhiRow.add(pDPhi);
  pDPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
@@ -107,7 +107,7 @@ function GeometryParametersPanel(editor, object) {
         aCSG = MeshCSG1;
         bCSG = MeshCSG1;
     }
-
+  
     if (DPhi > 270 && DPhi < 360) {
         let v_DPhi = 360 - DPhi;
 
