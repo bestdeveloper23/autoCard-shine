@@ -599,7 +599,7 @@ function MenubarFile( editor ) {
 		const loginStatus = localStorage.getItem('loginStatus');
 
 		if(loginStatus === undefined || loginStatus === 'false') {
-			alert( 'To export files, you must first sign up.');
+			alert( 'You must log in to export files.');
 			return;
 		}
 
@@ -2440,7 +2440,7 @@ function MenubarFile( editor ) {
 		const loginStatus = localStorage.getItem('loginStatus');
 
 		if(loginStatus === undefined || loginStatus === 'false') {
-			alert( 'To export files, you must first sign up.');
+			alert( 'You must log in to export files.');
 			return;
 		}
 
@@ -2904,7 +2904,7 @@ function MenubarFile( editor ) {
 		const loginStatus = localStorage.getItem('loginStatus');
 		
 		if(loginStatus === undefined || loginStatus === 'false') {
-			alert( 'To export files, you must first sign up.');
+			alert( 'You must log in to export files.');
 			return;
 		}
 

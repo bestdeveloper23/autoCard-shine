@@ -8,8 +8,11 @@ function MenubarLogin( editor ) {
 	const container = new UIPanel();
 	container.setClass( 'menu right' );
 
+    const loginStatusLabel = new UIText('Not logged in');
+    loginStatusLabel.setId('loginStatusLabel');
+
 // Login/Logout main Button
-    const LoginButton = new UIButton('Log in with Google');
+    const LoginButton = new UIButton('Sign up/Log in with Google');
     LoginButton.setId('login-button');
     LoginButton.dom.addEventListener('click', () => {
         loginModalBackground.dom.style.display = 'block';
@@ -23,7 +26,7 @@ function MenubarLogin( editor ) {
         loginModalBackground.dom.style.display = 'none';
     });
 
-    container.add(LoginButton, LogoutButton);
+    container.add(loginStatusLabel, LoginButton, LogoutButton);
 
     const loginModalBackground = new UIDiv();
     loginModalBackground.addClass('overlayModal');
@@ -143,7 +146,7 @@ function MenubarLogin( editor ) {
 
 // Register
     const registerDiv = new UIDiv();
-    const registerContent = new UIText(`Or register free`);
+    const registerContent = new UIText(`Or sign up free here`);
     const registerLink = new UILink(' here', 'https://forms.gle/cgPREbttZ56Ex4BU9');
     registerDiv.add(registerContent, registerLink);
 
@@ -207,6 +210,12 @@ function MenubarLogin( editor ) {
       document.getElementById('login-button').style.display = 'none';
       document.getElementById('logout-button').style.display = 'block';
 
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) 
+        {
+            document.getElementById('loginStatusLabel').textContent = userEmail;
+        }
+
     } else {
         document.getElementById('login-button').style.display = 'block';
         document.getElementById('logout-button').style.display = 'none';
@@ -220,6 +229,7 @@ function MenubarLogin( editor ) {
         localStorage.setItem('tempUserEmail', '');
         localStorage.setItem('userEmail', '');
 
+        document.getElementById('loginStatusLabel').textContent = 'Not logged in';
         
         const pincodearray = document.getElementsByClassName('loginFormInputPIN');
 
