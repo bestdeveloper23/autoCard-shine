@@ -200,6 +200,8 @@ function MenubarLogin( editor ) {
         verifyCode();
     })
 
+    // PIN input chaining
+
 	return container;
 
 }
@@ -294,6 +296,36 @@ function MenubarLogin( editor ) {
   
   
   function handleClientLoad() {
+    
+    const inputs = document.querySelectorAll('.loginFormInputPIN');
+
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (input.value.length === 1 && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('paste', (e) => {
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            if (paste.length === 4) {
+                inputs.forEach((input, index) => {
+                    input.value = paste[index];
+                });
+                inputs[inputs.length - 1].focus();
+            }
+            e.preventDefault();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            
+            console.log('Inputed 3')
+            if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+
     emailjs.init("ZdZOsOOaG3vBGigqs"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
     if(localStorage.getItem('loginStatus') === 'true') {
         updateSigninStatus(true);
