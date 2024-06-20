@@ -143,6 +143,7 @@ function MenubarLogin( editor ) {
 	CheckboxforRemember.text.setColor( '#888' );
 
     CheckboxforRemember.addClass('rememberbox');
+    CheckboxforRemember.setId('rememberBox');
     CheckboxforRemember.dom.addEventListener('click', () => {
         CheckboxforRemember.setValue(!CheckboxforRemember.getValue())
     })
@@ -249,7 +250,6 @@ function MenubarLogin( editor ) {
             pinInput.value = '';
             pinInput.textContent = '';
         });
-        document.getElementById('gmailInput').textContent = '';
 
         document.getElementById('login-button').style.display = 'block';
         document.getElementById('logout-button').style.display = 'none';
@@ -261,8 +261,12 @@ function MenubarLogin( editor ) {
         localStorage.setItem('loginStatus', false);
         localStorage.setItem('verificationCode', '');
         localStorage.setItem('tempUserEmail', '');
-        localStorage.setItem('userEmail', '');
-
+        const rememberBox = localStorage.getItem('rememberBox');
+        if( rememberBox !== 'true') {
+            localStorage.setItem('userEmail', '');
+            document.getElementById('gmailInput').value = '';
+        }
+        
         document.getElementById('loginStatusLabel').textContent = 'Not logged in';
         
         
@@ -315,6 +319,15 @@ function MenubarLogin( editor ) {
       document.getElementById('verification-message').textContent = 'Verification successful!';
       updateSigninStatus(true);
       document.getElementById('LoginFormID').style.display = 'none';
+
+      const rememberBox = document.getElementById('rememberBox').children[0];
+
+      if(rememberBox.checked) {
+        localStorage.setItem('rememberBox', 'true');
+      } else {
+        localStorage.setItem('rememberBox', 'false');
+      }
+
     } else {
       document.getElementById('verification-message').textContent = 'Incorrect code. Please try again.';
     }
@@ -356,6 +369,13 @@ function MenubarLogin( editor ) {
         updateSigninStatus(true);
     } else {
        updateSigninStatus(false);
+    }
+
+    const rememberBox = localStorage.getItem('rememberBox');
+
+    if(rememberBox && rememberBox.length === 'true') {
+        const userEmail = localStorage.getItem('userEmail');
+        document.getElementById('gmailInput').value = userEmail;
     }
     
   }
