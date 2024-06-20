@@ -110,7 +110,7 @@ function MenubarLogin( editor ) {
     // InputforPINLabel.dom.style.display = 'none';
 
     const InputforPINDiv = new UIDiv();
-    InputforPINDiv.addClass('pinInputcontainer')
+    InputforPINDiv.addClass('pinInputcontainer');
     const InputforPIN1 = new UIInput('').setWidth('20px');
     const InputforPIN2 = new UIInput('').setWidth('20px');
     const InputforPIN3 = new UIInput('').setWidth('20px');
@@ -205,7 +205,6 @@ function MenubarLogin( editor ) {
         [...pincodearray].forEach(pinInput => {
             inputCode += pinInput.value;
             
-            console.log(pinInput.value, pinInput.textContent)
         });
 
         if (inputCode) {
