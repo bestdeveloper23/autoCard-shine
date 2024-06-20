@@ -146,8 +146,8 @@ function MenubarLogin( editor ) {
 
 // Register
     const registerDiv = new UIDiv();
-    const registerContent = new UIText(`Or sign up free here`);
-    const registerLink = new UILink(' here', 'https://forms.gle/cgPREbttZ56Ex4BU9');
+    const registerContent = new UIText('Or sign up free\u00A0');
+    const registerLink = new UILink('here', 'https://forms.gle/cgPREbttZ56Ex4BU9');
     registerDiv.add(registerContent, registerLink);
 
 // Close Button
@@ -197,7 +197,24 @@ function MenubarLogin( editor ) {
     container.add(loginModalBackground);
 
     SubmitLogin.dom.addEventListener('click', () => {
-        verifyCode();
+        
+        let inputCode = '';
+        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+    
+        // Convert HTMLCollection to an array using the spread operator
+        [...pincodearray].forEach(pinInput => {
+            inputCode += pinInput.value;
+            
+            console.log(pinInput.value, pinInput.textContent)
+        });
+
+        if (inputCode) {
+
+            verifyCode();    
+        } else {
+            document.getElementById('verification-message').textContent = 'Please input PIN code';
+        }
+        
     })
 
     // PIN input chaining
@@ -219,12 +236,22 @@ function MenubarLogin( editor ) {
         }
 
     } else {
+        
+        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
+
+        // Convert HTMLCollection to an array using the spread operator
+        [...pincodearray].forEach(pinInput => {
+            pinInput.value = '';
+            pinInput.textContent = '';
+        });
+        document.getElementById('gmailInput').textContent = '';
+
         document.getElementById('login-button').style.display = 'block';
         document.getElementById('logout-button').style.display = 'none';
         document.getElementById('verification-message').style.display = 'none';
         document.querySelector('.pincontainer').style.display = 'none';
         document.getElementById('LoginFormID').style.display = 'none';
-        document.getElementById('gmailInput').textContent = '';
+        
 
         localStorage.setItem('loginStatus', false);
         localStorage.setItem('verificationCode', '');
@@ -233,12 +260,6 @@ function MenubarLogin( editor ) {
 
         document.getElementById('loginStatusLabel').textContent = 'Not logged in';
         
-        const pincodearray = document.getElementsByClassName('loginFormInputPIN');
-
-        // Convert HTMLCollection to an array using the spread operator
-        [...pincodearray].forEach(pinInput => {
-            pinInput.textContent = '';
-        });
         
     }
   }
@@ -260,12 +281,12 @@ function MenubarLogin( editor ) {
       verification_code: code
     })
     .then((response) => {
-
+      document.getElementById('verification-message').textContent = 'A PIN has sent to you, \n please check your gmail.';
       document.querySelector('.pincontainer').style.display = 'flex';
       document.getElementById('verification-message').style.display = 'block';
     }, (error) => {
       console.error('Failed to send email', error);
-      document.getElementById('verification-message').innerText = 'Failed to send email';
+      document.getElementById('verification-message').textContent = 'Failed to send email';
       document.getElementById('verification-message').style.display = 'block';
     });
   
@@ -286,11 +307,11 @@ function MenubarLogin( editor ) {
       const email = localStorage.getItem('tempUserEmail');
       localStorage.setItem('userEmail', email);
       localStorage.setItem('loginStatus', true);
-      document.getElementById('verification-message').innerText = 'Verification successful!';
+      document.getElementById('verification-message').textContent = 'Verification successful!';
       updateSigninStatus(true);
       document.getElementById('LoginFormID').style.display = 'none';
     } else {
-      document.getElementById('verification-message').innerText = 'Incorrect code. Please try again.';
+      document.getElementById('verification-message').textContent = 'Incorrect code. Please try again.';
     }
   }
   
@@ -319,7 +340,6 @@ function MenubarLogin( editor ) {
 
         input.addEventListener('keydown', (e) => {
             
-            console.log('Inputed 3')
             if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
                 inputs[index - 1].focus();
             }

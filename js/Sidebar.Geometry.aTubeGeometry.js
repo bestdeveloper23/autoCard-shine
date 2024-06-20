@@ -70,15 +70,15 @@ function GeometryParametersPanel(editor, object) {
 
  container.add(pDPhiRow);
 
- //
+ // update shape on canvas
 
  function update() {
 
   // we need to new each geometry module
 
-  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = - pSPhi.getValue(), DPhi = pDPhi.getValue();
+    var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi = - pSPhi.getValue(), DPhi = pDPhi.getValue();
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+    const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2, 32, 32, false, 0, Math.PI * 2);
     const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
     cylindermesh1.rotateX(Math.PI / 2);
     cylindermesh1.updateMatrix();
