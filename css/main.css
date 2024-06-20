@@ -673,8 +673,13 @@ select:hover {
   text-transform: initial;
 }
 
-.loginformButton:hover {
+.loginformButton:not(:disabled):hover {
   border: 1px solid #888;
+}
+
+.loginformButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .registercontainer {

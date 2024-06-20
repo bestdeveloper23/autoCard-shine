@@ -63,6 +63,10 @@ function MenubarLogin( editor ) {
     
     SendCodeButton.dom.addEventListener('click', () => {
         
+        SendCodeButton.dom.textContent = 'Sending the PIN ... ';
+                    
+        SendCodeButton.dom.disabled = true;
+
         const scriptURL = 'https://script.google.com/macros/s/AKfycbw4IIWqutEqzgrqrU69d-i6SVWsTi6pkHAYSO0u81yhb4cKVP3MkXaR9xVHFUc1id1N/exec'; // Replace with your Web App URL
         
         fetch(scriptURL, {
@@ -78,26 +82,28 @@ function MenubarLogin( editor ) {
                 const emails = data.map(row => row.email);
                 if (emails.includes(userEmail)) {
 
-                  loginWelcomeMessage.dom.style.display = 'block';
+                  loginWelcomeMessage.setValue('A PIN has sent to you, \n please check your gmail.');
                   generateAndSendCode(userEmail);
                 
                 } else {
 
-                    loginWelcomeMessage.setValue('Unregistered user, please register first!');
+                    loginWelcomeMessage.setValue('Unknown email address. Please sign up with Gmail first!');
                     
-                    loginWelcomeMessage.dom.style.display = 'block';
                 }
             } else {
-                loginWelcomeMessage.setValue('Error: This Gmail user is not registered.\nPlease register first.');
-                loginWelcomeMessage.dom.style.display = 'block';
+                loginWelcomeMessage.setValue('Error: Unknown email address. Please sign up with Gmail first!');
+
             }
 
-            loginWelcomeMessage.dom.style.display = 'block';
         })
         .catch(error => {
             console.error('Error!', error.message);
             alert('Failed to fetch emails.');
-        });
+        }).finally(() => {
+            SendCodeButton.dom.disabled = false;
+            SendCodeButton.dom.textContent = 'Send me a PIN';
+            loginWelcomeMessage.dom.style.display = 'block';
+        });;
     
     })
 
