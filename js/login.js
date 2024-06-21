@@ -144,8 +144,8 @@ function MenubarLogin( editor ) {
 
     CheckboxforRemember.addClass('rememberbox');
     CheckboxforRemember.setId('rememberBox');
-    CheckboxforRemember.dom.addEventListener('click', () => {
-        CheckboxforRemember.setValue(!CheckboxforRemember.getValue())
+    CheckboxforRemember.dom.children[1].addEventListener('click', () => {
+        CheckboxforRemember.setValue(!CheckboxforRemember.getValue());
     })
 
 // Login Button
