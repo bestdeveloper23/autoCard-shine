@@ -444,6 +444,13 @@ select:hover {
   background-color: #08f;
 }
 
+#menubar .menu .options .option.toggle-on::before {
+
+  content: '✔';
+  font-size: 12px;
+
+}
+
 #menubar .menu .options .option:active {
   color: #666;
   background: transparent;

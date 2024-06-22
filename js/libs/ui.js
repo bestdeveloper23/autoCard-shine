@@ -98,6 +98,14 @@ class UIElement {
 
 	}
 
+	toggleClass( name, toggle ) {
+
+		this.dom.classList.toggle( name, toggle );
+
+		return this;
+
+	}
+
 	setStyle( style, array ) {
 
 		for ( let i = 0; i < array.length; i ++ ) {
@@ -107,6 +115,20 @@ class UIElement {
 		}
 
 		return this;
+
+	}
+
+	setHidden( isHidden ) {
+
+		this.dom.hidden = isHidden;
+
+		return this;
+
+	}
+
+	isHidden() {
+
+		return this.dom.hidden;
 
 	}
 
@@ -148,7 +170,6 @@ const properties = [ 'position', 'left', 'top', 'right', 'bottom', 'width', 'hei
 	'margin', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom',
 	'padding', 'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom',
 	'fontSize', 'fontWeight', 'textAlign', 'textDecoration', 'textTransform', 'cursor', 'zIndex' ];
-
 properties.forEach( function ( property ) {
 
 	const method = 'set' + property.substr( 0, 1 ).toUpperCase() + property.substr( 1, property.length );
