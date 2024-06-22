@@ -8,9 +8,9 @@ import { Storage as _Storage } from './Storage.js';
 import { Selector } from './Viewport.Selector.js';
 import { PointSourceHelper } from './libs/helper/pointsourceHelper.js';
 
-var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.1, 10000 );
 _DEFAULT_CAMERA.name = 'Camera';
-_DEFAULT_CAMERA.position.set( 0, 5, 10 );
+_DEFAULT_CAMERA.position.set( 0, 500, 1000 );
 _DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 function Editor() {
@@ -648,6 +648,44 @@ Editor.prototype = {
 
 	clear: function () {
 
+		// this.history.clear();
+		// this.storage.clear();
+
+		// this.camera.copy( _DEFAULT_CAMERA );
+		// this.signals.cameraResetted.dispatch();
+
+		// this.scene.name = 'Scene';
+		// this.scene.userData = {};
+		// this.scene.background = null;
+		// this.scene.environment = null;
+		// this.scene.fog = null;
+
+		// var objects = this.scene.children;
+
+		// while ( objects.length > 0 ) {
+
+		// 	this.removeObject( objects[ 0 ] );
+
+		// }
+
+		// this.geometries = {};
+		// this.materials = {};
+		// this.textures = {};
+		// this.scripts = {};
+
+		// this.materialsRefCounter.clear();
+
+		// this.animations = {};
+		// this.mixer.stopAllAction();
+
+		// this.deselect();
+
+		// this.signals.editorCleared.dispatch();
+		
+		// this.signals.booleanEventChanged.dispatch();
+		// this.signals.measureEventChanged.dispatch();
+
+
 		this.history.clear();
 		this.storage.clear();
 
@@ -662,11 +700,15 @@ Editor.prototype = {
 
 		var objects = this.scene.children;
 
+		this.signals.sceneGraphChanged.active = false;
+
 		while ( objects.length > 0 ) {
 
 			this.removeObject( objects[ 0 ] );
 
 		}
+
+		this.signals.sceneGraphChanged.active = true;
 
 		this.geometries = {};
 		this.materials = {};
@@ -681,9 +723,6 @@ Editor.prototype = {
 		this.deselect();
 
 		this.signals.editorCleared.dispatch();
-		
-		this.signals.booleanEventChanged.dispatch();
-		this.signals.measureEventChanged.dispatch();
 
 	},
 

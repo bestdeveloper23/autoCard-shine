@@ -743,7 +743,7 @@ function Loader( editor ) {
 
 					const result = new VRMLLoader().parse( contents );
 
-					editor.execute( new SetSceneCommand( editor, result ) );
+					editor.execute( new AddObjectCommand( editor, result ) );
 
 				}, false );
 				reader.readAsText( file );
