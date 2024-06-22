@@ -57,7 +57,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Box');
     item.onClick(function () {
 
-        const geometry = new THREE.BoxGeometry(2, 2, 2, 1, 1, 1);
+        const geometry = new THREE.BoxGeometry(200, 200, 200, 1, 1, 1);
         let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         mesh.rotateX(Math.PI/2);
         mesh.updateMatrix();
@@ -90,7 +90,7 @@ function BasicSolids(editor) {
         var distance = -camera.position.y / direction.y;
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-        const geometry = new THREE.BoxGeometry(2, 2, 2, 1, 1, 1);
+        const geometry = new THREE.BoxGeometry(200, 200, 200, 1, 1, 1);
         let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         mesh.position.copy(position);
         mesh.rotateX(Math.PI/2);

@@ -86,7 +86,8 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-		const geometry = new THREE.BoxGeometry(width.getValue() * 2, height.getValue() * 2, depth.getValue() * 2, 1, 1, 1);
+		console.log(width.getValue())
+		const geometry = new THREE.BoxGeometry(width.getValue() * 200, height.getValue() * 200, depth.getValue() * 200, 1, 1, 1);
 
 		geometry.name = object.geometry.name;
         
@@ -100,7 +101,7 @@ function GeometryParametersPanel( editor, object ) {
         const param = {depth: depth.getValue(), depthSegments: 1, height: height.getValue(), heightSegments: 1, width: width.getValue(), widthSegments: 1};
         mesh.geometry.parameters = param;
 
-		editor.execute( new SetGeometryCommand( editor, object, geometry ) );
+		editor.execute( new SetGeometryCommand( editor, object, mesh.geometry ) );
 
 	}
 
