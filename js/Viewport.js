@@ -51,7 +51,7 @@ function Viewport(editor, measureValue) {
 	grid1.material.vertexColors = false;
 	grid.add(grid1);
 
-	const grid2 = new THREE.GridHelper(3000, 60, 0x222222);
+	const grid2 = new THREE.GridHelper(3000, 30, 0x222222);
 	grid2.material.color.setHex(0x222222);
 	grid2.material.vertexColors = false;
 	grid.add(grid2);
