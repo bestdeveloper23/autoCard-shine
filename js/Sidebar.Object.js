@@ -1095,9 +1095,9 @@ function SidebarObject( editor ) {
 			volumesourceShapeRow.setDisplay( 'none' );
 		}
 
-		objectPositionX.setValue( object.position.x );
-		objectPositionY.setValue( object.position.y );
-		objectPositionZ.setValue( object.position.z );
+		objectPositionX.setValue( object.position.x / 10 );
+		objectPositionY.setValue( object.position.y / 10 );
+		objectPositionZ.setValue( object.position.z / 10 );
 
 		objectRotationX.setValue( - object.rotation.x * THREE.MathUtils.RAD2DEG );
 		objectRotationY.setValue( - object.rotation.y * THREE.MathUtils.RAD2DEG );
