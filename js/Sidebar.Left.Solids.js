@@ -6,7 +6,6 @@ import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
 import { UIDiv, UIPanel, UIRow } from "./libs/ui.js";
 
 import { AddObjectCommand } from './commands/AddObjectCommand.js';
-import radiationsourceImg from '../images/basicmodels/radiationSource.jpg'
 import boxImg from '../images/basicmodels/aBox.jpg';
 import shpereImg from '../images/basicmodels/aOrb.jpg';
 import tubImg from '../images/basicmodels/aTubs.jpg';
@@ -55,9 +54,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/box'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Box');
+    const pX=100; // mm
+    const pY=100; // mm
+    const pZ=100; // mm
     item.onClick(function () {
-
-        const geometry = new THREE.BoxGeometry(200, 200, 200, 1, 1, 1);
+        // https://threejs.org/docs/#api/en/geometries/BoxGeometry
+        const geometry = new THREE.BoxGeometry(2*pX, 2*pY, 2*pZ);
         let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         mesh.rotateX(Math.PI/2);
         mesh.updateMatrix();
@@ -65,11 +67,10 @@ function BasicSolids(editor) {
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         mesh.name = 'Box';
         mesh.geometry.type = "BoxGeometry";
-        const param = {depth: 1, depthSegments: 1, height: 1, heightSegments: 1, width: 1, widthSegments: 1};
+        const param = {width: pX/10, height: pY/10, depth: pZ/10};
         mesh.geometry.parameters = param;
 
         editor.execute(new AddObjectCommand(editor, mesh));
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -90,7 +91,8 @@ function BasicSolids(editor) {
         var distance = -camera.position.y / direction.y;
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-        const geometry = new THREE.BoxGeometry(200, 200, 200, 1, 1, 1);
+        // FIXME: this is a complete duplication of function in line 60
+        const geometry = new THREE.BoxGeometry(2*pX, 2*pY, 2*pZ);
         let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         mesh.position.copy(position);
         mesh.rotateX(Math.PI/2);
@@ -100,11 +102,10 @@ function BasicSolids(editor) {
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         mesh.name = 'Box';
         mesh.geometry.type = "BoxGeometry";
-        const param = {depth: 1, depthSegments: 1, height: 1, heightSegments: 1, width: 1, widthSegments: 1};
+        const param = {width: pX/10, height: pY/10, depth: pZ/10};
         mesh.geometry.parameters = param;
                 
         editor.execute(new AddObjectCommand(editor, mesh));
-
     });
 
     options.add(item);
