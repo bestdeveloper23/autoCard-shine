@@ -308,21 +308,22 @@ function SidebarSource( editor ) {
 
 			}
 
-			if( object.planeshape !== undefined ) {
+			// if( object.planeshape !== undefined ) {
 
 				const newplaneshape = planesourceShape.getValue();
 				object.planeshape = SOURCE.shape.plane[Number(newplaneshape)];
 				// object.updateProjectionMatrix();
 				
-			}
+			// }
 
-			if( object.volumeshape !== undefined ) {
+			// if( object.volumeshape !== undefined ) {
 
 				const newvolumeshape = volumesourceShape.getValue();
 				object.volumeshape = SOURCE.shape.volume[Number(newvolumeshape)];
+				console.log(object)
 				// object.updateProjectionMatrix();
 				
-			}
+			// }
 
 			if( object.energykind !== undefined ) {
 
@@ -356,7 +357,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = 0.01;
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -368,13 +369,13 @@ function SidebarSource( editor ) {
 
 				} else if(object.source === "Plane" && object.planeshape === "Square") {
 					
-					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX, newHalfX, 0.01, 1, 1, 1)
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, newHalfX * 10, 0.01)
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
 				} else if(object.source === "Plane" && object.planeshape === "Rectangle") {
 
-					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX, sourceY.getValue(), 0.01);
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, sourceY.getValue() * 10, 0.01);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
@@ -382,7 +383,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*20, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -396,7 +397,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*20, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -408,9 +409,9 @@ function SidebarSource( editor ) {
 
 				} else if(object.source === "Surface" && object.volumeshape === "Para") {
 
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
-					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const maxRadius = Math.max(dx, dy, dz) * 20;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
 					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
@@ -470,16 +471,16 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
-					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const maxRadius = Math.max(dx, dy, dz) * 20;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
 					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
@@ -539,7 +540,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -558,7 +559,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = newHalfY, Dz = 0.01;
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -570,7 +571,7 @@ function SidebarSource( editor ) {
 
 				} else if(object.source === "Plane" && object.planeshape === "Rectangle") {
 
-					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX, newHalfY, 0.01);
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, newHalfY * 10, 0.01);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 					
@@ -578,7 +579,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = newHalfY, Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*20, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -592,7 +593,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*20, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -603,7 +604,7 @@ function SidebarSource( editor ) {
 					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
 
 				} else if(object.source === "Surface" && object.volumeshape === "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -665,14 +666,14 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -734,7 +735,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -753,7 +754,7 @@ function SidebarSource( editor ) {
 
 					const radius = sourceOuterRadius.getValue();
 					const halfZ = newHalfZ;
-					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 					
@@ -761,7 +762,7 @@ function SidebarSource( editor ) {
 
 					const radius = sourceOuterRadius.getValue();
 					const halfZ = newHalfZ;
-					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 					
@@ -769,7 +770,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz * 10, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -783,7 +784,7 @@ function SidebarSource( editor ) {
 
 					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
 
-					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz*2, 32, 1, false, 0, Math.PI * 2);
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*20, 32, 1, false, 0, Math.PI * 2);
 					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
 					const ratioZ = semiAxisY / xSemiAxis;
 					cylindermesh.scale.z = ratioZ;
@@ -797,12 +798,12 @@ function SidebarSource( editor ) {
 
 					const radius = sourceOuterRadius.getValue(); height = newHalfZ;
 
-					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, height, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, height * 10, 32, 32, false, 0, Math.PI * 2);
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 			
 				} else if(object.source === "Surface" && object.volumeshape === "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -864,14 +865,14 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -933,7 +934,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -951,10 +952,10 @@ function SidebarSource( editor ) {
 				if( object.source === "Plane" && object.planeshape === "Annulus") {
 
 					const outerRadius = newInRadius;
-					const innerRadius = sourceOuterRadius.getValue();
+					const innerRadius = sourceOuterRadius.getValue() * 10;
 					
-					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius, outerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
-					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius * 10, outerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius * 10, innerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
 
 					const sourceModelMaterial = new THREE.MeshBasicMaterial();
 					const secondModelMaterial = new THREE.MeshBasicMaterial();
@@ -982,7 +983,7 @@ function SidebarSource( editor ) {
 			if( object.outerradius !== undefined ) {
 
 				if(object.source === "Plane" && object.planeshape === "Circle") {
-					const sourceModelGeometry = new THREE.CylinderGeometry(newOutRadius, newOutRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(newOutRadius * 10, newOutRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
 				} else if( object.source === "Plane" && object.planeshape === "Annulus") {
@@ -990,8 +991,8 @@ function SidebarSource( editor ) {
 					const outerRadius = newOutRadius;
 					const innerRadius = sourceInRadius.getValue();
 					
-					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius, outerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
-					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius * 10, outerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius * 10, innerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
 
 					const sourceModelMaterial = new THREE.MeshBasicMaterial();
 					const secondModelMaterial = new THREE.MeshBasicMaterial();
@@ -1010,15 +1011,13 @@ function SidebarSource( editor ) {
 
 				} else if ( object.source === "Surface" && object.volumeshape === "Sphere") {
 
-					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius * 10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
-
-					console.log(newOutRadius)
 					
 				} else if ( object.source === "Volume" && object.volumeshape === "Sphere") {
 
-					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius * 10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
@@ -1026,7 +1025,7 @@ function SidebarSource( editor ) {
 
 					const radius = newOutRadius;
 					const halfZ = newHalfZ;
-					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
@@ -1034,7 +1033,7 @@ function SidebarSource( editor ) {
 
 					const radius = newOutRadius;
 					const halfZ = newHalfZ;
-					const sourceModelGeometry = new THREE.CylinderGeometry(radius, radius, 2 * halfZ, 32, 32, false, 0, Math.PI * 2);
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
 
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
 
@@ -1048,7 +1047,7 @@ function SidebarSource( editor ) {
 
 			if( object.alpha !== undefined ) {
 				if(object.source === "Surface" && object.volumeshape === "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1110,14 +1109,14 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1179,7 +1178,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -1193,7 +1192,7 @@ function SidebarSource( editor ) {
 			if ( object.theta !== undefined ) {
 				
 				if(object.source === "Surface" && object.volumeshape === "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1255,14 +1254,14 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1324,7 +1323,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -1338,7 +1337,7 @@ function SidebarSource( editor ) {
 			if ( object.phi !== undefined ) {
 
 				if(object.source === "Surface" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1400,14 +1399,14 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
 					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
 					
 				} else if(object.source === "Volume" && object.volumeshape == "Para") {
-					const dx = sourceX.getValue(), dy = sourceY.getValue(), dz = sourceZ.getValue(), alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
 
 					const maxRadius = Math.max(dx, dy, dz) * 2;
 					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
@@ -1469,7 +1468,7 @@ function SidebarSource( editor ) {
 					// aCSG = CSG.fromMesh(sourceModel);
 					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
-					const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
 					sourceModel.geometry.parameters = param;
 					sourceModel.geometry.type = 'aParallGeometry';
 					
@@ -1480,7 +1479,7 @@ function SidebarSource( editor ) {
 				object.phi = phiI.getValue();
 			}
 
-			const newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
+			const newPosition = new THREE.Vector3( objectPositionX.getValue() * 10, objectPositionY.getValue() * 10, objectPositionZ.getValue() * 10 );
 			if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
 
 				editor.execute( new SetPositionCommand( editor, object, newPosition ) );
@@ -1671,23 +1670,23 @@ function SidebarSource( editor ) {
 		}
 		
 		if( object.halfX !== undefined ) {
-			sourceX.setValue( object.halfX );
+			sourceX.setValue( object.halfX);
 		}
 		
 		if( object.halfY !== undefined ) {
-			sourceY.setValue( object.halfY );
+			sourceY.setValue( object.halfY);
 		}
 			
 		if( object.halfZ !== undefined ) {
-			sourceZ.setValue( object.halfZ );
+			sourceZ.setValue( object.halfZ);
 		}
 			
 		if( object.innerradius !== undefined ) {
-			sourceInRadius.setValue( object.innerradius );
+			sourceInRadius.setValue( object.innerradius);
 		}
 			
 		if( object.outerradius !== undefined ) {
-			sourceOuterRadius.setValue( object.outerradius );
+			sourceOuterRadius.setValue( object.outerradius);
 		}
 
 		if( object.alpha !== undefined ) {
@@ -1717,9 +1716,9 @@ function SidebarSource( editor ) {
 			volumesourceShapeRow.setDisplay( 'none' );
 		}
 
-		objectPositionX.setValue( object.position.x );
-		objectPositionY.setValue( object.position.y );
-		objectPositionZ.setValue( object.position.z );
+		objectPositionX.setValue( object.position.x / 10);
+		objectPositionY.setValue( object.position.y / 10);
+		objectPositionZ.setValue( object.position.z / 10);
 
 		objectRotationX.setValue( object.rotation.x * THREE.MathUtils.RAD2DEG );
 		objectRotationY.setValue( object.rotation.y * THREE.MathUtils.RAD2DEG );

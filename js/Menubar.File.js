@@ -2953,18 +2953,33 @@ function MenubarFile( editor ) {
 	
 			let macro = '';
 			
-			macro += `/gps/particle ${object.energykind}\n`
-			macro += `/gps/energy ${object.energysize} ${object.energyunit}\n`
-			macro += `/gps/pos/centre ${position.x} ${position.y} ${position.z} m\n`
-			macro += `/gps/pos/type ${object.source}\n`
+			macro += `/gps/particle ${object.energykind}`
+			macro += `\n/gps/energy ${object.energysize} ${object.energyunit}`
+			macro += `\n/gps/pos/centre ${position.x / 10} ${position.y / 10} ${position.z / 10} cm`
+			macro += `\n/gps/pos/type ${object.source}`
 			if(sourceShape) 
 			{
-				macro += `/gps/pos/shape ${sourceShape}\n`
-				macro += `/gps/pos/halfx ${object.halfX}\n`
-				macro += `/gps/pos/halfy ${object.halfY}\n`
-				macro += `/gps/pos/halfz ${object.halfZ}\n`
-				macro += `/gps/pos/inner_radius ${object.innerradius}\n`
-				macro += `/gps/pos/outer_radius ${object.outerradius}\n`
+				macro += `\n/gps/pos/shape ${sourceShape}`
+				if (object.halfX) {
+					macro += `\n/gps/pos/halfx ${object.halfX} cm`
+				}
+
+				if (object.halfY) {
+					macro += `\n/gps/pos/halfy ${object.halfY} cm`
+				}
+				
+				if (object.halfZ) {
+					macro += `\n/gps/pos/halfz ${object.halfZ} cm`
+				}
+				
+				if (object.innerradius) {
+					macro += `\n/gps/pos/inner_radius ${object.innerradius} cm`
+				}
+
+				if (object.outerradius) {
+					macro += `\n/gps/pos/outer_radius ${object.outerradius} cm`
+				}
+				
 			}
 	
 			downloadGeant4File( macro, 'run.mac')
