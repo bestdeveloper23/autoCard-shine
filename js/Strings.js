@@ -5,7 +5,6 @@ function Strings( config ) {
 	const values = {
 
 		en: {
-
 			'menubar/file': 'File',
 			'menubar/file/new': 'New',
 			'menubar/file/import': 'Import',
@@ -84,18 +83,18 @@ function Strings( config ) {
 			'menubar/add/polyhedra': 'Polyhedra',
 
 			'menubar/add/source/point' : 'Point',
-			'menubar/add/source/planeCircle' : 'planeCircle',
-			'menubar/add/source/planeAnnulus' : 'Annulus',
-			'menubar/add/source/planeElipse' : 'Elipse',
-			'menubar/add/source/planeSquare' : 'Square',
-			'menubar/add/source/planeRectangle' : 'Rectangle',
+			'menubar/add/source/circle' : 'Circle',
+			'menubar/add/source/annulus' : 'Annulus',
+			'menubar/add/source/ellipse' : 'Ellipse',
+			'menubar/add/source/square' : 'Square',
+			'menubar/add/source/rectangle' : 'Rectangle',
 			'menubar/add/source/beam' : 'Beam',
 			'menubar/add/source/surfaceSphere' : 'Sphere',
-			'menubar/add/source/surfaceElipsoid' : 'Elipsoid',
+			'menubar/add/source/surfaceEllipsoid' : 'Ellipsoid',
 			'menubar/add/source/surfaceCylinder' : 'Cylinder',
 			'menubar/add/source/surfacePara' : 'Para',
 			'menubar/add/source/volumeSphere' : 'Sphere',
-			'menubar/add/source/volumeElipsoid' : 'Elipsoid',
+			'menubar/add/source/volumeEllipsoid' : 'Ellipsoid',
 			'menubar/add/source/volumeCylinder' : 'Cylinder',
 			'menubar/add/source/volumePara' : 'Para',
 
@@ -144,9 +143,7 @@ function Strings( config ) {
 			'sidebar/scene/environment': 'Environment',
 			'sidebar/scene/fog': 'Fog',
 
-			// 'sidebar/properties/object': 'Object',
 			'sidebar/properties/object': 'Volume',
-			// 'sidebar/properties/geometry': 'Geometry',
 			'sidebar/properties/geometry': 'Solid',
 			'sidebar/properties/material': 'Material',
 			'sidebar/properties/script': 'Script',
@@ -559,11 +556,9 @@ function Strings( config ) {
 			'viewport/info/vertices': 'Vertices',
 			'viewport/info/triangles': 'Triangles',
 			'viewport/info/frametime': 'Frametime'
-
 		},
 
 		fr: {
-
 			'menubar/file': 'Fichier',
 			'menubar/file/new': 'Nouveau',
 			'menubar/file/import': 'Importer',
@@ -916,7 +911,6 @@ function Strings( config ) {
 		},
 
 		zh: {
-
 			'menubar/file': '文件',
 			'menubar/file/new': '新建',
 			'menubar/file/import': '导入',
@@ -1264,9 +1258,7 @@ function Strings( config ) {
 			'viewport/info/vertices': '顶点',
 			'viewport/info/triangles': '三角形',
 			'viewport/info/frametime': '帧时'
-
 		}
-
 	};
 
 	return {

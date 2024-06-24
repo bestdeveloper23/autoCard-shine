@@ -120,7 +120,7 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${circleImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/planeCircle'));
+    item.setTextContent(strings.getKey('menubar/add/source/circle'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'CircleSource');
     item.onClick(function () {
@@ -207,7 +207,7 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${annulusImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/planeAnnulus'));
+    item.setTextContent(strings.getKey('menubar/add/source/annulus'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'AnnulusSource');
     item.onClick(function () {
@@ -317,9 +317,9 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${ellipseImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/planeElipse'));
+    item.setTextContent(strings.getKey('menubar/add/source/ellipse'));
     item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'ElipseSource');
+    item.dom.setAttribute('item-type', 'EllipseSource');
     item.onClick(function () {
 
         const pointSource = new THREE.PerspectiveCamera();
@@ -416,7 +416,7 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${squareImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/planeSquare'));
+    item.setTextContent(strings.getKey('menubar/add/source/square'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'SqureSource');
     item.onClick(function () {
@@ -509,7 +509,7 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${rectangleImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/planeRectangle'));
+    item.setTextContent(strings.getKey('menubar/add/source/rectangle'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'RectangleSource');
     item.onClick(function () {
@@ -795,9 +795,9 @@ function BasicSources(editor) {
 
     // item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
 
-    // item.setTextContent(strings.getKey('menubar/add/source/surfaceElipsoid'));
+    // item.setTextContent(strings.getKey('menubar/add/source/surfaceEllipsoid'));
     // item.dom.setAttribute('draggable', true);
-    // item.dom.setAttribute('item-type', 'SElipsoidSource');
+    // item.dom.setAttribute('item-type', 'SEllipsoidSource');
     // item.onClick(function () {
 
     //     const pointSource = new THREE.PerspectiveCamera();
@@ -1317,9 +1317,9 @@ function BasicSources(editor) {
 
     item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
 
-    item.setTextContent(strings.getKey('menubar/add/source/volumeElipsoid'));
+    item.setTextContent(strings.getKey('menubar/add/source/volumeEllipsoid'));
     item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'VElipsoid');
+    item.dom.setAttribute('item-type', 'VEllipsoid');
     item.onClick(function () {
 
         const pointSource = new THREE.PerspectiveCamera();
