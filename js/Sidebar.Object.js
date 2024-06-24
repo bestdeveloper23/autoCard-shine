@@ -665,7 +665,7 @@ function SidebarObject( editor ) {
 				
 			}
 
-			const newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
+			const newPosition = new THREE.Vector3( objectPositionX.getValue() * 10, objectPositionY.getValue() * 10, objectPositionZ.getValue() * 10 );
 			if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
 
 				editor.execute( new SetPositionCommand( editor, object, newPosition ) );
