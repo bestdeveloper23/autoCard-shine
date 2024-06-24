@@ -1,12 +1,18 @@
 import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh.js';
-import { PolyhedronGeometry } from './libs/geometry/PolyhedronGeometry.js';
-import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
-
-import { UIDiv, UIPanel, UIRow } from "./libs/ui.js";
-
+import { UIDiv, UIPanel} from "./libs/ui.js";
 import { AddObjectCommand } from './commands/AddObjectCommand.js';
-import radiationsourceImg from '../images/basicmodels/radiationSource.jpg'
+import radiationsourceImg from '../images/basicmodels/radiationSource.jpg';
+import pointImg from '../images/sources/point.png';
+import squareImg from '../images/sources/square.png';
+import circleImg from '../images/sources/circle.png';
+import annulusImg from '../images/sources/annulus.png';
+import rectangleImg from '../images/sources/rectangle.png';
+import ellipseImg from '../images/sources/ellipse.png';
+import sphereImg from '../images/sources/sphere.png';
+import cylinderImg from '../images/sources/cylinder.png';
+import ellipsoidImg from '../images/sources/ellipsoid.png';
+import paraImg from '../images/sources/para.png';
 
 function BasicSources(editor) {
     const strings = editor.strings;
@@ -27,7 +33,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${pointImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/point'));
     item.dom.setAttribute('draggable', true);
@@ -45,27 +51,18 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Point';
-        // source.planeshape = "Circle";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -97,29 +94,19 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Point';
-        // source.planeshape = "Circle";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -131,13 +118,12 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${circleImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/planeCircle'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'CircleSource');
     item.onClick(function () {
-
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
@@ -150,26 +136,19 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
         source.source = 'Plane';
         source.planeshape = "Circle";
-        // source.volumeshape = "Sphere";
         source.energysize = 1;
         source.energyunit = "keV";
         source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -202,46 +181,36 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
         source.source = 'Plane';
         source.planeshape = "Circle";
-        // source.volumeshape = "Sphere";
         source.energysize = 1;
         source.energyunit = "keV";
         source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
         editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
-
     
-        // Annulus model
+    // Annulus model
 
     item = new UIDiv();
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${annulusImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/planeAnnulus'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'AnnulusSource');
     item.onClick(function () {
-
         const pointSource = new THREE.PerspectiveCamera();
 
         const sourceModelGeometry = new THREE.CylinderGeometry(1, 1, 0.01, 32, 32, false, 0, Math.PI * 2);
@@ -265,26 +234,20 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Annulus";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
         source.innerradius = 0.8;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -327,32 +290,24 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Annulus";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
         source.innerradius = 0.8;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
-
 
     // Ellipse model
 
@@ -360,7 +315,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${ellipseImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/planeElipse'));
     item.dom.setAttribute('draggable', true);
@@ -382,26 +337,20 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Ellipse";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 0.6;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -439,28 +388,21 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Ellipse";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 0.6;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -472,7 +414,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${squareImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/planeSquare'));
     item.dom.setAttribute('draggable', true);
@@ -481,7 +423,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01, 1, 1, 1)
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01)
         const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -491,16 +433,12 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Square";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
         // source.halfY = 1;
         // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
-
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
@@ -510,7 +448,6 @@ function BasicSources(editor) {
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -533,7 +470,7 @@ function BasicSources(editor) {
 
         const pointSource = new THREE.PerspectiveCamera();
 
-        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01, 1, 1, 1)
+        const sourceModelGeometry = new THREE.BoxGeometry(1, 1, 0.01)
         const sourceModelMaterial = new THREE.MeshBasicMaterial();
 
         const sourceModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
@@ -543,15 +480,12 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Square";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
         // source.halfY = 1;
         // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
@@ -563,8 +497,6 @@ function BasicSources(editor) {
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -575,7 +507,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${rectangleImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/planeRectangle'));
     item.dom.setAttribute('draggable', true);
@@ -607,13 +539,11 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -646,28 +576,21 @@ function BasicSources(editor) {
         source.name = 'RadiationSource';
 		source.source = 'Plane';
         source.planeshape = "Rectangle";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
         source.halfX = 1;
         source.halfY = 1.5;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -697,8 +620,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Beam';
-        // source.planeshape = "Cylinder";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -711,13 +632,11 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -749,8 +668,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Beam';
-        // source.planeshape = "Cylinder";
-        // source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
@@ -763,15 +680,12 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -783,7 +697,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${sphereImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/surfaceSphere'));
     item.dom.setAttribute('draggable', true);
@@ -853,29 +767,21 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        // source.planeshape = "Sphere";
         source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -887,7 +793,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/surfaceElipsoid'));
     item.dom.setAttribute('draggable', true);
@@ -910,7 +816,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        // source.planeshape = "Square";
         source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -918,19 +823,15 @@ function BasicSources(editor) {
         source.halfX = 1;
         source.halfY = 0.5;
         source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -967,7 +868,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        // source.planeshape = "Square";
         source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -981,15 +881,12 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -1001,7 +898,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${cylinderImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/surfaceCylinder'));
     item.dom.setAttribute('draggable', true);
@@ -1033,13 +930,11 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -1071,29 +966,22 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        // source.planeshape = "Square";
         source.volumeshape = "Cylinder";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
         source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -1105,7 +993,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${paraImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/surfacePara'));
     item.dom.setAttribute('draggable', true);
@@ -1305,7 +1193,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Surface';
-        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1322,15 +1209,12 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -1342,7 +1226,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${sphereImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/volumeSphere'));
     item.dom.setAttribute('draggable', true);
@@ -1360,27 +1244,20 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -1412,29 +1289,21 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Sphere";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
-        // source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
@@ -1446,7 +1315,7 @@ function BasicSources(editor) {
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/volumeElipsoid'));
     item.dom.setAttribute('draggable', true);
@@ -1469,7 +1338,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1477,19 +1345,15 @@ function BasicSources(editor) {
         source.halfX = 1;
         source.halfY = 0.5;
         source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -1526,7 +1390,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Ellipsoid";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1534,32 +1397,27 @@ function BasicSources(editor) {
         source.halfX = 1;
         source.halfY = 0.5;
         source.halfZ = 1;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
 
-// Volume Cylinder model
+    // Volume Cylinder model
 
     item = new UIDiv();
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${cylinderImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/volumeCylinder'));
     item.dom.setAttribute('draggable', true);
@@ -1578,27 +1436,21 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Cylinder";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
         source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -1631,40 +1483,33 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Cylinder";
 		source.energysize = 1;
 		source.energyunit = "keV";
 		source.energykind = "B+";
-        // source.halfX = 1;
-        // source.halfY = 1;
         source.halfZ = 1;
-        // source.innerradius = 1;
         source.outerradius = 1;
 
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
 
-// Volume Para model
+    // Volume Para model
 
     item = new UIDiv();
 
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${radiationsourceImg})`;
+    item.dom.style.backgroundImage = `url(${paraImg})`;
 
     item.setTextContent(strings.getKey('menubar/add/source/volumePara'));
     item.dom.setAttribute('draggable', true);
@@ -1745,7 +1590,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1753,8 +1597,6 @@ function BasicSources(editor) {
         source.halfX = 1;
         source.halfY = 1;
         source.halfZ = 2;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
         source.alpha = alpha;
         source.theta = theta;
         source.phi = phi;
@@ -1762,13 +1604,11 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
 		editor.execute( new AddObjectCommand( editor, source ) );
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
@@ -1862,7 +1702,6 @@ function BasicSources(editor) {
 
         source.name = 'RadiationSource';
 		source.source = 'Volume';
-        // source.planeshape = "Square";
         source.volumeshape = "Para";
 		source.energysize = 1;
 		source.energyunit = "keV";
@@ -1870,8 +1709,6 @@ function BasicSources(editor) {
         source.halfX = 1;
         source.halfY = 1;
         source.halfZ = 2;
-        // source.innerradius = 1;
-        // source.outerradius = 1;
         source.alpha = alpha;
         source.theta = theta;
         source.phi = phi;
@@ -1879,19 +1716,15 @@ function BasicSources(editor) {
         source.children.forEach(child => {
             child.matrixAutoUpdate = false;
             child.userData.draggable = false;
-
         });
 
         source.add(pointSource, sourceModel);
 
         source.position.copy(position);
 		editor.execute( new AddObjectCommand( editor, source ) );
-
-
     });
 
     options.add(item);
-
 
     return container;
 }
