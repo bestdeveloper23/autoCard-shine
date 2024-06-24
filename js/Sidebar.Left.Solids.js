@@ -57,6 +57,7 @@ function BasicSolids(editor) {
     const pX=100; // mm
     const pY=100; // mm
     const pZ=100; // mm
+    
     item.onClick(function () {
         // https://threejs.org/docs/#api/en/geometries/BoxGeometry
         const geometry = new THREE.BoxGeometry(2*pX, 2*pY, 2*pZ);

@@ -739,7 +739,7 @@ function Loader( editor ) {
 
 					const contents = event.target.result;
 
-					const { VRMLLoader } = await import( 'three/addons/loaders/VRMLLoader.js' );
+					const { VRMLLoader } = await import( './libs/VRMLLoader.js' );
 
 					const result = new VRMLLoader().parse( contents );
 
