@@ -3296,9 +3296,10 @@ class VRMLLoader extends Loader {
             console.log(negativeParticleGroup, positiveParticleGroup, neutralParticleGroup);
         
             // Add the groups to the scene if needed
-            scene.add(negativeParticleGroup);
-            scene.add(positiveParticleGroup);
-            scene.add(neutralParticleGroup);
+            if(negativeParticleGroup.children.length > 0) scene.add(negativeParticleGroup);
+            if(positiveParticleGroup.children.length > 0) scene.add(positiveParticleGroup);
+            if(neutralParticleGroup.children.length > 0) scene.add(neutralParticleGroup);
+
         } else {
             console.error('The parsed tree is not a valid THREE.Scene object.');
         }
