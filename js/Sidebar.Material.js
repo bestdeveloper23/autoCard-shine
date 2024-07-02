@@ -14,6 +14,8 @@ import { SidebarMaterialRangeValueProperty } from './Sidebar.Material.RangeValue
 import { SidebarMaterialProgram } from './Sidebar.Material.Program.js';
 import { PeriodicTable } from './PeriodTable.js';
 
+import { SOURCE } from './libs/nucleardata/radiation.js';
+
 
 function SidebarMaterial(editor) {
 
@@ -145,12 +147,12 @@ function SidebarMaterial(editor) {
 
 	// energy
 
-	const energyRow = new UIRow();
-	energyRow.add(new UIText(strings.getKey('sidebar/material/energy')).setWidth('120px'));
+	const materialEnergyRow = new UIRow();
+	materialEnergyRow.add(new UIText(strings.getKey('sidebar/material/energy')).setWidth('120px'));
 
 	const materialEnergy = new UIText().setWidth('60px');
-	energyRow.add(materialEnergy);
-	container.add(energyRow);
+	materialEnergyRow.add(materialEnergy);
+	container.add(materialEnergyRow);
 	// program
 
 	// const materialProgram = new SidebarMaterialProgram(editor, 'vertexShader');
@@ -491,6 +493,115 @@ function SidebarMaterial(editor) {
 
 	container.add(priodicElement);
 
+
+
+
+////////////////////////// Source
+
+
+	// type
+
+	const sourceTypeRow = new UIRow();
+	const sourceType = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const sourcetypeoption = [];
+	SOURCE.type.forEach(element => {
+		sourcetypeoption.push(element);
+	});
+
+	sourceType.setOptions(sourcetypeoption);
+	sourceType.setValue(0);
+
+	sourceTypeRow.add(new UIText(strings.getKey('sidebar/object/type')).setWidth('90px'));
+	sourceTypeRow.add(sourceType);
+
+	container.add(sourceTypeRow);
+
+
+	// Source Shape
+
+	const planesourceShapeRow = new UIRow();
+	const planesourceShape = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const planeshapeoption = [];
+	SOURCE.shape.plane.forEach(element => {
+		planeshapeoption.push(element);
+	});
+
+	planesourceShape.setOptions(planeshapeoption);
+
+	planesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
+	planesourceShapeRow.add(planesourceShape);
+	planesourceShapeRow.setDisplay( 'none' );
+
+	container.add(planesourceShapeRow);
+
+	// Source Shape
+
+	const volumesourceShapeRow = new UIRow();
+	const volumesourceShape = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const volumeshapeoption = [];
+	SOURCE.shape.volume.forEach(element => {
+		volumeshapeoption.push(element);
+	});
+
+	volumesourceShape.setOptions(volumeshapeoption);
+
+	volumesourceShapeRow.add(new UIText(strings.getKey('sidebar/object/shape')).setWidth('90px'));
+	volumesourceShapeRow.add(volumesourceShape);
+	volumesourceShapeRow.setDisplay( 'none' );
+
+	container.add(volumesourceShapeRow);
+	
+
+	// particle type
+
+	const energyKindRow = new UIRow();
+	const energykind = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const energyoptions = [];
+	SOURCE.particle.forEach(element => {
+		energyoptions.push(element);
+	});
+
+	energykind.setOptions(energyoptions);
+	energykind.setValue(0);
+
+	energyKindRow.add(new UIText(strings.getKey('sidebar/object/kind')).setWidth('90px'));
+	energyKindRow.add(energykind);
+
+	container.add(energyKindRow);
+
+	// energy size
+
+	const energyRow = new UIRow();
+	energyRow.add(new UIText(strings.getKey('sidebar/object/size')).setWidth('120px'));
+
+	const energysize = new UINumber().setPrecision( 5 ).setWidth('60px').onChange( update );
+	energyRow.add(energysize);
+	container.add(energyRow);
+
+	// energy unit
+
+	const energyunit = new UISelect().setWidth('60px').setFontSize('12px').onChange( update );
+	const unitoptions = [];
+	SOURCE.unit.forEach(element => {
+		unitoptions.push(element);
+	});
+
+	energyunit.setOptions(unitoptions);
+	energyunit.setValue(1);
+
+	energyRow.add(energyunit);
+
+	container.add(energyRow);
+
+
+
+
+
+
+
+
+
+
 	// select basicMaterial element
 	
 	basicMaterialButton.onClick(() => {
@@ -503,78 +614,142 @@ function SidebarMaterial(editor) {
 
 	function update() {
 
-		const previousSelectedSlot = currentMaterialSlot;
+		if (currentObject.source) {
+			const newsourcename = sourceType.getValue();			
+			if ( newsourcename == 1 ) {
+				planesourceShapeRow.setDisplay( 'flex' );
+				volumesourceShapeRow.setDisplay( 'none' );
+			} else if ( newsourcename == 3 || newsourcename == 4 ) {
+				planesourceShapeRow.setDisplay( 'none' );
+				volumesourceShapeRow.setDisplay( 'flex' );
+			} else {
+				planesourceShapeRow.setDisplay( 'none' );
+				volumesourceShapeRow.setDisplay( 'none' );
+			}
 
-		currentMaterialSlot = parseInt(materialSlotSelect.getValue());
+			if( object.source !== undefined ) {
 
-		if (currentMaterialSlot !== previousSelectedSlot) refreshUI();
-
-		let material = editor.getObjectMaterial(currentObject, currentMaterialSlot);
-
-		if (material) {
-
-			// if (material.uuid !== undefined && material.uuid !== materialUUID.getValue()) {
-
-			// 	editor.execute(new SetMaterialValueCommand(editor, currentObject, 'uuid', materialUUID.getValue(), currentMaterialSlot));
-
-			// }
-
-			if (material.type !== materialClass.getValue()) {
-
-				material = new materialClasses[materialClass.getValue()]();
-
-				if (material.type === 'RawShaderMaterial') {
-
-					material.vertexShader = vertexShaderVariables + material.vertexShader;
-
-				}
-
-				if (Array.isArray(currentObject.material)) {
-
-					// don't remove the entire multi-material. just the material of the selected slot
-
-					editor.removeMaterial(currentObject.material[currentMaterialSlot]);
-
-				} else {
-
-					editor.removeMaterial(currentObject.material);
-
-				}
-
-				editor.execute(new SetMaterialCommand(editor, currentObject, material, currentMaterialSlot), 'New Material: ' + materialClass.getValue());
-				editor.addMaterial(material);
-				// TODO Copy other references in the scene graph
-				// keeping name and UUID then.
-				// Also there should be means to create a unique
-				// copy for the current object explicitly and to
-				// attach the current material to other objects.
+				object.source = SOURCE.type[Number(newsourcename)];
+				// object.updateProjectionMatrix();
 
 			}
 
-			if ( material.name !== undefined ) {
+			// if( object.planeshape !== undefined ) {
 
-				materialName1.setValue( material.name );
+				const newplaneshape = planesourceShape.getValue();
+				object.planeshape = SOURCE.shape.plane[Number(newplaneshape)];
+				// object.updateProjectionMatrix();
+				
+			// }
+
+			// if( object.volumeshape !== undefined ) {
+
+				const newvolumeshape = volumesourceShape.getValue();
+				object.volumeshape = SOURCE.shape.volume[Number(newvolumeshape)];
+				
+				// object.updateProjectionMatrix();
+				
+			// }
+
+			if( object.energykind !== undefined ) {
+
+				const newKind = energykind.getValue();
+				object.energykind = SOURCE.particle[Number(newKind)];
+				// object.updateProjectionMatrix();
 				
 			}
 
+			
+			if( object.energysize !== undefined ) {
 
-			// try {
+				const newSize = energysize.getValue();
+				object.energysize = newSize;
+				// object.updateProjectionMatrix();
+				
+			}
+			
+			if( object.energyunit !== undefined ) {
 
-			// 	const userData = JSON.parse(materialUserData.getValue());
-			// 	if (JSON.stringify(material.userData) != JSON.stringify(userData)) {
+				const newUnit = energyunit.getValue();
+				object.energyunit = SOURCE.unit[Number(newUnit)];
+				// object.updateProjectionMatrix();
+				
+			}
+		} else {
+			const previousSelectedSlot = currentMaterialSlot;
 
-			// 		editor.execute(new SetMaterialValueCommand(editor, currentObject, 'userData', userData, currentMaterialSlot));
-
-			// 	}
-
-			// } catch (exception) {
-
-			// 	console.warn(exception);
-
-			// }
-
-			refreshUI();
-
+			currentMaterialSlot = parseInt(materialSlotSelect.getValue());
+	
+			if (currentMaterialSlot !== previousSelectedSlot) refreshUI();
+	
+			let material = editor.getObjectMaterial(currentObject, currentMaterialSlot);
+	
+			if (material) {
+	
+				// if (material.uuid !== undefined && material.uuid !== materialUUID.getValue()) {
+	
+				// 	editor.execute(new SetMaterialValueCommand(editor, currentObject, 'uuid', materialUUID.getValue(), currentMaterialSlot));
+	
+				// }
+	
+				if (material.type !== materialClass.getValue()) {
+	
+					material = new materialClasses[materialClass.getValue()]();
+	
+					if (material.type === 'RawShaderMaterial') {
+	
+						material.vertexShader = vertexShaderVariables + material.vertexShader;
+	
+					}
+	
+					if (Array.isArray(currentObject.material)) {
+	
+						// don't remove the entire multi-material. just the material of the selected slot
+	
+						editor.removeMaterial(currentObject.material[currentMaterialSlot]);
+	
+					} else {
+	
+						editor.removeMaterial(currentObject.material);
+	
+					}
+	
+					editor.execute(new SetMaterialCommand(editor, currentObject, material, currentMaterialSlot), 'New Material: ' + materialClass.getValue());
+					editor.addMaterial(material);
+					// TODO Copy other references in the scene graph
+					// keeping name and UUID then.
+					// Also there should be means to create a unique
+					// copy for the current object explicitly and to
+					// attach the current material to other objects.
+	
+				}
+	
+				if ( material.name !== undefined ) {
+	
+					materialName1.setValue( material.name );
+					
+				}
+	
+	
+				// try {
+	
+				// 	const userData = JSON.parse(materialUserData.getValue());
+				// 	if (JSON.stringify(material.userData) != JSON.stringify(userData)) {
+	
+				// 		editor.execute(new SetMaterialValueCommand(editor, currentObject, 'userData', userData, currentMaterialSlot));
+	
+				// 	}
+	
+				// } catch (exception) {
+	
+				// 	console.warn(exception);
+	
+				// }
+	
+				refreshUI();
+	
+			}
+	
 		}
 
 	}
@@ -583,6 +758,83 @@ function SidebarMaterial(editor) {
 
 	function setRowVisibility() {
 
+		
+		if( currentObject.source) {
+			const properties = {
+				'source': sourceTypeRow,
+				'planeshape': planesourceShapeRow,
+				'volumeshape': volumesourceShapeRow,
+				'energykind': energyKindRow,
+				'energysize': energyRow,
+			};
+	
+			for ( const property in properties ) {
+	
+				const uiElement = properties[ property ];
+	
+				if ( Array.isArray( uiElement ) === true ) {
+	
+					for ( let i = 0; i < uiElement.length; i ++ ) {
+	
+						uiElement[ i ].setDisplay( currentObject[ property ] !== undefined ? '' : 'none' );
+	
+					}
+	
+				} else {
+	
+					uiElement.setDisplay( currentObject[ property ] !== undefined ? '' : 'none' );
+	
+				}
+	
+			}
+
+			
+			materialTypeRow.setDisplay( 'none');
+			materialEnergyRow.setDisplay( 'none');
+			densityRow.setDisplay( 'none');
+			materialColor.setDisplay( 'none');
+			materialOpacity.setDisplay( 'none');
+			materialTransparent.setDisplay( 'none');
+
+		} 
+		if(currentObject.material) {
+			const properties2 = {
+				'type': materialTypeRow,
+				'energy': materialEnergyRow,
+				'density': densityRow,
+				'color	': materialColor,
+				'opacity': materialOpacity,
+				'transparent': materialTransparent,
+			};
+	
+			for ( const property in properties2 ) {
+	
+				const uiElement = properties2[ property ];
+	
+				if ( Array.isArray( uiElement ) === true ) {
+	
+					for ( let i = 0; i < uiElement.length; i ++ ) {
+	
+						uiElement[ i ].setDisplay( currentObject?.material[ property ] !== undefined ? '' : 'none' );
+	
+					}
+	
+				} else {
+	
+					uiElement.setDisplay( currentObject?.material[ property ] !== undefined ? '' : 'none' );
+	
+				}
+	
+			}
+
+			sourceTypeRow.setDisplay( 'none');
+			planesourceShapeRow.setDisplay( 'none');
+			volumesourceShapeRow.setDisplay( 'none');
+			energyKindRow.setDisplay( 'none');
+			energyRow.setDisplay( 'none');
+		}
+		
+		
 		const material = currentObject.material;
 
 		if (Array.isArray(material)) {
@@ -595,106 +847,157 @@ function SidebarMaterial(editor) {
 
 		}
 
+		if ( object.source !== undefined ) {
+			objectNameRow.setDisplay( 'none' );
+		}
+
+		if ( object.source) {
+			if ( object.source === 'Plane' ) {
+				planesourceShapeRow.setDisplay( 'flex' );
+			} else if ( object.source === 'Surface' || object.source === 'Volume' ) {
+				volumesourceShapeRow.setDisplay( 'flex' );
+			} else if( object.source === 'Point' || object.source === 'Beam' ) {
+				planesourceShapeRow.setDisplay( 'none' );
+				volumesourceShapeRow.setDisplay( 'none' );
+			} else {
+			}
+	
+		}
+		
 	}
 
 	function refreshUI() {
 
 		if (!currentObject) return;
 
-		let material = currentObject.material;
-
-		if (Array.isArray(material)) {
-
-			const slotOptions = {};
-
-			currentMaterialSlot = Math.max(0, Math.min(material.length, currentMaterialSlot));
-
-			for (let i = 0; i < material.length; i++) {
-
-				slotOptions[i] = String(i + 1) + ': ' + material[i].name;
-
+		if (currentObject.source) {
+			if( currentObject.source !== undefined ) {
+				sourceType.setValue( SOURCE.type.indexOf(currentObject.source) );	
 			}
+			
+			if( currentObject.planeshape !== undefined ) {
+				const index = SOURCE.shape.plane.indexOf(currentObject.planeshape);
+				planesourceShape.setValue( index );
+			}
+	
+			if( currentObject.volumeshape !== undefined ) {
+				const index = SOURCE.shape.volume.indexOf(currentObject.volumeshape);
+				volumesourceShape.setValue( index );
+			}
+	
+			if( currentObject.energysize !== undefined ) {
+				energysize.setValue( currentObject.energysize );
+			}
+	
+			if( currentObject.energyunit !== undefined ) {
+				energyunit.setValue( SOURCE.unit.indexOf(currentObject.energyunit) );
+			}
+			
+			if( currentObject.energykind !== undefined ) {
+				energykind.setValue( SOURCE.particle.indexOf(currentObject.energykind) );
+			}
+			
+		} else {
+			let material = currentObject.material;
 
-			materialSlotSelect.setOptions(slotOptions).setValue(currentMaterialSlot);
-
+			if (Array.isArray(material)) {
+	
+				const slotOptions = {};
+	
+				currentMaterialSlot = Math.max(0, Math.min(material.length, currentMaterialSlot));
+	
+				for (let i = 0; i < material.length; i++) {
+	
+					slotOptions[i] = String(i + 1) + ': ' + material[i].name;
+	
+				}
+	
+				materialSlotSelect.setOptions(slotOptions).setValue(currentMaterialSlot);
+	
+			}
+	
+			material = editor.getObjectMaterial(currentObject, currentMaterialSlot);
+	
+			// if (material.uuid !== undefined) {
+	
+			// 	materialUUID.setValue(material.uuid);
+	
+			// }
+	
+	
+			if ( material.name !== undefined ) {
+	
+				materialName1.setValue( material.name );
+	
+			}
+			
+			if (material.density !== undefined) {
+	
+				materialDensity.setValue(material.density);
+	
+			} else {
+				materialDensity.setValue('')
+			}
+	
+			if (material.energy !== undefined) {
+	
+				materialEnergy.setValue(material.energy);
+	
+			} else {
+				materialEnergy.setValue('');
+			}
+	
+			if (currentObject.isMesh) {
+	
+				materialClass.setOptions(meshMaterialOptions);
+	
+			} else if (currentObject.isSprite) {
+	
+				materialClass.setOptions(spriteMaterialOptions);
+	
+			} else if (currentObject.isPoints) {
+	
+				materialClass.setOptions(pointsMaterialOptions);
+	
+			} else if (currentObject.isLine) {
+	
+				materialClass.setOptions(lineMaterialOptions);
+	
+			}
+	
+			materialClass.setValue(material.type);
+			if(material.elementTypes) {
+				if(material.elementTypes === 'BasicMaterial') {
+					materialType.setValue(0);
+					materialBasicRow.dom.style.display = 'block';
+					materialNameRow.dom.style.display = 'none';
+					if(material.newmaterial) {
+						basicMaterialButton.setInnerHTML(materialTypeOptions[material.newmaterial.id-1].elementType);
+						materialName.setValue(-1);
+					} else {
+						basicMaterialButton.setInnerHTML('Select...');
+					}
+					
+				} else if (material.elementTypes === 'CompoundMaterial') {
+					materialType.setValue(1);
+					materialNameRow.dom.style.display = 'block';
+					materialBasicRow.dom.style.display = 'none';
+					if(material.newmaterial) {
+						materialName.setValue(material.newmaterial.id-99);
+						basicMaterialButton.setInnerHTML('Select...');
+					} else {
+						materialName.setValue(-1);
+					}
+				}
+			}
+			materialType.setValue(material.elementTypes);
+	
+	
 		}
 
-		material = editor.getObjectMaterial(currentObject, currentMaterialSlot);
 
-		// if (material.uuid !== undefined) {
-
-		// 	materialUUID.setValue(material.uuid);
-
-		// }
-
-
-		if ( material.name !== undefined ) {
-
-			materialName1.setValue( material.name );
-
-		}
 		
-		if (material.density !== undefined) {
-
-			materialDensity.setValue(material.density);
-
-		} else {
-			materialDensity.setValue('')
-		}
-
-		if (material.energy !== undefined) {
-
-			materialEnergy.setValue(material.energy);
-
-		} else {
-			materialEnergy.setValue('');
-		}
-
-		if (currentObject.isMesh) {
-
-			materialClass.setOptions(meshMaterialOptions);
-
-		} else if (currentObject.isSprite) {
-
-			materialClass.setOptions(spriteMaterialOptions);
-
-		} else if (currentObject.isPoints) {
-
-			materialClass.setOptions(pointsMaterialOptions);
-
-		} else if (currentObject.isLine) {
-
-			materialClass.setOptions(lineMaterialOptions);
-
-		}
-
-		materialClass.setValue(material.type);
-		if(material.elementTypes) {
-			if(material.elementTypes === 'BasicMaterial') {
-				materialType.setValue(0);
-				materialBasicRow.dom.style.display = 'block';
-				materialNameRow.dom.style.display = 'none';
-				if(material.newmaterial) {
-					basicMaterialButton.setInnerHTML(materialTypeOptions[material.newmaterial.id-1].elementType);
-					materialName.setValue(-1);
-				} else {
-					basicMaterialButton.setInnerHTML('Select...');
-				}
-				
-			} else if (material.elementTypes === 'CompoundMaterial') {
-				materialType.setValue(1);
-				materialNameRow.dom.style.display = 'block';
-				materialBasicRow.dom.style.display = 'none';
-				if(material.newmaterial) {
-					materialName.setValue(material.newmaterial.id-99);
-					basicMaterialButton.setInnerHTML('Select...');
-				} else {
-					materialName.setValue(-1);
-				}
-			}
-		}
-		materialType.setValue(material.elementTypes);
-
+		
 		setRowVisibility();
 
 		// try {
@@ -720,11 +1023,16 @@ function SidebarMaterial(editor) {
 		materialBasicRow.dom.style.display = 'none';
 		materialNameRow.dom.style.display = 'none';
 
-		if (object && object.material) {
+		if (object && object.material || object && object.source && object.children[1].material) {
 
 			hasMaterial = true;
 
 			if (Array.isArray(object.material) && object.material.length === 0) {
+
+				hasMaterial = false;
+
+			}
+			if (object.source && Array.isArray(object.children[1].material) && object.children[1].material.length === 0) {
 
 				hasMaterial = false;
 

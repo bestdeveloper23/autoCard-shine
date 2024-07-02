@@ -1,13 +1,16 @@
 import * as THREE from 'three';
 
-import { UIPanel, UIRow, UIText, UIInput, UIButton, UISpan } from './libs/ui.js';
+import { UIPanel, UIRow, UIText, UIInput, UIButton, UISpan, UINumber } from './libs/ui.js';
 
 import { SetGeometryValueCommand } from './commands/SetGeometryValueCommand.js';
+import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 
 import { SidebarGeometryBufferGeometry } from './Sidebar.Geometry.BufferGeometry.js';
 import { SidebarGeometryModifiers } from './Sidebar.Geometry.Modifiers.js';
 
-import { VertexNormalsHelper } from 'three/addons/helpers/VertexNormalsHelper.js';
+import { SOURCE } from './libs/nucleardata/radiation.js';
+import { SidebarSource } from './Sidebar.Source.Properties.js';
+import { CSG } from './libs/CSGMesh.js';
 
 function SidebarGeometry( editor ) {
 
@@ -118,7 +121,12 @@ function SidebarGeometry( editor ) {
 	const geometryNameRow = new UIRow();
 	const geometryName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
 
-		editor.execute( new SetGeometryValueCommand( editor, editor.selected, 'name', geometryName.getValue() ) );
+		if(editor.selected.geometry){
+			editor.execute( new SetGeometryValueCommand( editor, editor.selected, 'name', geometryName.getValue() ) );	
+		} else if (editor.selected.children.length ===2 && editor.selected.source) {
+			editor.execute( new SetGeometryValueCommand( editor, editor.selected.children[1], 'name', geometryName.getValue() ) );	
+		}
+		
 
 	} );
 
@@ -126,6 +134,88 @@ function SidebarGeometry( editor ) {
 	geometryNameRow.add( geometryName );
 
 	container.add( geometryNameRow );
+
+
+		
+	// HalfX
+
+	const sourceXRow = new UIRow();
+	sourceXRow.add(new UIText(strings.getKey('sidebar/object/halfx')).setWidth('120px'));
+
+	const sourceX = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	sourceXRow.add(sourceX);
+	container.add(sourceXRow);
+
+
+	// HalfY
+
+	const sourceYRow = new UIRow();
+	sourceYRow.add(new UIText(strings.getKey('sidebar/object/halfy')).setWidth('120px'));
+
+	const sourceY = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	sourceYRow.add(sourceY);
+	container.add(sourceYRow);
+
+
+	// HalfZ
+
+	const sourceZRow = new UIRow();
+	sourceZRow.add(new UIText(strings.getKey('sidebar/object/halfz')).setWidth('120px'));
+
+	const sourceZ = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	sourceZRow.add(sourceZ);
+	container.add(sourceZRow);
+
+
+	// InnerRadius
+
+	const sourceInRadiusRow = new UIRow();
+	sourceInRadiusRow.add(new UIText(strings.getKey('sidebar/object/inradius')).setWidth('120px'));
+
+	const sourceInRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	sourceInRadiusRow.add(sourceInRadius);
+	container.add(sourceInRadiusRow);
+
+
+	// OuterRadius
+
+	const sourceOuterRadiusRow = new UIRow();
+	sourceOuterRadiusRow.add(new UIText(strings.getKey('sidebar/object/outradius')).setWidth('120px'));
+
+	const sourceOuterRadius = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	sourceOuterRadiusRow.add(sourceOuterRadius);
+	container.add(sourceOuterRadiusRow);
+
+
+	// Alpha
+
+	const alphaRow = new UIRow();
+	alphaRow.add(new UIText(strings.getKey('sidebar/object/alpha')).setWidth('120px'));
+
+	const alphaI = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	alphaRow.add(alphaI);
+	container.add(alphaRow);
+
+
+	// theta
+
+	const thetaRow = new UIRow();
+	thetaRow.add(new UIText(strings.getKey('sidebar/object/theta')).setWidth('120px'));
+
+	const thetaI = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	thetaRow.add(thetaI);
+	container.add(thetaRow);
+
+
+	// phi
+
+	const phiRow = new UIRow();
+	phiRow.add(new UIText(strings.getKey('sidebar/object/phi')).setWidth('120px'));
+
+	const phiI = new UINumber().setPrecision( 5 ).setWidth('120px').onChange( update );
+	phiRow.add(phiI);
+	container.add(phiRow);
+
 
 	// parameters
 
@@ -174,7 +264,7 @@ function SidebarGeometry( editor ) {
 
 		const object = editor.selected;
 
-		if ( object && object.geometry ) {
+		if ( object && object.geometry) {
 
 			const geometry = object.geometry;
 
@@ -204,6 +294,7 @@ function SidebarGeometry( editor ) {
 					const { GeometryParametersPanel } = await import( `./Sidebar.Geometry.${ geometry.type }.js` );
 
 					parameters.add( new GeometryParametersPanel( editor, object ) );
+					
 
 				}
 
@@ -222,10 +313,6 @@ function SidebarGeometry( editor ) {
 
 			// helpersRow.setDisplay( geometry.hasAttribute( 'normal' ) ? '' : 'none' );
 
-		} else {
-
-			container.setDisplay( 'none' );
-
 		}
 
 	}
@@ -235,10 +322,1302 @@ function SidebarGeometry( editor ) {
 		currentGeometryType = null;
 
 		build();
+		const object = editor.selected;
+
+		if ( object !== null ) {
+
+			container.setDisplay( 'block' );
+
+			// if ( object.source ) {
+
+				updateRows( object );
+				updateUI( object );
+
+			// }
+
+		} else {
+
+			container.setDisplay( 'none' );
+
+		}
 
 	} );
 
 	signals.geometryChanged.add( build );
+
+
+	signals.objectChanged.add( function ( object ) {
+
+		if ( object !== editor.selected ) return;
+
+		// if ( object.source ) {
+
+			updateRows( object );
+			updateUI( object );
+
+		// }
+
+	} );
+
+	signals.refreshSidebarObject3D.add( function ( object ) {
+
+		if ( object !== editor.selected ) return;
+
+		// if ( object.source ) {
+			
+			updateUI( object );
+			
+		// }
+		
+
+	} );
+
+
+	function update() {
+
+		const object = editor.selected;
+
+		if ( object !== null && object.source ) {
+
+			const newHalfX = sourceX.getValue();
+			if( object.halfX !== undefined ) {
+
+				if(object.source === "Plane" && object.planeshape === "Ellipse") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = 0.01;
+
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz, 32, 1, false, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+					const ratioZ = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Plane" && object.planeshape === "Square") {
+					
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, newHalfX * 10, 0.01)
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if(object.source === "Plane" && object.planeshape === "Rectangle") {
+
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, sourceY.getValue() * 10, 0.01);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if(object.source === "Surface" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Surface" && object.volumeshape === "Para") {
+
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 20;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 20;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.halfX = newHalfX;
+				
+			}
+
+			const newHalfY = sourceY.getValue();
+			if( object.halfY !== undefined ) {
+
+				if(object.source === "Plane" && object.planeshape === "Ellipse") {
+
+					const xSemiAxis = newHalfX, semiAxisY = newHalfY, Dz = 0.01;
+
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz, 32, 1, false, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+					const ratioZ = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Plane" && object.planeshape === "Rectangle") {
+
+					const sourceModelGeometry = new THREE.BoxGeometry(newHalfX * 10, newHalfY * 10, 0.01);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if(object.source === "Surface" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = newHalfY, Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Surface" && object.volumeshape === "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.halfY = newHalfY;
+				
+			}
+
+			const newHalfZ = sourceZ.getValue();
+			if( object.halfZ !== undefined ) {
+
+				if ( object.source === "Surface" && object.volumeshape === "Cylinder") {
+
+					const radius = sourceOuterRadius.getValue();
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if ( object.source === "Volume" && object.volumeshape === "Cylinder") {
+
+					const radius = sourceOuterRadius.getValue();
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if(object.source === "Surface" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz * 10, 32, 1, false, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+					const ratioZ = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+
+				} else if(object.source === "Surface" && object.volumeshape === "Ellipsoid") {
+
+					const xSemiAxis = newHalfX, semiAxisY = sourceY.getValue(), Dz = sourceZ.getValue();
+
+					const sphereGeometry = new THREE.SphereGeometry(xSemiAxis*10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+					let cylindermesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+					const ratioZ = Dz / xSemiAxis;
+					const ratioY = semiAxisY / xSemiAxis;
+					cylindermesh.scale.z = ratioZ;
+					cylindermesh.scale.y = ratioY;
+					cylindermesh.updateMatrix();
+					const aCSG = CSG.fromMesh(cylindermesh);
+					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], finalMesh.geometry ) );
+			
+				} else if(object.source === "Surface" && object.volumeshape === "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.halfZ = newHalfZ;
+				
+			}
+
+			const newInRadius = sourceInRadius.getValue();
+			if( object.innerradius !== undefined ) {
+
+				if( object.source === "Plane" && object.planeshape === "Annulus") {
+
+					const outerRadius = newInRadius;
+					const innerRadius = sourceOuterRadius.getValue() * 10;
+					
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius * 10, outerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius * 10, innerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+
+					const sourceModelMaterial = new THREE.MeshBasicMaterial();
+					const secondModelMaterial = new THREE.MeshBasicMaterial();
+
+					const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+					const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
+
+					let CSGMesh1 = CSG.fromMesh(firstModel);
+					let secondMesh = CSG.fromMesh(secondModel);
+
+					CSGMesh1 = CSGMesh1.subtract(secondMesh);
+
+					const sourceModel = CSG.toMesh(CSGMesh1, new THREE.Matrix4());
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				}
+
+				object.innerradius = newInRadius;
+				sourceInRadius.setRange(0, sourceOuterRadius.getValue() - 0.00001);
+				
+			}
+
+			const newOutRadius = sourceOuterRadius.getValue();
+			if( object.outerradius !== undefined ) {
+
+				if(object.source === "Plane" && object.planeshape === "Circle") {
+					const sourceModelGeometry = new THREE.CylinderGeometry(newOutRadius * 10, newOutRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if( object.source === "Plane" && object.planeshape === "Annulus") {
+
+					const outerRadius = newOutRadius;
+					const innerRadius = sourceInRadius.getValue();
+					
+					const sourceModelGeometry = new THREE.CylinderGeometry(outerRadius * 10, outerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+					const secondModelGeometry = new THREE.CylinderGeometry(innerRadius * 10, innerRadius * 10, 0.01, 32, 32, false, 0, Math.PI * 2);
+
+					const sourceModelMaterial = new THREE.MeshBasicMaterial();
+					const secondModelMaterial = new THREE.MeshBasicMaterial();
+
+					const firstModel = new THREE.Mesh(sourceModelGeometry, sourceModelMaterial);
+					const secondModel = new THREE.Mesh(secondModelGeometry, secondModelMaterial);
+
+					let CSGMesh1 = CSG.fromMesh(firstModel);
+					let secondMesh = CSG.fromMesh(secondModel);
+
+					CSGMesh1 = CSGMesh1.subtract(secondMesh);
+
+					const sourceModel = CSG.toMesh(CSGMesh1, new THREE.Matrix4());
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if ( object.source === "Surface" && object.volumeshape === "Sphere") {
+
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius * 10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+					
+				} else if ( object.source === "Volume" && object.volumeshape === "Sphere") {
+
+					const sourceModelGeometry = new THREE.SphereGeometry(newOutRadius * 10, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if ( object.source === "Surface" && object.volumeshape === "Cylinder") {
+
+					const radius = newOutRadius;
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				} else if ( object.source === "Volume" && object.volumeshape === "Cylinder") {
+
+					const radius = newOutRadius;
+					const halfZ = newHalfZ;
+					const sourceModelGeometry = new THREE.CylinderGeometry(radius * 10, radius * 10, 20 * halfZ, 32, 32, false, 0, Math.PI * 2);
+
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModelGeometry ) );
+
+				}
+
+				object.outerradius = newOutRadius;
+				
+				sourceOuterRadius.setRange(sourceInRadius.getValue() + 0.00001, Infinity);
+
+			}
+
+			if( object.alpha !== undefined ) {
+				if(object.source === "Surface" && object.volumeshape === "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.alpha = alphaI.getValue();
+			}
+
+			if ( object.theta !== undefined ) {
+				
+				if(object.source === "Surface" && object.volumeshape === "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.theta = thetaI.getValue();
+			}
+
+			if ( object.phi !== undefined ) {
+
+				if(object.source === "Surface" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				} else if(object.source === "Volume" && object.volumeshape == "Para") {
+					const dx = sourceX.getValue() * 10, dy = sourceY.getValue() * 10, dz = sourceZ.getValue() * 10, alpha = alphaI.getValue(), theta = thetaI.getValue(), phi = phiI.getValue();
+
+					const maxRadius = Math.max(dx, dy, dz) * 2;
+					const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+					const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+					const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+					const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+					let MeshCSG1 = CSG.fromMesh(mesh);
+					let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+					boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 + dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0 - dx, 0, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+					boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+					boxmesh.position.set(0, 0, -dz);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.rotation.set(0, 0, 0);
+					boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+					boxmesh.position.set(0, dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+					boxmesh.position.set(0, - dy, 0);
+					boxmesh.updateMatrix();
+					MeshCSG3 = CSG.fromMesh(boxmesh);
+					aCSG = aCSG.subtract(MeshCSG3);
+
+					let sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());        
+					// sourceModel.rotateX(Math.PI / 2);
+					// sourceModel.updateMatrix();
+					// aCSG = CSG.fromMesh(sourceModel);
+					// sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+					const param = { 'dx': dx/10, 'dy': dy/10, 'dz': dz/10, 'alpha': alpha, 'theta': theta, 'phi': phi };
+					sourceModel.geometry.parameters = param;
+					sourceModel.geometry.type = 'aParallGeometry';
+					
+					editor.execute( new SetGeometryCommand( editor, object.children[1], sourceModel.geometry ) );
+					
+				}
+
+				object.phi = phiI.getValue();
+			}
+
+		}
+
+	}
+
+	function updateUI( object ) {
+
+		if( object !== undefined && object.source ) {
+			if( object.halfX !== undefined ) {
+				sourceX.setValue( object.halfX);
+			}
+			
+			if( object.halfY !== undefined ) {
+				sourceY.setValue( object.halfY);
+			}
+				
+			if( object.halfZ !== undefined ) {
+				sourceZ.setValue( object.halfZ);
+			}
+				
+			if( object.innerradius !== undefined ) {
+				sourceInRadius.setValue( object.innerradius);
+			}
+				
+			if( object.outerradius !== undefined ) {
+				sourceOuterRadius.setValue( object.outerradius);
+			}
+	
+			if( object.alpha !== undefined ) {
+				alphaI.setValue( object.alpha );
+			}
+	
+			if( object.theta !== undefined ) {
+				thetaI.setValue( object.theta );
+			}
+	
+			if( object.phi !== undefined ) {
+				phiI.setValue( object.phi );
+			}
+	
+		}
+
+	}
+
+	function updateRows( object ) {
+
+		const properties = {
+			'halfX': sourceXRow,
+			'halfY': sourceYRow,
+			'halfZ': sourceZRow,
+			'innerradius': sourceInRadiusRow,
+			'outerradius': sourceOuterRadiusRow,
+			'alpha': alphaRow,
+			'theta': thetaRow,
+			'phi': phiRow
+		};
+
+		for ( const property in properties ) {
+
+			const uiElement = properties[ property ];
+
+			if ( Array.isArray( uiElement ) === true ) {
+
+				for ( let i = 0; i < uiElement.length; i ++ ) {
+
+					uiElement[ i ].setDisplay( object[ property ] !== undefined ? '' : 'none' );
+
+				}
+
+			} else {
+
+				uiElement.setDisplay( object[ property ] !== undefined ? '' : 'none' );
+
+			}
+
+		}
+
+		if( object.source ) {
+
+			geometryNameRow.setDisplay( 'none' );
+			geometryTypeRow.setDisplay( 'none' );
+			parameters.clear();
+
+		} else {
+
+			geometryNameRow.setDisplay( '' );
+			geometryTypeRow.setDisplay( '' );
+
+		}
+		//
+
+	}
+
 
 	return container;
 

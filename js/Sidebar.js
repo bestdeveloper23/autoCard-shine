@@ -7,7 +7,7 @@ import { SidebarAnimation } from './Sidebar.Animation.js';
 import { SidebarProject } from './Sidebar.Project.js';
 import { SidebarSettings } from './Sidebar.Settings.js';
 import { SidebarModify } from './Sidebar.Modify.js';
-import { SidebarSource } from './Sidebar.Source.Properties.js';
+// import { SidebarSource } from './Sidebar.Source.Properties.js';
 
 function Sidebar( editor ) {
 
@@ -18,7 +18,7 @@ function Sidebar( editor ) {
 
 	const scene = new UISpan().add(
 		new SidebarScene( editor ),
-		new SidebarSource( editor ),
+		// new SidebarSource( editor ),
 		new SidebarProperties( editor ),
 		new SidebarAnimation( editor ),
 		new SidebarModify( editor )

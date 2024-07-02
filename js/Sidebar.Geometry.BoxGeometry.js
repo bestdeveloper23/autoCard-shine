@@ -49,7 +49,6 @@ function GeometryParametersPanel( editor, object ) {
 
 	function update() {
 		// we need to new each geometry module
-		console.log(width.getValue())
 		const geometry = new THREE.BoxGeometry(width.getValue() * 2 * wunit, height.getValue() * 2 * hunit, depth.getValue() * 2 * dunit);
 
 		geometry.name = object.geometry.name;

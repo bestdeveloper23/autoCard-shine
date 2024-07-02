@@ -25,7 +25,7 @@ function SidebarSource( editor ) {
 	const container = new UIPanel();
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '20px' );
-	container.setDisplay( 'none' );
+	// container.setDisplay( 'none' );
 
 
 	// type
@@ -320,7 +320,7 @@ function SidebarSource( editor ) {
 
 				const newvolumeshape = volumesourceShape.getValue();
 				object.volumeshape = SOURCE.shape.volume[Number(newvolumeshape)];
-				console.log(object)
+				
 				// object.updateProjectionMatrix();
 				
 			// }
@@ -1608,7 +1608,7 @@ function SidebarSource( editor ) {
 
 	signals.objectSelected.add( function ( object ) {
 
-		if ( object !== null && object.name === 'RadiationSource' ) {
+		if ( object !== null && object.source ) {
 
 			container.setDisplay( 'block' );
 
@@ -1622,6 +1622,7 @@ function SidebarSource( editor ) {
 		}
 
 	} );
+	// container.setDisplay('none');
 
 	signals.objectChanged.add( function ( object ) {
 

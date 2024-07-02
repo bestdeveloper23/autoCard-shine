@@ -17,22 +17,22 @@ function SidebarProperties( editor ) {
 	container.addTab( 'material', strings.getKey( 'sidebar/properties/material' ), new SidebarMaterial( editor ) );
 	container.select( 'object' );
 
-	signals.objectSelected.add( function ( object ) {
+	// signals.objectSelected.add( function ( object ) {
 
-		if ( object !== null && object.name !== 'RadiationSource' ) {
+	// 	if ( object !== null && object.name !== 'RadiationSource' ) {
 
-			container.setDisplay( 'block' );
+	// 		container.setDisplay( 'block' );
 
-			// updateRows( object );
-			// updateUI( object );
+	// 		// updateRows( object );
+	// 		// updateUI( object );
 
-		} else {
+	// 	} else {
 
-			container.setDisplay( 'none' );
+	// 		container.setDisplay( 'none' );
 
-		}
+	// 	}
 
-	} );
+	// } );
 
 	return container;
 

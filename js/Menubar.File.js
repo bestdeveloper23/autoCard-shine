@@ -2980,6 +2980,17 @@ function MenubarFile( editor ) {
 					macro += `\n/gps/pos/outer_radius ${object.outerradius} cm`
 				}
 				
+				if (object.alpha) {
+					macro += `\n/gps/pos/paralp ${object.alpha}`
+				}
+
+				if (object.theta) {
+					macro += `\n/gps/pos/parthe ${object.theta}`
+				}
+
+				if (object.phi) {
+					macro += `\n/gps/pos/parphi ${object.phi}`
+				}
 			}
 	
 			downloadGeant4File( macro, 'run.mac')

@@ -1326,12 +1326,14 @@ function BasicSources(editor) {
 
         const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*2*10, 32, 1, false, 0, Math.PI * 2);
-        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-        const ratioZ = semiAxisY / xSemiAxis;
-        cylindermesh.scale.z = ratioZ;
-        cylindermesh.updateMatrix();
-        const aCSG = CSG.fromMesh(cylindermesh);
+        const sphereGeometry = new THREE.SphereGeometry(xSemiAxis, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        let ellipsoidMesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+        const ratioZ = Dz / xSemiAxis;
+        const ratioY = semiAxisY / xSemiAxis;
+        ellipsoidMesh.scale.z = ratioZ;
+        ellipsoidMesh.scale.y = ratioY;
+        ellipsoidMesh.updateMatrix();
+        const aCSG = CSG.fromMesh(ellipsoidMesh);
         const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
@@ -1378,12 +1380,14 @@ function BasicSources(editor) {
 
         const xSemiAxis = 1, semiAxisY = 0.5, Dz = 1;
 
-        const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * 10, xSemiAxis * 10, Dz*2*10, 32, 1, false, 0, Math.PI * 2);
-        let cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-        const ratioZ = semiAxisY / xSemiAxis;
-        cylindermesh.scale.z = ratioZ;
-        cylindermesh.updateMatrix();
-        const aCSG = CSG.fromMesh(cylindermesh);
+        const sphereGeometry = new THREE.SphereGeometry(xSemiAxis, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
+        let ellipsoidMesh = new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial());
+        const ratioZ = Dz / xSemiAxis;
+        const ratioY = semiAxisY / xSemiAxis;
+        ellipsoidMesh.scale.z = ratioZ;
+        ellipsoidMesh.scale.y = ratioY;
+        ellipsoidMesh.updateMatrix();
+        const aCSG = CSG.fromMesh(ellipsoidMesh);
         const sourceModel = CSG.toMesh(aCSG, new THREE.Matrix4());
 
         const source = new THREE.Group();
