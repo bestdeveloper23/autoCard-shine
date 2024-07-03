@@ -1017,7 +1017,7 @@ function MenubarFile( editor ) {
 						}
 						//:volu gear1 bas5 G4_STAINLESS-STEEL
 						if(children.geometry.type !== "aGenericTrapGeometry" && children.geometry.type !== "aParaboloidGeometry" && children.name !== "RadiationSource"){
-							voluText += `:volu ${children.name} ${children.geometry.name ? children.geometry.name : children.name} ${children.material.newmaterial?.elementType}\n`
+							voluText += `:volu ${children.name} ${children.geometry.name ? children.geometry.name : children.name} ${children.material.name ? children.material.name : children.material.newmaterial?.elementType}\n`
 						}
 						
 						colorText += `:color ${children.name} ${children.material.color.r.toFixed(2)} ${children.material.color.g.toFixed(2)} ${children.material.color.b.toFixed(2)}\n`

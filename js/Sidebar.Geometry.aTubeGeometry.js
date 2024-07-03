@@ -17,7 +17,7 @@ const parameters = geometry.parameters;
 // maxRadius
 
 const maxRadiusRow = new UIRow();
-const maxRadius = new UINumber(parameters.pRMax).setRange(parameters.pRMin + 0.001, Infinity).onChange(update);
+const maxRadius = new UINumber(parameters.pRMax).setRange(parameters.pRMin + 0.0001, Infinity).onChange(update);
 
 maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/maxradius')).setWidth('90px'));
 maxRadiusRow.add(maxRadius);
@@ -29,7 +29,7 @@ container.add(maxRadiusRow);
 // minRadius
 
 const minRadiusRow = new UIRow();
-const minRadius = new UINumber(parameters.pRMin).setRange(0, parameters.pRMax - 0.001).onChange(update);
+const minRadius = new UINumber(parameters.pRMin).setRange(0, parameters.pRMax - 0.0001).onChange(update);
 
 minRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/minradius')).setWidth('90px'));
 minRadiusRow.add(minRadius);
@@ -77,12 +77,12 @@ function update() {
   // we need to new each geometry module
   var pRMax = maxRadius.getValue() * cm, pRMin = minRadius.getValue() * cm, pDz = height.getValue() * cm, SPhi = pSPhi.getValue(), DPhi = pDPhi.getValue();
 
-  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+  const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2);
   const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
   cylindermesh1.rotateX(Math.PI / 2);
   cylindermesh1.updateMatrix();
 
-  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * 2, 32, 32, false, 0, Math.PI * 2);
+  const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * 2);
 
   const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz * 2);
   const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
@@ -132,6 +132,9 @@ function update() {
 
   if(oDPhi > 270 && oDPhi <= 360){
     aCSG = bCSG.subtract(aCSG);
+      if(oDPhi == 360){
+        aCSG = bCSG;
+      }
   }
   
   const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
@@ -141,8 +144,8 @@ function update() {
   finalMesh.updateMatrix();
   finalMesh.name = 'Tubs';
   // set Range 
-  maxRadius.setRange(pRMin + 0.001, Infinity);
-  minRadius.setRange(0.00, pRMax - 0.001);
+  maxRadius.setRange(pRMin/cm+0.0001, Infinity);
+  minRadius.setRange(0.00, pRMax/cm - 0.0001);
 
   finalMesh.geometry.name = object.geometry.name;
 

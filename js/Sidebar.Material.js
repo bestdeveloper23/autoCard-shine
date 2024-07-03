@@ -103,36 +103,112 @@ function SidebarMaterial(editor) {
 	materialNameRow1.add( new UIText( strings.getKey( 'sidebar/material/name' ) ).setWidth( '90px' ) );
 	materialNameRow1.add( materialName1 );
 
-	// container.add( materialNameRow1 );
+	container.add( materialNameRow1 );
 
-	const materialNameRow = new UIRow();
 
-	// const materialName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
-	const materialName = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
-
-	const options = [];
-	compoundMaterialOptions.forEach(element => {
-		options.push(element.elementType);
-	});
-
-	materialNameRow.dom.style.display = 'none';
 	
+// Basic materials
+
 	const materialBasicRow = new UIRow();
 
 	const basicMaterialButton = new UIButton("Select...").setWidth('120px');
 	basicMaterialButton.dom.style.textTransform = 'none';
-	materialBasicRow.dom.style.display = 'none';
-
-	materialName.setOptions(options);
-	materialName.dom.style.marginLeft = '90px';
+	materialBasicRow.setDisplay('none');
 
 	materialBasicRow.add(new UIText(strings.getKey('sidebar/material/element')).setWidth('90px'));
 	materialBasicRow.add(basicMaterialButton);
 
-	materialNameRow.add(materialName);
-
 	container.add(materialBasicRow);
-	container.add(materialNameRow);
+
+// Nist materials
+
+	const nistMaterialNameRow = new UIRow();
+	nistMaterialNameRow.setDisplay('none');
+	
+	// const nistMaterials = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
+	// const nistMaterials = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
+	const nistMaterials = new UISelect().setWidth('150px').setFontSize('12px');
+
+	const nistOptions = [];
+	nistCompoundmaterialOptions.forEach(element => {
+		nistOptions.push(element.elementType);
+	});
+
+	nistMaterials.setOptions(nistOptions);
+	nistMaterials.dom.style.marginLeft = '90px';
+	nistMaterials.addClass('compoundmaterial');
+
+
+	nistMaterialNameRow.add(nistMaterials);
+
+	container.add(nistMaterialNameRow);
+
+	
+// H & Nuclear materials
+
+	const HNmaterialNameRow = new UIRow();
+	HNmaterialNameRow.setDisplay('none');
+
+	// const HNmaterials = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
+	const HNmaterials = new UISelect().setWidth('150px').setFontSize('12px');
+
+	const HNOptions = [];
+	HNmaterialOptions.forEach(element => {
+		HNOptions.push(element.elementType);
+	});
+
+	HNmaterials.setOptions(HNOptions);
+	HNmaterials.dom.style.marginLeft = '90px';
+	HNmaterials.addClass('compoundmaterial');
+	
+	HNmaterialNameRow.add(HNmaterials);
+
+	container.add(HNmaterialNameRow);
+
+
+// Space materials
+
+	const spaceMaterialNameRow = new UIRow();
+	spaceMaterialNameRow.setDisplay('none');
+
+	// const spaceMaterials = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
+	const spaceMaterials = new UISelect().setWidth('150px').setFontSize('12px');
+
+	const spaceOptions = [];
+	spaceMaterialOptions.forEach(element => {
+		spaceOptions.push(element.elementType);
+	});
+
+	spaceMaterials.setOptions(spaceOptions);
+	spaceMaterials.dom.style.marginLeft = '90px';
+	spaceMaterials.addClass('compoundmaterial');
+
+	spaceMaterialNameRow.add(spaceMaterials);
+
+	container.add(spaceMaterialNameRow);
+
+
+// Bio materials
+
+	const bioMaterialNameRow = new UIRow();
+	bioMaterialNameRow.setDisplay('none');
+
+	// const bioMaterials = new UISelect().setWidth('150px').setFontSize('12px').onChange(onChangeProperty)
+	const bioMaterials = new UISelect().setWidth('150px').setFontSize('12px');
+
+	const bioOptions = [];
+	bioMaterialOptions.forEach(element => {
+		bioOptions.push(element.elementType);
+	});
+
+	bioMaterials.setOptions(bioOptions);
+	bioMaterials.dom.style.marginLeft = '90px';
+	bioMaterials.addClass('compoundmaterial');
+
+	bioMaterialNameRow.add(bioMaterials);
+
+	container.add(bioMaterialNameRow);
+
 
 
 
@@ -488,8 +564,8 @@ function SidebarMaterial(editor) {
 
 	
 	const priodicElement = new UIRow();
-	priodicElement.dom.style.display = 'none';
-	priodicElement.add(PeriodicTable(materialDensity, materialEnergy, onChangeProperty, basicMaterialButton, priodicElement, materialName));
+	priodicElement.setDisplay('none');
+	priodicElement.add(PeriodicTable(materialDensity, materialEnergy, onChangeProperty, basicMaterialButton, priodicElement, nistMaterials));
 
 	container.add(priodicElement);
 
@@ -599,13 +675,35 @@ function SidebarMaterial(editor) {
 
 
 
+// CompoundMateriallist event
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const selects = document.querySelectorAll('.compoundmaterial');
+
+		selects.forEach((select, index) => {
+			select.addEventListener('change', function () {
+				// Deselect options in other select elements
+				selects.forEach((otherSelect, otherIndex) => {
+					if (index !== otherIndex) {
+						otherSelect.value = ""; // Set to empty value
+					}
+				});
+
+				// Output the index of the selected option
+				const selectedIndex = select.selectedIndex;
+				console.log( `Selected option index: ${selectedIndex}` );
+				onChangeProperty(false, selectedIndex, index);
+				
+			});
+		});
+	});
 
 
 
 	// select basicMaterial element
 	
 	basicMaterialButton.onClick(() => {
-		priodicElement.dom.style.display = 'grid';
+		priodicElement.setDisplay('grid');
 	})
 
 
@@ -969,24 +1067,33 @@ function SidebarMaterial(editor) {
 			if(material.elementTypes) {
 				if(material.elementTypes === 'BasicMaterial') {
 					materialType.setValue(0);
-					materialBasicRow.dom.style.display = 'block';
-					materialNameRow.dom.style.display = 'none';
+					materialBasicRow.setDisplay('block');
+					nistMaterialNameRow.setDisplay('none');
+					HNmaterialNameRow.setDisplay('none');
+					spaceMaterialNameRow.setDisplay('none');
+					bioMaterialNameRow.setDisplay('none');
+
 					if(material.newmaterial) {
 						basicMaterialButton.setInnerHTML(materialTypeOptions[material.newmaterial.id-1].elementType);
-						materialName.setValue(-1);
+						nistMaterials.setValue(-1);
 					} else {
 						basicMaterialButton.setInnerHTML('Select...');
 					}
 					
 				} else if (material.elementTypes === 'CompoundMaterial') {
 					materialType.setValue(1);
-					materialNameRow.dom.style.display = 'block';
-					materialBasicRow.dom.style.display = 'none';
+
+					nistMaterialNameRow.setDisplay('block');
+					HNmaterialNameRow.setDisplay('block');
+					spaceMaterialNameRow.setDisplay('block');
+					bioMaterialNameRow.setDisplay('block');
+					materialBasicRow.setDisplay('none');
+
 					if(material.newmaterial) {
-						materialName.setValue(material.newmaterial.id-99);
+						// nistMaterials.setValue(material.newmaterial.id-99);
 						basicMaterialButton.setInnerHTML('Select...');
 					} else {
-						materialName.setValue(-1);
+						// nistMaterials.setValue(-1);
 					}
 				}
 			}
@@ -1020,8 +1127,8 @@ function SidebarMaterial(editor) {
 	signals.objectSelected.add(function (object) {
 
 		let hasMaterial = false;
-		materialBasicRow.dom.style.display = 'none';
-		materialNameRow.dom.style.display = 'none';
+		materialBasicRow.setDisplay('none');
+		nistMaterialNameRow.setDisplay('none');
 
 		if (object && object.material || object && object.source && object.children[1].material) {
 
@@ -1055,7 +1162,7 @@ function SidebarMaterial(editor) {
 
 	});
 
-	function onChangeProperty(basic = false, id = 0) {
+	function onChangeProperty(basic = false, id = 0, index = 0) {
 		if(basic === true) {
 			
 			const materialElement = materialTypeOptions[id];
@@ -1072,9 +1179,30 @@ function SidebarMaterial(editor) {
 
 			
 		} else {
-			const selectedMaterialID = Number(materialName.getValue());
 			
-			const materialElement = compoundMaterialOptions[selectedMaterialID];
+			// const selectedMaterialID = id !== 0 ? id : Number(nistMaterials.getValue());
+			const selectedMaterialID = id;
+			let selectedOptions;
+			if(index === 0) {
+
+				selectedOptions = nistCompoundmaterialOptions;
+
+			} else if (index === 1) {
+
+				selectedOptions = HNmaterialOptions;
+
+			} else if (index === 2) {
+
+				selectedOptions = spaceMaterialOptions;
+
+			} else if (index === 3) {
+
+				selectedOptions = bioMaterialOptions;
+
+			}
+			
+			const materialElement = selectedOptions[selectedMaterialID];
+
 			materialDensity.setValue(materialElement.density);
 			materialEnergy.setValue(materialElement.energy);
 			basicMaterialButton.setInnerHTML('Select...');
@@ -1085,6 +1213,7 @@ function SidebarMaterial(editor) {
 
 			editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialElement.elementType, currentMaterialSlot ) );
 			
+			console.log(editor.selected, selectedMaterialID, materialElement)
 		}
 		
 	}
@@ -3079,7 +3208,7 @@ const materialTypeOptions =
 		}
 	]
 
-const compoundMaterialOptions = [
+const nistCompoundmaterialOptions = [
 
 	{
 		id: 99,
@@ -4168,8 +4297,17 @@ const compoundMaterialOptions = [
 		energy: 78
 	},
 
+];
+
 	//HEP and Nuclear Materials
 
+const HNmaterialOptions =[
+	{
+		id: 280,
+		elementType: 'HEP and Nuclear Materials',
+		density: 0.0708,
+		energy: 21.8
+	},
 	{
 		id: 280,
 		elementType: 'G4_lH2',
@@ -4267,8 +4405,11 @@ const compoundMaterialOptions = [
 		energy: 0
 	},
 
+]
 
 	//Space (ISS) Materials
+
+const spaceMaterialOptions = [
 
 	{
 		id: 296,
@@ -4289,7 +4430,12 @@ const compoundMaterialOptions = [
 		energy: 0
 	},
 
+]
+
+
 	//Bio-Chemical Materials
+
+const bioMaterialOptions = [
 
 	{
 		id: 299,
