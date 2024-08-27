@@ -64,7 +64,7 @@ function BasicSolids(editor) {
         let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         mesh.rotateX(Math.PI/2);
         mesh.updateMatrix();
-        let aCSG = CSG.fromMesh(mesh);
+        const aCSG = CSG.fromMesh(mesh);
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
         mesh.name = 'Box';
         mesh.geometry.type = "BoxGeometry";
@@ -122,118 +122,20 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/sphere'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Sphere');
+    const pRMin = 0, pRMax = 100, pSPhi = 0, pDPhi = 360, pSTheta = 0, pDTheta = 180;
     item.onClick(function () {
-
-        const pRMin = 0.8, pRMax = 1, pSPhi = 0, pDPhi = 180, pSTheta = 0, pDTheta = 90;
-
-        const geometryOut = new THREE.SphereGeometry(pRMax, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const geometryIn = new THREE.SphereGeometry(pRMin, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const geometryBox = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
-        const geometryBox2 = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
-
-        let meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-        let meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
-        let boxmesh = new THREE.Mesh(geometryBox, new THREE.MeshBasicMaterial());
-        let boxmesh2 = new THREE.Mesh(geometryBox2, new THREE.MeshBasicMaterial());
-
-        boxmesh.geometry.translate(pRMax * 2, pRMax * 2, 0);
-        boxmesh2.geometry.translate(0, -pRMax * 2 - pRMax, 0);
-        boxmesh2.updateMatrix();
-    
-
-        const MeshCSG1 = CSG.fromMesh(meshOut);
-        const MeshCSG2 = CSG.fromMesh(meshIn);
-        let MeshCSG3 = CSG.fromMesh(boxmesh);
-
-        let aCSG;
-        if(pRMin === 0) {
-            aCSG = MeshCSG1;
-        } else {
-            aCSG = MeshCSG1.subtract(MeshCSG2);
-        }
-        
-
-        let bCSG;
-        bCSG = MeshCSG1.subtract(MeshCSG2);
-
-        let cCSG;
-        cCSG = MeshCSG1.subtract(MeshCSG2);
-
-        const DPhi = pDPhi, SPhi = pSPhi, STheta = pSTheta, DTheta = pDTheta;
-        if (DPhi > 270 && DPhi < 360) {
-            let v_DPhi = 360 - DPhi;
-
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / 2;
-                boxmesh.rotateZ(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                bCSG = bCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-            aCSG = aCSG.subtract(bCSG);
-        } else if(DPhi <= 270) {
-
-            boxmesh.rotateZ(SPhi  * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / (2);
-                boxmesh.rotateZ(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-        }
-
-        let deltaphi = pSTheta / 180 * 2 * pRMax;
-
-        boxmesh2.translateY(deltaphi);
-        boxmesh2.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh2);
-        aCSG = aCSG.subtract(MeshCSG3);
-
-        deltaphi = pDTheta / 180 * 2 * pRMax;
-        boxmesh2.translateY(deltaphi + 4 * pRMax);
-        boxmesh2.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh2);
-        aCSG = aCSG.subtract(MeshCSG3);
-        
-        let mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-        mesh.rotateX(Math.PI/2);
-        mesh.updateMatrix();
-        aCSG = CSG.fromMesh(mesh);
-        mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-        const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pSTheta': pSTheta, 'pDTheta': pDTheta };
+	const geometry = new THREE.SphereGeometry(pRMax, 16, 16, pSPhi / 180 * Math.PI, pDPhi / 180 * Math.PI, pSTheta / 180 * Math.PI, pDTheta / 180 * Math.PI);	
+	let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+	const aCSG = CSG.fromMesh(mesh);
+	mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+	mesh.name = 'Sphere';
+        mesh.geometry.type = "SphereGeometry2";
+	const param = {'pRMax': pRMax, 'pRMin': pRMin, 'pSPhi': pSPhi, 'pDPhi': pDPhi, 'pSTheta': pSTheta, 'pDTheta': pDTheta};
         mesh.geometry.parameters = param;
-        mesh.geometry.type = 'SphereGeometry2';
-        mesh.name = 'Sphere';
-        editor.execute(new AddObjectCommand(editor, mesh));
-        
+	editor.execute(new AddObjectCommand(editor, mesh)); 
     });
 
     item.dom.addEventListener('dragend', function (event) {
-
         var mouseX = event.clientX;
         var mouseY = event.clientY;
 
@@ -250,116 +152,24 @@ function BasicSolids(editor) {
         var distance = -camera.position.y / direction.y;
         var position = camera.position.clone().add(direction.multiplyScalar(distance));
 
-        const pRMin = 0.8, pRMax = 1, pSPhi = 0, pDPhi = 180, pSTheta = 0, pDTheta = 90;
+        const pRMin = 0, pRMax = 100, pSPhi = 0, pDPhi = 360, pSTheta = 0, pDTheta = 180;
 
-        const geometryOut = new THREE.SphereGeometry(pRMax, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const geometryIn = new THREE.SphereGeometry(pRMin, 16, 16, 0, Math.PI * 2, 0, Math.PI * 2);
-        const geometryBox = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
-        const geometryBox2 = new THREE.BoxGeometry(pRMax * 4, pRMax * 4, pRMax * 4);
-
+        const geometryOut = new THREE.SphereGeometry(pRMax, 16, 16, pSPhi/180.*Math.PI, (pDPhi / 180) * Math.PI, pSTheta/180*Math.PI, (pDTheta / 180) * Math.PI );
+	    const geometryIn = new THREE.SphereGeometry(pRMin, 16, 16, pSPhi/180.*Math.PI, (pDPhi / 180) * Math.PI, pSTheta/180*Math.PI, (pDTheta / 180) * Math.PI );
         let meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
         let meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
-        let boxmesh = new THREE.Mesh(geometryBox, new THREE.MeshBasicMaterial());
-        let boxmesh2 = new THREE.Mesh(geometryBox2, new THREE.MeshBasicMaterial());
-
-        boxmesh.geometry.translate(pRMax * 2, pRMax * 2, 0);
-        boxmesh2.geometry.translate(0, -pRMax * 2 - pRMax, 0);
-        boxmesh2.updateMatrix();
-    
 
         const MeshCSG1 = CSG.fromMesh(meshOut);
         const MeshCSG2 = CSG.fromMesh(meshIn);
-        let MeshCSG3 = CSG.fromMesh(boxmesh);
 
-        let aCSG;
-        if(pRMin === 0) {
-            aCSG = MeshCSG1;
-        } else {
-            aCSG = MeshCSG1.subtract(MeshCSG2);
-        }
-        
-
-        let bCSG;
-        bCSG = MeshCSG1.subtract(MeshCSG2);
-
-        let cCSG;
-        cCSG = MeshCSG1.subtract(MeshCSG2);
-
-        const DPhi = pDPhi, SPhi = pSPhi, STheta = pSTheta, DTheta = pDTheta;
-        if (DPhi > 270 && DPhi < 360) {
-            let v_DPhi = 360 - DPhi;
-
-            boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / 2;
-                boxmesh.rotateZ(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                bCSG = bCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-            aCSG = aCSG.subtract(bCSG);
-
-        } else if(DPhi <= 270) {
-
-            boxmesh.rotateZ(SPhi  * Math.PI);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-            let repeatCount = Math.floor((270 - DPhi) / 90);
-
-            for (let i = 0; i < repeatCount; i++) {
-                let rotateVaule = Math.PI / (2);
-                boxmesh.rotateZ(rotateVaule);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-            }
-            let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-
-        }
-
-        let deltaphi = pSTheta / 180 * 2 * pRMax;
-
-        boxmesh2.translateY(deltaphi);
-        boxmesh2.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh2);
-        aCSG = aCSG.subtract(MeshCSG3);
-
-        deltaphi = pDTheta / 180 * 2 * pRMax;
-        boxmesh2.translateY(deltaphi + 5 * pRMax);
-        boxmesh2.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh2);
-        aCSG = aCSG.subtract(MeshCSG3);
-        
-        let mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-        mesh.rotateX(Math.PI/2);
-        mesh.updateMatrix();
-        aCSG = CSG.fromMesh(mesh);
+        let aCSG = MeshCSG1;
+		if (pRMin !== 0) aCSG = MeshCSG1.subtract(MeshCSG2);   
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-        const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pSPhi': SPhi, 'pDPhi': DPhi, 'pSTheta': pSTheta, 'pDTheta': pDTheta };
+        const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pSPhi': pSPhi, 'pDPhi': pDPhi, 'pSTheta': pSTheta, 'pDTheta': pDTheta };
         mesh.geometry.parameters = param;
         mesh.geometry.type = 'SphereGeometry2';
         mesh.name = 'Sphere';
-        mesh.position.copy(position);
-
         editor.execute(new AddObjectCommand(editor, mesh));
-
     });
 
     options.add(item);
@@ -374,6 +184,7 @@ function BasicSolids(editor) {
     item.onClick(function () {
         var pRMin = 0, pRMax = 150 /*mm*/, pDz = 200 /*mm*/, pSPhi = 0, pDPhi = 360;
 
+    
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2);
         const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
         cylindermesh1.rotateX(Math.PI / 2);
@@ -387,6 +198,7 @@ function BasicSolids(editor) {
 
         let aCSG = MeshCSG1;
         let bCSG = MeshCSG1;
+    
         if (pRMin !== 0) {
             if (pRMin>pRMax) pRMin = pRMax - 1;
             const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz * 2);
