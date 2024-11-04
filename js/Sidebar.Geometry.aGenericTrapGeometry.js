@@ -4,6 +4,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
+import { CreateGenericTrap } from './libs/CSG/GenericTrap.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -151,26 +152,7 @@ function GeometryParametersPanel(editor, object) {
         px.push(point1X.getValue(), point2X.getValue(), point3X.getValue(), point4X.getValue(), point5X.getValue(), point6X.getValue(), point7X.getValue(), point8X.getValue(),);
         py.push(point1Z.getValue(), point2Z.getValue(), point3Z.getValue(), point4Z.getValue(), point5Z.getValue(), point6Z.getValue(), point7Z.getValue(), point8Z.getValue(),);
 
-        const vertices = [], indices = [];
-        for (let i = 0; i < 8; i++) {
-            if (i > 3) {
-                vertices.push(px[i], 1 * pDz, py[i]);
-            } else {
-                vertices.push(px[i], -1 * pDz, py[i]);
-            }
-        }
-
-        indices.push(0, 2, 1, 0, 3, 2, 0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7, 4, 5, 6, 4, 6, 7, 0, 3, 1, 1, 3, 2, 0, 1, 4, 4, 1, 5, 1, 2, 5, 5, 2, 6, 6, 2, 3, 6, 3, 7, 3, 0, 7, 4, 7, 0, 4, 5, 7, 5, 6, 7);
-        const geometry = new PolyhedronGeometry(vertices, indices);
-        let mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-        mesh.rotateX(Math.PI / 2);
-        mesh.updateMatrix();
-        let aCSG = CSG.fromMesh(mesh);
-        mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-        
-        const param = { 'pDz': pDz, 'px': px, 'py': py };
-        mesh.geometry.parameters = param;
-        mesh.geometry.type = 'aGenericTrapGeometry';
+        const mesh = CreateGenericTrap(pDz,px,py);
         mesh.geometry.name = object.geometry.name;
 
         editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));

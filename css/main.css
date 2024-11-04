@@ -62,26 +62,25 @@ input {
   user-select: none;
 }
 
-#Category{
+#leftbar {
   position: absolute;
   top: 32px;
   left: 0;
-  width: 270px;
+  width: 195px;
   height: calc(100vh - 32px);
   overflow: auto;
   background: #eee;
 }
 
-#Category .Category-widget{
+#leftbar .Category-widget {
   /* width: calc(100% + 20px); */
   /* height: calc(100% - 21px); */
   display: block;
   color: #888;
   padding: 10px;
-  border-top: 1px solid #ccc;
 }
 
-#Category .Category-widget .Category-item{
+#leftbar .Category-widget .Category-item {
   display: inline-block;
   width: 70px;
   height: 70px;
@@ -94,7 +93,7 @@ input {
   color: #1b1b1b;
 }
 
-#Category .Category-widget .Category-item div{
+#leftbar .Category-widget .Category-item div {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -112,7 +111,7 @@ input {
   position: relative;
   display: block;
   width: 100%;
-  min-width: 260px;
+  min-width: 195px;
 }
 
 .TabbedPanel .Tabs {
@@ -157,26 +156,20 @@ input {
 /* CodeMirror */
 
 .CodeMirror {
-
   position: absolute !important;
   top: 37px;
   width: 100% !important;
   height: calc(100% - 37px) !important;
-
 }
 
 .CodeMirror .errorLine {
-
   background: rgba(255, 0, 0, 0.25);
-
 }
 
 .CodeMirror .esprima-error {
-
   color: #f00;
   text-align: right;
   padding: 0 20px;
-
 }
 
 /* outliner */
@@ -191,35 +184,27 @@ input {
 }
 
 #outliner .opener.open:after {
-  content: '−';
+  content: "−";
 }
 
 #outliner .opener.closed:after {
-  content: '+';
+  content: "+";
 }
 
 #outliner .option {
-
   border: 1px solid transparent;
-
 }
 
 #outliner .option.drag {
-
   border: 1px dashed #999;
-
 }
 
 #outliner .option.dragTop {
-
   border-top: 1px dashed #999;
-
 }
 
 #outliner .option.dragBottom {
-
   border-bottom: 1px dashed #999;
-
 }
 
 #outliner .type {
@@ -231,7 +216,7 @@ input {
 }
 
 #outliner .type:after {
-  content: '●';
+  content: "●";
 }
 
 /* */
@@ -283,7 +268,7 @@ input {
 /* */
 
 #outliner .Script:after {
-  content: '◎'
+  content: "◎";
 }
 
 /*  */
@@ -337,10 +322,19 @@ select:hover {
 
 /* UI */
 
+#leftbar-resizer {
+  position: absolute;
+  top: 32px;
+  left: 195px;
+  width: 5px;
+  bottom: 0px;
+  cursor: col-resize;
+}
+
 #resizer {
   position: absolute;
   top: 32px;
-  right: 295px;
+  right: 290px;
   width: 5px;
   bottom: 0px;
   /* background-color: rgba(255,0,0,0.5); */
@@ -350,8 +344,8 @@ select:hover {
 #viewport {
   position: absolute;
   top: 32px;
-  left: 260px;
-  right: 300px;
+  left: 195px;
+  right: 290px;
   bottom: 0;
 }
 
@@ -445,10 +439,8 @@ select:hover {
 }
 
 #menubar .menu .options .option.toggle-on::before {
-
-  content: '✔';
+  content: "✔";
   font-size: 12px;
-
 }
 
 #menubar .menu .options .option:active {
@@ -468,7 +460,7 @@ select:hover {
   right: 0;
   top: 32px;
   bottom: 0;
-  width: 300px;
+  width: 290px;
   background: #eee;
   overflow: auto;
 }
@@ -515,7 +507,7 @@ select:hover {
 
 #toolbar {
   position: absolute;
-  left: 270px;
+  left: 195px;
   top: 42px;
   height: 32px;
   background: #eee;
@@ -559,7 +551,6 @@ select:hover {
 .Outliner .option.active {
   background-color: rgba(0, 0, 0, 0.04);
 }
-
 
 .TabbedPanel .Tabs {
   background-color: #ddd;
@@ -641,7 +632,7 @@ select:hover {
   padding: 10px 20px !important;
   width: 100%;
   font-size: 14px;
-} 
+}
 
 .loginFormInputPIN {
   border-radius: 12px !important;
@@ -685,8 +676,8 @@ select:hover {
 }
 
 .loginformButton:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .registercontainer {
@@ -715,7 +706,7 @@ select:hover {
   text-align: center;
   line-height: 30px;
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -731,11 +722,9 @@ select:hover {
   justify-content: start;
 }
 
-
 /* */
 
 @media all and (max-width: 600px) {
-
   #resizer {
     display: none;
   }
@@ -783,7 +772,6 @@ select:hover {
     transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.2);
     border-radius: 16px;
   }
-
 }
 
 /* DARK MODE */
@@ -842,6 +830,13 @@ select:hover {
     color: #444;
   }
 
+  #leftbar {
+    background: #111;
+  }
+  #leftbar .Category-widget {
+    border-top: 1px solid #111;
+  }
+
   #sidebar {
     background-color: #111;
   }
@@ -851,7 +846,7 @@ select:hover {
   }
 
   #sidebar .Panel.Material canvas {
-    border: solid 1px #5A5A5A;
+    border: solid 1px #5a5a5a;
   }
 
   #tabs {
@@ -925,289 +920,331 @@ select:hover {
   z-index: 0;
 }
 
-
 body {
-    background-color:rgb(0, 0, 0);
+  background-color: rgb(0, 0, 0);
 
-   /* HERE */
-        overflow-y: auto; /* Add vertical scroll if content exceeds the height */
-        overflow-x: auto; /* Enable horizontal scrolling */
-      
+  /* HERE */
+  overflow-y: auto; /* Add vertical scroll if content exceeds the height */
+  overflow-x: auto; /* Enable horizontal scrolling */
 }
 
 h1 {
-    /* HERE */
-    font-size: 2.2rem;
-    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
-    font-weight: 500;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.728)  ;
-    letter-spacing: 2px;
-    text-shadow: 0 0 25px rgb(255, 255, 255);
+  /* HERE */
+  font-size: 2.2rem;
+  font-family: Calibri, "Gill Sans", "Gill Sans MT", "Trebuchet MS", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.728);
+  letter-spacing: 2px;
+  text-shadow: 0 0 25px rgb(255, 255, 255);
 }
-
 
 /* Creating the table from the divs within the periodic table class, repeating columns until there are 18
    also repeating rows until there are 10*/
 .periodicTable {
-    display: grid;
-    position: fixed;
-    padding: 50px;
-    background-color: #030303bb;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    grid-template-columns: repeat(18, auto);
-    grid-template-rows:repeat(10, auto);
-    column-gap: 1px;
-    row-gap: 1px;
-    justify-content: center;
-    margin-top: 2rem;
-    
-    max-width: 100%;
-    height: auto;
-    
+  display: grid;
+  position: fixed;
+  padding: 50px;
+  background-color: #030303bb;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  grid-template-columns: repeat(18, auto);
+  grid-template-rows: repeat(10, auto);
+  column-gap: 1px;
+  row-gap: 1px;
+  justify-content: center;
+  margin-top: 2rem;
+
+  max-width: 100%;
+  height: auto;
 }
 
 /* Grouping all of the elemental classes into one declaration so as not to have to do it for each one individually.
     I added min and max widths based on the viewport to keep the blocks looking relatively symmetrical*/
-.nobleGas, .lanthanide, .nonMetal, .alkaliMetal, .alkalineEarthMetal, .metalloid, .halogen, .transitionMetal, .postTransitionMetal, .actinide {
-    border: 2px solid rgb(255, 255, 255);
-    border-radius: 8px;
-    margin: 1px;
-    width: 60px;
-    max-width: 65px;
-    min-width: 55px;
-    height: auto;
-    
+.nobleGas,
+.lanthanide,
+.nonMetal,
+.alkaliMetal,
+.alkalineEarthMetal,
+.metalloid,
+.halogen,
+.transitionMetal,
+.postTransitionMetal,
+.actinide {
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  margin: 1px;
+  width: 60px;
+  max-width: 65px;
+  min-width: 55px;
+  height: auto;
 }
-
 
 /* Changing the colour of each of the elemental classes */
 
 .nonMetal {
-    background-color: black;
-    color: rgb(251, 251, 137);
-    border-color: rgb(251, 251, 137);
-    transition: .2s;
-  }
-  
-  .nonMetal:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(251, 251, 137) 0%, rgb(238, 238, 238) 50%, rgb(251, 251, 137) 100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-  }
-  
-
-.nobleGas {
-    color: rgb(255, 162, 126);
-    border-color:rgb(255, 162, 126) ;
-    background-color: black;
-    transition: .2s;
+  background-color: black;
+  color: rgb(251, 251, 137);
+  border-color: rgb(251, 251, 137);
+  transition: 0.2s;
 }
 
-.nobleGas:hover{
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(255, 162, 126) 0%, rgb(238, 238, 238) 50%, rgb(255, 162, 126) 100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
+.nonMetal:hover {
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(251, 251, 137) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(251, 251, 137) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
+}
 
+.nobleGas {
+  color: rgb(255, 162, 126);
+  border-color: rgb(255, 162, 126);
+  background-color: black;
+  transition: 0.2s;
+}
+
+.nobleGas:hover {
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(255, 162, 126) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(255, 162, 126) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .alkaliMetal {
-    color: rgb(204, 95, 95);
-    border-color:rgb(204, 95, 95) ;
-    background-color: black;
-    transition: .2s;
+  color: rgb(204, 95, 95);
+  border-color: rgb(204, 95, 95);
+  background-color: black;
+  transition: 0.2s;
 }
 .alkaliMetal:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(204, 95, 95) 0%, rgb(238, 238, 238) 50%, rgb(204, 95, 95) 100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(204, 95, 95) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(204, 95, 95) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .alkalineEarthMetal {
-   color: rgb(141, 41, 235);
-   background-color: black;
-   border-color: rgb(141, 41, 235);
-   transition: .2s;
+  color: rgb(141, 41, 235);
+  background-color: black;
+  border-color: rgb(141, 41, 235);
+  transition: 0.2s;
 }
 
 .alkalineEarthMetal:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(141, 41, 235) 0%, rgb(238, 238, 238) 50%, rgb(141, 41, 235) 100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(141, 41, 235) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(141, 41, 235) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .metalloid {
-    color: rgb(49, 169, 49);
-    background-color: black;
-    border-color: rgb(49, 169, 49);
-    transition: .2s;
+  color: rgb(49, 169, 49);
+  background-color: black;
+  border-color: rgb(49, 169, 49);
+  transition: 0.2s;
 }
 .metalloid:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(49, 169, 49)0%, rgb(238, 238, 238) 50%, rgb(49, 169, 49)100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(49, 169, 49) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(49, 169, 49) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .postTransitionMetal {
-    color: rgb(161, 251, 27);
-    border-color:rgb(161, 251, 27) ;
-    background-color: black;
-    transition: .2s;
+  color: rgb(161, 251, 27);
+  border-color: rgb(161, 251, 27);
+  background-color: black;
+  transition: 0.2s;
 }
 .postTransitionMetal:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(161, 251, 27)0%, rgb(238, 238, 238) 50%, rgb(161, 251, 27)100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(161, 251, 27) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(161, 251, 27) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .halogen {
-    color: rgb(218, 255, 54);
-    background-color: black;
-    border-color:rgb(218, 255, 54) ;
-    transition: .2s;
+  color: rgb(218, 255, 54);
+  background-color: black;
+  border-color: rgb(218, 255, 54);
+  transition: 0.2s;
 }
 .halogen:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(218, 255, 54) 0%, rgb(238, 238, 238) 50%, rgb(218, 255, 54) 100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(218, 255, 54) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(218, 255, 54) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .transitionMetal {
-    color: rgb(71, 203, 247);
-    background-color: black;
-    border-color:rgb(71, 203, 247) ;
-    transition: .2s;
+  color: rgb(71, 203, 247);
+  background-color: black;
+  border-color: rgb(71, 203, 247);
+  transition: 0.2s;
 }
 .transitionMetal:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(71, 203, 247)  0%, rgb(238, 238, 238) 50%, rgb(71, 203, 247)  100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(71, 203, 247) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(71, 203, 247) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .lanthanide {
-    color: rgb(82, 82, 236);
-    background-color: black;
-    border-color: rgb(82, 82, 236);
-    transition: .2s;
+  color: rgb(82, 82, 236);
+  background-color: black;
+  border-color: rgb(82, 82, 236);
+  transition: 0.2s;
 }
 
 .lanthanide:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(82, 82, 236)   0%, rgb(238, 238, 238) 50%, rgb(82, 82, 236)   100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-    border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(82, 82, 236) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(82, 82, 236) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 .actinide {
-    color: rgb(244, 171, 60);
-    border-color: rgb(244, 171, 60);
-    background-color: black;
-    transition: .2s;
+  color: rgb(244, 171, 60);
+  border-color: rgb(244, 171, 60);
+  background-color: black;
+  transition: 0.2s;
 }
 
 .actinide:hover {
-    color: black;
-    background-image: linear-gradient(to bottom right, rgb(244, 171, 60)   0%, rgb(238, 238, 238) 50%, rgb(244, 171, 60)   100%);
-    transform: scale(1.25);
-    transition: .2s;
-    cursor: pointer;
-        border: none;
-
+  color: black;
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(244, 171, 60) 0%,
+    rgb(238, 238, 238) 50%,
+    rgb(244, 171, 60) 100%
+  );
+  transform: scale(1.25);
+  transition: 0.2s;
+  cursor: pointer;
+  border: none;
 }
 
 /* Formatting the element number value */
 .elementNumber {
-    font-family:  'Courier New', Courier, monospace;
-    font-size: 10px;
-    font-weight:bold;
-    padding-top: 2px;
-    padding-left: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  padding-top: 2px;
+  padding-left: 4px;
 }
 
 /* Formatting the element symbol - making the text relative to the screen width, so it stays large enough to read but doesnt distort the blocks */
 .elementSymbol {
-    font-family: 'Comfortaa', cursive, 'Courier New', Courier, monospace;
-    font-size: 1.4rem;
-    font-weight: bold;
-    padding-left: 2px;
+  font-family: "Comfortaa", cursive, "Courier New", Courier, monospace;
+  font-size: 1.4rem;
+  font-weight: bold;
+  padding-left: 2px;
 }
 
 /* Formatting the element name */
 .elementName {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: .55rem;
-    letter-spacing: .2px;
-    padding-bottom: 3px;
-    padding-left: 1px;
-    font-weight: 100;
-    overflow: hidden;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2px;
+  padding-bottom: 3px;
+  padding-left: 1px;
+  font-weight: 100;
+  overflow: hidden;
 }
 
 /* adding the blank space on the top row of the table using a blank div */
 .blankRow1 {
-    grid-column: 2/span 16;
-    grid-row: 1;
+  grid-column: 2 / span 16;
+  grid-row: 1;
 }
 
 /* adding the blank space on the second row of the table using a blank div */
 .blankRow2 {
-    grid-column: 3/span 10;
-    grid-row: 2/span 2;
+  grid-column: 3 / span 10;
+  grid-row: 2 / span 2;
 }
 
 /* adding the blank space in the 3rd column, spanning 6th and 7th rows using a blank div */
 .blankRow3 {
-    grid-column: 3;
-    grid-row: 6/span 2;
+  grid-column: 3;
+  grid-row: 6 / span 2;
 }
 
 /* adding the blank row in row 8 of the table to give the space between row 7 and 9 */
 .blankRow4 {
-    grid-column: 1/span 18;
-    grid-row: 8;
-    margin: 6px;
+  grid-column: 1 / span 18;
+  grid-row: 8;
+  margin: 6px;
 }
-
 
 /* Adding the space at the bottom left of the table */
 .blankRow5 {
-    grid-column: 1/span 3;
-    grid-row:9/span 2;
+  grid-column: 1 / span 3;
+  grid-row: 9 / span 2;
 }
 
 .closeButton {
@@ -1225,26 +1262,24 @@ h1 {
   line-height: 30px;
   background-color: rgb(254, 39, 20);
   cursor: pointer;
-  transition: .2s;
+  transition: 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 @media (max-width: 767px) {
-
   body {
-      margin: 0;
-      min-width: 340px;
+    margin: 0;
+    min-width: 340px;
   }
 
   .periodicTable {
-      display: flex;
-      flex-direction: column;
-      padding: 25px;
-      padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    padding-top: 0;
   }
-
 
   .nobleGas,
   .lanthanide,
@@ -1256,11 +1291,11 @@ h1 {
   .transitionMetal,
   .postTransitionMetal,
   .actinide {
-      width: 100%;
-      max-width: none;
-      min-width: none;
-      min-height: 50px;
-      margin-bottom: 10px;
+    width: 100%;
+    max-width: none;
+    min-width: none;
+    min-height: 50px;
+    margin-bottom: 10px;
   }
 
   .nobleGas:hover,
@@ -1273,8 +1308,8 @@ h1 {
   .transitionMetal:hover,
   .postTransitionMetal:hover,
   .actinide:hover {
-      transform: scale(1.01);
-      border: 2px solid rgba(255, 255, 255, 0);
+    transform: scale(1.01);
+    border: 2px solid rgba(255, 255, 255, 0);
   }
 
   .blankRow1,
@@ -1282,36 +1317,30 @@ h1 {
   .blankRow3,
   .blankRow4,
   .blankRow5 {
-      display: none;
+    display: none;
   }
 
   .elementTile {
-      display: flex;
-      align-items: center;
-
+    display: flex;
+    align-items: center;
   }
   .elementNumber {
     width: 10%;
     text-align: center;
     font-size: 1.2rem;
-    
   }
-  
+
   .elementSymbol {
     width: 10%;
     text-align: center;
     font-size: 1.8rem;
-
-
   }
-  
+
   .elementName {
     width: 70%;
     padding-left: 5%;
     font-size: 1.3rem;
     transform: translateY(15%);
     letter-spacing: 2px;
-
   }
-
 }

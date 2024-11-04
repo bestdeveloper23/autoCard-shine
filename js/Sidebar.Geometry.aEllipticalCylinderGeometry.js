@@ -4,6 +4,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UIInteger, UICheckbox, UINumber } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
+import { CreateElipticalCylinder } from './libs/CSG/EllipticalCylinder.js';
 
 function GeometryParametersPanel( editor, object ) {
 
@@ -54,20 +55,7 @@ function GeometryParametersPanel( editor, object ) {
 	function update() {
 
 		var xSemiAxis = xSemiAxisI.getValue(), semiAxisY = ySemiAxisI.getValue(), Dz = dzI.getValue();
-		const ratioZ = semiAxisY / xSemiAxis;
-		const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz * 2, 32, 1, false, 0, Math.PI * 2);
-		const cylindermesh = new THREE.Mesh(cylindergeometry, new THREE.MeshBasicMaterial());
-		
-		cylindermesh.scale.z = ratioZ;
-		cylindermesh.rotateX(Math.PI / 2);
-        cylindermesh.updateMatrix();
-		const aCSG = CSG.fromMesh(cylindermesh);
-		const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-
-		const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
-		finalMesh.geometry.parameters = param;
-		finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
-		finalMesh.name = 'EllipeCylnder';
+		const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
 
 		finalMesh.geometry.name = object.geometry.name;
 

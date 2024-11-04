@@ -10,3 +10,13 @@ services:
     expose:
       - 5173
     command: "npx vite"
+  sh: # docker compose run --rm --service-ports sh
+    image: node
+    user: node
+    working_dir: /home/node/app
+    command: bash
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 5173:5173
+      - 4173:4173

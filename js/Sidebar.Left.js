@@ -1,21 +1,27 @@
-import { UITabbedPanel } from './libs/ui.js';
+import { UITabbedPanel } from "./libs/ui.js";
 
-import { BasicSolids } from './Sidebar.Left.Solids.js';
-import { BasicSources } from './Sidebar.Left.Sources.js'
+import { BasicSolids } from "./Sidebar.Left.Solids.js";
+import { BasicSources } from "./Sidebar.Left.Sources.js";
 
-function SidebarLeft( editor ) {
+function SidebarLeft(editor) {
+  const strings = editor.strings;
 
-	const strings = editor.strings;
+  const container = new UITabbedPanel();
+  container.setId("leftbar");
 
-	const container = new UITabbedPanel();
-	container.setId( 'Category' );
+  container.addTab(
+    "solids",
+    strings.getKey("sidebar/left/solids"),
+    new BasicSolids(editor)
+  );
+  container.addTab(
+    "sources",
+    strings.getKey("sidebar/left/sources"),
+    new BasicSources(editor)
+  );
+  container.select("solids");
 
-	container.addTab( 'solids', strings.getKey( 'sidebar/left/solids' ), new BasicSolids( editor ) );
-	container.addTab( 'sources', strings.getKey( 'sidebar/left/sources' ), new BasicSources( editor ) );
-	container.select( 'solids' );
-
-	return container;
-
+  return container;
 }
 
 export { SidebarLeft };

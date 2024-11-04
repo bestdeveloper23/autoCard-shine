@@ -135,10 +135,10 @@ function SidebarMaterial(editor) {
 	});
 
 	nistMaterials.setOptions(nistOptions);
-	nistMaterials.dom.style.marginLeft = '90px';
 	nistMaterials.addClass('compoundmaterial');
 
 
+  nistMaterialNameRow.add(new UIText(strings.getKey('sidebar/material/nistMaterials')).setWidth('90px'));
 	nistMaterialNameRow.add(nistMaterials);
 
 	container.add(nistMaterialNameRow);
@@ -158,9 +158,9 @@ function SidebarMaterial(editor) {
 	});
 
 	HNmaterials.setOptions(HNOptions);
-	HNmaterials.dom.style.marginLeft = '90px';
 	HNmaterials.addClass('compoundmaterial');
 	
+  HNmaterialNameRow.add(new UIText(strings.getKey('sidebar/material/HNMaterials')).setWidth('90px'));
 	HNmaterialNameRow.add(HNmaterials);
 
 	container.add(HNmaterialNameRow);
@@ -180,9 +180,9 @@ function SidebarMaterial(editor) {
 	});
 
 	spaceMaterials.setOptions(spaceOptions);
-	spaceMaterials.dom.style.marginLeft = '90px';
 	spaceMaterials.addClass('compoundmaterial');
 
+  spaceMaterialNameRow.add(new UIText(strings.getKey('sidebar/material/spaceMaterials')).setWidth('90px'));
 	spaceMaterialNameRow.add(spaceMaterials);
 
 	container.add(spaceMaterialNameRow);
@@ -202,9 +202,9 @@ function SidebarMaterial(editor) {
 	});
 
 	bioMaterials.setOptions(bioOptions);
-	bioMaterials.dom.style.marginLeft = '90px';
 	bioMaterials.addClass('compoundmaterial');
 
+  bioMaterialNameRow.add(new UIText(strings.getKey('sidebar/material/bioChemicalMaterials')).setWidth('90px'));
 	bioMaterialNameRow.add(bioMaterials);
 
 	container.add(bioMaterialNameRow);

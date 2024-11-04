@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirect files with pattern index-xxxxxx.js from /assets/ to /shine/assets/
+RewriteRule ^assets/index\-[a-zA-Z0-9]+\.(js|css)$ /shine/assets/index-$1.$2 [L,R=301]
+RewriteRule ^examples/index\-[a-zA-Z0-9]+\.(js|css)$ /shine/examples/index-$1.$2 [L,R=301]

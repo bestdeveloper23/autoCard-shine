@@ -401,8 +401,9 @@ function MenubarAdd( editor ) {
 		const light = new THREE.SpotLight( color, intensity, distance, angle, penumbra );
 		light.name = 'SpotLight';
 		light.target.name = 'SpotLight Target';
+		light.decay = 0;
 
-		light.position.set( 5, 10, 7.5 );
+		light.position.set( 707, 578, 253 );
 
 		editor.execute( new AddObjectCommand( editor, light ) );
 
