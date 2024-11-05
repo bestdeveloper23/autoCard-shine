@@ -120,6 +120,7 @@ function Strings( config ) {
 
 			'menubar/view': 'View',
 			'menubar/view/gridHelper': 'Grid Helper',
+			'menubar/view/lightHelper': 'Lights Helper',
 			'menubar/view/fullscreen': 'Fullscreen',
 
 			'menubar/help': 'Help',

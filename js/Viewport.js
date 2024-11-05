@@ -769,6 +769,13 @@ function Viewport(editor, measureValue) {
 
 	});
 
+	signals.showLightHelperChanged.add(function(lightHelper, state){
+		let helper = editor.helpers[lightHelper.id];
+		helper.visible = state;
+
+		render();
+	});
+
 	signals.showHelpersChanged.add(function (showHelpers) {
 
 		showSceneHelpers = showHelpers;

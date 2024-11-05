@@ -92,6 +92,10 @@ function SidebarScene(editor) {
       html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
         "World"
       )}`;
+    } else if (object.name === 'Light'){
+      html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
+        object.name //Light
+      )}`;
     } else {
       html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
         object.name
@@ -226,13 +230,21 @@ function SidebarScene(editor) {
   function refreshUI() {
     const camera = editor.camera;
     const scene = editor.scene;
+    const lights = scene.children?.filter(obj => obj.isLight === true);
+    const mesh = scene.children?.filter(obj => obj.isMesh === true);
 
     const options = [];
 
     options.push(buildOption(camera, false));
     options.push(buildOption(scene, false));
+    addObjects(mesh, 0);
+    if (lights.length !== 0) {
+      options.push(buildOption({name: 'Light'}, false));
+      addObjects(lights, 0);
+    }
 
-    (function addObjects(objects, pad) {
+
+    function addObjects(objects, pad) {
       for (let i = 0, l = objects.length; i < l; i++) {
         const object = objects[i];
 
@@ -248,7 +260,8 @@ function SidebarScene(editor) {
           addObjects(object.children, pad + 1);
         }
       }
-    })(scene.children, 0);
+    };
+
 
     outliner.setOptions(options);
 

@@ -22,11 +22,11 @@ function MenubarView( editor ) {
 	const states = {
 
 		gridHelper: true,
+		lightHelper: true
 
 	};
 
 	// Grid Helper
-
 	let option = new UIRow().addClass( 'option' ).addClass( 'toggle' ).setTextContent( strings.getKey( 'menubar/view/gridHelper' ) ).onClick( function () {
 
 		states.gridHelper = ! states.gridHelper;
@@ -39,7 +39,22 @@ function MenubarView( editor ) {
 
 	options.add( option );
 
-	//
+	//Light Helper
+	option = new UIRow().addClass( 'option' ).addClass( 'toggle' ).setTextContent( strings.getKey( 'menubar/view/lightHelper' ) ).onClick( function () {
+
+		states.lightHelper = ! states.lightHelper;
+
+		this.toggleClass( 'toggle-on', states.lightHelper );
+
+		let helperId =  Object.entries(editor.helpers).find(
+			([key, light]) => light.type === 'SpotLightHelper'
+		)?.[0];
+
+		signals.showLightHelperChanged.dispatch({id: helperId}, states.lightHelper)
+
+	} ).toggleClass( 'toggle-on', states.lightHelper );
+
+	options.add(option);
 
 	options.add( new UIHorizontalRule() );
 

@@ -85,6 +85,7 @@ function Editor() {
 
 		showGridChanged: new Signal(),
 		showHelpersChanged: new Signal(),
+		showLightHelperChanged: new Signal(),
 		refreshSidebarObject3D: new Signal(),
 		refreshSidebarEnvironment: new Signal(),
 		historyChanged: new Signal(),

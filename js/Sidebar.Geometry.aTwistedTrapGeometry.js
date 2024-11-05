@@ -6,223 +6,223 @@ import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 
 function GeometryParametersPanel(editor, object) {
 
- const strings = editor.strings;
+    const strings = editor.strings;
 
- const container = new UIDiv();
+    const container = new UIDiv();
 
- const geometry = object.geometry;
- const parameters = geometry.parameters;
+    const geometry = object.geometry;
+    const parameters = geometry.parameters;
 
- // width1
+    // width1
 
- const widthRow1 = new UIRow();
- const width1 = new UINumber(parameters.dx1).setRange(0, Infinity).onChange(update);
+    const widthRow1 = new UIRow();
+    const width1 = new UINumber(parameters.dx1).setRange(0, Infinity).onChange(update);
 
- widthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx1')).setWidth('90px'));
- widthRow1.add(width1);
+    widthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx1')).setWidth('90px'));
+    widthRow1.add(width1);
 
- widthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    widthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(widthRow1);
+    container.add(widthRow1);
 
- const widthRow2 = new UIRow();
- const width2 = new UINumber(parameters.dx2).setRange(0, Infinity).onChange(update);
+    const widthRow2 = new UIRow();
+    const width2 = new UINumber(parameters.dx2).setRange(0, Infinity).onChange(update);
 
- widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx2')).setWidth('90px'));
- widthRow2.add(width2);
+    widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx2')).setWidth('90px'));
+    widthRow2.add(width2);
 
- widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(widthRow2);
+    container.add(widthRow2);
 
- // depth1
+    // depth1
 
- const depthRow1 = new UIRow();
- const depth1 = new UINumber(parameters.dy1).setRange(0, Infinity).onChange(update);
+    const depthRow1 = new UIRow();
+    const depth1 = new UINumber(parameters.dy1).setRange(0, Infinity).onChange(update);
 
- depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dy1')).setWidth('90px'));
- depthRow1.add(depth1);
+    depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dy1')).setWidth('90px'));
+    depthRow1.add(depth1);
 
- depthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    depthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(depthRow1);
+    container.add(depthRow1);
 
- // width3
+    // width3
 
- const widthRow3 = new UIRow();
- const width3 = new UINumber(parameters.dx3).setRange(0, Infinity).onChange(update);
+    const widthRow3 = new UIRow();
+    const width3 = new UINumber(parameters.dx3).setRange(0, Infinity).onChange(update);
 
- widthRow3.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx3')).setWidth('90px'));
- widthRow3.add(width3);
+    widthRow3.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx3')).setWidth('90px'));
+    widthRow3.add(width3);
 
- widthRow3.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    widthRow3.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(widthRow3);
+    container.add(widthRow3);
 
- // width4
+    // width4
 
- const widthRow4 = new UIRow();
- const width4 = new UINumber(parameters.dx4).setRange(0, Infinity).onChange(update);
+    const widthRow4 = new UIRow();
+    const width4 = new UINumber(parameters.dx4).setRange(0, Infinity).onChange(update);
 
- widthRow4.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx4')).setWidth('90px'));
- widthRow4.add(width4);
+    widthRow4.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx4')).setWidth('90px'));
+    widthRow4.add(width4);
 
- widthRow4.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    widthRow4.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(widthRow4);
+    container.add(widthRow4);
 
 
 
- // depth2
+    // depth2
 
- const depthRow2 = new UIRow();
- const depth2 = new UINumber(parameters.dy2).setRange(0, Infinity).onChange(update);
+    const depthRow2 = new UIRow();
+    const depth2 = new UINumber(parameters.dy2).setRange(0, Infinity).onChange(update);
 
- depthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dy2')).setWidth('90px'));
- depthRow2.add(depth2);
+    depthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dy2')).setWidth('90px'));
+    depthRow2.add(depth2);
 
- depthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    depthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
- container.add(depthRow2);
+    container.add(depthRow2);
 
- // height
+    // height
 
- const heightRow = new UIRow();
- const height = new UINumber(parameters.dz).setRange(0, Infinity).onChange(update);
+    const heightRow = new UIRow();
+    const height = new UINumber(parameters.dz).setRange(0, Infinity).onChange(update);
 
- heightRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dz')).setWidth('90px'));
- heightRow.add(height);
+    heightRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dz')).setWidth('90px'));
+    heightRow.add(height);
 
- heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
- 
- container.add(heightRow);
+    heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
+    container.add(heightRow);
 
 
- // alpha
 
- const alphaRow = new UIRow();
- const alphaI = new UINumber(parameters.alpha).setRange(-90, 90).onChange(update);
+    // alpha
 
- alphaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/alpha')).setWidth('90px'));
- alphaRow.add(alphaI);
- alphaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    const alphaRow = new UIRow();
+    const alphaI = new UINumber(parameters.alpha).setRange(-90, 90).onChange(update);
 
- container.add(alphaRow);
+    alphaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/alpha')).setWidth('90px'));
+    alphaRow.add(alphaI);
+    alphaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
- // theta
+    container.add(alphaRow);
 
- const thetaRow = new UIRow();
- const thetaI = new UINumber(parameters.theta).setRange(-90, 90).onChange(update);
+    // theta
 
- thetaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/theta')).setWidth('90px'));
- thetaRow.add(thetaI);
- thetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    const thetaRow = new UIRow();
+    const thetaI = new UINumber(parameters.theta).setRange(-90, 90).onChange(update);
 
- container.add(thetaRow);
+    thetaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/theta')).setWidth('90px'));
+    thetaRow.add(thetaI);
+    thetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
- // phi
+    container.add(thetaRow);
 
- const phiRow = new UIRow();
- const phiI = new UINumber(parameters.phi).setRange(-90, 90).onChange(update);
+    // phi
 
- phiRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/phi')).setWidth('90px'));
- phiRow.add(phiI);
- phiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    const phiRow = new UIRow();
+    const phiI = new UINumber(parameters.phi).setRange(-90, 90).onChange(update);
 
- container.add(phiRow);
+    phiRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/phi')).setWidth('90px'));
+    phiRow.add(phiI);
+    phiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
+    container.add(phiRow);
 
- // twistedangle
 
- const twistedangleRow = new UIRow();
- const angleI = new UINumber(parameters.twistedangle).setRange(-90, 90).onChange(update);
+    // twistedangle
 
- twistedangleRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/twistedangle')).setWidth('90px'));
- twistedangleRow.add(angleI);
- twistedangleRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    const twistedangleRow = new UIRow();
+    const angleI = new UINumber(parameters.twistedangle).setRange(-90, 90).onChange(update);
 
- container.add(twistedangleRow);
+    twistedangleRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/twistedangle')).setWidth('90px'));
+    twistedangleRow.add(angleI);
+    twistedangleRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
- //
+    container.add(twistedangleRow);
 
- function update() {
+    //
 
-  // we need to new each geometry module
+    function update() {
 
-  const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(),
-   pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(),
-   pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(),
-   pAlpha = alphaI.getValue(), twistedangle = - angleI.getValue();
+        // we need to new each geometry module
 
-  const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
-  const maxWidth = Math.max(dx, pDx2, pDx3, pDx4) * 2;
-  const geometry = new THREE.BoxGeometry(2 * maxWidth, dz * 2, 2 * maxWidth, 32, 32, 32);
-  const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(),
+        pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(),
+        pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(),
+        pAlpha = alphaI.getValue(), twistedangle = - angleI.getValue();
 
-  const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 8 * dz, 4 * maxWidth, 32, 32, 32);
-  const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+        const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+        const maxWidth = Math.max(dx, pDx2, pDx3, pDx4) * 2;
+        const geometry = new THREE.BoxGeometry(2 * maxWidth, dz * 2, 2 * maxWidth, 32, 32, 32);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
 
-  let MeshCSG1 = CSG.fromMesh(mesh);
-  let MeshCSG3 = CSG.fromMesh(boxmesh);
+        const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 8 * dz, 4 * maxWidth, 32, 32, 32);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
 
-  boxmesh.geometry.translate(2 * maxWidth, 0, 0);
-  boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
-  boxmesh.position.set(0 + dx, 0, 0);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  let aCSG = MeshCSG1.subtract(MeshCSG3);
+        let MeshCSG1 = CSG.fromMesh(mesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
 
-  boxmesh.rotation.set(0, 0, 0);
-  boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
-  boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
-  boxmesh.position.set(0 - dx, 0, 0);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
+        boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+        boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+        boxmesh.position.set(0 + dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        let aCSG = MeshCSG1.subtract(MeshCSG3);
 
-  boxmesh.rotation.set(0, 0, 0);
-  boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
-  boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-  boxmesh.position.set(0, 0, dy);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+        boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+        boxmesh.position.set(0 - dx, 0, 0);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
-  boxmesh.rotation.set(0, 0, 0);
-  boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
-  boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
-  boxmesh.position.set(0, 0, -dy);
-  boxmesh.updateMatrix();
-  MeshCSG3 = CSG.fromMesh(boxmesh);
-  aCSG = aCSG.subtract(MeshCSG3);
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+        boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+        boxmesh.position.set(0, 0, dy);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
+        boxmesh.rotation.set(0, 0, 0);
+        boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+        boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+        boxmesh.position.set(0, 0, -dy);
+        boxmesh.updateMatrix();
+        MeshCSG3 = CSG.fromMesh(boxmesh);
+        aCSG = aCSG.subtract(MeshCSG3);
 
-  const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': - twistedangle };
-  finalMesh.geometry.parameters = param;
 
-  const positionAttribute = finalMesh.geometry.getAttribute('position');
+        const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': - twistedangle };
+        finalMesh.geometry.parameters = param;
 
-  let vec3 = new THREE.Vector3();
-  let axis_vector = new THREE.Vector3(0, 1, 0);
-  for (let i = 0; i < positionAttribute.count; i++) {
-   vec3.fromBufferAttribute(positionAttribute, i);
-   vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
-   finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-  }
+        const positionAttribute = finalMesh.geometry.getAttribute('position');
 
-  finalMesh.geometry.type = 'aTwistedTrapGeometry';
-  finalMesh.rotateX(Math.PI / 2);
-  finalMesh.updateMatrix();
-  finalMesh.name = 'TwistedTrapeZoidP';
+        let vec3 = new THREE.Vector3();
+        let axis_vector = new THREE.Vector3(0, 1, 0);
+        for (let i = 0; i < positionAttribute.count; i++) {
+            vec3.fromBufferAttribute(positionAttribute, i);
+            vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+            finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+        }
 
-  finalMesh.geometry.name = object.geometry.name;
+        finalMesh.geometry.type = 'aTwistedTrapGeometry';
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        finalMesh.name = 'TwistedTrapeZoidP';
 
-  editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
- }
+        finalMesh.geometry.name = object.geometry.name;
 
- return container;
+        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+    }
+
+    return container;
 
 }
 
