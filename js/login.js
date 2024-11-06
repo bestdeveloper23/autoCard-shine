@@ -284,7 +284,7 @@ function MenubarLogin( editor ) {
   
   function sendEmail(email, code) {
 
-    emailjs.send('service_82gn40c', 'template_iokrqmk', {
+    emailjs.send('service_7kt25dc', 'template_iokrqmk', {
       to_email: email,
       reply_to: 'request2shine@gmail.com',
       verification_code: code
