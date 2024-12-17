@@ -25,7 +25,7 @@ function Strings( config ) {
 			'menubar/file/export/stl': 'Export STL',
 			'menubar/file/export/stl_binary': 'Export STL (Binary)',
 			'menubar/file/export/usdz': 'Export USDZ',
-			'menubar/file/publish': 'Publish',
+			'menubar/file/publish': 'Export to JSON',
 
 			'menubar/edit': 'Edit',
 			'menubar/edit/undo': 'Undo (Ctrl+Z)',
@@ -107,6 +107,9 @@ function Strings( config ) {
 			'menubar/play/play': 'Play',
 
 			'menubar/examples': 'Examples',
+			'menubar/examples/geant4': 'Geant4',
+			'menubar/examples/geant4/basic': 'Basic',
+			'menubar/examples/geant4/basic/b1': 'B1',
 			'menubar/examples/Arkanoid': 'Arkanoid',
 			'menubar/examples/Camera': 'Camera',
 			'menubar/examples/Particles': 'Particles',
@@ -140,11 +143,13 @@ function Strings( config ) {
 			'sidebar/animations/timescale': 'Time Scale',
 
 			'sidebar/scene': 'Experiment',
+			'sidebar/scene/tool/clearworld': 'Clear World',
 			'sidebar/scene/background': 'Background',
 			'sidebar/scene/environment': 'Environment',
 			'sidebar/scene/fog': 'Fog',
 
 			'sidebar/properties/object': 'Volume',
+			'sidebar/properties/lights': 'Lights',
 			'sidebar/properties/geometry': 'Solid',
 			'sidebar/properties/material': 'Material',
 			'sidebar/properties/script': 'Script',
@@ -204,6 +209,7 @@ function Strings( config ) {
 			'sidebar/geometry/show_vertex_normals': 'Show Vertex Normals',
 			'sidebar/geometry/compute_vertex_normals': 'Compute Vertex Normals',
 			'sidebar/geometry/center': 'Center',
+			'sidebar/geometry/default_unit' : 'Default Unit',
 
 			'sidebar/geometry/box_geometry/width': 'Half X',
 			'sidebar/geometry/box_geometry/height': 'Half Y',
@@ -498,7 +504,8 @@ function Strings( config ) {
 			'sidebar/material/wireframe': 'Wireframe',
 			'sidebar/material/userdata': 'User data',
 
-			'sidebar/script': 'Script',
+			'sidebar/source': 'Source',
+			'sidebar/script/type': 'Type',
 			'sidebar/script/new': 'New',
 			'sidebar/script/edit': 'Edit',
 			'sidebar/script/remove': 'Remove',
@@ -532,6 +539,7 @@ function Strings( config ) {
 			'sidebar/settings/viewport': 'Viewport',
 			'sidebar/settings/viewport/grid': 'Grid',
 			'sidebar/settings/viewport/helpers': 'Helpers',
+			'sidebar/settings/viewport/defaultLights' : 'DefaultLights',
 
 			'sidebar/history': 'History',
 			'sidebar/history/persistent': 'persistent',

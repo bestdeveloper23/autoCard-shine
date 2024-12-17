@@ -41,6 +41,20 @@ function SidebarSettingsViewport( editor ) {
 	showHelpersRow.add( showHelpers );
 	container.add( showHelpersRow );
 
+
+	// Default Lights
+	const showDefaulLightsRow = new UIRow();
+	showDefaulLightsRow.add( new UIText( strings.getKey( 'sidebar/settings/viewport/defaultLights' ) ).setWidth( '90px' ) );
+
+	const showDefaultLights = new UIBoolean(true).onChange(function(){
+		signals.showDefaultLightChanged.dispatch(showDefaultLights.getValue());
+	})
+
+	showDefaulLightsRow.add(showDefaultLights);
+	container.add(showDefaulLightsRow);
+	signals.showDefaultLightChanged.dispatch(showDefaultLights.getValue());
+
+
 	return container;
 
 }

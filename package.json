@@ -4,7 +4,8 @@
     "@google-cloud/local-auth": "^3.0.1",
     "google-auth-library": "^9.10.0",
     "googleapis": "^140.0.0",
-    "three": "^0.168.0"
+    "three": "^0.168.0",
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "vite": "^4.5.5"

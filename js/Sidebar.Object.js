@@ -96,25 +96,32 @@ function SidebarObject( editor ) {
 
 	// type
 
-	const sourceTypeRow = new UIRow();
-	const sourceType = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
-	const sourcetypeoption = [];
-	SOURCE.type.forEach(element => {
-		sourcetypeoption.push(element);
-	});
+	// const sourceTypeRow = new UIRow();
+	// const sourceType = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	// const sourcetypeoption = [];
+	// SOURCE.type.forEach(element => {
+	// 	sourcetypeoption.push(element);
+	// });
 
-	sourceType.setOptions(sourcetypeoption);
-	sourceType.setValue(0);
+	// sourceType.setOptions(sourcetypeoption);
+	// sourceType.setValue(0);
 
-	sourceTypeRow.add(new UIText(strings.getKey('sidebar/object/type')).setWidth('90px'));
-	sourceTypeRow.add(sourceType);
+	// sourceTypeRow.add(new UIText(strings.getKey('sidebar/object/type')).setWidth('90px'));
+	// sourceTypeRow.add(sourceType);
 
-	container.add(sourceTypeRow);
+	// container.add(sourceTypeRow);
 
 	// name
 
 	const objectNameRow = new UIRow();
 	const objectName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
+        const regex = /^[a-zA-Z0-9]+$/;
+
+		if(!regex.test(objectName.getValue())){
+			alert('Warning: Name cannot contain spaces or symbols.');
+			
+			objectName.setValue('');
+		}
 
 		editor.execute( new SetValueCommand( editor, editor.selected, 'name', objectName.getValue() ) );
 
@@ -943,7 +950,7 @@ function SidebarObject( editor ) {
 
 	signals.objectSelected.add( function ( object ) {
 
-		if ( object !== null ) {
+		if ( object !== null && object.isLight !== true) {
 
 			container.setDisplay( 'block' );
 
@@ -960,7 +967,7 @@ function SidebarObject( editor ) {
 
 	signals.objectChanged.add( function ( object ) {
 
-		if ( object !== editor.selected ) return;
+		if ( object !== editor.selected || object.isLight === true ) return;
 
 		updateUI( object );
 
@@ -968,7 +975,7 @@ function SidebarObject( editor ) {
 
 	signals.refreshSidebarObject3D.add( function ( object ) {
 
-		if ( object !== editor.selected ) return;
+		if ( object !== editor.selected || object.isLight === true) return;
 
 		updateUI( object );
 
@@ -979,9 +986,21 @@ function SidebarObject( editor ) {
 		// objectType.setValue( object.type );
 
 		// objectUUID.setValue( object.uuid );
-		objectName.setValue( object.name );
+		if(object.name === 'Scene'){
 
-		copyNumber.setValue( object.copynumber ? object.copynumber : 1);
+			objectName.setValue( 'World' );
+
+		}else {
+			objectName.setValue( object.name );
+		}
+
+		if(object.name === 'Scene'){
+
+			copyNumber.setValue(0);
+
+		}else {
+			copyNumber.setValue( object.copynumber ? object.copynumber : 1);
+		}
 
 		// if( object.source !== undefined ) {
 		// 	sourceType.setValue( SOURCE.type.indexOf(object.source) );	

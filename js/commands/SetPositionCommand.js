@@ -40,6 +40,7 @@ class SetPositionCommand extends Command {
 		this.object.position.copy( this.newPosition );
 		this.object.updateMatrixWorld( true );
 		this.editor.signals.objectChanged.dispatch( this.object );
+		this.editor.signals.sceneGraphChanged.dispatch();
 
 	}
 
@@ -48,6 +49,7 @@ class SetPositionCommand extends Command {
 		this.object.position.copy( this.oldPosition );
 		this.object.updateMatrixWorld( true );
 		this.editor.signals.objectChanged.dispatch( this.object );
+		this.editor.signals.sceneGraphChanged.dispatch();
 
 	}
 

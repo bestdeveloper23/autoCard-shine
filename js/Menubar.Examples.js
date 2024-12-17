@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { UIPanel, UIRow } from "./libs/ui.js";
+import { UIPanel, UIRow, UIHorizontalRule } from "./libs/ui.js";
 
 import monkeyUrl from "/examples/monkey.stl";
 import kidneyUrl from "/examples/kidney.stl";
@@ -27,6 +27,57 @@ function MenubarExamples(editor) {
   container.add(options);
 
   // Examples
+
+  //Geant4
+	const Geant4SubmenuTitle = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4' ) ).addClass( 'option' );
+  Geant4SubmenuTitle.onMouseOver( function () {
+
+		const { top, right } = this.dom.getBoundingClientRect();
+		const { paddingTop } = getComputedStyle( this.dom );
+		Geant4Submenu.setLeft( right + 'px' );
+		Geant4Submenu.setTop( top - parseFloat( paddingTop ) + 'px' );
+		Geant4Submenu.setDisplay( 'block' );
+
+	} );
+	Geant4SubmenuTitle.onMouseOut( function () {
+
+		Geant4Submenu.setDisplay( 'none' );
+
+	} );
+	options.add( Geant4SubmenuTitle );
+
+  const Geant4Submenu = new UIPanel().setPosition( 'fixed' ).addClass( 'options' ).setDisplay( 'none' );
+	Geant4SubmenuTitle.add( Geant4Submenu );
+
+
+  //Basic
+  const basic = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic' ) ).addClass( 'option' );
+  basic.onMouseOver( function () {
+
+		const { top, right } = this.dom.getBoundingClientRect();
+		const { paddingTop } = getComputedStyle( this.dom );
+		newBasicSubmenu.setLeft(443.5 + 'px' );
+		newBasicSubmenu.setTop( 37 - parseFloat( paddingTop ) + 'px' );
+		newBasicSubmenu.setDisplay( 'block' );
+
+	} );
+
+  basic.onMouseOut( function () {
+
+		newBasicSubmenu.setDisplay( 'none' );
+
+	} );
+
+  Geant4Submenu.add( basic );
+
+  const newBasicSubmenu = new UIPanel().setPosition( 'fixed' ).addClass( 'options' ).setDisplay( 'none' );
+	basic.add( newBasicSubmenu );
+
+  //B1
+  const B1 = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic/b1' ) ).addClass( 'option' );
+  newBasicSubmenu.add(B1)
+
+  options.add( new UIHorizontalRule() );
 
   const items = [
     { title: "menubar/examples/kidney", file: "kidney.stl" },

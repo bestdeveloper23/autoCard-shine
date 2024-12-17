@@ -153,3 +153,45 @@ function CreateCutTube( pRMin , pRMax , pDz , SPhi , DPhi , pLowNorm , pHighNorm
 }
 
 export{CreateCutTube}
+
+
+
+
+
+// import cuttubImg from '../images/basicmodels/aCutTube.jpg';
+
+
+// // CutTube model
+
+// item = new UIDiv();
+// item.setClass('Category-item');
+
+// item.dom.style.backgroundImage = `url(${cuttubImg})`;
+
+// item.setTextContent(strings.getKey('menubar/add/g4cuttube'));
+// item.dom.setAttribute('draggable', true);
+// item.dom.setAttribute('item-type', 'cutTub');
+// item.onClick(function () {
+
+//     // we need to new each geometry module
+
+//     var pRMin = 1, pRMax = 1.5, pDz = 4, SPhi = 0, DPhi = 270, pLowNorm = new THREE.Vector3(0, -0.71, -0.7), pHighNorm = new THREE.Vector3(0.7, 0.71, 0);
+//     const finalMesh = CreateCutTube( pRMin , pRMax , pDz , SPhi , DPhi , pLowNorm , pHighNorm );
+
+//     editor.execute(new AddObjectCommand(editor, finalMesh));
+
+// });
+
+// item.dom.addEventListener('dragend', function (event) {
+
+//     var position = getPositionFromMouse(event);        
+
+//     var pRMin = 1, pRMax = 1.5, pDz = 4, SPhi = 0, DPhi = 270, pLowNorm = new THREE.Vector3(0, -0.71, -0.7), pHighNorm = new THREE.Vector3(0.7, 0.71, 0);
+//     const finalMesh = CreateCutTube( pRMin , pRMax , pDz , SPhi , DPhi , pLowNorm , pHighNorm );
+//     finalMesh.position.copy(position);
+
+//     editor.execute(new AddObjectCommand(editor, finalMesh));
+
+// });
+
+// options.add(item);

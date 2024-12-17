@@ -28,6 +28,7 @@ class SetColorCommand extends Command {
 
 		this.object[ this.attributeName ].setHex( this.newValue );
 		this.editor.signals.objectChanged.dispatch( this.object );
+		this.editor.signals.sceneGraphChanged.dispatch();
 
 	}
 
@@ -35,6 +36,7 @@ class SetColorCommand extends Command {
 
 		this.object[ this.attributeName ].setHex( this.oldValue );
 		this.editor.signals.objectChanged.dispatch( this.object );
+		this.editor.signals.sceneGraphChanged.dispatch();
 
 	}
 

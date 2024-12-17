@@ -1,5 +1,6 @@
 import { UITabbedPanel, UISpan } from "./libs/ui.js";
 
+import {SidebarSceneTool} from './Sidebar.Scene.Tools.js';
 import { SidebarScene } from "./Sidebar.Scene.js";
 import { SidebarProperties } from "./Sidebar.Properties.js";
 import { SidebarAnimation } from "./Sidebar.Animation.js";
@@ -12,6 +13,7 @@ function Sidebar(editor) {
   container.setId("sidebar");
 
   const scene = new UISpan().add(
+    new SidebarSceneTool(editor),
     new SidebarScene(editor),
     new SidebarProperties(editor),
     new SidebarAnimation(editor),

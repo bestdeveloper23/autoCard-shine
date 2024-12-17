@@ -1,7 +1,14 @@
 import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
-function CreateSphere(pRmin, pRmax, pSTheta, pDTheta, pSPhi, pDPhi) {
+function CreateSphere(pRMin, pRMax, pStheta, pDtheta, pSphi, pDphi) {
+  const mmTOcm=10;
+  const pRmin = pRMin*mmTOcm;
+  const pRmax = pRMax*mmTOcm;
+  const pSTheta =  pStheta/ 180 * Math.PI;
+  const  pDTheta =  pDtheta/ 180 * Math.PI;
+  const pSPhi =  pSphi/ 180 * Math.PI;
+  const pDPhi =  pDphi/ 180 * Math.PI;
   const pETheta = pSTheta + pDTheta;
 
   const sphereGeometry = new THREE.SphereGeometry(pRmax);
@@ -131,12 +138,12 @@ function CreateSphere(pRmin, pRmax, pSTheta, pDTheta, pSPhi, pDPhi) {
       new THREE.MeshLambertMaterial()
     );
     const param = {
-      pRMin: pRmin / 10,
-      pRMax: pRmax / 10,
-      pSTheta: (pSTheta / Math.PI) * 180,
-      pDTheta: (pDTheta / Math.PI) * 180,
-      pSPhi: (pSPhi / Math.PI) * 180,
-      pDPhi: (pDPhi / Math.PI) * 180,
+      pRMin: pRMin ,
+      pRMax: pRMax ,
+      pSTheta: pStheta ,
+      pDTheta: pDtheta ,
+      pSPhi: pSphi ,
+      pDPhi: pDphi ,
     };
     mesh.geometry.parameters = param;
     mesh.geometry.type = "SphereGeometry2";

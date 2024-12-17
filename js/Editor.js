@@ -9,7 +9,7 @@ import { Selector } from './Viewport.Selector.js';
 import { PointSourceHelper } from './libs/helper/pointsourceHelper.js';
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.1, 10000 );
-_DEFAULT_CAMERA.name = 'Camera';
+_DEFAULT_CAMERA.name = 'defaultCamera';
 _DEFAULT_CAMERA.position.set( 0, 500, 1000 );
 _DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
@@ -85,6 +85,7 @@ function Editor() {
 
 		showGridChanged: new Signal(),
 		showHelpersChanged: new Signal(),
+		showDefaultLightChanged: new Signal(),
 		showLightHelperChanged: new Signal(),
 		refreshSidebarObject3D: new Signal(),
 		refreshSidebarEnvironment: new Signal(),
@@ -202,7 +203,7 @@ Editor.prototype = {
 
 			
 			if ( object.type !== "PointSource" ) scope.addCamera( child );
-			scope.addHelper( child );
+			if ( !(child.name.startsWith('default')) ) scope.addHelper( child );
 
 		} );
 
@@ -740,7 +741,9 @@ Editor.prototype = {
 		this.history.fromJSON( json.history );
 		this.scripts = json.scripts;
 
-		this.setScene( await loader.parseAsync( json.scene ) );
+		const retrievedScene = await loader.parseAsync( json.scene )
+		retrievedScene.children = retrievedScene.children.filter(obj => !(obj.name.startsWith('default')));
+		this.setScene( retrievedScene );
 
 		if ( json.environment === 'ModelViewer' ) {
 

@@ -1,88 +1,49 @@
 import * as THREE from 'three';
 import { CSG } from '../CSGMesh.js';
 
-function CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi ){
-    const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz * 2, 32, 32, false, 0, Math.PI * 2);
-    const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-    cylindermesh1.rotateX(Math.PI / 2);
-    cylindermesh1.updateMatrix();
+function CreateCone( pRMin1 , pRMax1 , pRMin2 , pRMax2 , pdz , pSPhi , pDPhi ){
+    
+    const mmTOcm=10;
+    const pRmin1=pRMin1*mmTOcm;
+    const pRmax1=pRMax1*mmTOcm;
+    const pRmin2=pRMin2*mmTOcm;
+    const pRmax2=pRMax2*mmTOcm;
+    const pDz=pdz*mmTOcm;
 
-    const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz * 2, 32, 32, false, 0, Math.PI * 2);
-    const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-    cylindermesh2.rotateX(Math.PI / 2);
-    cylindermesh2.updateMatrix();
+    let SPhi = Math.PI*pSPhi/180;
+    let DPhi = Math.PI*pDPhi/180;
+    const cylindergeometry1 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz * 2, 32, 32);
+    const cylindergeometry2 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz * 2, 32, 32);
 
-    const maxRadius = Math.max(pRmax1, pRmax2) * 2;
-    const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz * 2);
-    const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+    const maxRadius = Math.max(pRmax1, pRmax2) ;
+    const  minRadius = Math.min(pRmin1, pRmin2) ;
 
-    boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
-    const MeshCSG1 = CSG.fromMesh(cylindermesh1);
-    const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-    let MeshCSG3 = CSG.fromMesh(boxmesh);
+    const cylinder1CSG = CSG.fromGeometry(cylindergeometry1);
 
-    let aCSG;
-        
-    let bCSG;
- 
-    if(pRmin1 === 0 && pRmin2 === 0 ) {
-         aCSG = MeshCSG2;
-         bCSG = MeshCSG2;
-    } else {
-        aCSG = MeshCSG2.subtract(MeshCSG1);
-        bCSG = MeshCSG2.subtract(MeshCSG1);
+    let resultCSG = cylinder1CSG;
+
+    if (DPhi < Math.PI*2){
+        const pieShape = new THREE.Shape();
+        pieShape.absarc(0, 0,  maxRadius , SPhi, SPhi + DPhi, false);
+        pieShape.lineTo(0, 0);
+        const extrusionsettings = { depth: pDz * 2, bevelEnabled: false };
+        const pieGeometry = new THREE.ExtrudeGeometry(pieShape, extrusionsettings);
+        pieGeometry.translate(0, 0, -pDz);
+        pieGeometry.rotateX(Math.PI/2)
+        const pieCSG = CSG.fromGeometry(pieGeometry);
+        const finalMesh = CSG.toMesh(pieCSG, new THREE.Matrix4(), new THREE.MeshLambertMaterial());
+        resultCSG = resultCSG.intersect(pieCSG);
     }
 
-    if (DPhi > 270 && DPhi < 360) {
-        let v_DPhi = 360 - DPhi;
-
-        boxmesh.rotateZ((SPhi - 90) / 180 * Math.PI);
-        boxmesh.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh);
-        bCSG = bCSG.subtract(MeshCSG3);
-
-        let repeatCount = Math.floor((270 - v_DPhi) / 90);
-
-        for (let i = 0; i < repeatCount; i++) {
-            let rotateVaule = - Math.PI / 2;
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            bCSG = bCSG.subtract(MeshCSG3);
-        }
-        let rotateVaule = (-1) * (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-        boxmesh.rotateZ(rotateVaule);
-        boxmesh.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh);
-        bCSG = bCSG.subtract(MeshCSG3);
-        aCSG = aCSG.subtract(bCSG);
-
-    } else if(DPhi <= 270){
-
-        boxmesh.rotateZ((SPhi) / 180 * Math.PI);
-        boxmesh.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh);
-        aCSG = aCSG.subtract(MeshCSG3);
-
-        let repeatCount = Math.floor((270 - DPhi) / 90);
-
-        for (let i = 0; i < repeatCount; i++) {
-            let rotateVaule = Math.PI / (2);
-            boxmesh.rotateZ(rotateVaule);
-            boxmesh.updateMatrix();
-            MeshCSG3 = CSG.fromMesh(boxmesh);
-            aCSG = aCSG.subtract(MeshCSG3);
-        }
-        let rotateVaule = (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-        boxmesh.rotateZ(rotateVaule);
-        boxmesh.updateMatrix();
-        MeshCSG3 = CSG.fromMesh(boxmesh);
-        aCSG = aCSG.subtract(MeshCSG3);
-
+    // Convert geometries to CSG objects
+    if (maxRadius>0 && minRadius>0){ 
+        const cylinder2CSG = CSG.fromGeometry(cylindergeometry2);
+        resultCSG = resultCSG.subtract(cylinder2CSG);
     }
-
-    const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4(), new THREE.MeshLambertMaterial());
-    const param = { 'pRMax1': pRmax1/10 , 'pRMin1': pRmin1/10 , 'pRMax2': pRmax2/10 , 'pRMin2': pRmin2/10 , 'pDz': pDz/10 , 'pSPhi': SPhi, 'pDPhi': DPhi };
+    const finalMesh = CSG.toMesh(resultCSG, new THREE.Matrix4(), new THREE.MeshLambertMaterial());
+    finalMesh.rotateX(Math.PI/2);
+    finalMesh.rotateX(Math.PI)
+    const param = { 'pRMax1': pRMax1 , 'pRMin1': pRMin1 , 'pRMax2': pRMax2 , 'pRMin2': pRMin2 , 'pDz': pdz , 'pSPhi': pSPhi, 'pDPhi': pDPhi};
     finalMesh.geometry.parameters = param;
     finalMesh.geometry.type = 'aConeGeometry';
     finalMesh.updateMatrix();
@@ -93,4 +54,3 @@ function CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi ){
 }
 
 export {CreateCone}
-   

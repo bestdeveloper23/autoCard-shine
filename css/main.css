@@ -66,7 +66,7 @@ input {
   position: absolute;
   top: 32px;
   left: 0;
-  width: 195px;
+  width: 200px;
   height: calc(100vh - 32px);
   overflow: auto;
   background: #eee;
@@ -325,7 +325,7 @@ select:hover {
 #leftbar-resizer {
   position: absolute;
   top: 32px;
-  left: 195px;
+  left: 200px;
   width: 5px;
   bottom: 0px;
   cursor: col-resize;
@@ -468,7 +468,6 @@ select:hover {
 #sidebar .Panel {
   color: #888;
   padding: 10px;
-  border-top: 1px solid #ccc;
 }
 
 #sidebar .Panel .Divider {
@@ -505,9 +504,20 @@ select:hover {
   background-color: #eee;
 }
 
+div#Scene-tool.Row{
+  min-height: 0;
+  margin-bottom: 0;
+}
+button#Scene-tool-clrWorld.Button {
+  left: 165px;
+  position: absolute;
+  margin-left: 10px;
+  margin-bottom: 0;
+}
+
 #toolbar {
   position: absolute;
-  left: 195px;
+  left: 200px;
   top: 42px;
   height: 32px;
   background: #eee;
@@ -841,9 +851,6 @@ select:hover {
     background-color: #111;
   }
 
-  #sidebar .Panel {
-    border-top: 1px solid #222;
-  }
 
   #sidebar .Panel.Material canvas {
     border: solid 1px #5a5a5a;

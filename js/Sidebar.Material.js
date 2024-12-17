@@ -95,6 +95,14 @@ function SidebarMaterial(editor) {
 	const materialNameRow1 = new UIRow();
 	const materialName1 = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
 
+		const regex = /^[a-zA-Z0-9]+$/;
+
+		if(!regex.test(materialName1.getValue())){
+			alert('Warning: Name cannot contain spaces or symbols.');
+			
+			materialName1.setValue('');
+		}
+
 		editor.execute( new SetMaterialValueCommand( editor, editor.selected, 'name', materialName1.getValue(), currentMaterialSlot ) );
 		
 
@@ -565,7 +573,7 @@ function SidebarMaterial(editor) {
 	
 	const priodicElement = new UIRow();
 	priodicElement.setDisplay('none');
-	priodicElement.add(PeriodicTable(materialDensity, materialEnergy, onChangeProperty, basicMaterialButton, priodicElement, nistMaterials));
+	priodicElement.add(PeriodicTable(materialDensity, materialEnergy,onChangeProperty, basicMaterialButton, priodicElement, nistMaterials));
 
 	container.add(priodicElement);
 
@@ -909,7 +917,7 @@ function SidebarMaterial(editor) {
 	
 				const uiElement = properties2[ property ];
 	
-				if ( Array.isArray( uiElement ) === true ) {
+				if ( typeof uiElement == 'object') {					
 	
 					for ( let i = 0; i < uiElement.length; i ++ ) {
 	
@@ -935,7 +943,7 @@ function SidebarMaterial(editor) {
 		
 		const material = currentObject.material;
 
-		if (Array.isArray(material)) {
+		if (typeof uiElement == 'object') {
 
 			materialSlotRow.setDisplay('');
 
@@ -998,7 +1006,7 @@ function SidebarMaterial(editor) {
 		} else {
 			let material = currentObject.material;
 
-			if (Array.isArray(material)) {
+			if (typeof material == 'object') {
 	
 				const slotOptions = {};
 	

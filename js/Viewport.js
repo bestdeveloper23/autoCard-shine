@@ -785,6 +785,37 @@ function Viewport(editor, measureValue) {
 
 	});
 
+	signals.showDefaultLightChanged.add(function(showDefaultLights = true){
+
+		//Default SpotLight
+		const SpotLight = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI * 0.233,  0 );
+		SpotLight.name = 'defaultSpotLight';
+		SpotLight.target.name = 'SpotLight Target';
+		SpotLight.decay = 0;
+		SpotLight.position.set( 1136, 1058, 178 );
+		
+		// Default AmbientLight
+		const ambientLight = new THREE.AmbientLight( 0xffffff, .1 );
+		ambientLight.name = 'defaultAmbientLight';
+		
+		const lights =  scene.children?.filter(child => child.name.startsWith('default'))
+
+		if(showDefaultLights){
+			
+			editor.addObject(SpotLight)
+			editor.addObject(ambientLight)
+
+
+			render()
+		} else{
+			lights.forEach(light => {
+				editor.removeObject(light)
+			});
+
+			render()
+		}
+	})
+
 	signals.cameraResetted.add(updateAspectRatio);
 
 	// animations

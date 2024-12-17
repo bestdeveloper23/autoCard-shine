@@ -1,8 +1,10 @@
-import { UIPanel, UIBreak, UIText, UIButton, UIRow, UIInput } from './libs/ui.js';
+import { UIPanel, UIBreak, UIText, UIButton, UIRow, UIInput, UISelect } from './libs/ui.js';
 
 import { AddScriptCommand } from './commands/AddScriptCommand.js';
 import { SetScriptValueCommand } from './commands/SetScriptValueCommand.js';
 import { RemoveScriptCommand } from './commands/RemoveScriptCommand.js';
+
+import { SOURCE } from './libs/nucleardata/radiation.js';
 
 function SidebarScript( editor ) {
 
@@ -13,9 +15,28 @@ function SidebarScript( editor ) {
 	const container = new UIPanel();
 	container.setDisplay( 'none' );
 
-	container.add( new UIText( strings.getKey( 'sidebar/script' ) ).setTextTransform( 'uppercase' ) );
+	container.add( new UIText( strings.getKey( 'sidebar/source' ) ).setTextTransform( 'uppercase' ) );
 	container.add( new UIBreak() );
 	container.add( new UIBreak() );
+
+	//
+
+	// type
+
+	const sourceTypeRow = new UIRow();
+	const sourceType = new UISelect().setWidth('150px').setFontSize('12px').onChange( update );
+	const sourcetypeoption = [];
+	SOURCE.type.forEach(element => {
+		sourcetypeoption.push(element);
+	});
+
+	sourceType.setOptions(sourcetypeoption);
+	sourceType.setValue(0);
+
+	sourceTypeRow.add(new UIText(strings.getKey('sidebar/script/type')).setWidth('90px'));
+	sourceTypeRow.add(sourceType);
+
+	container.add(sourceTypeRow);
 
 	//
 

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import tippy from 'tippy.js';
 import { CSG } from './libs/CSGMesh.js';
 import { PolyhedronGeometry } from './libs/geometry/PolyhedronGeometry.js';
 import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
@@ -9,7 +10,6 @@ import { AddObjectCommand } from './commands/AddObjectCommand.js';
 import boxImg from '../images/basicmodels/aBox.jpg';
 import shpereImg from '../images/basicmodels/aOrb.jpg';
 import tubImg from '../images/basicmodels/aTubs.jpg';
-import cuttubImg from '../images/basicmodels/aCutTube.jpg';
 import coneImg from '../images/basicmodels/aCons.jpg';
 import paraImg from '../images/basicmodels/aPara.jpg';
 import trdImg from '../images/basicmodels/aTrd.jpg';
@@ -33,12 +33,12 @@ import { CreateBox } from './libs/CSG/Box.js';
 import { CreateSphere } from './libs/CSG/Sphere.js';
 import { CreateTube } from './libs/CSG/Tube.js'; 
 import { CreateCone } from './libs/CSG/Cone.js';
-// import { CreateTorus } from './libs/CSG/Torus.js'; 
+import { CreateTorus } from './libs/CSG/Torus.js'; 
+import { CreateElipticalCylinder } from './libs/CSG/EllipticalCylinder.js';
 // import { CreateCutTube } from './libs/CSG/CutTube.js';
 // import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
 // import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
 // import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
-// import { CreateElipticalCylinder } from './libs/CSG/EllipticalCylinder.js';
 // import { CreateEllipsoid } from './libs/CSG/Ellipsoid.js';
 // import { CreateEllipticalCone } from './libs/CSG/EllipticalCone.js';
 // import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
@@ -65,32 +65,6 @@ function BasicSolids(editor) {
 
     const options = new UIPanel();
     options.setClass('Category-widget');
-
-    let isDefaultLightsOn = false;
-
-    function addDefaultLights(){
-
-       //Default SpotLight
-        const SpotLight = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI * 0.233,  0 );
-		SpotLight.name = 'defaultSpotLight';
-		SpotLight.target.name = 'SpotLight Target';
-		SpotLight.decay = 0;
-        SpotLight.position.set( 120, 50, 80 );
-
-        // Default AmbientLight
-        const ambientLight = new THREE.AmbientLight( 0xffffff, .1 );
-		ambientLight.name = 'defaultAmbientLight';
-
-
-		editor.execute( new AddObjectCommand( editor, ambientLight ) );
-		editor.execute( new AddObjectCommand( editor, SpotLight ) );
-    }
-
-    options.onClick((e) => {
-            if (e.target.classList.contains("Category-item") && !isDefaultLightsOn) {
-                addDefaultLights();
-                isDefaultLightsOn = true; // Update flag to prevent further triggering
-            }})
 
     container.add(options);
 
@@ -127,10 +101,15 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/box'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Box');
-    const pX=100; // mm
-    const pY=100; // mm
-    const pZ=100; // mm
+    const pX=10; 
+    const pY=10; 
+    const pZ=10; 
     
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
         const mesh = CreateBox(pX, pY, pZ);
         editor.execute(new AddObjectCommand(editor, mesh));
@@ -158,9 +137,15 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/sphere'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Sphere');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+  
     
     item.onClick(function () {
-        var pRmin = 50, pRmax = 100, pSPhi = 0, pDPhi = Math.PI*2 , pSTheta = 0, pDTheta = Math.PI/1.5 ;
+        var pRmin = 5, pRmax = 10, pSPhi = 0, pDPhi = 360 , pSTheta = 0, pDTheta = 120;
         const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi );
 
         editor.execute(new AddObjectCommand(editor, mesh)); 
@@ -169,7 +154,7 @@ function BasicSolids(editor) {
     item.dom.addEventListener('dragend', function (event) {
         var position = getPositionFromMouse(event);
                
-        var pRmin = 50, pRmax = 100, pSPhi = 0, pDPhi = Math.PI*2 , pSTheta = 0, pDTheta = Math.PI ;
+        var pRmin = 5, pRmax = 10, pSPhi = 0, pDPhi = 360 , pSTheta = 0, pDTheta = 120;
         const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi ); 
 
         mesh.position.copy(position);
@@ -185,8 +170,14 @@ function BasicSolids(editor) {
     item.dom.style.backgroundImage = `url(${tubImg})`;
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'eTub');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
-        var pRMin = 0, pRMax = 150 /*mm*/, pDz = 200 /*mm*/, pSPhi = 0, pDPhi = 360;
+        var pRMin = 5, pRMax = 10 , pDz = 10 , pSPhi = 0, pDPhi = 360;
         const finalMesh = CreateTube( pRMin , pRMax , pDz, pSPhi , pDPhi )
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -196,50 +187,13 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var pRMin = 0, pRMax = 150 /*mm*/, pDz = 200 /*mm*/, pSPhi = 0, pDPhi = 360;
+        var pRMin = 5, pRMax = 10 , pDz = 10 , pSPhi = 0, pDPhi = 360;
         const finalMesh = CreateTube( pRMin , pRMax , pDz, pSPhi , pDPhi );
         finalMesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, finalMesh));
     });
 
     options.add(item);
-
-
-
-    // // CutTube model
-
-    // item = new UIDiv();
-    // item.setClass('Category-item');
-
-    // item.dom.style.backgroundImage = `url(${cuttubImg})`;
-
-    // item.setTextContent(strings.getKey('menubar/add/g4cuttube'));
-    // item.dom.setAttribute('draggable', true);
-    // item.dom.setAttribute('item-type', 'cutTub');
-    // item.onClick(function () {
-
-    //     // we need to new each geometry module
-
-    //     var pRMin = 1, pRMax = 1.5, pDz = 4, SPhi = 0, DPhi = 270, pLowNorm = new THREE.Vector3(0, -0.71, -0.7), pHighNorm = new THREE.Vector3(0.7, 0.71, 0);
-    //     const finalMesh = CreateCutTube( pRMin , pRMax , pDz , SPhi , DPhi , pLowNorm , pHighNorm );
-
-    //     editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    // });
-
-    // item.dom.addEventListener('dragend', function (event) {
-
-    //     var position = getPositionFromMouse(event);        
-
-    //     var pRMin = 1, pRMax = 1.5, pDz = 4, SPhi = 0, DPhi = 270, pLowNorm = new THREE.Vector3(0, -0.71, -0.7), pHighNorm = new THREE.Vector3(0.7, 0.71, 0);
-    //     const finalMesh = CreateCutTube( pRMin , pRMax , pDz , SPhi , DPhi , pLowNorm , pHighNorm );
-    //     finalMesh.position.copy(position);
-
-    //     editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    // });
-
-    // options.add(item);
 
 
     // Cone model
@@ -252,11 +206,17 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/g4cone'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Cons');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
 
-        var pRmin1 = 5, pRmax1 = 10, pRmin2 = 20, pRmax2 = 25, pDz = 40, SPhi = 0, DPhi = 360;
+        var pRmin1 = 6, pRmax1 = 8, pRmin2 = 1, pRmax2 = 3, pDz = 10, SPhi = 0, DPhi = 360;
         const finalMesh = CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -267,10 +227,95 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var pRmin1 = 5, pRmax1 = 10, pRmin2 = 20, pRmax2 = 25, pDz = 40, SPhi = 0, DPhi = 360;
+        var pRmin1 = 6, pRmax1 = 8, pRmin2 = 1, pRmax2 = 3, pDz = 10, SPhi = 0, DPhi = 360;
         const finalMesh = CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
 
         finalMesh.position.copy(position);
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // Torus model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+    item.dom.style.backgroundImage = `url(${torusImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/atorus'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Torus');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const pRmin = 0.8, pRmax = 1, pRtor = 10, pSPhi = 0, pDPhi = 90 ;
+        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const pRmin = 0.8, pRmax = 1, pRtor = 10, pSPhi = 0, pDPhi = 90;
+        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+        
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // EllipticalCylinder model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${ellipticaltubeImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/aellipticalcylinder'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'eCylinder');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;
+        const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);       
+
+        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;
+		const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
+
+        finalMesh.position.copy(position);
+
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
@@ -289,6 +334,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/apara'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Parallelediped');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
@@ -323,6 +374,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'TrapeZoid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
@@ -358,6 +415,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/atrapezoid2'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Parallelediped');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10;
@@ -382,80 +445,6 @@ function BasicSolids(editor) {
     });
 
     options.add(item);
-
-
-    // Torus model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-    item.dom.style.backgroundImage = `url(${torusImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/atorus'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Torus');
-    item.onClick(function () {
-
-        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = Math.PI/2 ;
-        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = 90;
-        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
-        
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // EllipticalCylinder model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${ellipticaltubeImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/aellipticalcylinder'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'eCylinder');
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var xSemiAxis = 1, semiAxisY = 2, Dz = 2;
-        const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);       
-
-        var xSemiAxis = 1, semiAxisY = 2, Dz = 2;
-		const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
 
 
     // Ellipsoid model
@@ -469,6 +458,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Ellipsoid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
@@ -507,6 +502,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'aEllipticalCone');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
@@ -545,6 +546,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/twistedbox'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Box');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
@@ -579,6 +586,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/atwistedtrd'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'TrapeZoid3');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = - 30;
@@ -613,6 +626,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Trapezoid4');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10, twistedangle = - 30;
@@ -649,6 +668,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'TwistedTube');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
@@ -687,6 +712,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Tetrahedra');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const anchor = [0, Math.sqrt(3), 0], p2 = [0, -1 / Math.sqrt(3), 2 * Math.sqrt(2 / 3)], p3 = [-Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3),], p4 = [Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3)];
@@ -723,6 +754,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/generictrap'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'GenericTrap');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const pDz = 1, px = [-1, -1, 1, 1, -0.5, -0.5, 0.5, 0.5], py = [-1, 1, 1, -1, -0.5, 0.5, 0.5, -0.5];
@@ -760,6 +797,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Paraboloid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
@@ -798,6 +841,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/ahyperboloid'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Hyperboloid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         // we need to new each geometry module
@@ -835,6 +884,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/polycone'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Polycone');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
@@ -870,6 +925,12 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/polyhedra'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Polyhedra');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
     item.onClick(function () {
 
         const SPhi = 30 , DPhi = 210 , numSide = 3 , numZPlanes = 9 , rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01] , rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];

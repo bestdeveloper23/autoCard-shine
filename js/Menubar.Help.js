@@ -49,22 +49,11 @@ function MenubarHelp( editor ) {
 	option.setTextContent( strings.getKey( 'menubar/help/about' ) );
 	option.onClick( function () {
 
-		window.open( 'https://threejs.org', '_blank' );
+		window.open( 'https://physino.xyz/geant4/#shine-a-web-ui-for-geant4', '_blank' );
 
 	} );
 	options.add( option );
 
-	// Manual
-
-	option = new UIRow();
-	option.setClass( 'option' );
-	option.setTextContent( strings.getKey( 'menubar/help/manual' ) );
-	option.onClick( function () {
-
-		window.open( 'https://github.com/mrdoob/three.js/wiki/Editor-Manual', '_blank' );
-
-	} );
-	options.add( option );
 
 	return container;
 

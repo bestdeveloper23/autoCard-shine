@@ -231,18 +231,18 @@ function SidebarScene(editor) {
     const camera = editor.camera;
     const scene = editor.scene;
     const lights = scene.children?.filter(obj => obj.isLight === true);
-    const mesh = scene.children?.filter(obj => obj.isMesh === true);
+    const mesh = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
+    const cameras = Object.values(editor.cameras).filter(camera => !camera.name.startsWith('default'));
 
     const options = [];
 
-    options.push(buildOption(camera, false));
+  
     options.push(buildOption(scene, false));
     addObjects(mesh, 0);
-    if (lights.length !== 0) {
-      options.push(buildOption({name: 'Light'}, false));
-      addObjects(lights, 0);
-    }
-
+    options.push(buildOption({name: 'Light'}, false));
+    addObjects(lights, 0);
+    options.push(buildOption({name: 'Camera'}, false));
+    addObjects(cameras, 0);
 
     function addObjects(objects, pad) {
       for (let i = 0, l = objects.length; i < l; i++) {

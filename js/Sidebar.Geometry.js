@@ -121,9 +121,24 @@ function SidebarGeometry( editor ) {
 	const geometryNameRow = new UIRow();
 	const geometryName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
 
-		if(editor.selected.geometry){
+		const nameConstraint = (name) => {
+		const regex = /^[a-zA-Z0-9]+$/;
+
+		if(!regex.test(name)){
+			alert('Warning: Name cannot contain spaces or symbols.');
+			
+			geometryName.setValue('');
+			return false;
+		}else {
+			return true;
+		}
+			
+		}
+		
+
+		if(editor.selected.geometry && nameConstraint(geometryName.getValue()) ){
 			editor.execute( new SetGeometryValueCommand( editor, editor.selected, 'name', geometryName.getValue() ) );	
-		} else if (editor.selected.children.length ===2 && editor.selected.source) {
+		} else if (editor.selected.children.length ===2 && editor.selected.source && nameConstraint(geometryName.getValue())) {
 			editor.execute( new SetGeometryValueCommand( editor, editor.selected.children[1], 'name', geometryName.getValue() ) );	
 		}
 		
@@ -324,7 +339,7 @@ function SidebarGeometry( editor ) {
 		build();
 		const object = editor.selected;
 
-		if ( object !== null ) {
+		if ( object !== null && object.isLight !== true ) {
 
 			container.setDisplay( 'block' );
 
@@ -348,7 +363,7 @@ function SidebarGeometry( editor ) {
 
 	signals.objectChanged.add( function ( object ) {
 
-		if ( object !== editor.selected ) return;
+		if ( object !== editor.selected || object.isLight === true) return;
 
 		// if ( object.source ) {
 
@@ -361,7 +376,7 @@ function SidebarGeometry( editor ) {
 
 	signals.refreshSidebarObject3D.add( function ( object ) {
 
-		if ( object !== editor.selected ) return;
+		if ( object !== editor.selected || object.isLight === true) return;
 
 		// if ( object.source ) {
 			

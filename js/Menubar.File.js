@@ -2896,7 +2896,7 @@ function MenubarFile( editor ) {
 		}
 
 	} );
-	options.add( option );
+	// options.add( option );
 		
 
 	// Export Macro

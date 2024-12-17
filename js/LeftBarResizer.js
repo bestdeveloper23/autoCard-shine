@@ -32,7 +32,7 @@ function LeftBarResizer(editor) {
     const cX =
       clientX < 0 ? 0 : clientX > leftbarLimit ? leftbarLimit : clientX;
 
-    const x = Math.max(180, cX); // .TabbedPanel min-width: 180px
+    const x = Math.max(200, cX); // .TabbedPanel min-width: 200px
 
     dom.style.left = x + "px";
 
