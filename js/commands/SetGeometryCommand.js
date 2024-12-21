@@ -1,5 +1,6 @@
 import { Command } from '../Command.js';
 import { ObjectLoader } from 'three';
+import { shineObjectLoader } from '../shineObjectLoader.js';
 
 /**
  * @param editor Editor
@@ -75,7 +76,7 @@ class SetGeometryCommand extends Command {
 
 		function parseGeometry( data ) {
 
-			const loader = new ObjectLoader();
+			const loader = new shineObjectLoader();
 			return loader.parseGeometries( [ data ] )[ data.uuid ];
 
 		}

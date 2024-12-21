@@ -3,6 +3,7 @@ import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
 import { CreateSphere } from './libs/CSG/Sphere.js';
+import { SphereGeometry2 } from './libs/geometry/SphereGeometry2.js';
 
 
 function GeometryParametersPanel(editor, object) {
@@ -140,14 +141,10 @@ function GeometryParametersPanel(editor, object) {
         const pSPhi = startPhi.getValue();
         const pDPhi = deltaPhi.getValue();
         const pSTheta = startTheta.getValue();
-        const pDTheta = deltaTheta.getValue();
+        const pDTheta = deltaTheta.getValue();    
 
-        const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi )
-		
-
-        mesh.geometry.name = object.geometry.name;
-
-        editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));
+        console.log(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi);
+        editor.execute(new SetGeometryCommand(editor, object, new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi)));
 
 		// radiusIn.setRange(0, radiusOut.getValue()-0.01);  //radiusIn.setRange(0, radiusOut.getValue()-0.01);
         // radiusOut.setRange(radiusIn.getValue() + 0.001, Infinity);

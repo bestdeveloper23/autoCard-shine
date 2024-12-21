@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { CreateBox } from './libs/CSG/Box.js'; 
+import { BoxGeometry } from './libs/geometry/BoxGeometry.js';
 
 function GeometryParametersPanel( editor, object ) {
     
@@ -18,7 +18,7 @@ function GeometryParametersPanel( editor, object ) {
     let baseDimensions = {
         width: parameters.width,  
         height: parameters.height, 
-        depth: parameters.depth  
+        depth: parameters.depth
     };
 
     // Unit conversion multipliers relative to cm
@@ -121,14 +121,15 @@ function GeometryParametersPanel( editor, object ) {
     // Function to update the geometry
     function updateGeometry() {
         // Create a new geometry using the base dimensions
-        const mesh = CreateBox(
-            baseDimensions.width,
-            baseDimensions.height,
-            baseDimensions.depth
-        );
+        const width = baseDimensions.width;
+        const height = baseDimensions.height;
+        const depth = baseDimensions.depth;
+        const widthSegments = baseDimensions.width;
+        const heightSegments = baseDimensions.height;
+        const depthSegments = baseDimensions.depth;
 
         // Execute the geometry update command
-        editor.execute( new SetGeometryCommand( editor, object, mesh.geometry ) );
+        editor.execute( new SetGeometryCommand( editor, object, new BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)));
     }
 
     return container;

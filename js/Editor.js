@@ -7,6 +7,7 @@ import { Strings } from './Strings.js';
 import { Storage as _Storage } from './Storage.js';
 import { Selector } from './Viewport.Selector.js';
 import { PointSourceHelper } from './libs/helper/pointsourceHelper.js';
+import { shineObjectLoader } from './shineObjectLoader.js';
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.1, 10000 );
 _DEFAULT_CAMERA.name = 'defaultCamera';
@@ -732,7 +733,7 @@ Editor.prototype = {
 
 	fromJSON: async function ( json ) {
 
-		var loader = new THREE.ObjectLoader();
+		var loader = new shineObjectLoader();
 		var camera = await loader.parseAsync( json.camera );
 
 		this.camera.copy( camera );
@@ -813,6 +814,7 @@ Editor.prototype = {
 
 	execute: function ( cmd, optionalName ) {
 
+		console.log(cmd);
 		this.history.execute( cmd, optionalName );
 
 	},
