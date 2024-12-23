@@ -287,8 +287,10 @@ function SidebarGeometry( editor ) {
 
 			if(geometry.type.includes('Geometry2')) {
 				geometryType.setValue( geometry.type.slice(0, -9) );	
-			} else if(geometry.type.includes('Geometry')) {
-				geometryType.setValue( geometry.type.slice(0, -8) );
+			} else if(geometry.type[0] === 'a') {
+				geometryType.setValue( geometry.type.slice(1, -8) );
+			}else if(geometry.type.includes('Geometry')){
+				geometryType.setValue(geometry.type.slice(0,-8));
 			}
 			
 			// geometryUUID.setValue( geometry.uuid );

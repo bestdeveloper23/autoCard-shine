@@ -1,10 +1,11 @@
 import * as THREE from 'three';
+import tippy from 'tippy.js';
 import { CSG } from './libs/CSGMesh.js';
 
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateCone } from './libs/CSG/Cone.js';
+import { aConeGeometry } from './libs/geometry/aConeGeometry.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -31,7 +32,16 @@ function GeometryParametersPanel(editor, object) {
      const defaultUnitRow = new UIRow();
      const defaultUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
      defaultUnitRow.add(new UIText('Default Unit').setWidth('90px'), defaultUnitSelect);
-     container.add(defaultUnitRow);
+
+       //grid space
+     const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
+     defaultUnitRow.add(gridSpace);
+     container.add( defaultUnitRow );
+      
+     tippy(gridSpace.dom, { //For comment
+       content: 'The grid is 10x10, with each square and the space between lines measuring 1 cm.',
+       placement: 'top', 
+     });
 
      // minRadius2 with unit select
      const minRadiusRow2 = new UIRow();
@@ -181,9 +191,7 @@ function GeometryParametersPanel(editor, object) {
           const SPhi = pSPhi.getValue();
           const DPhi = pDPhi.getValue();
 
-          const finalMesh = CreateCone(pRMin1, pRMax1, pRMin2, pRMax2, pDz, SPhi, DPhi);
-
-          editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+          editor.execute(new SetGeometryCommand(editor, object, new aConeGeometry(pRMin1, pRMax1, pRMin2, pRMax2, pDz, SPhi, DPhi)));
      }
 
      return container;

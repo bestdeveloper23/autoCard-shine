@@ -7,8 +7,6 @@ class aTubeGeometry extends THREE.BufferGeometry{
 
 		this.type = 'aTubeGeometry';
 
-		this.parameters = { 'pRMax': pRmax, 'pRMin': pRmin, 'pDz': pdz, 'pSPhi': SPhi, 'pDPhi':DPhi }
-
         const mmTOcm = 10;
         let pRMin = pRmin * mmTOcm;
         let pRMax = pRmax * mmTOcm;
@@ -18,7 +16,7 @@ class aTubeGeometry extends THREE.BufferGeometry{
     
         const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz * 2);
         const cylinder1CSG = CSG.fromGeometry(cylindergeometry1);
-        let resultCSG=cylinder1CSG;
+        let resultCSG = cylinder1CSG;
         
         if (pRMin !== 0) {
             if (pRMin>pRMax) pRMin = pRMax - 0.1;

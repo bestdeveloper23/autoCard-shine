@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import tippy from 'tippy.js';
 import { CSG } from './libs/CSGMesh.js';
 
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
@@ -29,7 +30,16 @@ function GeometryParametersPanel(editor, object) {
   const defaultUnitRow = new UIRow();
   const defaultUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
   defaultUnitRow.add(new UIText('Default Unit').setWidth('90px'), defaultUnitSelect);
-  container.add(defaultUnitRow);
+
+  //grid space
+  const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
+  defaultUnitRow.add(gridSpace);
+  container.add( defaultUnitRow );
+      
+  tippy(gridSpace.dom, { //For comment
+      content: 'The grid is 10x10, with each square and the space between lines measuring 1 cm.',
+      placement: 'top', 
+  });
 
   // maxRadius with unit select
   const maxRadiusRow = new UIRow();
