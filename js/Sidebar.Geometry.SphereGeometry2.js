@@ -143,7 +143,6 @@ function GeometryParametersPanel(editor, object) {
         const pSTheta = startTheta.getValue();
         const pDTheta = deltaTheta.getValue();    
 
-        console.log(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi);
         editor.execute(new SetGeometryCommand(editor, object, new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi)));
 
 		// radiusIn.setRange(0, radiusOut.getValue()-0.01);  //radiusIn.setRange(0, radiusOut.getValue()-0.01);

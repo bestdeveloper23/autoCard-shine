@@ -210,6 +210,7 @@ function Strings( config ) {
 			'sidebar/geometry/compute_vertex_normals': 'Compute Vertex Normals',
 			'sidebar/geometry/center': 'Center',
 			'sidebar/geometry/default_unit' : 'Default Unit',
+			'sidebar/geometry/grid_Space' : 'Grid: 10x10 1cm',
 
 			'sidebar/geometry/box_geometry/width': 'Half X',
 			'sidebar/geometry/box_geometry/height': 'Half Y',

@@ -4,7 +4,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateTube } from './libs/CSG/Tube.js'; 
+import { aTubeGeometry } from './libs/geometry/aTubeGeometry.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -141,10 +141,9 @@ function GeometryParametersPanel(editor, object) {
     const SPhi = pSPhi.getValue();
     const DPhi = pDPhi.getValue();
 
-    const finalMesh = CreateTube(pRMin, pRMax, pDz, SPhi, DPhi);
     // maxRadius.setRange(pRMin / cm + 0.0001, Infinity);
     // minRadius.setRange(0.00, pRMax / cm - 0.0001);
-    editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+    editor.execute(new SetGeometryCommand(editor, object, new aTubeGeometry(pRMin , pRMax , pDz, SPhi , DPhi)));
   }
 
   return container;

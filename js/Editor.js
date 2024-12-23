@@ -814,7 +814,6 @@ Editor.prototype = {
 
 	execute: function ( cmd, optionalName ) {
 
-		console.log(cmd);
 		this.history.execute( cmd, optionalName );
 
 	},

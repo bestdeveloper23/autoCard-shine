@@ -515,6 +515,13 @@ button#Scene-tool-clrWorld.Button {
   margin-bottom: 0;
 }
 
+span.grid_Space{
+  padding: 4px;
+  text-align: right;
+  font-size: 13px;
+  margin-left: 28px;
+}
+
 #toolbar {
   position: absolute;
   left: 200px;

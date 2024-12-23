@@ -101,9 +101,9 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/box'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Box');
-    const pX=10; 
-    const pY=10; 
-    const pZ=10; 
+    const pX=200; 
+    const pY=200; 
+    const pZ=200; 
     
     tippy(item.dom, { //For comment
         content: 'Click or drag it to add.',

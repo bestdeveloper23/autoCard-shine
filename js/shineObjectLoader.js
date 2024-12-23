@@ -56,7 +56,6 @@ class shineObjectLoader extends THREE.ObjectLoader {
 						if ( data.type in Geometries ) {
 
 							geometry = Geometries[ data.type ].fromJSON( data, shapes );
-                            console.log(geometry);
 
 						} else {
 

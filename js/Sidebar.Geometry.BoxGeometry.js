@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
@@ -14,18 +15,18 @@ function GeometryParametersPanel( editor, object ) {
     // Define unit options
     const unitOptions = { cm: 'cm', inch: 'inch', mm: 'mm' };
 
-    // Base dimensions stored in cm for consistent calculations
+    // Base dimensions stored in mm for consistent calculations
     let baseDimensions = {
         width: parameters.width,  
         height: parameters.height, 
         depth: parameters.depth
     };
 
-    // Unit conversion multipliers relative to cm
+    // Unit conversion multipliers relative to mm
     const unitMultiplier = {
-        cm: 1, 
-        inch: 2.54, 
-        mm: 0.1 
+        cm: 10, 
+        inch: 25.4, 
+        mm: 1 
     };
 
     let isUnitChange = false; // Flag to track if a unit change is occurring
@@ -35,12 +36,22 @@ function GeometryParametersPanel( editor, object ) {
 	const defaultUnitSelect = new UISelect().setOptions( unitOptions ).setValue('cm').onChange( updateDefaultUnit );
 	defaultUnitRow.add( new UIText( strings.getKey( 'sidebar/geometry/default_unit' ) ).setWidth( '90px' ) );
 	defaultUnitRow.add( defaultUnitSelect );
+    setTimeout(updateDefaultUnit, 1000); //shows the default units in cm
+
+    //grid space
+    const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
+    defaultUnitRow.add(gridSpace);
 	container.add( defaultUnitRow );
+
+    tippy(gridSpace.dom, { //For comment
+        content: 'The grid is 10x10, with each square and the space between lines measuring 1 cm.',
+        placement: 'top', 
+    });
 
     // Width Row
     const widthRow = new UIRow();
     const width = new UINumber(baseDimensions.width).onChange(updateDimensions);
-    const widthUnitSelect = new UISelect().setOptions( unitOptions ).setValue('cm').onChange( handleUnitChange );
+    const widthUnitSelect = new UISelect().setOptions( unitOptions ).setValue('mm').onChange( handleUnitChange );
 
 	widthRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/width' ) ).setWidth( '90px' ) );
 	widthRow.add( width );
@@ -50,7 +61,7 @@ function GeometryParametersPanel( editor, object ) {
     // Height Row
     const heightRow = new UIRow();
     const height = new UINumber(baseDimensions.height).onChange(updateDimensions);
-    const heightUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    const heightUnitSelect = new UISelect().setOptions(unitOptions).setValue('mm').onChange(handleUnitChange);
 
 	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/height' ) ).setWidth( '90px' ) );
 	heightRow.add( height );
@@ -60,7 +71,7 @@ function GeometryParametersPanel( editor, object ) {
     // Depth Row
     const depthRow = new UIRow();
     const depth = new UINumber(baseDimensions.depth).onChange(updateDimensions);
-    const depthUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    const depthUnitSelect = new UISelect().setOptions(unitOptions).setValue('mm').onChange(handleUnitChange);
 
 	depthRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/depth' ) ).setWidth( '90px' ) );
 	depthRow.add( depth );
@@ -93,7 +104,7 @@ function GeometryParametersPanel( editor, object ) {
             const heightUnit = heightUnitSelect.getValue();
             const depthUnit = depthUnitSelect.getValue();
 
-            // Convert displayed values to base dimensions in cm
+            // Convert displayed values to base dimensions in mm
             baseDimensions.width = width.getValue() * unitMultiplier[widthUnit];
             baseDimensions.height = height.getValue() * unitMultiplier[heightUnit];
             baseDimensions.depth = depth.getValue() * unitMultiplier[depthUnit];
