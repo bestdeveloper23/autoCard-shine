@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh.js';
-
+import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateTorus } from './libs/CSG/Torus.js'; 
+import { aTorusGeometry } from './libs/geometry/aTorusGeometry.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -26,7 +26,16 @@ function GeometryParametersPanel(editor, object) {
     const unitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
     unitRow.add(new UIText('Unit').setWidth('90px'));
     unitRow.add(unitSelect);
+
+    //grid space
+    const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
+    unitRow.add(gridSpace);
     container.add(unitRow);
+        
+    tippy(gridSpace.dom, { //For comment
+        content: 'The grid is 10x10, with each square and the space between lines measuring 1 cm.',
+        placement: 'top', 
+    });
     
     // maxRadius
     const maxRadiusRow = new UIRow();
@@ -133,15 +142,12 @@ function GeometryParametersPanel(editor, object) {
         const SPhi = pSPhi.getValue();
         const DPhi = pDPhi.getValue();
 
-        const finalMesh = CreateTorus(pRmin, pRmax, pRtor, SPhi, DPhi);
 
         // maxRadius.setRange(pRmin + 0.001, pRtor - 0.001);
         // minRadius.setRange(0, pRmax - 0.001);
         // torRadius.setRange(pRmax + 0.001, Infinity);
-
-        finalMesh.geometry.name = object.geometry.name;
         
-        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aTorusGeometry(pRmin, pRmax, pRtor, SPhi, DPhi)));
 
     }
 

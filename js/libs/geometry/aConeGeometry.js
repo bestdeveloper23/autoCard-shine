@@ -43,6 +43,7 @@ class aConeGeometry extends THREE.BufferGeometry{
                 resultCSG = resultCSG.subtract(cylinder2CSG);
             }
 
+            // Convert CSG back to a geometry
             const finalGeometry = CSG.toGeometry(resultCSG);
             finalGeometry.type = 'aConeGeometry';
             finalGeometry.parameters = { 'pRMax1': pRMax1 , 'pRMin1': pRMin1 , 'pRMax2': pRMax2 , 'pRMin2': pRMin2 , 'pDz': pdz , 'pSPhi': pSPhi, 'pDPhi': pDPhi};
