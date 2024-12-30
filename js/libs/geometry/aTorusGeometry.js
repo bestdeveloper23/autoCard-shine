@@ -5,10 +5,9 @@ class aTorusGeometry extends THREE.BufferGeometry {
     constructor(pRMin, pRMax, pRTor, pSphi, pDphi){
         super();
 
-            const mmTOcm=10;
-            const pRmin=pRMin*mmTOcm;
-            const pRmax=pRMax*mmTOcm;
-            const pRtor=pRTor*mmTOcm;
+            const pRmin = pRMin;
+            const pRmax = pRMax;
+            const pRtor = pRTor;
             const pSPhi = pSphi*Math.PI/180;
             const pDPhi = pDphi*Math.PI/180;
         

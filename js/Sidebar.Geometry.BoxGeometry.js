@@ -36,7 +36,7 @@ function GeometryParametersPanel( editor, object ) {
 	const defaultUnitSelect = new UISelect().setOptions( unitOptions ).setValue('cm').onChange( updateDefaultUnit );
 	defaultUnitRow.add( new UIText( strings.getKey( 'sidebar/geometry/default_unit' ) ).setWidth( '90px' ) );
 	defaultUnitRow.add( defaultUnitSelect );
-    setTimeout(updateDefaultUnit, 1000); //shows the default units in cm
+    setTimeout(updateDefaultUnit, 300); //shows the default units in cm
 
     //grid space
     const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');

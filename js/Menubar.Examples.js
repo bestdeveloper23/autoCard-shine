@@ -51,8 +51,8 @@ function MenubarExamples(editor) {
 
 
   //Basic
-  const basic = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic' ) ).addClass( 'option' );
-  basic.onMouseOver( function () {
+  const basicTitle  = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic' ) ).addClass( 'option' );
+  basicTitle.onMouseOver( function () {
 
 		const { top, right } = this.dom.getBoundingClientRect();
 		const { paddingTop } = getComputedStyle( this.dom );
@@ -62,20 +62,20 @@ function MenubarExamples(editor) {
 
 	} );
 
-  basic.onMouseOut( function () {
+  basicTitle.onMouseOut( function () {
 
 		newBasicSubmenu.setDisplay( 'none' );
 
 	} );
 
-  Geant4Submenu.add( basic );
+  Geant4Submenu.add( basicTitle );
 
   const newBasicSubmenu = new UIPanel().setPosition( 'fixed' ).addClass( 'options' ).setDisplay( 'none' );
-	basic.add( newBasicSubmenu );
+	basicTitle.add( newBasicSubmenu );
 
   //B1
-  const B1 = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic/b1' ) ).addClass( 'option' );
-  newBasicSubmenu.add(B1)
+  const B1Title = new UIRow().setTextContent( strings.getKey( 'menubar/examples/geant4/basic/b1' ) ).addClass( 'option' );
+  newBasicSubmenu.add(B1Title);
 
   options.add( new UIHorizontalRule() );
 

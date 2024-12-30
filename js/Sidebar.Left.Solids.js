@@ -256,7 +256,7 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pRmin = 0.8, pRmax = 1, pRtor = 10, pSPhi = 0, pDPhi = 90 ;
+        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = 90 ;
         const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -267,7 +267,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pRmin = 0.8, pRmax = 1, pRtor = 10, pSPhi = 0, pDPhi = 90;
+        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = 90;
         const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
         
         finalMesh.position.copy(position);
@@ -300,7 +300,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;
+        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;
         const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -311,7 +311,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);       
 
-        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;
+        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;
 		const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
 
         finalMesh.position.copy(position);

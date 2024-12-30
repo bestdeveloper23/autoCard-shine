@@ -17,7 +17,7 @@ function GeometryParametersPanel(editor, object) {
 
     // Define unit options and multipliers
     const unitOptions = { cm: 'cm', inch: 'in', mm: 'mm' };
-    const unitMultiplier = { cm: 1, inch: 2.54, mm: 0.1 }; // Conversion factors relative to cm
+    const unitMultiplier = { cm: 10, inch: 25.4, mm: 1 }; // Conversion factors relative to mm
     let baseDimensions = { maxRadius: parameters.pRMax, minRadius: parameters.pRMin, torRadius: parameters.pRTor };
     let isUnitChange = false; // Prevent unnecessary updates during unit change
 
@@ -26,6 +26,7 @@ function GeometryParametersPanel(editor, object) {
     const unitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
     unitRow.add(new UIText('Unit').setWidth('90px'));
     unitRow.add(unitSelect);
+    setTimeout(updateDefaultUnit, 300);
 
     //grid space
     const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
