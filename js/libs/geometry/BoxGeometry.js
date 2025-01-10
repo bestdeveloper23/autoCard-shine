@@ -176,3 +176,51 @@ class BoxGeometry extends THREE.BufferGeometry {
 }
 
 export { BoxGeometry };
+
+
+// import * as THREE from 'three'
+// import { CSG } from '../CSGMesh.js';
+
+// class BoxGeometry extends THREE.BufferGeometry {
+
+// 	constructor( X, Y, Z ) {
+
+// 		super();
+		
+// 			this.type = 'BoxGeometry';
+// 			const mmTOcm = 10;
+// 			const pX=X*mmTOcm;
+// 			const pY=Y*mmTOcm;
+// 			const pZ=Z*mmTOcm;
+// 			const geometry = new THREE.BoxGeometry( 2*pX, 2* pY  , 2* pZ);
+// 			geometry.rotateX(Math.PI / 2);
+// 			const resultCSG = CSG.fromGeometry(geometry);
+
+//             const finalGeometry = CSG.toGeometry(resultCSG);
+//             finalGeometry.type = 'BoxGeometry';
+// 			finalGeometry.parameters = {'width': X,'height': Y,'depth': Z}
+
+//             Object.assign(this, finalGeometry);
+//     }
+// 	copy( source ) {
+
+// 		super.copy( source );
+
+// 		this.parameters = Object.assign( {}, source.parameters );
+
+// 		return this;
+
+// 	}
+
+// 	static fromJSON( data ) {
+
+// 		return new BoxGeometry( 
+// 			data.X, 
+// 			data.Y, 
+// 			data.Z);
+
+// 	}
+
+// }
+// export { BoxGeometry };
+

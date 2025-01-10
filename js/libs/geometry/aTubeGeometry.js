@@ -38,6 +38,8 @@ class aTubeGeometry extends THREE.BufferGeometry{
         }
 
         const finalGeometry = CSG.toGeometry(resultCSG);
+        finalGeometry.rotateX(Math.PI/2);
+        finalGeometry.rotateX(Math.PI);
         finalGeometry.type = 'aTubeGeometry';
         finalGeometry.parameters = { 'pRMax': pRmax, 'pRMin': pRmin, 'pDz': pdz, 'pSPhi': SPhi, 'pDPhi':DPhi }
 

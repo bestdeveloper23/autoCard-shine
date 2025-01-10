@@ -38,13 +38,15 @@ class aConeGeometry extends THREE.BufferGeometry{
             }
         
             // Convert geometries to CSG objects
-            if (maxRadius>0 && minRadius>0){ 
+            if (maxRadius > 0 || minRadius > 0) {
                 const cylinder2CSG = CSG.fromGeometry(cylindergeometry2);
                 resultCSG = resultCSG.subtract(cylinder2CSG);
             }
 
             // Convert CSG back to a geometry
             const finalGeometry = CSG.toGeometry(resultCSG);
+            finalGeometry.rotateX(Math.PI/2);
+            // finalGeometry.rotateX(Math.PI); 
             finalGeometry.type = 'aConeGeometry';
             finalGeometry.parameters = { 'pRMax1': pRMax1 , 'pRMin1': pRMin1 , 'pRMax2': pRMax2 , 'pRMin2': pRMin2 , 'pDz': pdz , 'pSPhi': pSPhi, 'pDPhi': pDPhi};
 

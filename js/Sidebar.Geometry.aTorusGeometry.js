@@ -17,7 +17,7 @@ function GeometryParametersPanel(editor, object) {
 
     // Define unit options and multipliers
     const unitOptions = { cm: 'cm', inch: 'in', mm: 'mm' };
-    const unitMultiplier = { cm: 10, inch: 25.4, mm: 1 }; // Conversion factors relative to mm
+    const unitMultiplier = { cm: 1, inch: 2.54, mm: 0.1 }; // Conversion factors relative to mm
     let baseDimensions = { maxRadius: parameters.pRMax, minRadius: parameters.pRMin, torRadius: parameters.pRTor };
     let isUnitChange = false; // Prevent unnecessary updates during unit change
 

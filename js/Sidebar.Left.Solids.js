@@ -30,17 +30,17 @@ import solidconeImg from '../images/basicmodels/aBREPSolidPCone.jpg';
 import solidpolyhedraImg from '../images/basicmodels/aBREPSolidPolyhedra.jpg';
 
 import { CreateBox } from './libs/CSG/Box.js'; 
-import { CreateSphere } from './libs/CSG/Sphere.js';
-import { CreateTube } from './libs/CSG/Tube.js'; 
-import { CreateCone } from './libs/CSG/Cone.js';
-import { CreateTorus } from './libs/CSG/Torus.js'; 
-import { CreateElipticalCylinder } from './libs/CSG/EllipticalCylinder.js';
+import { SphereGeometry2 } from './libs/geometry/SphereGeometry2.js';
+import { aTubeGeometry } from './libs/geometry/aTubeGeometry.js';
+import { aConeGeometry } from './libs/geometry/aConeGeometry.js';
+import { aTorusGeometry } from './libs/geometry/aTorusGeometry.js';
+import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinderGeometry.js';
+import { aEllipsoidGeometry } from './libs/geometry/aEllipsoidGeometry.js';
+import { aEllipticalConeGeometry } from './libs/geometry/aEllipticalConeGeometry.js';
 // import { CreateCutTube } from './libs/CSG/CutTube.js';
 // import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
 // import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
 // import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
-// import { CreateEllipsoid } from './libs/CSG/Ellipsoid.js';
-// import { CreateEllipticalCone } from './libs/CSG/EllipticalCone.js';
 // import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
 // import { CreateTwistedTube } from './libs/CSG/TwistedTube.js';
 // import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
@@ -146,7 +146,10 @@ function BasicSolids(editor) {
     
     item.onClick(function () {
         var pRmin = 5, pRmax = 10, pSPhi = 0, pDPhi = 360 , pSTheta = 0, pDTheta = 120;
-        const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi );
+        // const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi );
+        const geometry = new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        mesh.name = 'Sphere';
 
         editor.execute(new AddObjectCommand(editor, mesh)); 
     });
@@ -155,7 +158,9 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);
                
         var pRmin = 5, pRmax = 10, pSPhi = 0, pDPhi = 360 , pSTheta = 0, pDTheta = 120;
-        const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi ); 
+        const geometry = new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        mesh.name = 'Sphere';
 
         mesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, mesh));
@@ -178,7 +183,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
         var pRMin = 5, pRMax = 10 , pDz = 10 , pSPhi = 0, pDPhi = 360;
-        const finalMesh = CreateTube( pRMin , pRMax , pDz, pSPhi , pDPhi )
+
+        const geometry = new aTubeGeometry( pRMin , pRMax , pDz, pSPhi , pDPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tubs';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
     });
@@ -188,7 +196,11 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         var pRMin = 5, pRMax = 10 , pDz = 10 , pSPhi = 0, pDPhi = 360;
-        const finalMesh = CreateTube( pRMin , pRMax , pDz, pSPhi , pDPhi );
+
+        const geometry = new aTubeGeometry( pRMin , pRMax , pDz, pSPhi , pDPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tubs';
+        
         finalMesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, finalMesh));
     });
@@ -217,7 +229,9 @@ function BasicSolids(editor) {
         // we need to new each geometry module
 
         var pRmin1 = 6, pRmax1 = 8, pRmin2 = 1, pRmax2 = 3, pDz = 10, SPhi = 0, DPhi = 360;
-        const finalMesh = CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
+        const geometry = new aConeGeometry(pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial()); 
+        finalMesh.name = 'Cone';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -228,7 +242,9 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         var pRmin1 = 6, pRmax1 = 8, pRmin2 = 1, pRmax2 = 3, pDz = 10, SPhi = 0, DPhi = 360;
-        const finalMesh = CreateCone( pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
+        const geometry = new aConeGeometry(pRmin1 , pRmax1 , pRmin2 , pRmax2 , pDz , SPhi , DPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial()); 
+        finalMesh.name = 'Cone';
 
         finalMesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -256,8 +272,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = 90 ;
-        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+        const pRmin = 1, pRmax = 1.5, pRtor = 10, pSPhi = 0, pDPhi = 90 ;
+        const geometry = new aTorusGeometry( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Torus';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -267,8 +285,10 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pRmin = 8, pRmax = 10, pRtor = 100, pSPhi = 0, pDPhi = 90;
-        const finalMesh = CreateTorus( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+        const pRmin = 1, pRmax = 1.5, pRtor = 10, pSPhi = 0, pDPhi = 90 ;
+        const geometry = new aTorusGeometry( pRmin , pRmax , pRtor , pSPhi , pDPhi );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Torus';
         
         finalMesh.position.copy(position);
 
@@ -300,8 +320,10 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;
-        const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
+        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;            
+        const geometry = new aEllipticalCylinderGeometry( xSemiAxis , semiAxisY , Dz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'EllipticalCylinder';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -312,7 +334,106 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);       
 
         var xSemiAxis = 50, semiAxisY = 100, Dz = 100;
-		const finalMesh = CreateElipticalCylinder( xSemiAxis , semiAxisY , Dz );
+        const geometry = new aEllipticalCylinderGeometry( xSemiAxis , semiAxisY , Dz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'EllipticalCylinder';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // Ellipsoid model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Ellipsoid');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, pzTopCut = 3, zBottomCut = 2;
+        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , pzTopCut , zBottomCut);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Ellipsoid';
+
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, pzTopCut = 3, zBottomCut = 2;
+        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , pzTopCut , zBottomCut);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Ellipsoid';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // EllipticalCone model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${ellipticalconeImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'aEllipticalCone');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag it to add.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var xSemiAxis = 10, ySemiAxis = 8, zTopCut = 3, height = 5;
+        const geometry = new aEllipticalConeGeometry(xSemiAxis , ySemiAxis , zTopCut , height);
+        const finalMesh = new THREE.Mesh(geometry , new THREE.MeshLambertMaterial());
+        finalMesh.name = 'EllipticalCone';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
+        const geometry = new aEllipticalConeGeometry(xSemiAxis , ySemiAxis , zTopCut , height);
+        const finalMesh = new THREE.Mesh(geometry , new THREE.MeshLambertMaterial());
+        finalMesh.name = 'EllipticalCone';
 
         finalMesh.position.copy(position);
 
@@ -437,94 +558,6 @@ function BasicSolids(editor) {
 
         const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10;
         const finalMesh = CreateTrapezoidParallePiped( pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha )
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // Ellipsoid model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Ellipsoid');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var xSemiAxis = 1, ySemiAxis = 1.5, zSemiAxis = 4, pzTopCut = 3, zBottomCut = -2;
-        const  finalMesh = CreateEllipsoid( xSemiAxis , ySemiAxis , zSemiAxis , pzTopCut , zBottomCut );
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        var xSemiAxis = 1, ySemiAxis = 1.5, zSemiAxis = 4, zTopCut = 3, zBottomCut = -2;
-        const  finalMesh = CreateEllipsoid( xSemiAxis , ySemiAxis , zSemiAxis , zTopCut , zBottomCut );
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // EllipticalCone model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${ellipticalconeImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'aEllipticalCone');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
-        const finalMesh = CreateEllipticalCone( xSemiAxis , ySemiAxis , zTopCut , height );
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
-        const finalMesh = CreateEllipticalCone( xSemiAxis , ySemiAxis , zTopCut , height );
 
         finalMesh.position.copy(position);
 
