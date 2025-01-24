@@ -14,8 +14,8 @@ class aConeGeometry extends THREE.BufferGeometry{
         
             let SPhi = Math.PI*pSPhi/180;
             let DPhi = Math.PI*pDPhi/180;
-            const cylindergeometry1 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz * 2, 32, 32);
-            const cylindergeometry2 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz * 2, 32, 32);
+            const cylindergeometry1 = new THREE.CylinderGeometry(pRmax2, pRmax1, pDz * 2, 32, 32);
+            const cylindergeometry2 = new THREE.CylinderGeometry(pRmin2,pRmin1 , pDz * 2, 32, 32);
         
             const maxRadius = Math.max(pRmax1, pRmax2) ;
             const  minRadius = Math.min(pRmin1, pRmin2) ;
@@ -46,7 +46,7 @@ class aConeGeometry extends THREE.BufferGeometry{
             // Convert CSG back to a geometry
             const finalGeometry = CSG.toGeometry(resultCSG);
             finalGeometry.rotateX(Math.PI/2);
-            // finalGeometry.rotateX(Math.PI); 
+            finalGeometry.rotateX(Math.PI); 
             finalGeometry.type = 'aConeGeometry';
             finalGeometry.parameters = { 'pRMax1': pRMax1 , 'pRMin1': pRMin1 , 'pRMax2': pRMax2 , 'pRMin2': pRMin2 , 'pDz': pdz , 'pSPhi': pSPhi, 'pDPhi': pDPhi};
 

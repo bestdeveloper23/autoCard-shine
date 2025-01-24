@@ -6,3 +6,5 @@ export * from './aTorusGeometry.js';
 export * from './EllipticalCylinderGeometry.js';
 export * from './aEllipsoidGeometry.js'
 export * from './aEllipticalConeGeometry.js'
+export * from './aParallGeometry.js'
+export * from './aTrapezoidGeometry.js'

@@ -3,7 +3,9 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
+// import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
+// import { aParallelepipedGeometry } from './libs/geometry/aParallelepipedGeometry.js';
+import { aParallGeometry } from './libs/geometry/aParallGeometry.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -88,11 +90,8 @@ function GeometryParametersPanel(editor, object) {
 	function update() {
 
 		const dx = width.getValue(), dy = height.getValue(), dz = depth.getValue(), alpha = - alphaI.getValue(), theta = - thetaI.getValue(), phi = - phiI.getValue();
-		const finalMesh = CreateParallelepiped(dx, dy, dz, alpha, theta, phi)
+		editor.execute(new SetGeometryCommand(editor, object, new aParallGeometry(dx, dy, dz, alpha, theta, phi)));
 
-		finalMesh.geometry.name = object.geometry.nyame;
-
-		editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
 	}
 
 	return container;

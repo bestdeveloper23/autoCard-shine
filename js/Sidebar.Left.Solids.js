@@ -29,17 +29,19 @@ import hyperboloidImg from '../images/basicmodels/aHyperboloid.jpg';
 import solidconeImg from '../images/basicmodels/aBREPSolidPCone.jpg';
 import solidpolyhedraImg from '../images/basicmodels/aBREPSolidPolyhedra.jpg';
 
-import { CreateBox } from './libs/CSG/Box.js'; 
+import { BoxGeometry } from './libs/geometry/BoxGeometry.js';
 import { SphereGeometry2 } from './libs/geometry/SphereGeometry2.js';
 import { aTubeGeometry } from './libs/geometry/aTubeGeometry.js';
 import { aConeGeometry } from './libs/geometry/aConeGeometry.js';
 import { aTorusGeometry } from './libs/geometry/aTorusGeometry.js';
 import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinderGeometry.js';
-import { aEllipsoidGeometry } from './libs/geometry/aEllipsoidGeometry.js';
-import { aEllipticalConeGeometry } from './libs/geometry/aEllipticalConeGeometry.js';
+// import { aEllipsoidGeometry } from './libs/geometry/aEllipsoidGeometry.js';
+// import { aEllipticalConeGeometry } from './libs/geometry/aEllipticalConeGeometry.js';
+import { aParallGeometry } from './libs/geometry/aParallGeometry.js';
+import { aTrapezoidGeometry } from './libs/geometry/aTrapezoidGeometry.js';
 // import { CreateCutTube } from './libs/CSG/CutTube.js';
-// import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
-// import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
+import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
+import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
 // import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
 // import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
 // import { CreateTwistedTube } from './libs/CSG/TwistedTube.js';
@@ -101,25 +103,29 @@ function BasicSolids(editor) {
     item.setTextContent(strings.getKey('menubar/add/box'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Box');
-    const pX=200; 
-    const pY=200; 
-    const pZ=200; 
-    
     tippy(item.dom, { //For comment
         content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
     item.onClick(function () {
-        const mesh = CreateBox(pX, pY, pZ);
+
+        const pX=10,        pY=10,      pZ=10;     
+        const geometry = new BoxGeometry(pX, pY, pZ);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        mesh.name = 'Box';
+
         editor.execute(new AddObjectCommand(editor, mesh));
     });
 
     item.dom.addEventListener('dragend', function (event) {
+        var position = getPositionFromMouse(event);    
 
-        var position = getPositionFromMouse(event);        
+        const pX=10,        pY=10,      pZ=10;     
+        const geometry = new BoxGeometry(pX, pY, pZ);
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        mesh.name = 'Box';
 
-        const mesh = CreateBox(pX, pY, pZ);
         mesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, mesh));
     });
@@ -353,14 +359,14 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Ellipsoid');
 
     tippy(item.dom, { //For comment
-        content: 'Click or drag it to add.',
+        content: 'Under Development',
         placement: 'top', 
     });
 
@@ -402,15 +408,15 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${ellipticalconeImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'aEllipticalCone');
 
     tippy(item.dom, { //For comment
-        content: 'Click or drag it to add.',
-        placement: 'top', 
+        content: 'Under Development',
+        placement: 'top',     
     });
 
     item.onClick(function () {
@@ -450,21 +456,24 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/apara'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Parallelediped');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag to add it.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
-        const finalMesh = CreateParallelepiped( dx , dy , dz , alpha , theta , phi );
+        const dx = 10, dy = 10, dz = 10, alpha = -10, theta = 10, phi = -10;
+        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Parallelepiped';
+
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -474,8 +483,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const dx = 1, dy = 1, dz = 2, alpha = -10, theta = 10, phi = -10;
-        const finalMesh = CreateParallelepiped( dx , dy , dz , alpha , theta , phi );
+        const dx = 10, dy = 10, dz = 10, alpha = -10, theta = 10, phi = -10;
+        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Parallelepiped';
+        
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -490,7 +502,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trdImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
     item.dom.setAttribute('draggable', true);
@@ -504,7 +516,8 @@ function BasicSolids(editor) {
     item.onClick(function () {
 
         const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
-        const finalMesh = CreateTrapezoid( dx1 , dy1 , dz , dx2 , dy2 )
+        const geometry = new aTrapezoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
