@@ -6,6 +6,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
+import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -147,12 +148,12 @@ function GeometryParametersPanel(editor, object) {
   pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(), 
   pAlpha = alphaI.getValue();
 
-  const finalMesh = CreateTrapezoidParallePiped( pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
+//   const finalMesh = CreateTrapezoidParallePiped( pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
 
 
-  finalMesh.geometry.name = object.geometry.name;
+//   finalMesh.geometry.name = object.geometry.name;
   
-  editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+  editor.execute(new SetGeometryCommand(editor, object, new aTrapeZoidPGeometry(pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha)));
  }
 
  return container;

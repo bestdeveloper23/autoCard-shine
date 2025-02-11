@@ -4,7 +4,7 @@ import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UIInteger, UICheckbox, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinderGeometry.js';
+import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinder.js';
 
 function GeometryParametersPanel( editor, object ) {
 

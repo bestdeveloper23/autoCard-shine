@@ -3,8 +3,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
-import { aTrapezoidGeometry } from './libs/geometry/aTrapezoidGeometry.js';
+import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -79,12 +78,16 @@ function GeometryParametersPanel(editor, object) {
 
   function update() {
 
-    const dx1 = width1.getValue(), dy1 = depth1.getValue(), dz = height.getValue(), dx2 = width2.getValue(), dy2 = depth2.getValue();
+    const dx1 = width1.getValue();
+    const dy1 = depth1.getValue();
+    const dz = height.getValue();
+    const dx2 = width2.getValue();
+    const dy2 = depth2.getValue();
     // const finalMesh = CreateTrapezoid( dx1 , dy1 , dz , dx2 , dy2 )
 
     // finalMesh.geometry.name = object.geometry.name;
-    
-    editor.execute(new SetGeometryCommand(editor, object, aTrapezoidGeometry(dx1 , dy1 , dz , dx2 , dy2)));
+    // aTrapezoidGeometry(dx1 , dy1 , dz , dx2 , dy2)
+    editor.execute(new SetGeometryCommand(editor, object, new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2)));
   }
 
   return container;

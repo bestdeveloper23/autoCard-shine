@@ -4,7 +4,7 @@ import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aTorusGeometry } from './libs/geometry/aTorusGeometry.js';
+import { aTorusGeometry } from './libs/geometry/Torus.js';
 
 function GeometryParametersPanel(editor, object) {
 

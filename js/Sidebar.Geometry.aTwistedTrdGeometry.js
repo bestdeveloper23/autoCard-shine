@@ -4,6 +4,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CreateTwistedTrapezoid3 } from './libs/CSG/TwistedTrapezoid3.js';
+import { aTwistedTrapeZoidGeometry } from './libs/geometry/TrapeZoid3.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -92,12 +93,17 @@ function GeometryParametersPanel(editor, object) {
 
         // we need to new each geometry module
 
-        const dx1 = width1.getValue(), dy1 = depth1.getValue(), dz = height.getValue(), dx2 = width2.getValue(), dy2 = depth2.getValue(), twistedangle = - angleI.getValue();
-        const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle);        
+        const dx1 = width1.getValue();
+        const dy1 = depth1.getValue();
+        const dz = height.getValue();
+        const dx2 = width2.getValue();
+        const dy2 = depth2.getValue();
+        const twistedangle = - angleI.getValue();
+        // const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle);        
 
-        finalMesh.geometry.name = object.geometry.name;
+        // finalMesh.geometry.name = object.geometry.name;
 
-        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aTwistedTrapeZoidGeometry(dx1, dy1, dz, dx2, dy2, twistedangle)));
     }
 
     return container;

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aEllipsoidGeometry } from './libs/geometry/aEllipsoidGeometry.js';
+import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
 
 function GeometryParametersPanel(editor, object) {
 

@@ -3,7 +3,7 @@ import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { SphereGeometry2 } from './libs/geometry/SphereGeometry2.js';
+import { SphereGeometry2 } from './libs/geometry/Sphere.js';
 
 
 function GeometryParametersPanel(editor, object) {
@@ -147,10 +147,10 @@ function GeometryParametersPanel(editor, object) {
     function update() {
         const pRmin = baseDimensions.radiusIn;
         const pRmax = baseDimensions.radiusOut;
-        const pSPhi = startPhi.getValue();
-        const pDPhi = deltaPhi.getValue();
         const pSTheta = startTheta.getValue();
-        const pDTheta = deltaTheta.getValue();    
+        const pDTheta = deltaTheta.getValue();   
+        const pSPhi = startPhi.getValue();
+        const pDPhi = deltaPhi.getValue(); 
 
         editor.execute(new SetGeometryCommand(editor, object, new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi)));
 

@@ -5,7 +5,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aConeGeometry } from './libs/geometry/aConeGeometry.js';
+import { aConeGeometry } from './libs/geometry/Cone.js';
 
 function GeometryParametersPanel(editor, object) {
 

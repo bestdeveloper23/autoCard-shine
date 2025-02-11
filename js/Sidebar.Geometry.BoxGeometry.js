@@ -3,7 +3,7 @@ import tippy from 'tippy.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { BoxGeometry } from './libs/geometry/BoxGeometry.js';
+import { BoxGeometry } from './libs/geometry/Box.js';
 
 function GeometryParametersPanel( editor, object ) {
     

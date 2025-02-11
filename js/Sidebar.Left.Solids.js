@@ -29,21 +29,20 @@ import hyperboloidImg from '../images/basicmodels/aHyperboloid.jpg';
 import solidconeImg from '../images/basicmodels/aBREPSolidPCone.jpg';
 import solidpolyhedraImg from '../images/basicmodels/aBREPSolidPolyhedra.jpg';
 
-import { BoxGeometry } from './libs/geometry/BoxGeometry.js';
-import { SphereGeometry2 } from './libs/geometry/SphereGeometry2.js';
-import { aTubeGeometry } from './libs/geometry/aTubeGeometry.js';
-import { aConeGeometry } from './libs/geometry/aConeGeometry.js';
-import { aTorusGeometry } from './libs/geometry/aTorusGeometry.js';
-import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinderGeometry.js';
-// import { aEllipsoidGeometry } from './libs/geometry/aEllipsoidGeometry.js';
-// import { aEllipticalConeGeometry } from './libs/geometry/aEllipticalConeGeometry.js';
-import { aParallGeometry } from './libs/geometry/aParallGeometry.js';
-import { aTrapezoidGeometry } from './libs/geometry/aTrapezoidGeometry.js';
+import { BoxGeometry } from './libs/geometry/Box.js';
+import { SphereGeometry2 } from './libs/geometry/Sphere.js';
+import { aTubeGeometry } from './libs/geometry/Tube.js';
+import { aConeGeometry } from './libs/geometry/Cone.js';
+import { aTorusGeometry } from './libs/geometry/Torus.js';
+import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinder.js';
+import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
+import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
+import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
+import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
 // import { CreateCutTube } from './libs/CSG/CutTube.js';
-import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
-import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
 // import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
 // import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
+// import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 // import { CreateTwistedTube } from './libs/CSG/TwistedTube.js';
 // import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
 // import { CreateHyperboloid } from './libs/CSG/Hyperboloid.js';
@@ -54,6 +53,7 @@ import { CreateTrapezoid } from './libs/CSG/TrapeZoid.js';
 // import { CreatePolyCone } from './libs/CSG/Polycons.js';
 
 // import { CreatePolyHedra } from './libs/CSG/Polyhedra.js';
+import { aTwistedTrapeZoidGeometry } from './libs/geometry/TrapeZoid3.js';
 
 
 function BasicSolids(editor) {
@@ -112,7 +112,7 @@ function BasicSolids(editor) {
 
         const pX=10,        pY=10,      pZ=10;     
         const geometry = new BoxGeometry(pX, pY, pZ);
-        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: 0x88392b }));
         mesh.name = 'Box';
 
         editor.execute(new AddObjectCommand(editor, mesh));
@@ -123,7 +123,7 @@ function BasicSolids(editor) {
 
         const pX=10,        pY=10,      pZ=10;     
         const geometry = new BoxGeometry(pX, pY, pZ);
-        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial(0xbbbbbb));
         mesh.name = 'Box';
 
         mesh.position.copy(position);
@@ -456,7 +456,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/apara'));
     item.dom.setAttribute('draggable', true);
@@ -502,7 +502,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trdImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
     item.dom.setAttribute('draggable', true);
@@ -515,9 +515,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
-        const geometry = new aTrapezoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
+        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
+        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Trapezoid'
         
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -527,8 +528,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const dx1 = 1.5, dy1 = 1.5, dz = 1, dx2 = 0.5, dy2 = 0.5;
-        const finalMesh = CreateTrapezoid( dx1 , dy1 , dz , dx2 , dy2 )
+        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
+        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Trapezoid'
+
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -538,7 +542,7 @@ function BasicSolids(editor) {
     options.add(item);
 
 
-    // TrapeZoid-P model
+    // TrapeZoid-P(2) model
 
     item = new UIDiv();
     item.setClass('Category-item');
@@ -557,8 +561,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10;
-        const finalMesh = CreateTrapezoidParallePiped( pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha )
+        const pDx1 = 5, pDx2 = 10, pDy1 = 15, pDx3 = 15, pDx4 = 2, pDy2 = 14, pDz = 10, pTheta = 20, pPhi = 5, pAlpha = 10;
+        const geometry = new aTrapeZoidPGeometry(pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'aTrapezoidParallePiped'
         
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -569,53 +575,14 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10;
-        const finalMesh = CreateTrapezoidParallePiped( pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha )
+        const pDx1 = 5, pDx2 = 10, pDy1 = 15, pDx3 = 15, pDx4 = 2, pDy2 = 14, pDz = 10, pTheta = 20, pPhi = 5, pAlpha = 10;
+        const geometry = new aTrapeZoidPGeometry(pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'aTrapezoidParallePiped'
 
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // twisted box
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${twistedboxImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/twistedbox'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Box');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
-        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
-
-        editor.execute(new AddObjectCommand(editor, mesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
-        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
-        mesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, mesh));
 
     });
 
@@ -641,7 +608,11 @@ function BasicSolids(editor) {
     item.onClick(function () {
 
         const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = - 30;
-        const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle);        
+        // const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle); 
+        const geometry = new aTwistedTrapeZoidGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+
+               
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -651,6 +622,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
+        const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = - 30;
         const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle);        
         finalMesh.position.copy(position);
 
@@ -697,6 +669,48 @@ function BasicSolids(editor) {
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+
+    // twisted box
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${twistedboxImg})`;
+    item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/twistedbox'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Box');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
+        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
+
+        editor.execute(new AddObjectCommand(editor, mesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
+        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
+        mesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, mesh));
 
     });
 

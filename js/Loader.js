@@ -1644,7 +1644,7 @@ function Loader( editor ) {
               
               break;
             
-            case "ELLIPTICAL_TUBE":
+            case "ELLIPTICALTUBE":
     
               {
                 const xSemiAxis = Number(wordArray[3]);
@@ -2946,7 +2946,7 @@ function Loader( editor ) {
               
               break;
             
-            case "ELLIPTICAL_TUBE":
+            case "ELLIPTICALTUBE":
     
               {
                 const xSemiAxis = Number(wordArray[3]);

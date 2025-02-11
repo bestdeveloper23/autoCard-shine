@@ -5,8 +5,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 // import { CreateParallelepiped } from './libs/CSG/Parallelepiped.js';
 // import { aParallelepipedGeometry } from './libs/geometry/aParallelepipedGeometry.js';
-import { aParallGeometry } from './libs/geometry/aParallGeometry.js';
-
+import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 function GeometryParametersPanel(editor, object) {
 
 	const strings = editor.strings;

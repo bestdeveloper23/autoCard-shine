@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aEllipticalConeGeometry } from './libs/geometry/aEllipticalConeGeometry.js';
+import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 
 function GeometryParametersPanel(editor, object) {
 

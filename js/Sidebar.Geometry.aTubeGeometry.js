@@ -5,7 +5,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aTubeGeometry } from './libs/geometry/aTubeGeometry.js';
+import { aTubeGeometry } from './libs/geometry/Tube.js';
 
 function GeometryParametersPanel(editor, object) {
 
