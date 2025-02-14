@@ -4,7 +4,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
+import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
 
 function GeometryParametersPanel( editor, object ) {
 
@@ -69,10 +69,8 @@ function GeometryParametersPanel( editor, object ) {
 
 		// we need to new each geometry module
 
-		const twistedangle = - twistedangleI.getValue(), pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue();
-		const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz )
-
-		editor.execute( new SetGeometryCommand( editor, object, mesh.geometry));
+		const pDx = width.getValue(), pDy = height.getValue(), pDz = depth.getValue(), twistedangle = twistedangleI.getValue();
+		editor.execute( new SetGeometryCommand( editor, object, new aTwistedBoxGeometry(pDx, pDy, pDz, twistedangle)));
 
 	}
 

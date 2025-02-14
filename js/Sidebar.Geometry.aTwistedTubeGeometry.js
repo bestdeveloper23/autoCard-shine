@@ -4,7 +4,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateTwistedTube } from './libs/CSG/TwistedTube.js';
+import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -88,17 +88,16 @@ function GeometryParametersPanel(editor, object) {
 
   // we need to new each geometry module
 
-  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi =  pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = - twistedangleI.getValue();
+  var pRMax = maxRadius.getValue(), pRMin = minRadius.getValue(), pDz = height.getValue(), SPhi =  pSPhi.getValue(), DPhi = pDPhi.getValue(), twistedangle = twistedangleI.getValue();
 
-  const finalMesh = CreateTwistedTube ( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )
+//   const finalMesh = CreateTwistedTube ( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )
 
   // set Range 
-  maxRadius.setRange(pRMin + 0.001, Infinity);
-  minRadius.setRange(0, pRMax - 0.001);
+//   maxRadius.setRange(pRMin + 0.001, Infinity);
+//   minRadius.setRange(0, pRMax - 0.001);
 
-  finalMesh.geometry.name = object.geometry.name;
   
-  editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+  editor.execute(new SetGeometryCommand(editor, object, new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )));
 
  }
 

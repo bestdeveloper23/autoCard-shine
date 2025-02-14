@@ -39,21 +39,22 @@ import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
 import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
+import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
+import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
+import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
+import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
+import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
+import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
+
+
+
 // import { CreateCutTube } from './libs/CSG/CutTube.js';
-// import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
-// import { CreateTwistedBox } from './libs/CSG/TwistedBox.js';
-// import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
-// import { CreateTwistedTube } from './libs/CSG/TwistedTube.js';
-// import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
-// import { CreateHyperboloid } from './libs/CSG/Hyperboloid.js';
-// import { CreateTwistedTrapezoid3 } from './libs/CSG/TwistedTrapezoid3.js';
-// import { CreateTwistedTrapezoid4 } from './libs/CSG/TwistedTrapezoid4.js';
-// import { CreateTetrahedra } from './libs/CSG/Tetrahedra.js';
-// import { CreateGenericTrap } from './libs/CSG/GenericTrap.js';
-// import { CreatePolyCone } from './libs/CSG/Polycons.js';
+import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
+import { CreateHyperboloid } from './libs/CSG/Hyperboloid.js';
+import { CreateGenericTrap } from './libs/CSG/GenericTrap.js';
+import { CreatePolyCone } from './libs/CSG/Polycons.js';
 
 // import { CreatePolyHedra } from './libs/CSG/Polyhedra.js';
-import { aTwistedTrapeZoidGeometry } from './libs/geometry/TrapeZoid3.js';
 
 
 function BasicSolids(editor) {
@@ -112,7 +113,7 @@ function BasicSolids(editor) {
 
         const pX=10,        pY=10,      pZ=10;     
         const geometry = new BoxGeometry(pX, pY, pZ);
-        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: 0x88392b }));
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         mesh.name = 'Box';
 
         editor.execute(new AddObjectCommand(editor, mesh));
@@ -152,7 +153,6 @@ function BasicSolids(editor) {
     
     item.onClick(function () {
         var pRmin = 5, pRmax = 10, pSPhi = 0, pDPhi = 360 , pSTheta = 0, pDTheta = 120;
-        // const mesh = CreateSphere( pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi );
         const geometry = new SphereGeometry2(pRmin , pRmax , pSTheta , pDTheta , pSPhi , pDPhi);
         const mesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         mesh.name = 'Sphere';
@@ -548,7 +548,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trapImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid2'));
     item.dom.setAttribute('draggable', true);
@@ -594,7 +594,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtrdImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtrd'));
     item.dom.setAttribute('draggable', true);
@@ -607,10 +607,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = - 30;
-        // const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle); 
-        const geometry = new aTwistedTrapeZoidGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
+        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = - 30;
+        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTrapeZoid'
 
                
 
@@ -622,8 +622,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const dx1 = 2, dy1 = 2, dz = 5, dx2 = 1, dy2 = 1, twistedangle = - 30;
-        const finalMesh = CreateTwistedTrapezoid3(dx1, dy1, dz, dx2, dy2, twistedangle);        
+        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = - 30;
+        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTrapeZoid'
+
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -639,7 +642,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtrapImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
     item.dom.setAttribute('draggable', true);
@@ -652,8 +655,10 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10, twistedangle = - 30;
-        const finalMesh = CreateTwistedTrapezoid4(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = - 30;
+        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'aTwistedTrapGeometry'
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -663,8 +668,10 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pDx1 = 0.5, pDx2 = 1, pDy1 = 1.5, pDx3 = 1.5, pDx4 = 2, pDy2 = 1.6, pDz = 4, pTheta = 20, pPhi = 5, pAlpha = 10, twistedangle = - 30;
-        const finalMesh = CreateTwistedTrapezoid4(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = - 30;
+        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'aTwistedTrapGeometry'
 
         finalMesh.position.copy(position);
 
@@ -682,7 +689,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedboxImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/twistedbox'));
     item.dom.setAttribute('draggable', true);
@@ -695,10 +702,13 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
-        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
+        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
+        const geometry = new aTwistedBoxGeometry(pDx, pDy, pDz, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = ' TwistedBox '
 
-        editor.execute(new AddObjectCommand(editor, mesh));
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
@@ -706,8 +716,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const twistedangle = - 30, pDx = 1, pDy = 2, pDz = 1;
-        const mesh = CreateTwistedBox( twistedangle , pDx , pDy , pDz );
+        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
+        const geometry = new aTwistedBoxGeometry(pDx, pDy, pDz, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = ' TwistedBox '
+
         mesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, mesh));
@@ -723,7 +736,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtubImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
     item.dom.setAttribute('draggable', true);
@@ -738,8 +751,10 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90, twistedangle = - 30;
-        const finalMesh = CreateTwistedTube ( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -749,8 +764,10 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var pRMin = 1, pRMax = 1.5, pDz = 2, SPhi = 0, DPhi = 90, twistedangle = - 30;
-        const finalMesh = CreateTwistedTube ( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
 
         finalMesh.position.copy(position);
 
@@ -767,7 +784,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${tetImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
     item.dom.setAttribute('draggable', true);
@@ -780,10 +797,16 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const anchor = [0, Math.sqrt(3), 0], p2 = [0, -1 / Math.sqrt(3), 2 * Math.sqrt(2 / 3)], p3 = [-Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3),], p4 = [Math.sqrt(2), -1 / Math.sqrt(3), -Math.sqrt(2 / 3)];
-        const mesh = CreateTetrahedra(anchor, p2, p3, p4);  
+        const anchor = [0, 5 * Math.sqrt(3), 0];
+        const p2 = [0, -5 / Math.sqrt(3), 10 * Math.sqrt(2 / 3)];
+        const p3 = [-5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const p4 = [5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tetrahedra';
+
         
-        editor.execute(new AddObjectCommand(editor, mesh));
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
@@ -791,12 +814,17 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const anchor = [0, 0, Math.sqrt(3)], p2 = [0, 2 * Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p3 = [-Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)], p4 = [Math.sqrt(2), -Math.sqrt(2 / 3), -1 / Math.sqrt(3)];
-        const mesh = CreateTetrahedra(anchor, p2, p3, p4);  
+        const anchor = [0, 5 * Math.sqrt(3), 0];
+        const p2 = [0, -5 / Math.sqrt(3), 10 * Math.sqrt(2 / 3)];
+        const p3 = [-5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const p4 = [5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tetrahedra';
 
         mesh.position.copy(position);
 
-        editor.execute(new AddObjectCommand(editor, mesh));
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 

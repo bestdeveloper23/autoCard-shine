@@ -5,7 +5,6 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateTrapezoidParallePiped } from './libs/CSG/TrapeZoidParallelpiped.js';
 import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 
 function GeometryParametersPanel(editor, object) {

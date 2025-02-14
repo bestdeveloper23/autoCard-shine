@@ -4,7 +4,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { CreateTetrahedra } from './libs/CSG/Tetrahedra.js';
+import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -87,12 +87,8 @@ function GeometryParametersPanel(editor, object) {
         const anchor = [anchorX.getValue(), anchorY.getValue(), anchorZ.getValue()], p2 = [point2X.getValue(), point2Y.getValue(), point2Z.getValue()],
         p3 = [point3X.getValue(), point3Y.getValue(), point3Z.getValue()], p4 = [point4X.getValue(), point4Y.getValue(), point4Z.getValue()];
 
-        const mesh = CreateTetrahedra(anchor, p2, p3, p4);  
 
-
-        mesh.geometry.name = object.geometry.name;
-
-        editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aTetrahedraGeometry(anchor, p2, p3, p4)));
 
     }
 

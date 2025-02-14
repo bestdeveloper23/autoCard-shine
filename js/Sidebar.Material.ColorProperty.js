@@ -5,11 +5,12 @@ import { SetMaterialValueCommand } from './commands/SetMaterialValueCommand.js';
 function SidebarMaterialColorProperty( editor, property, name ) {
 
 	const signals = editor.signals;
+	const DEFAULT_COLOR = 0xff5c5c; 
 
 	const container = new UIRow();
 	container.add( new UIText( name ).setWidth( '90px' ) );
 
-	const color = new UIColor().onInput( onChange );
+	const color = new UIColor().setHexValue(DEFAULT_COLOR.toString(16)).onInput( onChange ); // Use default color
 	container.add( color );
 
 	let intensity;
@@ -52,8 +53,12 @@ function SidebarMaterialColorProperty( editor, property, name ) {
 		material = object.material;
 
 		if ( property in material ) {
-
-			color.setHexValue( material[ property ].getHexString() );
+			// Ensure the material has a color, set default if it's white
+			if (!material[property] || material[property].getHexString() === 'ffffff') {
+				material[property] = new THREE.Color(DEFAULT_COLOR);
+			}
+		
+			color.setHexValue( material[ property ].getHexString());
 
 			if ( intensity !== undefined ) {
 
@@ -77,8 +82,15 @@ function SidebarMaterialColorProperty( editor, property, name ) {
 
 		object = selected;
 
+		if (object && object.material && property in object.material) {
+			if (!object.material[property] || object.material[property].getHexString() === 'ffffff') {
+				object.material[property] = new THREE.Color(DEFAULT_COLOR);
+	
+				editor.execute(new SetMaterialColorCommand(editor, object, property, DEFAULT_COLOR, 0));
+			}
+		}
+	
 		update();
-
 	} );
 
 	signals.materialChanged.add( update );

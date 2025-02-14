@@ -7,12 +7,14 @@ class aTetrahedraGeometry extends THREE.BufferGeometry {
         super();
         this.type = "aTetrahedraGeometry";
 
-        const material = new THREE.MeshBasicMaterial();
+        const material = new THREE.MeshLambertMaterial();
         const vertices = [];
         const indices = [];
         
+        // Push the points into the vertices array
         vertices.push(...anchor, ...p2, ...p3, ...p4);
         
+        // Define the indices for the tetrahedron
         indices.push(
             0, 1, 2,
             0, 2, 1,
@@ -24,19 +26,24 @@ class aTetrahedraGeometry extends THREE.BufferGeometry {
             1, 3, 2
         );
         
+        // Create the geometry from vertices and indices
         const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+
+        // Create the mesh
         let mesh = new THREE.Mesh(geometry, material);
 
+        // Rotate and update the mesh
         mesh.rotateX(Math.PI / 2);
         mesh.updateMatrix();
         
+        // Perform CSG operations
         let aCSG = CSG.fromMesh(mesh);
         mesh = CSG.toMesh(aCSG, new THREE.Matrix4(), material);
         
         const finalCSG = CSG.fromMesh(mesh);
         const finalGeometry = CSG.toGeometry(finalCSG);
         finalGeometry.type = "aTetrahedraGeometry";
-        finalGeometry.parameters = { anchor, p2, p3, p4 };
+        finalGeometry.parameters = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
 
         Object.assign(this, finalGeometry);
     }

@@ -2,11 +2,15 @@ import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
 class aTwistedBoxGeometry extends THREE.BufferGeometry {
-    constructor(twistedangle, pDx, pDy, pDz) {
+    constructor(pdx, pdy, pdz, twistedangle ) {
         super();
         this.type = "aTwistedBoxGeometry";
+        const mmTOcm = 10;
+        const pDx = pdx*mmTOcm;
+        const pDy = pdy*mmTOcm;
+        const pDz = pdz*mmTOcm;
 
-        const geometry = new THREE.BoxGeometry(pDx * 2, pDy * 2, pDz * 2, 32, 32, 32);
+        const geometry = new THREE.BoxGeometry(pDx * 2, pDz * 2, pDy * 2, 32, 32, 32);
         const positionAttribute = geometry.getAttribute("position");
 
         let vec3 = new THREE.Vector3();
@@ -26,7 +30,7 @@ class aTwistedBoxGeometry extends THREE.BufferGeometry {
         const finalCSG = CSG.fromMesh(mesh);
         const finalGeometry = CSG.toGeometry(finalCSG);
         finalGeometry.type = "aTwistedBoxGeometry";
-        finalGeometry.parameters = { width: pDx, height: pDy, depth: pDz, angle: -twistedangle };
+        finalGeometry.parameters = { 'width': pdx, 'height': pdy, 'depth': pdz, 'angle':  twistedangle };
 
         Object.assign(this, finalGeometry);
     }
@@ -38,7 +42,7 @@ class aTwistedBoxGeometry extends THREE.BufferGeometry {
     }
 
     static fromJSON(data) {
-        return new aTwistedBoxGeometry(data.angle, data.width, data.height, data.depth);
+        return new aTwistedBoxGeometry(data.width, data.height, data.depth, data.angle);
     }
 }
 

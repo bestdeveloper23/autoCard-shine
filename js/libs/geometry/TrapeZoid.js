@@ -115,3 +115,72 @@ class aTrapeZoidGeometry extends THREE.BufferGeometry {
 }
 
 export { aTrapeZoidGeometry };
+
+
+
+
+
+// const x1 = width1.getValue(), y1 = depth1.getValue(), z = height.getValue(), x2 = width2.getValue(), y2 = depth2.getValue();
+// if (x1 * y1 * x2 * y2 * z === 0) {
+//   return;
+// }
+// var trd = new THREE.BufferGeometry();
+
+//     const points = [
+//         new THREE.Vector3(-x2, -y2, z),//2
+//         new THREE.Vector3(-x2, y2, z),//1
+//         new THREE.Vector3(x2, y2, z),//0
+
+//         new THREE.Vector3(x2, y2, z),//0
+//         new THREE.Vector3(x2, -y2, z),//3
+//         new THREE.Vector3(-x2, -y2, z),//2
+
+//         new THREE.Vector3(x1, y1, -z),//4
+//         new THREE.Vector3(-x1, y1, -z),//5
+//         new THREE.Vector3(-x1, -y1, -z),//6
+
+//         new THREE.Vector3(-x1, -y1, -z),//6
+//         new THREE.Vector3(x1, -y1, -z),//7
+//         new THREE.Vector3(x1, y1, -z),//4
+
+//         new THREE.Vector3(x2, y2, z),//0
+//         new THREE.Vector3(x1, y1, -z),//4
+//         new THREE.Vector3(x1, -y1, -z),//7
+
+//         new THREE.Vector3(x1, -y1, -z),//7
+//         new THREE.Vector3(x2, -y2, z),//3
+//         new THREE.Vector3(x2, y2, z),//0
+
+//         new THREE.Vector3(-x2, y2, z),//1
+//         new THREE.Vector3(-x2, -y2, z),//2
+//         new THREE.Vector3(-x1, -y1, -z),//6
+
+//         new THREE.Vector3(-x1, -y1, -z),//6
+//         new THREE.Vector3(-x1, y1, -z),//5
+//         new THREE.Vector3(-x2, y2, z),//1
+
+//         new THREE.Vector3(-x2, y2, z),//1
+//         new THREE.Vector3(-x1, y1, -z),//5
+//         new THREE.Vector3(x1, y1, -z),//4
+
+//         new THREE.Vector3(x1, y1, -z),//4
+//         new THREE.Vector3(x2, y2, z),//0
+//         new THREE.Vector3(-x2, y2, z),//1
+
+//         new THREE.Vector3(-x2, -y2, z),//2
+//         new THREE.Vector3(x2, -y2, z),//3
+//         new THREE.Vector3(x1, -y1, -z),//7
+
+//         new THREE.Vector3(x1, -y1, -z),//7
+//         new THREE.Vector3(-x1, -y1, -z),//6
+//         new THREE.Vector3(-x2, -y2, z),//2
+//     ]
+
+//     trd.setFromPoints(points);
+
+//     const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
+//     trd.parameters = param;
+//     trd.type = 'aTrapeZoidGeometry';
+//     const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
+//     finalMesh.updateMatrix();
+//     finalMesh.name = 'TrapeZoid';

@@ -1,11 +1,17 @@
 import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
-class aTwistedTrapeZoidGeometry extends THREE.BufferGeometry {
-    constructor(dx1, dy1, dz, dx2, dy2, twistedangle) {
+class aTwistedTrdGeometry extends THREE.BufferGeometry {
+    constructor(dX1, dY1, dZ, dX2, dY2, twistedangle) {
         super();
-        this.type = "aTwistedTrapeZoidGeometry";
+        this.type = "aTwistedTrdGeometry";
 
+        const mmTOcm = 10;
+        const dx1= dX1*mmTOcm;
+        const dy1= dY1*mmTOcm;
+        const dz= dZ*mmTOcm;
+        const dx2= dX2*mmTOcm;
+        const dy2= dY2*mmTOcm;
 
         const maxdis = Math.max(dx1, dy1, dx2, dy2, dz) * 2;
         const maxwidth = Math.max(dx1, dy1, dx2, dy2) * 2;
@@ -93,9 +99,8 @@ class aTwistedTrapeZoidGeometry extends THREE.BufferGeometry {
 
         const finalCSG = CSG.fromMesh(finalMesh);
         const finalGeometry = CSG.toGeometry(finalCSG);
-        finalGeometry.type = "aTwistedTrapeZoidGeometry";
-        console.log("dx1:", dx1, "dy1:", dy1, "dz:", dz, "dx2:", dx2, "dy2:", dy2, "twistedangle:", twistedangle);
-        finalGeometry.parameters = {'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
+        finalGeometry.type = "aTwistedTrdGeometry";
+        finalGeometry.parameters = {'dx1': dX1, 'dy1': dY1, 'dz': dZ, 'dx2': dX2, 'dy2': dY2, 'twistedangle': twistedangle };
 
         Object.assign(this, finalGeometry);
     }
@@ -107,7 +112,7 @@ class aTwistedTrapeZoidGeometry extends THREE.BufferGeometry {
     }
 
     static fromJSON(data) {
-        return new aTwistedTrapeZoidGeometry(
+        return new aTwistedTrdGeometry(
             data.dx1,
             data.dy1,
             data.dz,
@@ -118,4 +123,4 @@ class aTwistedTrapeZoidGeometry extends THREE.BufferGeometry {
     }
 }
 
-export { aTwistedTrapeZoidGeometry };
+export { aTwistedTrdGeometry };
