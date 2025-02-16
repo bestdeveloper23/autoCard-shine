@@ -5,7 +5,7 @@ import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger, UIInput } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreatePolyCone } from './libs/CSG/Polycons.js';
+import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -82,12 +82,8 @@ function GeometryParametersPanel(editor, object) {
         const rInner = rInner_string.map(item => parseFloat(item));
         const rOuter = rOuter_string.map(item => parseFloat(item));
         const z = z_string.map(item => parseFloat(item));
-
-        const finalMesh = CreatePolyCone(SPhi, DPhi , numZPlanes , rInner , rOuter , z)
-            
-        finalMesh.geometry.name = object.geometry.name;
         
-        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aPolyconeGeometry(SPhi, DPhi , numZPlanes , rInner , rOuter , z)));
 
     }
 

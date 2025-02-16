@@ -4,7 +4,7 @@ import { UIDiv, UIRow, UIText, UINumber, UIInteger } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { CSG } from './libs/CSGMesh.js';
-import { CreateGenericTrap } from './libs/CSG/GenericTrap.js';
+import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -152,10 +152,7 @@ function GeometryParametersPanel(editor, object) {
         px.push(point1X.getValue(), point2X.getValue(), point3X.getValue(), point4X.getValue(), point5X.getValue(), point6X.getValue(), point7X.getValue(), point8X.getValue(),);
         py.push(point1Z.getValue(), point2Z.getValue(), point3Z.getValue(), point4Z.getValue(), point5Z.getValue(), point6Z.getValue(), point7Z.getValue(), point8Z.getValue(),);
 
-        const mesh = CreateGenericTrap(pDz,px,py);
-        mesh.geometry.name = object.geometry.name;
-
-        editor.execute(new SetGeometryCommand(editor, object, mesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aGenericTrapGeometry(pDz,px,py)));
 
     }
 

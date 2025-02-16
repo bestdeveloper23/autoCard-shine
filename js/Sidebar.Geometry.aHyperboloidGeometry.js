@@ -4,7 +4,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreateHyperboloid } from './libs/CSG/Hyperboloid.js';
+import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
 
 function GeometryParametersPanel( editor, object ) {
 
@@ -77,12 +77,12 @@ function GeometryParametersPanel( editor, object ) {
 
 
         var radiusOut = radius1I.getValue(), radiusIn = radius2I.getValue(), stereo1 = stereo1I.getValue(), stereo2 = stereo2I.getValue(), pDz = heightI.getValue();
-        const  finalMesh = CreateHyperboloid(radiusOut, radiusIn, stereo1, stereo2, pDz);
+        // const  finalMesh = CreateHyperboloid(radiusOut, radiusIn, stereo1, stereo2, pDz);
 
 
-        finalMesh.geometry.name = object.geometry.name;
+        // finalMesh.geometry.name = object.geometry.name;
         
-		editor.execute( new SetGeometryCommand( editor, object, finalMesh.geometry ) );
+		editor.execute( new SetGeometryCommand( editor, object, new aHyperboloidGeometry(radiusOut, radiusIn, stereo1, stereo2, pDz) ) );
 
         radius1I.setRange(radiusIn + 0.001, Infinity);
         radius2I.setRange(0, radiusOut - 0.001);

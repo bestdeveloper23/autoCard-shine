@@ -5,6 +5,7 @@ import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger, UIInput } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
+import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -85,28 +86,17 @@ function GeometryParametersPanel(editor, object) {
 
     function update() {
 
-        const SPhi = sphiI.getValue(), DPhi = dphiI.getValue(), numSide = numsideI.getValue(), numZPlanes = znumberI.getValue(), rOuter_string = radius.getValue().split(','), z_string = zposition.getValue().split(',');
+        const SPhi = sphiI.getValue();
+        const DPhi = dphiI.getValue();
+        const numSide = numsideI.getValue();
+        const numZPlanes = znumberI.getValue(); 
+        const rOuter_string = radius.getValue().split(',');
+        const z_string = zposition.getValue().split(',');
         const rOuter = rOuter_string.map(item => parseFloat(item));
         const z = z_string.map(item => parseFloat(item));
 
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, (SPhi + 90) / 180 * Math.PI, DPhi / 180 * Math.PI);
-
-        const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-
-        let finalMesh = meshOut;
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-        let aCSG = CSG.fromMesh(finalMesh);
-        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-
-        const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide };
-        finalMesh.geometry.parameters = param;
-        finalMesh.geometry.computeVertexNormals();
-        finalMesh.geometry.type = 'aPolyhedraGeometry';
-
-        finalMesh.geometry.name = object.geometry.name;
         
-        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aPolyhedraGeometry(SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z)));
 
     }
 

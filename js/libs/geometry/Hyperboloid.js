@@ -2,57 +2,91 @@ import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
 class aHyperboloidGeometry extends THREE.BufferGeometry {
-    constructor(radiusOut, radiusIn, stereo1, stereo2, pDz) {
+    constructor(radiusOut, radiusIn, stereo1, stereo2, pdz) {
         super();
         this.type = "aHyperboloidGeometry";
-        const mmTocm = 10;
-        const rOut = radiusOut * mmTocm;
-        const rIn = radiusIn * mmTocm;
-        const dz = pDz * mmTocm;
-        
+
+        const pDz = pdz*10;
+
         const c_z1 = Math.tan(stereo1 * Math.PI / 90);
         const c_z2 = Math.tan(stereo2 * Math.PI / 90);
-        let geometryOut = new THREE.CylinderGeometry(rOut, rOut, dz, 16, 8, false, 0, Math.PI * 2);
-        let geometryIn = new THREE.CylinderGeometry(rIn, rIn, dz, 16, 8, false, 0, Math.PI * 2);
+        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz*2, 16, 8, false, 0, Math.PI * 2);
+        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz*2, 16, 8, false, 0, Math.PI * 2);
 
-        let positionAttributeOut = geometryOut.getAttribute("position");
-        let positionAttributeIn = geometryIn.getAttribute("position");
-        let vertexOut = new THREE.Vector3();
-        let vertexIn = new THREE.Vector3();
+        let positionAttribute = cylindergeometry1.getAttribute('position');
+        let positionAttribute2 = cylindergeometry2.getAttribute('position');
+        let vertex = new THREE.Vector3();
+        let vertex2 = new THREE.Vector3();
 
-        for (let i = 0; i < positionAttributeOut.count; i++) {
-            vertexOut.fromBufferAttribute(positionAttributeOut, i);
-            vertexIn.fromBufferAttribute(positionAttributeIn, i);
+        for (let i = 0; i < positionAttribute.count; i++) {
+
+            vertex.fromBufferAttribute(positionAttribute, i);
+            vertex2.fromBufferAttribute(positionAttribute2, i);
+            let x, y, z, x2, y2, z2;
+            x = vertex.x;
+            y = vertex.y;
+            z = vertex.z;
+            x2 = vertex2.x;
+            y2 = vertex2.y;
+            z2 = vertex2.z;
+            let r = radiusOut*Math.sqrt((1+ Math.pow((y/c_z1), 2)));
+            let r2 = radiusIn*Math.sqrt((1+ Math.pow((y2/c_z2), 2)));
+
+            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+            if (vertex.z >= 0) {
+                z = Math.abs(r * Math.sin(alpha));
+                z2 = Math.abs(r2 * Math.sin(alpha));
+            } else {
+                z = - Math.abs(r * Math.sin(alpha));
+                z2 = - Math.abs(r2 * Math.sin(alpha));
+            }
+            if (vertex.x >= 0) {
+                x = r * Math.cos(alpha);
+                x2 = r2 * Math.cos(alpha);
+            } else {
+                x = -r * Math.cos(alpha);
+                x2 = -r2 * Math.cos(alpha);
+            }
+
+            cylindergeometry1.attributes.position.array[i * 3] = x;
+            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+            cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
+
             
-            let rOuter = rOut * Math.sqrt(1 + Math.pow(vertexOut.y / c_z1, 2));
-            let rInner = rIn * Math.sqrt(1 + Math.pow(vertexIn.y / c_z2, 2));
-            
-            let alphaOut = Math.atan(vertexOut.z / vertexOut.x) || (vertexOut.z >= 0 ? Math.PI / 2 : -Math.PI / 2);
-            let alphaIn = Math.atan(vertexIn.z / vertexIn.x) || (vertexIn.z >= 0 ? Math.PI / 2 : -Math.PI / 2);
-            
-            vertexOut.x = vertexOut.x >= 0 ? rOuter * Math.cos(alphaOut) : -rOuter * Math.cos(alphaOut);
-            vertexOut.z = vertexOut.z >= 0 ? Math.abs(rOuter * Math.sin(alphaOut)) : -Math.abs(rOuter * Math.sin(alphaOut));
-            
-            vertexIn.x = vertexIn.x >= 0 ? rInner * Math.cos(alphaIn) : -rInner * Math.cos(alphaIn);
-            vertexIn.z = vertexIn.z >= 0 ? Math.abs(rInner * Math.sin(alphaIn)) : -Math.abs(rInner * Math.sin(alphaIn));
-            
-            geometryOut.attributes.position.setXYZ(i, vertexOut.x, vertexOut.y, vertexOut.z);
-            geometryIn.attributes.position.setXYZ(i, vertexIn.x, vertexIn.y, vertexIn.z);
+            cylindergeometry2.attributes.position.array[i * 3] = x2;
+            cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
+            cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
+
         }
-        geometryOut.attributes.position.needsUpdate = true;
-        geometryIn.attributes.position.needsUpdate = true;
+        cylindergeometry1.attributes.position.needsUpdate = true;
+        cylindergeometry2.attributes.position.needsUpdate = true;
 
-        let meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-        let meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
+        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
 
-        let MeshCSGOut = CSG.fromMesh(meshOut);
-        let MeshCSGIn = CSG.fromMesh(meshIn);
+        const MeshCSG1 = CSG.fromMesh(cylindermesh);
+        const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+
+        let aCSG;
+        if(radiusIn === 0 ) {
+            aCSG = MeshCSG1;
+        } else {
+            aCSG = MeshCSG1.subtract(MeshCSG2);
+        }
         
-        let aCSG = radiusIn === 0 ? MeshCSGOut : MeshCSGOut.subtract(MeshCSGIn);
+
+
+        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+        
+        finalMesh.rotateX(Math.PI / 2);
+        finalMesh.updateMatrix();
+        aCSG = CSG.fromMesh(finalMesh);
         const finalGeometry = CSG.toGeometry(aCSG); 
         
         finalGeometry.type = "aHyperboloidGeometry";
-        const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
+        const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pdz };
         finalGeometry.parameters = param;
         
         Object.assign(this, finalGeometry);

@@ -45,16 +45,11 @@ import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
 import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
 import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
-
-
-
-// import { CreateCutTube } from './libs/CSG/CutTube.js';
-import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
-import { CreateHyperboloid } from './libs/CSG/Hyperboloid.js';
-import { CreateGenericTrap } from './libs/CSG/GenericTrap.js';
-import { CreatePolyCone } from './libs/CSG/Polycons.js';
-
-// import { CreatePolyHedra } from './libs/CSG/Polyhedra.js';
+import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
+import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
+import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
+import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
+import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
 
 
 function BasicSolids(editor) {
@@ -721,9 +716,9 @@ function BasicSolids(editor) {
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = ' TwistedBox '
 
-        mesh.position.copy(position);
+        finalMesh.position.copy(position);
 
-        editor.execute(new AddObjectCommand(editor, mesh));
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
@@ -822,7 +817,7 @@ function BasicSolids(editor) {
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Tetrahedra';
 
-        mesh.position.copy(position);
+        finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -837,7 +832,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${generictrapImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/generictrap'));
     item.dom.setAttribute('draggable', true);
@@ -851,9 +846,12 @@ function BasicSolids(editor) {
     item.onClick(function () {
 
         const pDz = 1, px = [-1, -1, 1, 1, -0.5, -0.5, 0.5, 0.5], py = [-1, 1, 1, -1, -0.5, 0.5, 0.5, -0.5];
-        const mesh = CreateGenericTrap(pDz, px, py);
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
+
         
-        editor.execute(new AddObjectCommand(editor, mesh));
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
@@ -862,11 +860,13 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         const pDz = 1, px = [-1, -1, 1, 1, -0.5, -0.5, 0.5, 0.5], py = [-1, 1, 1, -1, -0.5, 0.5, 0.5, -0.5];
-        const mesh = CreateGenericTrap(pDz, px, py);
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
         
-        mesh.position.copy(position);
+        finalMesh.position.copy(position);
 
-        editor.execute(new AddObjectCommand(editor, mesh));
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
@@ -880,7 +880,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraboloidImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
     item.dom.setAttribute('draggable', true);
@@ -895,8 +895,10 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var radius1 = 0.5, radius2 = 1, pDz = 2;
-        const finalMesh = CreatePrabolicCylinder(radius1 , radius2 , pDz);
+        var radius1 = 5, radius2 = 7, pDz = 10;
+        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Paraboloid';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -906,8 +908,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var radius1 = 0.5, radius2 = 1, pDz = 2;
-        const finalMesh = CreatePrabolicCylinder(radius1 , radius2 , pDz)
+        var radius1 = 5, radius2 = 7, pDz = 10;
+        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Paraboloid';
+
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -922,7 +927,7 @@ function BasicSolids(editor) {
 
     item = new UIDiv();
     item.setClass('Category-item');
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.dom.style.backgroundImage = `url(${hyperboloidImg})`;
 
@@ -939,8 +944,10 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 2;
-        const  finalMesh = CreateHyperboloid(radiusOut, radiusIn, stereo1, stereo2, pDz);
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 10;
+        const geometry = new aHyperboloidGeometry( radiusOut, radiusIn, stereo1, stereo2, pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Hyperboloid';
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -950,8 +957,11 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 2;
-        const  finalMesh = CreateHyperboloid(radiusOut, radiusIn, stereo1, stereo2, pDz);
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 10;
+        const geometry = new aHyperboloidGeometry( radiusOut, radiusIn, stereo1, stereo2, pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Hyperboloid';
+
         finalMesh.position.copy(position);
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -967,7 +977,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidconeImg})`;
-    item.dom.style.filter = 'blur(1.5px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polycone'));
     item.dom.setAttribute('draggable', true);
@@ -981,7 +991,9 @@ function BasicSolids(editor) {
     item.onClick(function () {
 
         const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const finalMesh = CreatePolyCone(SPhi , DPhi , numZPlanes , rInner , rOuter , z)
+        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , rInner , rOuter , z );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        finalMesh.name = 'Polycone';
         
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -992,7 +1004,9 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const finalMesh = CreatePolyCone(SPhi , DPhi , numZPlanes , rInner , rOuter , z)
+        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , rInner , rOuter , z );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        finalMesh.name = 'Polycone';
 
         finalMesh.position.copy(position);
 
@@ -1008,7 +1022,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidpolyhedraImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polyhedra'));
     item.dom.setAttribute('draggable', true);
@@ -1022,8 +1036,10 @@ function BasicSolids(editor) {
     item.onClick(function () {
 
         const SPhi = 30 , DPhi = 210 , numSide = 3 , numZPlanes = 9 , rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01] , rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const finalMesh = CreatePolyHedra(SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z);
-        
+        const geometry = new aPolyhedraGeometry( SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        finalMesh.name = 'Polyhedra';
+
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -1034,7 +1050,9 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const finalMesh = CreatePolyHedra(SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z);
+        const geometry = new aPolyhedraGeometry( SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        finalMesh.name = 'Polyhedra';
 
         finalMesh.position.copy(position);
 

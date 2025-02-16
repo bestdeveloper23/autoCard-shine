@@ -45,8 +45,7 @@ class aGenericTrapGeometry extends THREE.BufferGeometry {
         const finalCSG = CSG.fromMesh(mesh);
         const finalGeometry = CSG.toGeometry(finalCSG);
         finalGeometry.type = "aGenericTrapGeometry";
-        const param = { 'pDz': pDz, 'px': px, 'py': py };
-        finalGeometry.parameters = param;
+        finalGeometry.parameters = { 'pDz': pDz, 'px': px, 'py': py };
 
         Object.assign(this, finalGeometry);
     }

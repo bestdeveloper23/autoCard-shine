@@ -4,7 +4,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { CreatePrabolicCylinder } from './libs/CSG/PrabolicCylinder.js';
+import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
 
 function GeometryParametersPanel(editor, object) {
 
@@ -56,11 +56,8 @@ function GeometryParametersPanel(editor, object) {
 
 
         var radius1 = radius1I.getValue(), radius2 = radius2I.getValue(), pDz = dzI.getValue();
-        const finalMesh = CreatePrabolicCylinder( radius1 , radius2 , pDz);
-
-        finalMesh.geometry.name = object.geometry.name;
         
-        editor.execute(new SetGeometryCommand(editor, object, finalMesh.geometry));
+        editor.execute(new SetGeometryCommand(editor, object, new aParaboloidGeometry(radius1 , radius2 , pDz)));
 
     }
 

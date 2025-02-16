@@ -7,44 +7,39 @@ class aPolyconeGeometry extends THREE.BufferGeometry {
         super();
         this.type = "aPolyconeGeometry";
 
-        // Create Polycone Inner and Outer Geometry
-        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 1, false, (SPhi + 90) * Math.PI / 180, DPhi * Math.PI / 180);
-        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, (SPhi + 90) * Math.PI / 180, DPhi * Math.PI / 180);
+        const material = new THREE.MeshBasicMaterial();
 
-        // Create Meshes
+        const geometryIn = new PolyconeGeometry(numZPlanes, rInner, z, 32, 1, false, (SPhi + 90)/180*Math.PI, DPhi/180*Math.PI);
+        const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, (SPhi + 90)/180*Math.PI, DPhi/180*Math.PI);
+
         const meshIn = new THREE.Mesh(geometryIn, new THREE.MeshBasicMaterial());
         const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-
-        // Compute bounding box dimensions
         let maxWidth = Math.max(...rOuter);
         let maxHeight = Math.max(...z);
 
-        // Create Box Geometry for Boolean Operations
-        const boxGeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
-        const boxMesh = new THREE.Mesh(boxGeometry, new THREE.MeshBasicMaterial());
-        boxMesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
+        const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
+        const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+        boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
 
-        // Convert to CSG for Boolean Operations
         let MeshCSG1 = CSG.fromMesh(meshOut);
         let MeshCSG2 = CSG.fromMesh(meshIn);
-        let MeshCSG3 = CSG.fromMesh(boxMesh);
+        let MeshCSG3 = CSG.fromMesh(boxmesh);
 
-        // Final Mesh Creation
-        let finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4(), new THREE.MeshBasicMaterial());
+        let finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4(), material);
+        
         finalMesh.geometry.computeVertexNormals();
-
-        // Rotate and Update Mesh
+        
         finalMesh.rotateX(Math.PI / 2);
         finalMesh.updateMatrix();
+        let aCSG = CSG.fromMesh(finalMesh);
+        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4(), material);
 
         // Convert to CSG and back for final geometry
         let finalCSG = CSG.fromMesh(finalMesh);
         const finalGeometry = CSG.toGeometry(finalCSG);
 
-        // Assign parameters to geometry for serialization
         finalGeometry.type = "aPolyconeGeometry";
-        const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
-        finalGeometry.geometry.parameters = param;
+        finalGeometry.parameters = { 'SPhi': SPhi, 'DPhi': DPhi, 'numZPlanes': numZPlanes, 'rInner': rInner, 'rOuter': rOuter, 'z': z   };
     
         Object.assign(this, finalGeometry);
     }
@@ -56,7 +51,7 @@ class aPolyconeGeometry extends THREE.BufferGeometry {
     }
 
     static fromJSON(data) {
-        return new aPolyconeGeometry(data.rInner, data.rOuter, data.z, data.numZPlanes, data.SPhi, data.DPhi);
+        return new aPolyconeGeometry(data.SPhi, data.DPhi, data.numZPlanes, data.rInner, data.rOuter, data.z  );
     }
 }
 

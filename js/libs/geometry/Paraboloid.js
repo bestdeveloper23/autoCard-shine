@@ -43,8 +43,7 @@ class aParaboloidGeometry extends THREE.BufferGeometry {
         const finalGeometry = CSG.toGeometry(aCSG);
 
         finalGeometry.type = "aParaboloidGeometry";
-        const param = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
-        finalGeometry.parameters = param;
+        finalGeometry.parameters = { 'R1': radius1, 'R2': radius2, 'pDz': pDz };
         
         Object.assign(this, finalGeometry);
     }
