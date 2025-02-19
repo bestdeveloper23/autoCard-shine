@@ -308,8 +308,20 @@ function SidebarGeometry( editor ) {
 
 				} else {
 					// we need to new each geometry module
-					const { GeometryParametersPanel } = await import( `./Sidebar.Geometry.${ geometry.type }.js` );
+					let module;
 
+					try {
+						module = await import(`./Sidebar.Geometry.${geometry.type}.js`);
+					} catch (error1) {
+						try {
+							module = await import(`./Sidebar.Sources.${geometry.type}.js`);
+						} catch (error2) {
+							module = await import(`./Sidebar.Solids.${geometry.type}.js`);
+						}
+					}
+					
+					const { GeometryParametersPanel } = module;
+					
 					parameters.add( new GeometryParametersPanel( editor, object ) );
 					
 

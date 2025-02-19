@@ -39,17 +39,17 @@ import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
 import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
-import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
-import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
-import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
-import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
-import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
-import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
-import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
-import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
-import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
-import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
-import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
+// import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
+// import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
+// import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
+// import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
+// import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
+// import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
+// import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
+// import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
+// import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
+// import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
+// import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
 
 
 function BasicSolids(editor) {
@@ -354,7 +354,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${ellipsoidImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aellipsoid'));
     item.dom.setAttribute('draggable', true);
@@ -403,7 +403,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${ellipticalconeImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aellipticalcone'));
     item.dom.setAttribute('draggable', true);
@@ -451,14 +451,14 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/apara'));
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'Parallelediped');
 
     tippy(item.dom, { //For comment
-        content: 'Click or drag to add it.',
+        content: 'Under Development',
         placement: 'top', 
     });
 
@@ -497,7 +497,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trdImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
     item.dom.setAttribute('draggable', true);
@@ -543,7 +543,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trapImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid2'));
     item.dom.setAttribute('draggable', true);
@@ -589,7 +589,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtrdImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtrd'));
     item.dom.setAttribute('draggable', true);
@@ -637,7 +637,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtrapImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
     item.dom.setAttribute('draggable', true);
@@ -684,7 +684,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedboxImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/twistedbox'));
     item.dom.setAttribute('draggable', true);
@@ -731,7 +731,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtubImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
     item.dom.setAttribute('draggable', true);
@@ -779,7 +779,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${tetImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
     item.dom.setAttribute('draggable', true);
@@ -832,7 +832,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${generictrapImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/generictrap'));
     item.dom.setAttribute('draggable', true);
@@ -880,7 +880,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraboloidImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
     item.dom.setAttribute('draggable', true);
@@ -927,7 +927,7 @@ function BasicSolids(editor) {
 
     item = new UIDiv();
     item.setClass('Category-item');
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.dom.style.backgroundImage = `url(${hyperboloidImg})`;
 
@@ -977,7 +977,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidconeImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polycone'));
     item.dom.setAttribute('draggable', true);
@@ -1022,7 +1022,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidpolyhedraImg})`;
-    // item.dom.style.filter = 'blur(2px)';
+    item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polyhedra'));
     item.dom.setAttribute('draggable', true);
