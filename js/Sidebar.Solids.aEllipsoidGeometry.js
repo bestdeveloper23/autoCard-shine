@@ -46,24 +46,26 @@ function GeometryParametersPanel(editor, object) {
 
     // zSemiAxis with unit select
     const zSemiAxisRow = new UIRow();
-    const zSemiAxis = new UINumber(baseDimensions.zSemiAxis).setRange(0.1, Infinity).onChange(updateDimensions);
+    const zSemiAxis = new UINumber(baseDimensions.zSemiAxis).onChange(updateDimensions);
     const zSemiAxisUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
     zSemiAxisRow.add(new UIText(strings.getKey('sidebar/geometry/aellipsoid_geometry/zSemiAxis')).setWidth('90px'), zSemiAxis, zSemiAxisUnitSelect);
     container.add(zSemiAxisRow);
 
+    // zBottomCut with unit select
+    const zBottomCutRow = new UIRow();
+    const zBottomCut = new UINumber(baseDimensions.zBottomCut).onChange(updateDimensions);
+    const zBottomCutUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    zBottomCutRow.add(new UIText(strings.getKey('sidebar/geometry/aellipsoid_geometry/zbottomcut')).setWidth('90px'), zBottomCut, zBottomCutUnitSelect);
+    container.add(zBottomCutRow);
+    
     // zTopCut with unit select
     const zTopCutRow = new UIRow();
-    const zTopCut = new UINumber(baseDimensions.zTopCut).setRange(0,Infinity).onChange(updateDimensions);
+    const zTopCut = new UINumber(baseDimensions.zTopCut).onChange(updateDimensions);
     const zTopCutUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
     zTopCutRow.add(new UIText(strings.getKey('sidebar/geometry/aellipsoid_geometry/ztopcut')).setWidth('90px'), zTopCut, zTopCutUnitSelect);
     container.add(zTopCutRow);
 
-    // zBottomCut with unit select
-    const zBottomCutRow = new UIRow();
-    const zBottomCut = new UINumber(baseDimensions.zBottomCut).setRange(0,Infinity).onChange(updateDimensions);
-    const zBottomCutUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
-    zBottomCutRow.add(new UIText(strings.getKey('sidebar/geometry/aellipsoid_geometry/zbottomcut')).setWidth('90px'), zBottomCut, zBottomCutUnitSelect);
-    container.add(zBottomCutRow);
+
 
     // Function to update dimensions when the default unit changes
     function updateDefaultUnit() {
@@ -138,7 +140,7 @@ function GeometryParametersPanel(editor, object) {
         const zTopCutVal = baseDimensions.zTopCut;
         const zBottomCutVal = baseDimensions.zBottomCut;
 
-        editor.execute(new SetGeometryCommand(editor, object, new aEllipsoidGeometry(xSemiAxisVal, ySemiAxisVal, zSemiAxisVal, zTopCutVal, zBottomCutVal)));
+        editor.execute(new SetGeometryCommand(editor, object, new aEllipsoidGeometry(xSemiAxisVal, ySemiAxisVal, zSemiAxisVal, -zBottomCutVal, zTopCutVal )));
     }
 
     return container;

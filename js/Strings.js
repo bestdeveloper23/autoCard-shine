@@ -377,8 +377,8 @@ function Strings( config ) {
 			'sidebar/geometry/aellipsoid_geometry/xSemiAxis' : 'Semiaxis in X',
 			'sidebar/geometry/aellipsoid_geometry/ySemiAxis' : 'Semiaxis in Y',
 			'sidebar/geometry/aellipsoid_geometry/zSemiAxis' : 'Semiaxis in Z',
-			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'Bottom Cut',
-			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'Top Cut',
+			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'Top Cut',
+			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'Bottom Cut',
 
 			'sidebar/geometry/aellipticalcone_geometry/xSemiAxis' : 'Semiaxis in X',
 			'sidebar/geometry/aellipticalcone_geometry/ySemiAxis' : 'Semiaxis in Y',

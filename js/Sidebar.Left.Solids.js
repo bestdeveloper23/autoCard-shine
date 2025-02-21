@@ -369,8 +369,8 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, pzTopCut = 3, zBottomCut = 2;
-        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , pzTopCut , zBottomCut);
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 2, pzTopCut = 3 ;
+        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , zBottomCut, pzTopCut );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Ellipsoid';
 
@@ -383,8 +383,8 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, pzTopCut = 3, zBottomCut = 2;
-        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , pzTopCut , zBottomCut);
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 2, pzTopCut = 3 ;
+        const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , zBottomCut, pzTopCut );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Ellipsoid';
 
