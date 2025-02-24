@@ -361,7 +361,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Ellipsoid');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 

@@ -100,13 +100,24 @@ function GeometryParametersPanel(editor, object) {
 			baseDimensions.zTopCut = zTopCut.getValue() * unitMultiplier[zTopCutUnit];
 			baseDimensions.zBottomCut = zBottomCut.getValue() * unitMultiplier[zBottomCutUnit];
 
-			// Validate and adjust zTopCut and zBottomCut
-			const maxCutLimit = baseDimensions.zSemiAxis * 2 - 0.1;
-			if (baseDimensions.zTopCut + baseDimensions.zBottomCut >= maxCutLimit) {
-				baseDimensions.zTopCut = Math.min(baseDimensions.zTopCut, maxCutLimit - baseDimensions.zBottomCut, maxCutLimit);
-				baseDimensions.zBottomCut = Math.min(baseDimensions.zBottomCut, maxCutLimit - baseDimensions.zTopCut, maxCutLimit);
-			}
+            //Setting range to avoid error
+            baseDimensions.zTopCut = Math.min(Math.max(baseDimensions.zTopCut, -baseDimensions.zSemiAxis), baseDimensions.zSemiAxis);
+            baseDimensions.zBottomCut = Math.min(Math.max(baseDimensions.zBottomCut, -baseDimensions.zSemiAxis), baseDimensions.zSemiAxis);
 
+            // zTopCut change handler
+            zTopCut.onChange(() => {
+                baseDimensions.zTopCut = Math.max(zTopCut.getValue() * unitMultiplier[zTopCutUnitSelect.getValue()], baseDimensions.zBottomCut + 0.01);
+                zTopCut.setValue(baseDimensions.zTopCut / unitMultiplier[zTopCutUnitSelect.getValue()]);
+                update();
+            });
+
+            // zBottomCut change handler
+            zBottomCut.onChange(() => {
+                baseDimensions.zBottomCut = Math.min(zBottomCut.getValue() * unitMultiplier[zBottomCutUnitSelect.getValue()], baseDimensions.zTopCut - 0.01);
+                zBottomCut.setValue(baseDimensions.zBottomCut / unitMultiplier[zBottomCutUnitSelect.getValue()]);
+                update();
+            });
+        
 			// Update UI values after adjustment
 			zTopCut.setValue(baseDimensions.zTopCut / unitMultiplier[zTopCutUnit]);
 			zBottomCut.setValue(baseDimensions.zBottomCut / unitMultiplier[zBottomCutUnit]);
