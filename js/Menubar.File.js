@@ -236,7 +236,7 @@ function MenubarFile( editor ) {
 
 	// 			case "aTwistedBoxGeometry":
 
-	// 				solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
+	// 				solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTEDBOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
 					
 	// 				break;
 
@@ -513,7 +513,7 @@ function MenubarFile( editor ) {
 
 	// 			case "aTwistedBoxGeometry":
 
-	// 				txt += `\n:solid mytbox TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n\n`
+	// 				txt += `\n:solid mytbox TWISTEDBOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n\n`
 	// 				txt += `:volu mytbox mytbox ${object.material.newmaterial?.elementType}\n\n`
 	// 				txt += `:place mytbox 1 world r000 ${object.position.x.toFixed(6)/10}*cm ${object.position.y.toFixed(6)/10}*cm ${object.position.z.toFixed(6)/10}*cm\n`
 	// 				downloadGeant4File( txt, 'twistedbox.tg');
@@ -721,7 +721,7 @@ function MenubarFile( editor ) {
 
 				case "aTwistedBoxGeometry":
 
-					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTED_BOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTEDBOX ${object.geometry.parameters.twistedangle} ${object.geometry.parameters.width}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.depth}*cm\n`
 					
 					break;
 
@@ -919,8 +919,8 @@ function MenubarFile( editor ) {
 								break;
 			
 							case "aTwistedBoxGeometry":
-								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`									
-								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTED_BOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
+								rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`;
+								solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDBOX ${children.geometry.parameters.angle*Math.PI/180} ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
 								break;
 			
 							case "aTwistedTrdGeometry":

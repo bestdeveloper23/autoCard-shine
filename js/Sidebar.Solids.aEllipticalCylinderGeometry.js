@@ -40,7 +40,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	// xSemiAxis
 	const xSemiAxisRow = new UIRow();
-	const xSemiAxisI = new UINumber( baseDimensions.xSemiAxis *2).setRange(0, Infinity).onChange( updateDimensions );
+	const xSemiAxisI = new UINumber( baseDimensions.xSemiAxis *2).setRange(0.01, Infinity).onChange( updateDimensions );
 	const xSemiAxisUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
 	xSemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/xSemiAxis' ) ).setWidth( '90px' ) );
 	xSemiAxisRow.add( xSemiAxisI, xSemiAxisUnitSelect );
@@ -49,7 +49,7 @@ function GeometryParametersPanel( editor, object ) {
 
 	// ySemiAxis
 	const ySemiAxisRow = new UIRow();
-	const ySemiAxisI = new UINumber( baseDimensions.ySemiAxis *2).setRange(0, Infinity).onChange( updateDimensions );
+	const ySemiAxisI = new UINumber( baseDimensions.ySemiAxis *2).setRange(0.01, Infinity).onChange( updateDimensions );
 	const ySemiAxisUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
 	ySemiAxisRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/ySemiAxis' ) ).setWidth( '90px' ) );
 	ySemiAxisRow.add( ySemiAxisI, ySemiAxisUnitSelect );
@@ -59,7 +59,7 @@ function GeometryParametersPanel( editor, object ) {
 	// height
 
 	const dzRow = new UIRow();
-	const dzI = new UINumber( baseDimensions.height *2).setRange(0, Infinity).onChange( updateDimensions );
+	const dzI = new UINumber( baseDimensions.height *2).setRange(0.01, Infinity).onChange( updateDimensions );
 	const dzUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
 	dzRow.add( new UIText( strings.getKey( 'sidebar/geometry/aecylinder_geometry/dz' ) ).setWidth( '90px' ) );
 	dzRow.add( dzI, dzUnitSelect );

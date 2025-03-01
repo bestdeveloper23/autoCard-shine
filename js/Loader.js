@@ -1798,7 +1798,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_BOX":
+            case "TWISTEDBOX":
     
               {
                 const twistedangle = Number(wordArray[3]);
@@ -1818,7 +1818,7 @@ function Loader( editor ) {
                   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
   
-                const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+                const param = { 'angle': twistedangle, 'width': pDx, 'height': pDy, 'depth': pDz  };
                 geometry.parameters = param;
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.rotateX(Math.PI / 2);
@@ -3104,7 +3104,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_BOX":
+            case "TWISTEDBOX":
     
               {
                 const twistedangle = Number(wordArray[3]);
@@ -3124,7 +3124,7 @@ function Loader( editor ) {
                   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
   
-                const param = { 'width': pDx, 'height': pDy, 'depth': pDz, 'angle': twistedangle };
+                const param = { 'angle': twistedangle, 'width': pDx, 'height': pDy, 'depth': pDz };
                 geometry.parameters = param;
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.rotateX(Math.PI / 2);

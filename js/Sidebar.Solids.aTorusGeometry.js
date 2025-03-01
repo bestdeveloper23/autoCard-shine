@@ -38,19 +38,19 @@ function GeometryParametersPanel(editor, object) {
         placement: 'top', 
     });
     
-    // maxRadius
-    const maxRadiusRow = new UIRow();
-    const maxRadius = new UINumber(baseDimensions.maxRadius).setRange(0, Infinity).onChange(updateDimensions);
-    const maxRadiusUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
-    maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/maxradius')).setWidth('90px'), maxRadius, maxRadiusUnitSelect);
-    container.add(maxRadiusRow);
-
     // minRadius
     const minRadiusRow = new UIRow();
     const minRadius = new UINumber(baseDimensions.minRadius).setRange(0, Infinity).onChange(updateDimensions);
     const minRadiusUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
     minRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/minradius')).setWidth('90px'), minRadius, minRadiusUnitSelect);
     container.add(minRadiusRow);
+
+    // maxRadius
+    const maxRadiusRow = new UIRow();
+    const maxRadius = new UINumber(baseDimensions.maxRadius).setRange(0, Infinity).onChange(updateDimensions);
+    const maxRadiusUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atorus_geometry/maxradius')).setWidth('90px'), maxRadius, maxRadiusUnitSelect);
+    container.add(maxRadiusRow);
 
     // torRadius
     const torRadiusRow = new UIRow();

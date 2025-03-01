@@ -36,6 +36,13 @@ function GeometryParametersPanel(editor, object) {
         placement: 'top', 
     });
 
+    // radiusIn with unit select
+    const radiusInRow = new UIRow();
+    const radiusIn = new UINumber(baseDimensions.radiusIn).setRange(0, Infinity).onChange(updateDimensions);
+    const radiusInUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    radiusInRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/radiusIn')).setWidth('90px'), radiusIn, radiusInUnitSelect);
+    container.add(radiusInRow);
+    
     // radiusOut with unit select
     const radiusOutRow = new UIRow();
     const radiusOut = new UINumber(baseDimensions.radiusOut).setRange(0, Infinity).onChange(updateDimensions);
@@ -43,44 +50,29 @@ function GeometryParametersPanel(editor, object) {
     radiusOutRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/radiusOut')).setWidth('90px'), radiusOut, radiusOutUnitSelect);
     container.add(radiusOutRow);
 
-    // radiusIn with unit select
-    const radiusInRow = new UIRow();
-    const radiusIn = new UINumber(baseDimensions.radiusIn).setRange(0, Infinity).onChange(updateDimensions);
-    const radiusInUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
-    radiusInRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/radiusIn')).setWidth('90px'), radiusIn, radiusInUnitSelect);
-    container.add(radiusInRow);
-
 	// startPhi
-
     const startPhiRow = new UIRow();
     const startPhi = new UINumber(parameters.pSPhi).setStep(5).onChange(update);
 	startPhiRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/startPhi')).setWidth('90px'));
 	startPhiRow.add(startPhi);
     startPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
-
     container.add(startPhiRow);
 
 	// deltaPhi
-
     const deltaPhiRow = new UIRow();
     const deltaPhi = new UINumber(parameters.pDPhi).setRange(0, 360).onChange(update);
-	
 	deltaPhiRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/deltaPhi')).setWidth('90px'));
 	deltaPhiRow.add(deltaPhi);
     deltaPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
-
     container.add(deltaPhiRow);
 
 
 	// startTheta
-
     const startThetaRow = new UIRow();
     const startTheta = new UINumber(parameters.pSTheta).setRange(0, 180).onChange(update);
-	
 	startThetaRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/startTheta')).setWidth('90px'));
 	startThetaRow.add(startTheta);
     startThetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
-
     container.add(startThetaRow);
 
     //sync test 
@@ -88,7 +80,6 @@ function GeometryParametersPanel(editor, object) {
 
     const deltaThetaRow = new UIRow();
     const deltaTheta = new UINumber(parameters.pDTheta).setRange(0, 180).onChange(update);
-	
 	deltaThetaRow.add(new UIText(strings.getKey('sidebar/geometry/sphere_geometry/deltaTheta')).setWidth('90px'));
 	deltaThetaRow.add(deltaTheta);
     deltaThetaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));

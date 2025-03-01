@@ -42,7 +42,7 @@ import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
 // import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 // import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
 // import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
-// import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
+import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
 // import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 // import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
 // import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
@@ -369,7 +369,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 2, pzTopCut = 3 ;
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 6, pzTopCut = 10 ;
         const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , zBottomCut, pzTopCut );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Ellipsoid';
@@ -383,7 +383,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 2, pzTopCut = 3 ;
+        var xSemiAxis = 10, ySemiAxis = 8, zSemiAxis = 10, zBottomCut = 6, pzTopCut = 10 ;
         const geometry = new aEllipsoidGeometry(xSemiAxis , ySemiAxis , zSemiAxis , zBottomCut, pzTopCut );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Ellipsoid';
@@ -396,6 +396,51 @@ function BasicSolids(editor) {
 
     options.add(item);
 
+    // twisted box
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${twistedboxImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/twistedbox'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Box');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag to add it.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
+        const geometry = new aTwistedBoxGeometry(twistedangle, pDx, pDy, pDz);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = ' TwistedBox'
+
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
+        const geometry = new aTwistedBoxGeometry(twistedangle, pDx, pDy, pDz);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = ' TwistedBox'
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
 
     // EllipticalCone model
 
@@ -676,53 +721,6 @@ function BasicSolids(editor) {
 
     options.add(item);
 
-
-
-    // twisted box
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${twistedboxImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/twistedbox'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Box');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
-        const geometry = new aTwistedBoxGeometry(pDx, pDy, pDz, twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = ' TwistedBox '
-
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const twistedangle = 15, pDx = 10, pDy = 15, pDz = 10;
-        const geometry = new aTwistedBoxGeometry(pDx, pDy, pDz, twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = ' TwistedBox '
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
 
 
     // TwitsedTube model
