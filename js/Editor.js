@@ -96,6 +96,11 @@ function Editor() {
 		viewportShadingChanged: new Signal(),
 
 		intersectionsDetected: new Signal(),
+
+		userLoggedIn: new Signal(),
+		userLoggedOut: new Signal(),
+		projectTitleChanged: new Signal(),
+		projectCreated: new Signal()
 	
 	};
 

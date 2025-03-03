@@ -36,13 +36,15 @@ import { aConeGeometry } from './libs/geometry/Cone.js';
 import { aTorusGeometry } from './libs/geometry/Torus.js';
 import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinder.js';
 import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
+import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
+import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
+
 import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
-import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
+
 // import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 // import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
 // import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
-import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
 // import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 // import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
 // import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
@@ -442,6 +444,52 @@ function BasicSolids(editor) {
 
     options.add(item);
 
+    // TrapeZoid model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${trdImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'TrapeZoid');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag to add it.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
+        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Trapezoid'
+        
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
+        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Trapezoid'
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
     // EllipticalCone model
 
     item = new UIDiv();
@@ -535,52 +583,6 @@ function BasicSolids(editor) {
     });
 
     options.add(item);
-
-    // TrapeZoid model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${trdImg})`;
-    // item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/atrapezoid'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'TrapeZoid');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
-        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Trapezoid'
-        
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const dx1 = 15, dy1 = 15, dz = 10, dx2 = 5, dy2 = 5;
-        const geometry = new aTrapeZoidGeometry(dx1 , dy1 , dz , dx2 , dy2);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Trapezoid'
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
 
     // TrapeZoid-P(2) model
 

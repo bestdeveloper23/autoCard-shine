@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UIInteger, UISelect } from './libs/ui.js';
+import tippy from 'tippy.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
@@ -30,7 +31,17 @@ function GeometryParametersPanel(editor, object) {
   const defaultUnitRow = new UIRow();
   const defaultUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
   defaultUnitRow.add(new UIText('Default Unit').setWidth('90px'), defaultUnitSelect);
+  // container.add(defaultUnitRow);
+
+  // Grid space
+  const gridSpace = new UIText(strings.getKey('sidebar/geometry/grid_Space')).setClass('grid_Space');
+  defaultUnitRow.add(gridSpace);
   container.add(defaultUnitRow);
+      
+  tippy(gridSpace.dom, { 
+      content: 'The grid is 10x10, with each square and the space between lines measuring 1 cm.',
+      placement: 'top', 
+  });
 
   // width1 with unit select
   const widthRow1 = new UIRow();
@@ -39,19 +50,19 @@ function GeometryParametersPanel(editor, object) {
   widthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx1')).setWidth('90px'), width1, width1UnitSelect);
   container.add(widthRow1);
 
-  // depth1 with unit select
-  const depthRow1 = new UIRow();
-  const depth1 = new UINumber(baseDimensions.dy1).setRange(0.001, Infinity).onChange(updateDimensions);
-  const depth1UnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
-  depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy1')).setWidth('90px'), depth1, depth1UnitSelect);
-  container.add(depthRow1);
-
   // width2 with unit select
   const widthRow2 = new UIRow();
   const width2 = new UINumber(baseDimensions.dx2).setRange(0.001, Infinity).onChange(updateDimensions);
   const width2UnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
   widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dx2')).setWidth('90px'), width2, width2UnitSelect);
   container.add(widthRow2);
+
+  // depth1 with unit select
+  const depthRow1 = new UIRow();
+  const depth1 = new UINumber(baseDimensions.dy1).setRange(0.001, Infinity).onChange(updateDimensions);
+  const depth1UnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+  depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy1')).setWidth('90px'), depth1, depth1UnitSelect);
+  container.add(depthRow1);
 
   // depth2 with unit select
   const depthRow2 = new UIRow();

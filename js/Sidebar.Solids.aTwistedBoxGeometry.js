@@ -59,7 +59,7 @@ function GeometryParametersPanel( editor, object ) {
 
     // Twisted Angle
     const twistedangleRow = new UIRow();
-    const twistedangleI = new UINumber(parameters.angle).setRange(0, 89.99).onChange(updateGeometry);
+    const twistedangleI = new UINumber(parameters.angle).setRange(-89.99, 89.99).onChange(updateGeometry);
     twistedangleRow.add(new UIText(strings.getKey('sidebar/geometry/atwistedbox_geometry/angle')).setWidth('90px'));
     twistedangleRow.add(twistedangleI);
     twistedangleRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
