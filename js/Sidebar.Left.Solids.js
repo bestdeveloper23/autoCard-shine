@@ -41,11 +41,11 @@ import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
 
 import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
+import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
+import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 
-// import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 // import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
 // import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
-// import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 // import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
 // import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
 // import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
@@ -584,13 +584,60 @@ function BasicSolids(editor) {
 
     options.add(item);
 
+    // TwitsedTube model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${twistedtubImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'TwistedTube');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
     // TrapeZoid-P(2) model
 
     item = new UIDiv();
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${trapImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atrapezoid2'));
     item.dom.setAttribute('draggable', true);
@@ -714,55 +761,6 @@ function BasicSolids(editor) {
         const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTwistedTrapGeometry'
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-
-    // TwitsedTube model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${twistedtubImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'TwistedTube');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
-        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTubs';
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
-        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTubs';
 
         finalMesh.position.copy(position);
 
