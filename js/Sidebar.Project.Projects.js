@@ -1,10 +1,12 @@
-import { UIButton, UIPanel, UIRow, UIText, UINotification, UIModal, UIProgressModal, UITextArea } from './libs/ui.js';
+import { UIButton, UIPanel, UIRow, UIText, UINotification, UIModal, UIProgressModal, UITextArea, UIDiv } from './libs/ui.js';
 import { ProjectAPI } from './factory/ProjectAPIs.js';
+import { PatternEraser } from './factory/PatternEraser.js';
 import { Factory } from './factory/Factory.js'
 
 
 function SidebarProjects(editor) {
     const signals = editor.signals;
+    const strings = editor.strings;
     const container = new UIPanel();
     const projectsList = new UIPanel();
     const notification = new UINotification();
@@ -15,6 +17,22 @@ function SidebarProjects(editor) {
         }
     }
 
+    // Store project order
+    function saveProjectOrder() {
+        const userEmail = localStorage.getItem('userEmail');
+        const projects = Array.from(projectsList.dom.children).map(row =>
+            row.getAttribute('data-project')
+        );
+        localStorage.setItem(`projectOrder_${userEmail}`, JSON.stringify(projects));
+    }
+
+    // Load project order
+    function loadProjectOrder() {
+        const userEmail = localStorage.getItem('userEmail');
+        const order = JSON.parse(localStorage.getItem(`projectOrder_${userEmail}`) || '[]');
+        return order;
+    }
+
     async function loadUserProjects() {
         const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) return;
@@ -23,8 +41,16 @@ function SidebarProjects(editor) {
             clearProjectsList();
             const response = await ProjectAPI.getUserProjects(userEmail);
             const projects = response.projects || [];
+            const order = loadProjectOrder();
 
-            projects.forEach(project => {
+            // Sort projects based on saved order
+            const sortedProjects = projects.sort((a, b) => {
+                const indexA = order.indexOf(a['project-name']);
+                const indexB = order.indexOf(b['project-name']);
+                return indexA - indexB;
+            });
+
+            sortedProjects.forEach(project => {
                 if (project['project-name']) {
                     addProjectButton(project['project-name']);
                 }
@@ -37,9 +63,69 @@ function SidebarProjects(editor) {
     function addProjectButton(title) {
         const projectRow = new UIRow();
 
-        // Project Button
-        const projectButton = new UIButton(title);
-        projectButton.onClick(function () {
+        projectRow.dom.draggable = true;
+        projectRow.dom.setAttribute('data-project', title);
+
+        // Drag events
+        projectRow.dom.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', title);
+            e.target.style.opacity = '0.4';
+        });
+
+        projectRow.dom.addEventListener('dragend', (e) => {
+            e.target.style.opacity = '1';
+            saveProjectOrder();
+        });
+
+        projectRow.dom.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        projectRow.dom.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const draggedTitle = e.dataTransfer.getData('text/plain');
+            const draggedRow = projectsList.dom.querySelector(`[data-project="${draggedTitle}"]`);
+            const targetRow = e.currentTarget;
+
+            if (draggedRow && targetRow !== draggedRow) {
+                const rect = targetRow.getBoundingClientRect();
+                const mid = rect.top + rect.height / 2;
+                if (e.clientY < mid) {
+                    targetRow.parentNode.insertBefore(draggedRow, targetRow);
+                } else {
+                    targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
+                }
+            }
+        });
+
+        // Project Title
+        const projectTitle = new UIDiv();
+        projectTitle.dom.textContent = title;
+        projectTitle.dom.style.padding = '8px 12px';
+        projectTitle.dom.style.fontSize = '13px';
+        projectTitle.dom.style.fontFamily = 'Arial, sans-serif';
+        projectTitle.dom.style.borderRadius = '4px';
+        projectTitle.dom.style.flex = '1';
+        projectTitle.dom.style.overflow = 'hidden';
+        projectTitle.dom.style.textOverflow = 'ellipsis';
+        projectTitle.dom.style.whiteSpace = 'nowrap';
+
+        projectTitle.dom.addEventListener('mouseover', function () {
+            this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+        });
+
+        projectTitle.dom.addEventListener('mouseout', function () {
+            this.style.backgroundColor = 'transparent';
+        });
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            projectTitle.dom.style.color = '#aaa';
+            projectTitle.dom.addEventListener('mouseover', function () {
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            });
+        }
+
+        projectTitle.onClick(function () {
             console.log('Project selected:', title);
         });
 
@@ -151,8 +237,8 @@ function SidebarProjects(editor) {
                 simulateButtonModal.style.padding = '8px 16px';
 
                 simulateButtonModal.onclick = async () => {
+                    const progressModal = new UIProgressModal('Simulating...');
                     try {
-                        const progressModal = new UIProgressModal('Simulating...');
                         progressModal.show();
                         progressModal.setProgress(30);
 
@@ -170,11 +256,11 @@ function SidebarProjects(editor) {
                             progressModal.setProgress(60);
 
                             try {
-                                const wrlContent = await ProjectAPI.getFileContent(
+                                const wrlContent = PatternEraser.removeSolids(await ProjectAPI.getFileContent(
                                     userEmail,
                                     title,
                                     result.filename
-                                );
+                                ));
 
                                 progressModal.setProgress(100);
                                 await progressModal.hide();
@@ -223,6 +309,7 @@ function SidebarProjects(editor) {
                         }
                     } catch (error) {
                         notification.show('Failed to prepare simulation', 'error');
+                        await progressModal.hide();
                     }
                 };
 
@@ -266,10 +353,12 @@ function SidebarProjects(editor) {
             }
         });
 
-        projectRow.add(projectButton);
+        projectRow.add(projectTitle);
         projectRow.add(simulateButton);
         projectRow.add(deleteButton);
         projectsList.add(projectRow);
+
+        saveProjectOrder();
     }
 
 
@@ -287,7 +376,7 @@ function SidebarProjects(editor) {
     });
 
     const headerRow = new UIRow();
-    headerRow.add(new UIText('PROJECTS'));
+    headerRow.add(new UIText(strings.getKey('sidebar/project/projectlist')));
     container.add(headerRow);
     container.add(projectsList);
 

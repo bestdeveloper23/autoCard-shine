@@ -1,6 +1,6 @@
-import { UIButton, UIDiv , UIRow} from "./libs/ui.js";
+import { UIButton, UIDiv, UIRow } from "./libs/ui.js";
 
-function SidebarSceneTool( editor ) {
+function SidebarSceneTool(editor) {
 
     const signals = editor.signals;
     const strings = editor.strings;
@@ -8,31 +8,33 @@ function SidebarSceneTool( editor ) {
 
 
     const container = new UIDiv()
-    container.setPaddingTop( '20px' );
-    
+    container.setPaddingTop('20px');
+
     const toolRow = new UIRow().setId('Scene-tool');
 
     //for clearing world
-    const button = new UIButton(  strings.getKey('sidebar/scene/tool/clearworld') ).setId('Scene-tool-clrWorld');
-    button.onClick( function () {
+    const button = new UIButton(strings.getKey('sidebar/scene/tool/clearworld')).setId('Scene-tool-clrWorld');
+    button.onClick(function () {
 
         const worldObjects = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
+        const particles = scene.children?.filter(obj => obj.isScene === true).map(line => line.children?.filter(obj => obj.isGroup === true)).flat();
+        worldObjects.push(...particles);
 
         const confirmation = worldObjects.length > 0 && window.confirm("Are you sure you want to clear everything?");
 
-        if(confirmation){
-            for(let i = 0; i < worldObjects.length; i++){
-              editor.removeObject(worldObjects[i]);
+        if (confirmation) {
+            for (let i = 0; i < worldObjects.length; i++) {
+                editor.removeObject(worldObjects[i]);
             }
 
-           editor.deselect();
-           signals.sceneGraphChanged.dispatch();
+            editor.deselect();
+            signals.sceneGraphChanged.dispatch();
         }
 
 
-    } );
+    });
 
-    toolRow.add( button );
+    toolRow.add(button);
 
     container.add(toolRow)
 
@@ -42,4 +44,4 @@ function SidebarSceneTool( editor ) {
 
 
 
-export {SidebarSceneTool}
+export { SidebarSceneTool }

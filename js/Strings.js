@@ -1,6 +1,6 @@
-function Strings( config ) {
+function Strings(config) {
 
-	const language = config.getKey( 'language' );
+	const language = config.getKey('language');
 
 	const values = {
 
@@ -82,21 +82,21 @@ function Strings( config ) {
 			'menubar/add/ahyperboloid': 'Hyperboloid',
 			'menubar/add/polyhedra': 'Polyhedra',
 
-			'menubar/add/source/point' : 'Point',
-			'menubar/add/source/circle' : 'Circle',
-			'menubar/add/source/annulus' : 'Annulus',
-			'menubar/add/source/ellipse' : 'Ellipse',
-			'menubar/add/source/square' : 'Square',
-			'menubar/add/source/rectangle' : 'Rectangle',
-			'menubar/add/source/beam' : 'Beam',
-			'menubar/add/source/surfaceSphere' : 'Sphere',
-			'menubar/add/source/surfaceEllipsoid' : 'Ellipsoid',
-			'menubar/add/source/surfaceCylinder' : 'Cylinder',
-			'menubar/add/source/surfacePara' : 'Para',
-			'menubar/add/source/volumeSphere' : 'Sphere',
-			'menubar/add/source/volumeEllipsoid' : 'Ellipsoid',
-			'menubar/add/source/volumeCylinder' : 'Cylinder',
-			'menubar/add/source/volumePara' : 'Para',
+			'menubar/add/source/point': 'Point',
+			'menubar/add/source/circle': 'Circle',
+			'menubar/add/source/annulus': 'Annulus',
+			'menubar/add/source/ellipse': 'Ellipse',
+			'menubar/add/source/square': 'Square',
+			'menubar/add/source/rectangle': 'Rectangle',
+			'menubar/add/source/beam': 'Beam',
+			'menubar/add/source/surfaceSphere': 'Sphere',
+			'menubar/add/source/surfaceEllipsoid': 'Ellipsoid',
+			'menubar/add/source/surfaceCylinder': 'Cylinder',
+			'menubar/add/source/surfacePara': 'Para',
+			'menubar/add/source/volumeSphere': 'Sphere',
+			'menubar/add/source/volumeEllipsoid': 'Ellipsoid',
+			'menubar/add/source/volumeCylinder': 'Cylinder',
+			'menubar/add/source/volumePara': 'Para',
 
 			'menubar/status/autosave': 'autosave',
 			'menubar/status/login': 'Log in with Google',
@@ -209,8 +209,8 @@ function Strings( config ) {
 			'sidebar/geometry/show_vertex_normals': 'Show Vertex Normals',
 			'sidebar/geometry/compute_vertex_normals': 'Compute Vertex Normals',
 			'sidebar/geometry/center': 'Center',
-			'sidebar/geometry/default_unit' : 'Default Unit',
-			'sidebar/geometry/grid_Space' : 'Grid: 10x10 1cm',
+			'sidebar/geometry/default_unit': 'Default Unit',
+			'sidebar/geometry/grid_Space': 'Grid: 10x10 1cm',
 
 			'sidebar/geometry/box_geometry/width': 'Half X',
 			'sidebar/geometry/box_geometry/height': 'Half Y',
@@ -319,13 +319,13 @@ function Strings( config ) {
 			'sidebar/geometry/tube_geometry/curvetype': 'Curve Type',
 			'sidebar/geometry/tube_geometry/tension': 'Tension',
 
-			'sidebar/geometry/atube_geometry/maxradius' : 'Outer radius',
-			'sidebar/geometry/atube_geometry/minradius' : 'Inner radius',
-			'sidebar/geometry/atube_geometry/height' : 'Half length in Z',
-			'sidebar/geometry/atube_geometry/pSPhi' : 'Starting phi angle',
-			'sidebar/geometry/atube_geometry/pDPhi' : 'Angle of the segment',
-			'sidebar/geometry/atube_geometry/twistedangle' : 'Twist angle',
-			
+			'sidebar/geometry/atube_geometry/maxradius': 'Outer radius',
+			'sidebar/geometry/atube_geometry/minradius': 'Inner radius',
+			'sidebar/geometry/atube_geometry/height': 'Half length in Z',
+			'sidebar/geometry/atube_geometry/pSPhi': 'Starting phi angle',
+			'sidebar/geometry/atube_geometry/pDPhi': 'Angle of the segment',
+			'sidebar/geometry/atube_geometry/twistedangle': 'Twist angle',
+
 			'sidebar/geometry/atube_geometry/pHighNorm': 'Outside Normal at +Z',
 			'sidebar/geometry/atube_geometry/pLowNorm': 'Outside Normal at -Z',
 
@@ -364,46 +364,46 @@ function Strings( config ) {
 			'sidebar/geometry/atrapezoidp_geometry/phi': 'phi',
 			'sidebar/geometry/atrapezoidp_geometry/twistedangle': 'Twist angle',
 
-			'sidebar/geometry/atorus_geometry/maxradius' : 'Outer radius',
-			'sidebar/geometry/atorus_geometry/minradius' : 'Inner radius',
-			'sidebar/geometry/atorus_geometry/torusradius' : 'Swept radius of torus',
-			'sidebar/geometry/atorus_geometry/pSPhi' : 'Starting phi angle',
-			'sidebar/geometry/atorus_geometry/pDPhi' : 'Angle of the segment',
-			
-			'sidebar/geometry/aecylinder_geometry/xSemiAxis' : 'Semiaxis in X',
-			'sidebar/geometry/aecylinder_geometry/ySemiAxis' : 'semiaxis in Y',
-			'sidebar/geometry/aecylinder_geometry/dz' : 'Half length Z',
+			'sidebar/geometry/atorus_geometry/maxradius': 'Outer radius',
+			'sidebar/geometry/atorus_geometry/minradius': 'Inner radius',
+			'sidebar/geometry/atorus_geometry/torusradius': 'Swept radius of torus',
+			'sidebar/geometry/atorus_geometry/pSPhi': 'Starting phi angle',
+			'sidebar/geometry/atorus_geometry/pDPhi': 'Angle of the segment',
 
-			'sidebar/geometry/aellipsoid_geometry/xSemiAxis' : 'Semiaxis in X',
-			'sidebar/geometry/aellipsoid_geometry/ySemiAxis' : 'Semiaxis in Y',
-			'sidebar/geometry/aellipsoid_geometry/zSemiAxis' : 'Semiaxis in Z',
-			'sidebar/geometry/aellipsoid_geometry/ztopcut' : 'Top Cut',
-			'sidebar/geometry/aellipsoid_geometry/zbottomcut' : 'Bottom Cut',
+			'sidebar/geometry/aecylinder_geometry/xSemiAxis': 'Semiaxis in X',
+			'sidebar/geometry/aecylinder_geometry/ySemiAxis': 'semiaxis in Y',
+			'sidebar/geometry/aecylinder_geometry/dz': 'Half length Z',
 
-			'sidebar/geometry/aellipticalcone_geometry/xSemiAxis' : 'Semiaxis in X',
-			'sidebar/geometry/aellipticalcone_geometry/ySemiAxis' : 'Semiaxis in Y',
-			'sidebar/geometry/aellipticalcone_geometry/height' : 'Height',
-			'sidebar/geometry/aellipticalcone_geometry/topcut' : 'TopCut',
+			'sidebar/geometry/aellipsoid_geometry/xSemiAxis': 'Semiaxis in X',
+			'sidebar/geometry/aellipsoid_geometry/ySemiAxis': 'Semiaxis in Y',
+			'sidebar/geometry/aellipsoid_geometry/zSemiAxis': 'Semiaxis in Z',
+			'sidebar/geometry/aellipsoid_geometry/ztopcut': 'Top Cut',
+			'sidebar/geometry/aellipsoid_geometry/zbottomcut': 'Bottom Cut',
 
-			'sidebar/geometry/atwistedbox_geometry/width' : 'Half length X',
-			'sidebar/geometry/atwistedbox_geometry/height' : 'Half length Y',
-			'sidebar/geometry/atwistedbox_geometry/depth' : 'Half length Z',
-			'sidebar/geometry/atwistedbox_geometry/angle' : 'Twist angle',
+			'sidebar/geometry/aellipticalcone_geometry/xSemiAxis': 'Semiaxis in X',
+			'sidebar/geometry/aellipticalcone_geometry/ySemiAxis': 'Semiaxis in Y',
+			'sidebar/geometry/aellipticalcone_geometry/height': 'Height',
+			'sidebar/geometry/aellipticalcone_geometry/topcut': 'TopCut',
 
-			'sidebar/geometry/atetrahedra_geometry/anchor' : 'anchor',
-			'sidebar/geometry/atetrahedra_geometry/point2' : 'point2',
-			'sidebar/geometry/atetrahedra_geometry/point3' : 'point3',
-			'sidebar/geometry/atetrahedra_geometry/point4' : 'point4',
+			'sidebar/geometry/atwistedbox_geometry/width': 'Half length X',
+			'sidebar/geometry/atwistedbox_geometry/height': 'Half length Y',
+			'sidebar/geometry/atwistedbox_geometry/depth': 'Half length Z',
+			'sidebar/geometry/atwistedbox_geometry/angle': 'Twist angle',
 
-			'sidebar/geometry/agenerictrap_geometry/pdz' : 'pDz',
-			'sidebar/geometry/agenerictrap_geometry/point1' : 'point1',
-			'sidebar/geometry/agenerictrap_geometry/point2' : 'point2',
-			'sidebar/geometry/agenerictrap_geometry/point3' : 'point3',
-			'sidebar/geometry/agenerictrap_geometry/point4' : 'point4',
-			'sidebar/geometry/agenerictrap_geometry/point5' : 'point5',
-			'sidebar/geometry/agenerictrap_geometry/point6' : 'point6',
-			'sidebar/geometry/agenerictrap_geometry/point7' : 'point7',
-			'sidebar/geometry/agenerictrap_geometry/point8' : 'point8',
+			'sidebar/geometry/atetrahedra_geometry/anchor': 'anchor',
+			'sidebar/geometry/atetrahedra_geometry/point2': 'point2',
+			'sidebar/geometry/atetrahedra_geometry/point3': 'point3',
+			'sidebar/geometry/atetrahedra_geometry/point4': 'point4',
+
+			'sidebar/geometry/agenerictrap_geometry/pdz': 'pDz',
+			'sidebar/geometry/agenerictrap_geometry/point1': 'point1',
+			'sidebar/geometry/agenerictrap_geometry/point2': 'point2',
+			'sidebar/geometry/agenerictrap_geometry/point3': 'point3',
+			'sidebar/geometry/agenerictrap_geometry/point4': 'point4',
+			'sidebar/geometry/agenerictrap_geometry/point5': 'point5',
+			'sidebar/geometry/agenerictrap_geometry/point6': 'point6',
+			'sidebar/geometry/agenerictrap_geometry/point7': 'point7',
+			'sidebar/geometry/agenerictrap_geometry/point8': 'point8',
 
 			'sidebar/geometry/aparaboloid_geometry/r1': 'Radius at +dz',
 			'sidebar/geometry/aparaboloid_geometry/r2': 'Radius at -dz',
@@ -428,7 +428,7 @@ function Strings( config ) {
 			'sidebar/geometry/apolyhedra_geometry/sphi': 'Initial Phi starting angle',
 			'sidebar/geometry/apolyhedra_geometry/dphi': 'Total Phi angle',
 
-			
+
 			'sidebar/material/new': 'New',
 			'sidebar/material/copy': 'Copy',
 			'sidebar/material/paste': 'Paste',
@@ -521,6 +521,7 @@ function Strings( config ) {
 			'sidebar/project/toneMapping': 'Tone mapping',
 			'sidebar/project/materials': 'Materials',
 			'sidebar/project/Assign': 'Assign',
+			'sidebar/project/projectlist': 'PROJECT LIST',
 
 			'sidebar/project/video': 'Video',
 			'sidebar/project/resolution': 'Resolution',
@@ -540,7 +541,7 @@ function Strings( config ) {
 			'sidebar/settings/viewport': 'Viewport',
 			'sidebar/settings/viewport/grid': 'Grid',
 			'sidebar/settings/viewport/helpers': 'Helpers',
-			'sidebar/settings/viewport/defaultLights' : 'DefaultLights',
+			'sidebar/settings/viewport/defaultLights': 'DefaultLights',
 
 			'sidebar/history': 'History',
 			'sidebar/history/persistent': 'persistent',
@@ -802,7 +803,7 @@ function Strings( config ) {
 			'sidebar/geometry/tube_geometry/closed': 'Fermé',
 			'sidebar/geometry/tube_geometry/curvetype': 'Type de courbe',
 			'sidebar/geometry/tube_geometry/tension': 'Tension',
-			
+
 
 			'sidebar/material/new': 'Nouveau',
 			'sidebar/material/copy': 'Copier',
@@ -1277,9 +1278,9 @@ function Strings( config ) {
 
 	return {
 
-		getKey: function ( key ) {
+		getKey: function (key) {
 
-			return values[ language ][ key ] || '???';
+			return values[language][key] || '???';
 
 		}
 

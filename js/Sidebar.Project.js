@@ -1,4 +1,4 @@
-import { UIPanel, UIRow, UIInput, UICheckbox, UIText, UISpan, UINotification } from './libs/ui.js';
+import { UIPanel, UIRow, UIInput, UICheckbox, UIText, UISpan, UINotification, UIButton } from './libs/ui.js';
 
 /* import { SidebarProjectMaterials } from './Sidebar.Project.Materials.js'; */
 import { SidebarProjectRenderer } from './Sidebar.Project.Renderer.js';
@@ -68,38 +68,65 @@ function SidebarProject(editor) {
 
 		});
 
+	// Add button
+	const addButton = new UIButton('+');
+	addButton.dom.style.width = '24px';
+	addButton.dom.style.height = '24px';
+	addButton.dom.style.borderRadius = '50%';
+	addButton.dom.style.marginLeft = '8px';
+	addButton.dom.style.padding = '0';
+	addButton.dom.style.display = 'flex';
+	addButton.dom.style.alignItems = 'center';
+	addButton.dom.style.justifyContent = 'center';
+	addButton.dom.style.fontSize = '18px';
+	addButton.dom.style.fontWeight = 'bold';
+	addButton.dom.style.cursor = 'pointer';
+	addButton.dom.style.transition = 'all 0.2s';
+
+
+	addButton.onClick(async function () {
+		const userEmail = localStorage.getItem('userEmail');
+		const newTitle = title.getValue();
+
+		if (newTitle && userEmail) {
+			await createNewProject(userEmail, newTitle);
+			title.setValue('');
+		}
+	});
+
 	titleRow.add(new UIText(strings.getKey('sidebar/project/title')).setWidth('90px'));
 	titleRow.add(title);
+	titleRow.add(addButton);
 
 	settings.add(titleRow);
 
 	// Editable
 
-	const editableRow = new UIRow();
-	const editable = new UICheckbox(config.getKey('project/editable')).setLeft('100px').onChange(function () {
+	// const editableRow = new UIRow();
+	// const editable = new UICheckbox(config.getKey('project/editable')).setLeft('100px').onChange(function () {
 
-		config.setKey('project/editable', this.getValue());
+	// 	config.setKey('project/editable', this.getValue());
 
-	});
+	// });
 
-	editableRow.add(new UIText(strings.getKey('sidebar/project/editable')).setWidth('90px'));
-	editableRow.add(editable);
+	// editableRow.add(new UIText(strings.getKey('sidebar/project/editable')).setWidth('90px'));
+	// editableRow.add(editable);
 
-	settings.add(editableRow);
+	// settings.add(editableRow);
 
-	// WebVR
+	// // WebVR
 
-	const vrRow = new UIRow();
-	const vr = new UICheckbox(config.getKey('project/vr')).setLeft('100px').onChange(function () {
+	// const vrRow = new UIRow();
+	// const vr = new UICheckbox(config.getKey('project/vr')).setLeft('100px').onChange(function () {
 
-		config.setKey('project/vr', this.getValue());
+	// 	config.setKey('project/vr', this.getValue());
 
-	});
+	// });
 
-	vrRow.add(new UIText(strings.getKey('sidebar/project/vr')).setWidth('90px'));
-	vrRow.add(vr);
+	// vrRow.add(new UIText(strings.getKey('sidebar/project/vr')).setWidth('90px'));
+	// vrRow.add(vr);
 
-	settings.add(vrRow);
+	// settings.add(vrRow);
 
 	//
 

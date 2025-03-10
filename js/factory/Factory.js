@@ -576,14 +576,15 @@ class Factory {
 			macro += `# print macro commands on screen\n`;
 			macro += `/control/verbose 1\n`;
 			macro += `# uncomment the following line if you use https://github.com/jintonic/gears\n`;
-			macro += `#/geometry/source detector.tg\n\n`;
+			macro += `/geometry/source detector.tg\n\n`;
 
 			macro += `# initialize geometry and physics\n`;
 			macro += `/run/initialize\n\n`;
 
 			macro += `# change particle and its energy here\n`;
 			macro += `/gps/particle gamma\n`;
-			macro += `/gps/energy 2.6 MeV\n\n`;
+			macro += `/gps/energy 2.6 MeV\n`;
+			macro += `/gps/ang/type iso\n\n`;
 
 			macro += `# visualize geometry and events for debugging\n`;
 			macro += `/vis/open\n`;

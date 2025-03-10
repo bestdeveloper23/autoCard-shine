@@ -92,9 +92,13 @@ function SidebarScene(editor) {
       html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
         "World"
       )}`;
-    } else if (object.name === 'Light'){
+    } else if (object.name === 'Light') {
       html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
         object.name //Light
+      )}`;
+    } else if (object.name === 'Particles') {
+      html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
+        object.name
       )}`;
     } else {
       html = `<span class="type ${getObjectType(object)}"></span> ${escapeHTML(
@@ -232,17 +236,20 @@ function SidebarScene(editor) {
     const scene = editor.scene;
     const lights = scene.children?.filter(obj => obj.isLight === true);
     const mesh = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
+    const particles = scene.children?.filter(obj => obj.isScene === true).map(line => line.children?.filter(obj => obj.isGroup === true)).flat();
     const cameras = Object.values(editor.cameras).filter(camera => !camera.name.startsWith('default'));
 
     const options = [];
 
-  
+
     options.push(buildOption(scene, false));
     addObjects(mesh, 0);
-    options.push(buildOption({name: 'Light'}, false));
+    options.push(buildOption({ name: 'Light' }, false));
     addObjects(lights, 0);
-    options.push(buildOption({name: 'Camera'}, false));
+    options.push(buildOption({ name: 'Camera' }, false));
     addObjects(cameras, 0);
+    options.push(buildOption({ name: "Particles" }, false));
+    addObjects(particles || [], 0);
 
     function addObjects(objects, pad) {
       for (let i = 0, l = objects.length; i < l; i++) {
