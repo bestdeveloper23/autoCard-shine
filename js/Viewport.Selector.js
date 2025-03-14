@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh';
 class Selector {
 
-	constructor( editor ) {
+	constructor(editor) {
 
 		const signals = editor.signals;
 
@@ -22,107 +22,107 @@ class Selector {
 
 		// signals
 
-		signals.intersectionsDetected.add( ( intersects ) => {
+		signals.intersectionsDetected.add((intersects) => {
 
-			if ( intersects.length > 0 ) {
+			if (intersects.length > 0) {
 
-				const object = intersects[ 0 ].object;
+				const object = intersects[0].object;
 
-				if ( object.userData.object !== undefined ) {
+				if (object.userData.object !== undefined) {
 
 					// helper
 
-					this.select( object.userData.object );
+					this.select(object.userData.object);
 
-				} else if ( object.parent.name === 'RadiationSource') {
-					this.select( object.parent );
+				} else if (object.parent.name === 'RadiationSource') {
+					this.select(object.parent);
 				} else {
 
-					this.select( object );
+					this.select(object);
 
 				}
 
 			} else {
 
-				this.select( null );
+				this.select(null);
 
 			}
 
-		} );
+		});
 
 	}
 
-	select( object ) {
+	select(object) {
 
-		if ( this.editor.selected === object ) return;
+		if (this.editor.selected === object) return;
 
 		let uuid = null;
 
-		if ( object !== null ) {
+		if (object !== null) {
 
 			uuid = object.uuid;
 
 		}
 		let originalObject = this.editor.selected;
 		this.editor.selected = object;
-		this.editor.config.setKey( 'selected', uuid );
+		this.editor.config.setKey('selected', uuid);
 
-		this.signals.objectSelected.dispatch( object );
+		this.signals.objectSelected.dispatch(object);
 
-			if(this.booleanEventAvailability){
-				if(this.editor.booleanEvent !== 'measure'){
-				
-					const MeshCSG1 = CSG.fromMesh(originalObject)
-					const MeshCSG2 = CSG.fromMesh(object)
-					let aCSG;
-					switch (this.editor.booleanEvent) {
-						case 'merge' : aCSG = MeshCSG1.union(MeshCSG2); break;
-						case 'subtract' : aCSG = MeshCSG1.subtract(MeshCSG2); break;
-						case 'exclude' : aCSG = MeshCSG1.intersect(MeshCSG2); break;
-					}
-	
-					const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4())
-	
-					// add childrens for boolean operation handling
-					if(!finalMesh.childrenObject) finalMesh.childrenObject = [];
-					finalMesh.childrenObject.push(originalObject, object);
-	
-					// remove old objects from scene
-					this.editor.removeObject(originalObject)
-					this.editor.removeObject(object);
-					
-					switch (this.editor.booleanEvent) {
-						case 'merge' : {
-							finalMesh.name = "united_object"; 
-							finalMesh.geometry.type = "unitedGeometry";
-							break;
-						}
-						case 'subtract' : {
-							finalMesh.name = "subtracted_object"; 
-							finalMesh.geometry.type = "subtractedGeometry";
-							break;
-						}
-						case 'exclude' : {
-							finalMesh.name = "intersected_object"; 
-							finalMesh.geometry.type = "intersectedGeometry";
-							break;
-						}
-					}
-					this.editor.addObject(finalMesh);
-					
-					this.booleanEventAvailability = false;
-					this.signals.booleanEventChanged.dispatch();
-					this.editor.booleanEvent = null;
-					this.originalObject = object;	
+		if (this.booleanEventAvailability) {
+			if (this.editor.booleanEvent !== 'measure') {
+
+				const MeshCSG1 = CSG.fromMesh(originalObject)
+				const MeshCSG2 = CSG.fromMesh(object)
+				let aCSG;
+				switch (this.editor.booleanEvent) {
+					case 'merge': aCSG = MeshCSG1.union(MeshCSG2); break;
+					case 'subtract': aCSG = MeshCSG1.subtract(MeshCSG2); break;
+					case 'exclude': aCSG = MeshCSG1.intersect(MeshCSG2); break;
 				}
-				
+
+				const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4())
+
+				// add childrens for boolean operation handling
+				if (!finalMesh.childrenObject) finalMesh.childrenObject = [];
+				finalMesh.childrenObject.push(originalObject, object);
+
+				// remove old objects from scene
+				this.editor.removeObject(originalObject)
+				this.editor.removeObject(object);
+
+				switch (this.editor.booleanEvent) {
+					case 'merge': {
+						finalMesh.name = "united_object";
+						finalMesh.geometry.type = "unitedGeometry";
+						break;
+					}
+					case 'subtract': {
+						finalMesh.name = "subtracted_object";
+						finalMesh.geometry.type = "subtractedGeometry";
+						break;
+					}
+					case 'exclude': {
+						finalMesh.name = "intersected_object";
+						finalMesh.geometry.type = "intersectedGeometry";
+						break;
+					}
+				}
+				this.editor.addObject(finalMesh);
+
+				this.booleanEventAvailability = false;
+				this.signals.booleanEventChanged.dispatch();
+				this.editor.booleanEvent = null;
+				this.originalObject = object;
 			}
-			
+
+		}
+
 	}
 
 	deselect() {
 
-		this.select( null );
+		this.select(null);
 
 	}
 

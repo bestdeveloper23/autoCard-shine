@@ -23,9 +23,10 @@ function SidebarScene(editor) {
 
   const nodeStates = new WeakMap();
 
-  function buildOption(object, draggable) {
+  function buildOption(object, draggable, pointerEvents = "auto") {
     const option = document.createElement("div");
     option.draggable = draggable;
+    option.style.pointerEvents = pointerEvents;
     option.innerHTML = buildHTML(object);
     option.value = object.id;
 
@@ -244,12 +245,12 @@ function SidebarScene(editor) {
 
     options.push(buildOption(scene, false));
     addObjects(mesh, 0);
-    options.push(buildOption({ name: 'Light' }, false));
+    options.push(buildOption({ name: 'Light' }, false, 'none'));
     addObjects(lights, 0);
-    options.push(buildOption({ name: 'Camera' }, false));
+    options.push(buildOption({ name: 'Camera' }, false, 'none'));
     addObjects(cameras, 0);
-    options.push(buildOption({ name: "Particles" }, false));
-    addObjects(particles || [], 0);
+    options.push(buildOption({ name: "Particles" }, false, 'none'));
+    addObjects(particles, 0);
 
     function addObjects(objects, pad) {
       for (let i = 0, l = objects.length; i < l; i++) {
