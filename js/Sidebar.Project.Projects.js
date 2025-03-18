@@ -40,7 +40,12 @@ function SidebarProjects(editor) {
         try {
             clearProjectsList();
             const response = await ProjectAPI.getUserProjects(userEmail);
-            const projects = response.projects || [];
+
+            if (!response.projects) {
+                throw new Error('Invalid server response');
+            }
+
+            const projects = response.projects;
             const order = loadProjectOrder();
 
             // Sort projects based on saved order
@@ -56,7 +61,7 @@ function SidebarProjects(editor) {
                 }
             });
         } catch (error) {
-            console.error('Failed to load projects:', error);
+            notification.show(error.message || 'Failed to load projects', 'error');
         }
     }
 
@@ -137,10 +142,16 @@ function SidebarProjects(editor) {
 
         simulateButton.onClick(async function () {
             const userEmail = localStorage.getItem('userEmail');
+            const progressModal = new UIProgressModal('Simulating...');
 
             try {
                 // Get project files from server
                 const files = await ProjectAPI.getProjectFiles(userEmail, title);
+
+                if (!files.tgFile || !files.macFile) {
+                    throw new Error('Invalid file content received');
+                }
+
                 const tgContent = files.tgFile;
                 const macContent = files.macFile;
 
@@ -252,6 +263,10 @@ function SidebarProjects(editor) {
                             mac_blob
                         );
 
+                        if (result.Status !== 'Success') {
+                            throw new Error(result.message || 'Simulation failed');
+                        }
+
                         if (result.Status === 'Success') {
                             progressModal.setProgress(60);
 
@@ -304,11 +319,11 @@ function SidebarProjects(editor) {
 
                             } catch (fileError) {
                                 await progressModal.hide();
-                                notification.show('Failed to get simulation results', 'error');
+                                notification.show(error.message || 'Failed to get simulation results', 'error');
                             }
                         }
                     } catch (error) {
-                        notification.show('Failed to prepare simulation', 'error');
+                        notification.show(error.message || 'Failed to prepare simulation', 'error');
                         await progressModal.hide();
                     }
                 };

@@ -61,7 +61,10 @@ function SidebarProject(editor) {
 			// Get current user email
 			const userEmail = localStorage.getItem('userEmail');
 
-			if (userEmail) {
+			if (!userEmail) {
+				alert('Please log in or sign up to create projects.');
+				this.setValue('');
+			} else {
 				createNewProject(userEmail, newTitle);
 				signals.projectTitleChanged.dispatch(newTitle);
 			}

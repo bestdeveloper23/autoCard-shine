@@ -18,13 +18,12 @@ export const ProjectAPI = {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create project');
+                throw new Error(response.message || 'Failed to create project');
             }
 
             return await response.json();
         } catch (error) {
-            console.error('Error creating project:', error);
-            throw error;
+            throw error.message || 'Network error occurred';
         }
     },
 
@@ -46,8 +45,7 @@ export const ProjectAPI = {
             return await response.json();
 
         } catch (error) {
-            console.error('failed to delete', err)
-            throw error;
+            throw error.message;
         }
 
     },
@@ -64,7 +62,7 @@ export const ProjectAPI = {
             })
 
             if (!response.ok) {
-                throw new Error('Failed to get the files')
+                throw new Error(response.message || 'Failed to get the files')
             }
 
             const result = await response.json();
@@ -72,7 +70,7 @@ export const ProjectAPI = {
 
         } catch (error) {
 
-            throw error
+            throw error.message
         }
 
     },
@@ -89,7 +87,7 @@ export const ProjectAPI = {
             })
 
             if (!response.ok) {
-                throw new Error('failed to fetech file content')
+                throw new Error(response.message || 'failed to fetech file content')
             }
 
             const data = await response.text();
@@ -150,8 +148,7 @@ export const ProjectAPI = {
             return result;
 
         } catch (error) {
-            console.error('Failed to simulate', error);
-            throw error;
+            throw error.message;
         }
     },
 
@@ -174,8 +171,7 @@ export const ProjectAPI = {
 
             return await response.text();
         } catch (error) {
-            console.error('Error fetching file content:', error);
-            throw error;
+            throw error.message;
         }
     },
 
@@ -203,7 +199,7 @@ export const ProjectAPI = {
             return 'File successfully updated';
 
         } catch (error) {
-            throw error;
+            throw error.message;
         }
 
     },
@@ -218,13 +214,12 @@ export const ProjectAPI = {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to fetch projects');
+                throw new Error(response.message || 'Failed to fetch projects');
             }
 
             return await response.json();
         } catch (error) {
-            console.error('Error fetching projects:', error);
-            throw error;
+            throw error.message;
         }
     }
 };
