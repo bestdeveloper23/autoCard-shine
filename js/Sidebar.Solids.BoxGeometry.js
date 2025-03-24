@@ -51,7 +51,7 @@ function GeometryParametersPanel( editor, object ) {
     // Width Row
     const widthRow = new UIRow();
     const width = new UINumber(baseDimensions.width).setRange(0.01,Infinity).onChange(updateDimensions);
-    const widthUnitSelect = new UISelect().setOptions( unitOptions ).setValue('mm').onChange( handleUnitChange );
+    const widthUnitSelect = new UISelect().setOptions( unitOptions ).setValue('cm').onChange( handleUnitChange );
 
 	widthRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/width' ) ).setWidth( '90px' ) );
 	widthRow.add( width );
@@ -61,7 +61,7 @@ function GeometryParametersPanel( editor, object ) {
     // Height Row
     const heightRow = new UIRow();
     const height = new UINumber(baseDimensions.height).setRange(0.01,Infinity).onChange(updateDimensions);
-    const heightUnitSelect = new UISelect().setOptions(unitOptions).setValue('mm').onChange(handleUnitChange);
+    const heightUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
 
 	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/height' ) ).setWidth( '90px' ) );
 	heightRow.add( height );
@@ -71,7 +71,7 @@ function GeometryParametersPanel( editor, object ) {
     // Depth Row
     const depthRow = new UIRow();
     const depth = new UINumber(baseDimensions.depth).setRange(0.01,Infinity).onChange(updateDimensions);
-    const depthUnitSelect = new UISelect().setOptions(unitOptions).setValue('mm').onChange(handleUnitChange);
+    const depthUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
 
 	depthRow.add( new UIText( strings.getKey( 'sidebar/geometry/box_geometry/depth' ) ).setWidth( '90px' ) );
 	depthRow.add( depth );
@@ -135,9 +135,6 @@ function GeometryParametersPanel( editor, object ) {
         const width = baseDimensions.width;
         const height = baseDimensions.height;
         const depth = baseDimensions.depth;
-        const widthSegments = baseDimensions.width;
-        const heightSegments = baseDimensions.height;
-        const depthSegments = baseDimensions.depth;
 
         // Execute the geometry update command
         editor.execute( new SetGeometryCommand( editor, object, new BoxGeometry(width, height, depth)));

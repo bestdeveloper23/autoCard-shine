@@ -1763,7 +1763,7 @@ function Loader( editor ) {
               
               break;
     
-            case "ELLIPTICAL_CONE":
+            case "ELLIPTICALCONE":
     
               {
                 const xSemiAxis = Number(wordArray[3]);
@@ -1834,7 +1834,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TRD":
+            case "TWISTEDTRD":
     
               {
                 const dx1 = Number(wordArray[3]);
@@ -1917,7 +1917,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TRAP":
+            case "TWISTEDTRAP":
               
               {
                 const twistedangle = Number(wordArray[3]);
@@ -2004,7 +2004,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TUBS":
+            case "TWISTEDTUBS":
     
               {
                 const twistedangle = Number(wordArray[3])
@@ -3067,7 +3067,7 @@ function Loader( editor ) {
               
               break;
     
-            case "ELLIPTICAL_CONE":
+            case "ELLIPTICALCONE":
     
               {
                 const xSemiAxis = Number(wordArray[3]);
@@ -3141,7 +3141,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TRD":
+            case "TWISTEDTRD":
     
               {
                 const dx1 = Number(wordArray[3]);
@@ -3226,7 +3226,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TRAP":
+            case "TWISTEDTRAP":
               
               {
                 const twistedangle = Number(wordArray[3]);
@@ -3315,7 +3315,7 @@ function Loader( editor ) {
               
               break;
     
-            case "TWISTED_TUBS":
+            case "TWISTEDTUBS":
     
               {
                 const twistedangle = Number(wordArray[3])

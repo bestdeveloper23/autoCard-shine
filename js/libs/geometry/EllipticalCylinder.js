@@ -7,10 +7,10 @@ class aEllipticalCylinderGeometry extends THREE.BufferGeometry{
 
         const xSemiAxis = XSemiAxis;
         const semiAxisY = YSemiAxis;
-        const Dz = dz;
+        const Dz = dz*10;
         
         const ratioZ = semiAxisY / xSemiAxis;
-        const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz * 2, 32, 1, false, 0, Math.PI * 2);
+        const cylindergeometry = new THREE.CylinderGeometry(xSemiAxis*10, xSemiAxis*10, Dz * 2);
         const cylindermesh = new THREE.Mesh(cylindergeometry, new THREE.MeshLambertMaterial());
             
         cylindermesh.scale.z = ratioZ;

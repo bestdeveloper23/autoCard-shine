@@ -78,6 +78,8 @@ function Editor() {
 		materialChanged: new Signal(),
 		materialRemoved: new Signal(),
 
+		worldCleared: new Signal(),
+
 		scriptAdded: new Signal(),
 		scriptChanged: new Signal(),
 		scriptRemoved: new Signal(),
@@ -654,7 +656,7 @@ Editor.prototype = {
 
 	},
 
-	clear: function () {
+	clear: function (confirmation) {
 
 		// this.history.clear();
 		// this.storage.clear();
@@ -706,16 +708,12 @@ Editor.prototype = {
 		this.scene.environment = null;
 		this.scene.fog = null;
 
-		var objects = this.scene.children;
+		// var objects = this.scene.children;
 
 		this.signals.sceneGraphChanged.active = false;
 
-		while (objects.length > 0) {
 
-			this.removeObject(objects[0]);
-
-		}
-
+		this.signals.worldCleared.dispatch(confirmation);
 		this.signals.sceneGraphChanged.active = true;
 
 		this.geometries = {};

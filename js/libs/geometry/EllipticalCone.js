@@ -21,18 +21,10 @@ class aEllipticalConeGeometry extends THREE.BufferGeometry{
 
         cylindermesh.scale.z = ratioZ;
         cylindermesh.updateMatrix();
-        let aCSG = CSG.fromMesh(cylindermesh);
-        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4(), new THREE.MeshLambertMaterial());
+        let FinalCSG = CSG.fromMesh(cylindermesh);
 
-
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-        aCSG = CSG.fromMesh(finalMesh);
-        finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4(), new THREE.MeshLambertMaterial());
-        const FinalCSG = CSG.fromMesh(finalMesh);
-
-        
         const finalGeometry = CSG.toGeometry(FinalCSG);
+        finalGeometry.rotateX(Math.PI / 2);
         finalGeometry.type = 'aEllipticalConeGeometry';
         finalGeometry.parameters = { 'xSemiAxis': SemiAxisX, 'ySemiAxis': SemiAxisY, 'zTopCut': TopCutZ , 'height': Height }
 

@@ -371,7 +371,7 @@ function Strings(config) {
 			'sidebar/geometry/atorus_geometry/pDPhi': 'Angle of the segment',
 
 			'sidebar/geometry/aecylinder_geometry/xSemiAxis': 'Semiaxis in X',
-			'sidebar/geometry/aecylinder_geometry/ySemiAxis': 'semiaxis in Y',
+			'sidebar/geometry/aecylinder_geometry/ySemiAxis': 'Semiaxis in Y',
 			'sidebar/geometry/aecylinder_geometry/dz': 'Half length Z',
 
 			'sidebar/geometry/aellipsoid_geometry/xSemiAxis': 'Semiaxis in X',

@@ -44,14 +44,14 @@ import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
 
-// import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
-// import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
-// import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
-// import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
-// import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
-// import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
-// import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
-// import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
+import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
+import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
+import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
+import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
+import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
+import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
+import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
+import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
 
 
 function BasicSolids(editor) {
@@ -323,7 +323,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;            
+        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;            
         const geometry = new aEllipticalCylinderGeometry( xSemiAxis , semiAxisY , Dz );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'EllipticalCylinder';
@@ -336,7 +336,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);       
 
-        var xSemiAxis = 50, semiAxisY = 100, Dz = 100;
+        var xSemiAxis = 5, semiAxisY = 10, Dz = 10;            
         const geometry = new aEllipticalCylinderGeometry( xSemiAxis , semiAxisY , Dz );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'EllipticalCylinder';
@@ -490,6 +490,53 @@ function BasicSolids(editor) {
     options.add(item);
 
 
+    // Twisted Trapezoid3
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${twistedtrdImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/atwistedtrd'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'TrapeZoid3');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag to add it.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = 30;
+        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTrapeZoid'
+
+               
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = 30;
+        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTrapeZoid'
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
     // EllipticalCone model
 
     item = new UIDiv();
@@ -503,7 +550,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'aEllipticalCone');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag to add it.',
         placement: 'top',     
     });
 
@@ -511,7 +558,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var xSemiAxis = 10, ySemiAxis = 8, zTopCut = 3, height = 5;
+        var xSemiAxis = 10, ySemiAxis = 8, zTopCut = 4, height = 5;
         const geometry = new aEllipticalConeGeometry(xSemiAxis , ySemiAxis , zTopCut , height);
         const finalMesh = new THREE.Mesh(geometry , new THREE.MeshLambertMaterial());
         finalMesh.name = 'EllipticalCone';
@@ -524,7 +571,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 3, height = 5;
+        var xSemiAxis = 2, ySemiAxis = 1.5, zTopCut = 4, height = 5;
         const geometry = new aEllipticalConeGeometry(xSemiAxis , ySemiAxis , zTopCut , height);
         const finalMesh = new THREE.Mesh(geometry , new THREE.MeshLambertMaterial());
         finalMesh.name = 'EllipticalCone';
@@ -537,6 +584,109 @@ function BasicSolids(editor) {
 
     options.add(item);
 
+
+    // Tetrahedra model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${tetImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Tetrahedra');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag to add it.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const anchor = [0, 5, 0];
+        const p2 = [0, -5, 10];
+        const p3 = [-8, -5, -5];
+        const p4 = [8, -5, -5];
+        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tetrahedra';
+
+        
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const anchor = [0, 5 * Math.sqrt(3), 0];
+        const p2 = [0, -5 / Math.sqrt(3), 10 * Math.sqrt(2 / 3)];
+        const p3 = [-5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const p4 = [5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
+        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Tetrahedra';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // GenericTrap model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${generictrapImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/generictrap'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'GenericTrap');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const pDz = 10;
+        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
+        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
+
+        
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const pDz = 10;
+        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
+        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
+        
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
 
     // Parallelepiped model
 
@@ -557,7 +707,7 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const dx = 10, dy = 10, dz = 10, alpha = -10, theta = 10, phi = -10;
+        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
         const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Parallelepiped';
@@ -571,7 +721,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const dx = 10, dy = 10, dz = 10, alpha = -10, theta = 10, phi = -10;
+        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
         const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Parallelepiped';
@@ -605,7 +755,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 90;
         const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'TwistedTubs';
@@ -677,53 +827,6 @@ function BasicSolids(editor) {
 
     options.add(item);
 
-    // Twisted Trapezoid3
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${twistedtrdImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/atwistedtrd'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'TrapeZoid3');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = - 30;
-        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTrapeZoid'
-
-               
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const dx1 = 2.5, dy1 = 2.5, dz = 10, dx2 = 3, dy2 = 3, twistedangle = - 30;
-        const geometry = new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTrapeZoid'
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
 
     // TwistedTrap model (TwistedTrap4)
 
@@ -731,7 +834,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${twistedtrapImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
     item.dom.setAttribute('draggable', true);
@@ -771,114 +874,13 @@ function BasicSolids(editor) {
     options.add(item);
 
 
-    // Tetrahedra model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${tetImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/tetrahedra'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Tetrahedra');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const anchor = [0, 5 * Math.sqrt(3), 0];
-        const p2 = [0, -5 / Math.sqrt(3), 10 * Math.sqrt(2 / 3)];
-        const p3 = [-5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
-        const p4 = [5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
-        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Tetrahedra';
-
-        
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const anchor = [0, 5 * Math.sqrt(3), 0];
-        const p2 = [0, -5 / Math.sqrt(3), 10 * Math.sqrt(2 / 3)];
-        const p3 = [-5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
-        const p4 = [5 * Math.sqrt(2), -5 / Math.sqrt(3), -5 * Math.sqrt(2 / 3)];
-        const geometry = new aTetrahedraGeometry( anchor, p2, p3, p4 );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Tetrahedra';
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // GenericTrap model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${generictrapImg})`;
-    item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/generictrap'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'GenericTrap');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const pDz = 1, px = [-1, -1, 1, 1, -0.5, -0.5, 0.5, 0.5], py = [-1, 1, 1, -1, -0.5, 0.5, 0.5, -0.5];
-        const geometry = new aGenericTrapGeometry( pDz, px, py );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'GenericTrap'
-
-        
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const pDz = 1, px = [-1, -1, 1, 1, -0.5, -0.5, 0.5, 0.5], py = [-1, 1, 1, -1, -0.5, 0.5, 0.5, -0.5];
-        const geometry = new aGenericTrapGeometry( pDz, px, py );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'GenericTrap'
-        
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-
     // PrabolicCylinder model
 
     item = new UIDiv();
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${paraboloidImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
     item.dom.setAttribute('draggable', true);
@@ -925,7 +927,7 @@ function BasicSolids(editor) {
 
     item = new UIDiv();
     item.setClass('Category-item');
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.dom.style.backgroundImage = `url(${hyperboloidImg})`;
 
@@ -975,7 +977,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidconeImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polycone'));
     item.dom.setAttribute('draggable', true);
@@ -1020,7 +1022,7 @@ function BasicSolids(editor) {
     item.setClass('Category-item');
 
     item.dom.style.backgroundImage = `url(${solidpolyhedraImg})`;
-    item.dom.style.filter = 'blur(2px)';
+    // item.dom.style.filter = 'blur(2px)';
 
     item.setTextContent(strings.getKey('menubar/add/polyhedra'));
     item.dom.setAttribute('draggable', true);

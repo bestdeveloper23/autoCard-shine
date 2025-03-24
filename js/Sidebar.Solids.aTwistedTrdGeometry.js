@@ -26,17 +26,6 @@ function GeometryParametersPanel(editor, object) {
 
     container.add(widthRow1);
 
-    // depth1
-
-    const depthRow1 = new UIRow();
-    const depth1 = new UINumber(parameters.dy1).setRange(0, Infinity).onChange(update);
-
-    depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy1')).setWidth('90px'));
-    depthRow1.add(depth1);
-
-    depthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
-
-    container.add(depthRow1);
 
     // width2
 
@@ -49,6 +38,20 @@ function GeometryParametersPanel(editor, object) {
     widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
     container.add(widthRow2);
+
+
+    // depth1
+
+    const depthRow1 = new UIRow();
+    const depth1 = new UINumber(parameters.dy1).setRange(0, Infinity).onChange(update);
+
+    depthRow1.add(new UIText(strings.getKey('sidebar/geometry/atrapezoid_geometry/dy1')).setWidth('90px'));
+    depthRow1.add(depth1);
+
+    depthRow1.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+
+    container.add(depthRow1);
+
 
     // depth2
 
@@ -97,7 +100,7 @@ function GeometryParametersPanel(editor, object) {
         const dz = height.getValue();
         const dx2 = width2.getValue();
         const dy2 = depth2.getValue();
-        const twistedangle = - angleI.getValue();
+        const twistedangle = angleI.getValue();
 
         editor.execute(new SetGeometryCommand(editor, object, new aTwistedTrdGeometry(dx1, dy1, dz, dx2, dy2, twistedangle)));
     }

@@ -84,10 +84,16 @@ function GeometryParametersPanel(editor, object) {
             const dzUnit = dzUnitSelect.getValue();
             const zTopCutUnit = zTopCutUnitSelect.getValue();
 
+
+            baseDimensions.zTopCut = Math.min(
+                zTopCut.getValue() * unitMultiplier[zTopCutUnit],
+                baseDimensions.height
+            );
+
             baseDimensions.xSemiAxis = xSemiAxis.getValue() * unitMultiplier[xSemiAxisUnit];
             baseDimensions.ySemiAxis = ySemiAxis.getValue() * unitMultiplier[ySemiAxisUnit];
             baseDimensions.height = dz.getValue() * unitMultiplier[dzUnit];
-            baseDimensions.zTopCut = zTopCut.getValue() * unitMultiplier[zTopCutUnit];
+            zTopCut.setValue(baseDimensions.zTopCut / unitMultiplier[zTopCutUnit]);
 
             update();
         }

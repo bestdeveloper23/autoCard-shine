@@ -123,9 +123,9 @@ function GeometryParametersPanel(editor, object) {
 		const dx = baseDimensions.dx;
 		const dy = baseDimensions.dy;
 		const dz = baseDimensions.dz;
-		const alpha = -alphaI.getValue();
-		const theta = -thetaI.getValue();
-		const phi = -phiI.getValue();
+		const alpha = alphaI.getValue();
+		const theta = thetaI.getValue();
+		const phi = phiI.getValue();
 
 		editor.execute(new SetGeometryCommand(editor, object, new aParallGeometry(dx, dy, dz, alpha, theta, phi)));
 	}
