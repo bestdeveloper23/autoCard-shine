@@ -237,7 +237,9 @@ function SidebarScene(editor) {
     const scene = editor.scene;
     const lights = scene.children?.filter(obj => obj.isLight === true);
     const mesh = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
-    const particles = scene.children?.filter(obj => obj.isScene === true).map(line => line.children?.filter(obj => obj.isGroup === true)).flat();
+    const VRMLMesh = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isMesh === true)).flat();
+    mesh.push(...VRMLMesh);
+    const particles = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isGroup === true)).flat();
     const cameras = Object.values(editor.cameras).filter(camera => !camera.name.startsWith('default'));
 
     const options = [];

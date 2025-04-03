@@ -16,9 +16,7 @@ function SidebarSceneTool(editor) {
     const clearButton = new UIButton(strings.getKey('sidebar/scene/tool/clearworld')).setId('Scene-tool-clrWorld');
     clearButton.onClick(() => {
 
-        const worldObjects = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
-
-        const confirmation = worldObjects.length > 0 && window.confirm("Are you sure you want to clear everything?");
+        const confirmation = window.confirm("Are you sure you want to clear everything?");
         clearWorld(confirmation);
 
         editor.deselect();
@@ -29,8 +27,9 @@ function SidebarSceneTool(editor) {
     function clearWorld(confirmation) {
 
         const worldObjects = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
-        const particles = scene.children?.filter(obj => obj.isScene === true).map(line => line.children?.filter(obj => obj.isGroup === true)).flat();
-        worldObjects.push(...particles);
+        const VRMLMesh = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isMesh === true)).flat();
+        const particles = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isGroup === true)).flat();
+        worldObjects.push(...particles, ...VRMLMesh);
 
         if (confirmation) {
             for (let i = 0; i < worldObjects.length; i++) {

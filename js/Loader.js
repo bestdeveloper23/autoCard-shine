@@ -6,1035 +6,1079 @@ import { AddObjectCommand } from './commands/AddObjectCommand.js';
 import { SetSceneCommand } from './commands/SetSceneCommand.js';
 
 import { LoaderUtils } from './LoaderUtils.js';
+import { PatternEraser } from './factory/PatternEraser.js';
 
 import { unzipSync, strFromU8 } from 'three/addons/libs/fflate.module.js';
 import { CSG } from './libs/CSGMesh.js';
 import { PolyconeGeometry } from './libs/geometry/PolyconeGeometry.js';
 import { PolyhedronGeometry } from './libs/geometry/PolyhedronGeometry.js';
 
-function Loader( editor ) {
+function Loader(editor) {
 
-	const scope = this;
+  const scope = this;
 
-	this.texturePath = '';
+  this.checkWorldObjects = function (callback) {
+    const request = indexedDB.open('threejs-editor');
 
-	this.loadItemList = function ( items ) {
+    request.onsuccess = function (event) {
+      const db = event.target.result;
 
-		LoaderUtils.getFilesFromItemList( items, function ( files, filesMap ) {
+      const transaction = db.transaction(['states'], 'readonly');
+      const objectStore = transaction.objectStore('states');
+      const request = objectStore.get(0);
 
-			scope.loadFiles( files, filesMap );
+      request.onsuccess = function (event) {
+        if (request.result) {
 
-		} );
+          callback(request.result.scene.geometries?.length > 0);
+        } else {
+          console.log('No data found for the given ID');
+          callback(false);
+        }
+      };
 
-	};
+      request.onerror = function (event) {
+        console.error('Error fetching data:', event.target.error);
+        callback(false);
+      };
+    };
 
-	this.loadFiles = function ( files, filesMap ) {
+    request.onerror = function (event) {
+      console.error('Error opening database:', event.target.error);
+      callback(false);
+    };
+  };
 
-		if ( files.length > 0 ) {
 
-			filesMap = filesMap || LoaderUtils.createFilesMap( files );
+  this.texturePath = '';
 
-			const manager = new THREE.LoadingManager();
-			manager.setURLModifier( function ( url ) {
+  this.loadItemList = function (items) {
 
-				url = url.replace( /^(\.?\/)/, '' ); // remove './'
+    LoaderUtils.getFilesFromItemList(items, function (files, filesMap) {
 
-				const file = filesMap[ url ];
+      scope.loadFiles(files, filesMap);
 
-				if ( file ) {
+    });
 
-					console.log( 'Loading', url );
+  };
 
-					return URL.createObjectURL( file );
+  this.loadFiles = function (files, filesMap) {
 
-				}
 
-				return url;
+    if (files.length > 0) {
 
-			} );
+      filesMap = filesMap || LoaderUtils.createFilesMap(files);
 
-			manager.addHandler( /\.tga$/i, new TGALoader() );
+      const manager = new THREE.LoadingManager();
+      manager.setURLModifier(function (url) {
 
-			for ( let i = 0; i < files.length; i ++ ) {
+        url = url.replace(/^(\.?\/)/, ''); // remove './'
 
-				scope.loadFile( files[ i ], manager );
+        const file = filesMap[url];
 
-			}
+        if (file) {
 
-		}
+          console.log('Loading', url);
 
-	};
+          return URL.createObjectURL(file);
 
-	this.loadFile = function ( file, manager ) {
+        }
 
-		const filename = file.name;
-		const extension = filename.split( '.' ).pop().toLowerCase();
+        return url;
 
-		const reader = new FileReader();
-		reader.addEventListener( 'progress', function ( event ) {
+      });
 
-			const size = '(' + Math.floor( event.total / 1000 ).format() + ' KB)';
-			const progress = Math.floor( ( event.loaded / event.total ) * 100 ) + '%';
+      manager.addHandler(/\.tga$/i, new TGALoader());
 
-			console.log( 'Loading', filename, size, progress );
+      for (let i = 0; i < files.length; i++) {
 
-		} );
 
-		switch ( extension ) {
+        scope.loadFile(files[i], manager);
 
-			case '3dm':
+      }
 
-			{
+    }
 
-				reader.addEventListener( 'load', async function ( event ) {
+  };
 
-					const contents = event.target.result;
+  this.loadFile = function (file, manager) {
 
-					const { Rhino3dmLoader } = await import( 'three/addons/loaders/3DMLoader.js' );
 
-					const loader = new Rhino3dmLoader();
-					loader.setLibraryPath( 'three/examples/jsm/libs/rhino3dm/' );
-					loader.parse( contents, function ( object ) {
+    const filename = file.name;
+    const extension = filename.split('.').pop().toLowerCase();
 
-						object.name = filename;
+    const reader = new FileReader();
+    reader.addEventListener('progress', function (event) {
 
-						editor.execute( new AddObjectCommand( editor, object ) );
+      const size = '(' + Math.floor(event.total / 1000).format() + ' KB)';
+      const progress = Math.floor((event.loaded / event.total) * 100) + '%';
 
-					}, function ( error ) {
+      console.log('Loading', filename, size, progress);
 
-						console.error( error )
+    });
 
-					} );
+    switch (extension) {
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+      case '3dm':
 
-				break;
+        {
 
-			}
+          reader.addEventListener('load', async function (event) {
 
-			case '3ds':
+            const contents = event.target.result;
 
-			{
+            const { Rhino3dmLoader } = await import('three/addons/loaders/3DMLoader.js');
 
-				reader.addEventListener( 'load', async function ( event ) {
+            const loader = new Rhino3dmLoader();
+            loader.setLibraryPath('three/examples/jsm/libs/rhino3dm/');
+            loader.parse(contents, function (object) {
 
-					const { TDSLoader } = await import( 'three/addons/loaders/TDSLoader.js' );
+              object.name = filename;
 
-					const loader = new TDSLoader();
-					const object = loader.parse( event.target.result );
+              editor.execute(new AddObjectCommand(editor, object));
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+            }, function (error) {
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+              console.error(error)
 
-				break;
+            });
 
-			}
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			case '3mf':
+          break;
 
-			{
+        }
 
-				reader.addEventListener( 'load', async function ( event ) {
+      case '3ds':
 
-					const { ThreeMFLoader } = await import( 'three/addons/loaders/3MFLoader.js' );
+        {
 
-					const loader = new ThreeMFLoader();
-					const object = loader.parse( event.target.result );
+          reader.addEventListener('load', async function (event) {
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+            const { TDSLoader } = await import('three/addons/loaders/TDSLoader.js');
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            const loader = new TDSLoader();
+            const object = loader.parse(event.target.result);
 
-				break;
+            editor.execute(new AddObjectCommand(editor, object));
 
-			}
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			case 'amf':
+          break;
 
-			{
+        }
 
-				reader.addEventListener( 'load', async function ( event ) {
+      case '3mf':
 
-					const { AMFLoader } = await import( 'three/addons/loaders/AMFLoader.js' );
+        {
 
-					const loader = new AMFLoader();
-					const amfobject = loader.parse( event.target.result );
+          reader.addEventListener('load', async function (event) {
 
-					editor.execute( new AddObjectCommand( editor, amfobject ) );
+            const { ThreeMFLoader } = await import('three/addons/loaders/3MFLoader.js');
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            const loader = new ThreeMFLoader();
+            const object = loader.parse(event.target.result);
 
-				break;
+            editor.execute(new AddObjectCommand(editor, object));
 
-			}
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			case 'dae':
+          break;
 
-			{
+        }
 
-				reader.addEventListener( 'load', async function ( event ) {
+      case 'amf':
 
-					const contents = event.target.result;
+        {
 
-					const { ColladaLoader } = await import( 'three/addons/loaders/ColladaLoader.js' );
+          reader.addEventListener('load', async function (event) {
 
-					const loader = new ColladaLoader( manager );
-					const collada = loader.parse( contents );
+            const { AMFLoader } = await import('three/addons/loaders/AMFLoader.js');
 
-					collada.scene.name = filename;
+            const loader = new AMFLoader();
+            const amfobject = loader.parse(event.target.result);
 
-					editor.execute( new AddObjectCommand( editor, collada.scene ) );
+            editor.execute(new AddObjectCommand(editor, amfobject));
 
-				}, false );
-				reader.readAsText( file );
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-				break;
+          break;
 
-			}
+        }
 
-			case 'drc':
+      case 'dae':
 
-			{
+        {
 
-				reader.addEventListener( 'load', async function ( event ) {
+          reader.addEventListener('load', async function (event) {
 
-					const contents = event.target.result;
+            const contents = event.target.result;
 
-					const { DRACOLoader } = await import( 'three/addons/loaders/DRACOLoader.js' );
+            const { ColladaLoader } = await import('three/addons/loaders/ColladaLoader.js');
 
-					const loader = new DRACOLoader();
-					loader.setDecoderPath( 'three/examples/jsm/libs/draco/' );
-					loader.parse( contents, function ( geometry ) {
+            const loader = new ColladaLoader(manager);
+            const collada = loader.parse(contents);
 
-						let object;
+            collada.scene.name = filename;
 
-						if ( geometry.index !== null ) {
+            editor.execute(new AddObjectCommand(editor, collada.scene));
 
-							const material = new THREE.MeshBasicMaterial();
+          }, false);
+          reader.readAsText(file);
 
-							object = new THREE.Mesh( geometry, material );
-							object.name = filename;
+          break;
 
-						} else {
+        }
 
-							const material = new THREE.PointsMaterial( { size: 0.01 } );
-							material.vertexColors = geometry.hasAttribute( 'color' );
+      case 'drc':
 
-							object = new THREE.Points( geometry, material );
-							object.name = filename;
+        {
 
-						}
+          reader.addEventListener('load', async function (event) {
 
-						loader.dispose();
-						editor.execute( new AddObjectCommand( editor, object ) );
+            const contents = event.target.result;
 
-					} );
+            const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            const loader = new DRACOLoader();
+            loader.setDecoderPath('three/examples/jsm/libs/draco/');
+            loader.parse(contents, function (geometry) {
 
-				break;
+              let object;
 
-			}
+              if (geometry.index !== null) {
 
-			case 'fbx':
+                const material = new THREE.MeshBasicMaterial();
 
-			{
+                object = new THREE.Mesh(geometry, material);
+                object.name = filename;
 
-				reader.addEventListener( 'load', async function ( event ) {
+              } else {
 
-					const contents = event.target.result;
+                const material = new THREE.PointsMaterial({ size: 0.01 });
+                material.vertexColors = geometry.hasAttribute('color');
 
-					const { FBXLoader } = await import( 'three/addons/loaders/FBXLoader.js' );
+                object = new THREE.Points(geometry, material);
+                object.name = filename;
 
-					const loader = new FBXLoader( manager );
-					const object = loader.parse( contents );
+              }
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+              loader.dispose();
+              editor.execute(new AddObjectCommand(editor, object));
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            });
 
-				break;
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			}
+          break;
 
-			case 'glb':
+        }
 
-			{
+      case 'fbx':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const contents = event.target.result;
+          reader.addEventListener('load', async function (event) {
 
-					const { GLTFLoader } = await import( 'three/addons/loaders/GLTFLoader.js' );
-					const { DRACOLoader } = await import( 'three/addons/loaders/DRACOLoader.js' );
-					const { KTX2Loader } = await import( 'three/addons/loaders/KTX2Loader.js' );
-					const { MeshoptDecoder } = await import( 'three/addons/libs/meshopt_decoder.module.js' );
+            const contents = event.target.result;
 
-					const dracoLoader = new DRACOLoader();
-					dracoLoader.setDecoderPath( 'three/examples/jsm/libs/draco/gltf/' );
+            const { FBXLoader } = await import('three/addons/loaders/FBXLoader.js');
 
-					const ktx2Loader = new KTX2Loader();
-					ktx2Loader.setTranscoderPath( 'three/examples/jsm/libs/basis/' );
+            const loader = new FBXLoader(manager);
+            const object = loader.parse(contents);
 
-					const loader = new GLTFLoader();
-					loader.setDRACOLoader( dracoLoader );
-					loader.setKTX2Loader( ktx2Loader );
-					loader.setMeshoptDecoder( MeshoptDecoder );
-					loader.parse( contents, '', function ( result ) {
+            editor.execute(new AddObjectCommand(editor, object));
 
-						const scene = result.scene;
-						scene.name = filename;
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-						scene.animations.push( ...result.animations );
-						editor.execute( new AddObjectCommand( editor, scene ) );
+          break;
 
-						dracoLoader.dispose();
+        }
 
-					} );
+      case 'glb':
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+        {
 
-				break;
+          reader.addEventListener('load', async function (event) {
 
-			}
+            const contents = event.target.result;
 
-			case 'gltf':
+            const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+            const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+            const { KTX2Loader } = await import('three/addons/loaders/KTX2Loader.js');
+            const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
 
-			{
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/gltf/');
 
-				reader.addEventListener( 'load', async function ( event ) {
+            const ktx2Loader = new KTX2Loader();
+            ktx2Loader.setTranscoderPath('three/examples/jsm/libs/basis/');
 
-					const contents = event.target.result;
+            const loader = new GLTFLoader();
+            loader.setDRACOLoader(dracoLoader);
+            loader.setKTX2Loader(ktx2Loader);
+            loader.setMeshoptDecoder(MeshoptDecoder);
+            loader.parse(contents, '', function (result) {
 
-					const { DRACOLoader } = await import( 'three/addons/loaders/DRACOLoader.js' );
-					const { GLTFLoader } = await import( 'three/addons/loaders/GLTFLoader.js' );
-					const { KTX2Loader } = await import( 'three/addons/loaders/KTX2Loader.js' );
-					const { MeshoptDecoder } = await import( 'three/addons/libs/meshopt_decoder.module.js' );
+              const scene = result.scene;
+              scene.name = filename;
 
-					const dracoLoader = new DRACOLoader();
-					dracoLoader.setDecoderPath( 'three/examples/jsm/libs/draco/gltf/' );
+              scene.animations.push(...result.animations);
+              editor.execute(new AddObjectCommand(editor, scene));
 
-					const ktx2Loader = new KTX2Loader();
-					ktx2Loader.setTranscoderPath( 'three/examples/jsm/libs/basis/' );
+              dracoLoader.dispose();
 
-					const loader = new GLTFLoader( manager );
-					loader.setDRACOLoader( dracoLoader );
-					loader.setKTX2Loader( ktx2Loader );
-					loader.setMeshoptDecoder( MeshoptDecoder );
+            });
 
-					loader.parse( contents, '', function ( result ) {
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-						const scene = result.scene;
-						scene.name = filename;
+          break;
 
-						scene.animations.push( ...result.animations );
-						editor.execute( new AddObjectCommand( editor, scene ) );
+        }
 
-						dracoLoader.dispose();
+      case 'gltf':
 
-					} );
+        {
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+          reader.addEventListener('load', async function (event) {
 
-				break;
+            const contents = event.target.result;
 
-			}
+            const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+            const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+            const { KTX2Loader } = await import('three/addons/loaders/KTX2Loader.js');
+            const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
 
-			case 'js':
-			case 'json':
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/gltf/');
 
-			{
+            const ktx2Loader = new KTX2Loader();
+            ktx2Loader.setTranscoderPath('three/examples/jsm/libs/basis/');
 
-				reader.addEventListener( 'load', function ( event ) {
+            const loader = new GLTFLoader(manager);
+            loader.setDRACOLoader(dracoLoader);
+            loader.setKTX2Loader(ktx2Loader);
+            loader.setMeshoptDecoder(MeshoptDecoder);
 
-					const contents = event.target.result;
+            loader.parse(contents, '', function (result) {
 
-					// 2.0
+              const scene = result.scene;
+              scene.name = filename;
 
-					if ( contents.indexOf( 'postMessage' ) !== - 1 ) {
+              scene.animations.push(...result.animations);
+              editor.execute(new AddObjectCommand(editor, scene));
 
-						const blob = new Blob( [ contents ], { type: 'text/javascript' } );
-						const url = URL.createObjectURL( blob );
+              dracoLoader.dispose();
 
-						const worker = new Worker( url );
+            });
 
-						worker.onmessage = function ( event ) {
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-							event.data.metadata = { version: 2 };
-							handleJSON( event.data );
+          break;
 
-						};
+        }
 
-						worker.postMessage( Date.now() );
+      case 'js':
+      case 'json':
 
-						return;
+        {
 
-					}
+          reader.addEventListener('load', function (event) {
 
-					// >= 3.0
+            const contents = event.target.result;
 
-					let data;
+            // 2.0
 
-					try {
+            if (contents.indexOf('postMessage') !== - 1) {
 
-						data = JSON.parse( contents );
+              const blob = new Blob([contents], { type: 'text/javascript' });
+              const url = URL.createObjectURL(blob);
 
-					} catch ( error ) {
+              const worker = new Worker(url);
 
-						alert( error );
-						return;
+              worker.onmessage = function (event) {
 
-					}
+                event.data.metadata = { version: 2 };
+                handleJSON(event.data);
 
-					handleJSON( data );
+              };
 
-				}, false );
-				reader.readAsText( file );
+              worker.postMessage(Date.now());
 
-				break;
+              return;
 
-			}
+            }
 
-			case 'kmz':
+            // >= 3.0
 
-			{
+            let data;
 
-				reader.addEventListener( 'load', async function ( event ) {
+            try {
 
-					const { KMZLoader } = await import( 'three/addons/loaders/KMZLoader.js' );
+              data = JSON.parse(contents);
 
-					const loader = new KMZLoader();
-					const collada = loader.parse( event.target.result );
+            } catch (error) {
 
-					collada.scene.name = filename;
+              alert(error);
+              return;
 
-					editor.execute( new AddObjectCommand( editor, collada.scene ) );
+            }
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            handleJSON(data);
 
-				break;
+          }, false);
+          reader.readAsText(file);
 
-			}
+          break;
 
-			case 'ldr':
-			case 'mpd':
+        }
 
-			{
+      case 'kmz':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const { LDrawLoader } = await import( 'three/addons/loaders/LDrawLoader.js' );
+          reader.addEventListener('load', async function (event) {
 
-					const loader = new LDrawLoader();
-					loader.setPath( 'three/examples/models/ldraw/officialLibrary/' );
-					loader.parse( event.target.result, function ( group ) {
+            const { KMZLoader } = await import('three/addons/loaders/KMZLoader.js');
 
-						group.name = filename;
-						// Convert from LDraw coordinates: rotate 180 degrees around OX
-						group.rotation.x = Math.PI;
+            const loader = new KMZLoader();
+            const collada = loader.parse(event.target.result);
 
-						editor.execute( new AddObjectCommand( editor, group ) );
+            collada.scene.name = filename;
 
-					} );
+            editor.execute(new AddObjectCommand(editor, collada.scene));
 
-				}, false );
-				reader.readAsText( file );
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-				break;
+          break;
 
-			}
+        }
 
-			case 'md2':
+      case 'ldr':
+      case 'mpd':
 
-			{
+        {
 
-				reader.addEventListener( 'load', async function ( event ) {
+          reader.addEventListener('load', async function (event) {
 
-					const contents = event.target.result;
+            const { LDrawLoader } = await import('three/addons/loaders/LDrawLoader.js');
 
-					const { MD2Loader } = await import( 'three/addons/loaders/MD2Loader.js' );
+            const loader = new LDrawLoader();
+            loader.setPath('three/examples/models/ldraw/officialLibrary/');
+            loader.parse(event.target.result, function (group) {
 
-					const geometry = new MD2Loader().parse( contents );
-					const material = new THREE.MeshBasicMaterial();
+              group.name = filename;
+              // Convert from LDraw coordinates: rotate 180 degrees around OX
+              group.rotation.x = Math.PI;
 
-					const mesh = new THREE.Mesh( geometry, material );
-					mesh.mixer = new THREE.AnimationMixer( mesh );
-					mesh.name = filename;
+              editor.execute(new AddObjectCommand(editor, group));
 
-					mesh.animations.push( ...geometry.animations );
-					editor.execute( new AddObjectCommand( editor, mesh ) );
+            });
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+          }, false);
+          reader.readAsText(file);
 
-				break;
+          break;
 
-			}
+        }
 
-			case 'obj':
+      case 'md2':
 
-			{
+        {
 
-				reader.addEventListener( 'load', async function ( event ) {
+          reader.addEventListener('load', async function (event) {
 
-					const contents = event.target.result;
+            const contents = event.target.result;
 
-					const { OBJLoader } = await import( 'three/addons/loaders/OBJLoader.js' );
+            const { MD2Loader } = await import('three/addons/loaders/MD2Loader.js');
 
-					const object = new OBJLoader().parse( contents );
-					object.name = filename;
+            const geometry = new MD2Loader().parse(contents);
+            const material = new THREE.MeshBasicMaterial();
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.mixer = new THREE.AnimationMixer(mesh);
+            mesh.name = filename;
 
-				}, false );
-				reader.readAsText( file );
+            mesh.animations.push(...geometry.animations);
+            editor.execute(new AddObjectCommand(editor, mesh));
 
-				break;
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			}
+          break;
 
-			case 'pcd':
+        }
 
-			{
+      case 'obj':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const contents = event.target.result;
+          reader.addEventListener('load', async function (event) {
 
-					const { PCDLoader } = await import( 'three/examples/jsm/loaders/PCDLoader.js' );
+            const contents = event.target.result;
 
-					const points = new PCDLoader().parse( contents );
-					points.name = filename;
+            const { OBJLoader } = await import('three/addons/loaders/OBJLoader.js');
 
-					editor.execute( new AddObjectCommand( editor, points ) );
+            const object = new OBJLoader().parse(contents);
+            object.name = filename;
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            editor.execute(new AddObjectCommand(editor, object));
 
-				break;
+          }, false);
+          reader.readAsText(file);
 
-			}
+          break;
 
-			case 'ply':
+        }
 
-			{
+      case 'pcd':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const contents = event.target.result;
+          reader.addEventListener('load', async function (event) {
 
-					const { PLYLoader } = await import( 'three/addons/loaders/PLYLoader.js' );
+            const contents = event.target.result;
 
-					const geometry = new PLYLoader().parse( contents );
-					let object;
+            const { PCDLoader } = await import('three/examples/jsm/loaders/PCDLoader.js');
 
-					if ( geometry.index !== null ) {
+            const points = new PCDLoader().parse(contents);
+            points.name = filename;
 
-						const material = new THREE.MeshBasicMaterial();
+            editor.execute(new AddObjectCommand(editor, points));
 
-						object = new THREE.Mesh( geometry, material );
-						object.name = filename;
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-					} else {
+          break;
 
-						const material = new THREE.PointsMaterial( { size: 0.01 } );
-						material.vertexColors = geometry.hasAttribute( 'color' );
+        }
 
-						object = new THREE.Points( geometry, material );
-						object.name = filename;
+      case 'ply':
 
-					}
+        {
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+          reader.addEventListener('load', async function (event) {
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            const contents = event.target.result;
 
-				break;
+            const { PLYLoader } = await import('three/addons/loaders/PLYLoader.js');
 
-			}
+            const geometry = new PLYLoader().parse(contents);
+            let object;
 
-			case 'stl':
+            if (geometry.index !== null) {
 
-			{
+              const material = new THREE.MeshBasicMaterial();
 
-				reader.addEventListener( 'load', async function ( event ) {
+              object = new THREE.Mesh(geometry, material);
+              object.name = filename;
 
-					const contents = event.target.result;
+            } else {
 
-					const { STLLoader } = await import( 'three/addons/loaders/STLLoader.js' );
+              const material = new THREE.PointsMaterial({ size: 0.01 });
+              material.vertexColors = geometry.hasAttribute('color');
 
-					const geometry = new STLLoader().parse( contents );
-					const material = new THREE.MeshBasicMaterial();
+              object = new THREE.Points(geometry, material);
+              object.name = filename;
 
-					const mesh = new THREE.Mesh( geometry, material );
-					mesh.name = filename;
+            }
 
-					editor.execute( new AddObjectCommand( editor, mesh ) );
+            editor.execute(new AddObjectCommand(editor, object));
 
-				}, false );
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-				if ( reader.readAsBinaryString !== undefined ) {
+          break;
 
-					reader.readAsBinaryString( file );
+        }
 
-				} else {
+      case 'stl':
 
-					reader.readAsArrayBuffer( file );
+        {
 
-				}
+          reader.addEventListener('load', async function (event) {
 
-				break;
+            const contents = event.target.result;
 
-			}
+            const { STLLoader } = await import('three/addons/loaders/STLLoader.js');
 
-			case 'svg':
+            const geometry = new STLLoader().parse(contents);
+            const material = new THREE.MeshBasicMaterial();
 
-			{
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.name = filename;
 
-				reader.addEventListener( 'load', async function ( event ) {
+            editor.execute(new AddObjectCommand(editor, mesh));
 
-					const contents = event.target.result;
+          }, false);
 
-					const { SVGLoader } = await import( 'three/addons/loaders/SVGLoader.js' );
+          if (reader.readAsBinaryString !== undefined) {
 
-					const loader = new SVGLoader();
-					const paths = loader.parse( contents ).paths;
+            reader.readAsBinaryString(file);
 
-					//
+          } else {
 
-					const group = new THREE.Group();
-					group.scale.multiplyScalar( 0.1 );
-					group.scale.y *= - 1;
+            reader.readAsArrayBuffer(file);
 
-					for ( let i = 0; i < paths.length; i ++ ) {
+          }
 
-						const path = paths[ i ];
+          break;
 
-						const material = new THREE.MeshBasicMaterial( {
-							color: path.color,
-							depthWrite: false
-						} );
+        }
 
-						const shapes = SVGLoader.createShapes( path );
+      case 'svg':
 
-						for ( let j = 0; j < shapes.length; j ++ ) {
+        {
 
-							const shape = shapes[ j ];
+          reader.addEventListener('load', async function (event) {
 
-							const geometry = new THREE.ShapeGeometry( shape );
-							const mesh = new THREE.Mesh( geometry, material );
+            const contents = event.target.result;
 
-							group.add( mesh );
+            const { SVGLoader } = await import('three/addons/loaders/SVGLoader.js');
 
-						}
+            const loader = new SVGLoader();
+            const paths = loader.parse(contents).paths;
 
-					}
+            //
 
-					editor.execute( new AddObjectCommand( editor, group ) );
+            const group = new THREE.Group();
+            group.scale.multiplyScalar(0.1);
+            group.scale.y *= - 1;
 
-				}, false );
-				reader.readAsText( file );
+            for (let i = 0; i < paths.length; i++) {
 
-				break;
+              const path = paths[i];
 
-			}
+              const material = new THREE.MeshBasicMaterial({
+                color: path.color,
+                depthWrite: false
+              });
 
-			case 'usdz':
+              const shapes = SVGLoader.createShapes(path);
 
-			{
+              for (let j = 0; j < shapes.length; j++) {
 
-				reader.addEventListener( 'load', async function ( event ) {
+                const shape = shapes[j];
 
-					const contents = event.target.result;
+                const geometry = new THREE.ShapeGeometry(shape);
+                const mesh = new THREE.Mesh(geometry, material);
 
-					const { USDZLoader } = await import( 'three/examples/jsm/loaders/USDZLoader.js' );
+                group.add(mesh);
 
-					const group = new USDZLoader().parse( contents );
-					group.name = filename;
+              }
 
-					editor.execute( new AddObjectCommand( editor, group ) );
+            }
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            editor.execute(new AddObjectCommand(editor, group));
 
-				break;
+          }, false);
+          reader.readAsText(file);
 
-			}
+          break;
 
-			case 'vox':
+        }
 
-			{
+      case 'usdz':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const contents = event.target.result;
+          reader.addEventListener('load', async function (event) {
 
-					const { VOXLoader, VOXMesh } = await import( 'three/addons/loaders/VOXLoader.js' );
+            const contents = event.target.result;
 
-					const chunks = new VOXLoader().parse( contents );
+            const { USDZLoader } = await import('three/examples/jsm/loaders/USDZLoader.js');
 
-					const group = new THREE.Group();
-					group.name = filename;
+            const group = new USDZLoader().parse(contents);
+            group.name = filename;
 
-					for ( let i = 0; i < chunks.length; i ++ ) {
+            editor.execute(new AddObjectCommand(editor, group));
 
-						const chunk = chunks[ i ];
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-						const mesh = new VOXMesh( chunk );
-						group.add( mesh );
+          break;
 
-					}
+        }
 
-					editor.execute( new AddObjectCommand( editor, group ) );
+      case 'vox':
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+        {
 
-				break;
+          reader.addEventListener('load', async function (event) {
 
-			}
+            const contents = event.target.result;
 
-			case 'vtk':
-			case 'vtp':
+            const { VOXLoader, VOXMesh } = await import('three/addons/loaders/VOXLoader.js');
 
-			{
+            const chunks = new VOXLoader().parse(contents);
 
-				reader.addEventListener( 'load', async function ( event ) {
+            const group = new THREE.Group();
+            group.name = filename;
 
-					const contents = event.target.result;
+            for (let i = 0; i < chunks.length; i++) {
 
-					const { VTKLoader } = await import( 'three/addons/loaders/VTKLoader.js' );
+              const chunk = chunks[i];
 
-					const geometry = new VTKLoader().parse( contents );
-					const material = new THREE.MeshBasicMaterial();
+              const mesh = new VOXMesh(chunk);
+              group.add(mesh);
 
-					const mesh = new THREE.Mesh( geometry, material );
-					mesh.name = filename;
+            }
 
-					editor.execute( new AddObjectCommand( editor, mesh ) );
+            editor.execute(new AddObjectCommand(editor, group));
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-				break;
+          break;
 
-			}
+        }
 
-			case 'wrl':
+      case 'vtk':
+      case 'vtp':
 
-			{
+        {
 
-				reader.addEventListener( 'load', async function ( event ) {
+          reader.addEventListener('load', async function (event) {
 
-					const contents = event.target.result;
+            const contents = event.target.result;
 
-					const { VRMLLoader } = await import( './libs/VRMLLoader.js' );
+            const { VTKLoader } = await import('three/addons/loaders/VTKLoader.js');
 
-					const result = new VRMLLoader().parse( contents );
+            const geometry = new VTKLoader().parse(contents);
+            const material = new THREE.MeshBasicMaterial();
 
-					editor.execute( new AddObjectCommand( editor, result ) );
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.name = filename;
 
-				}, false );
-				reader.readAsText( file );
+            editor.execute(new AddObjectCommand(editor, mesh));
 
-				break;
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-			}
+          break;
 
-			case 'xyz':
+        }
 
-			{
+      case 'wrl':
 
-				reader.addEventListener( 'load', async function ( event ) {
+        {
 
-					const contents = event.target.result;
+          scope.checkWorldObjects(function (hasObjects) {
+            reader.addEventListener('load', async function (event) {
 
-					const { XYZLoader } = await import( 'three/addons/loaders/XYZLoader.js' );
+              let contents = '';
+              if (hasObjects) {
+                contents = PatternEraser.removeSolids(event.target.result);
+              } else {
+                contents = PatternEraser.addDEFTokens(event.target.result);
+              }
 
-					const geometry = new XYZLoader().parse( contents );
+              const { VRMLLoader } = await import('./libs/VRMLLoader.js');
 
-					const material = new THREE.PointsMaterial();
-					material.vertexColors = geometry.hasAttribute( 'color' );
+              const result = new VRMLLoader().parse(contents);
 
-					const points = new THREE.Points( geometry, material );
-					points.name = filename;
+              editor.execute(new AddObjectCommand(editor, result));
 
-					editor.execute( new AddObjectCommand( editor, points ) );
+            }, false);
+            reader.readAsText(file);
+          });
 
-				}, false );
-				reader.readAsText( file );
+          break;
 
-				break;
+        }
 
-			}
+      case 'xyz':
 
-			case 'zip':
+        {
 
-			{
+          reader.addEventListener('load', async function (event) {
 
-				reader.addEventListener( 'load', function ( event ) {
+            const contents = event.target.result;
 
-					handleZIP( event.target.result );
+            const { XYZLoader } = await import('three/addons/loaders/XYZLoader.js');
 
-				}, false );
-				reader.readAsArrayBuffer( file );
+            const geometry = new XYZLoader().parse(contents);
 
-				break;
+            const material = new THREE.PointsMaterial();
+            material.vertexColors = geometry.hasAttribute('color');
 
-			}
+            const points = new THREE.Points(geometry, material);
+            points.name = filename;
 
-			case 'tg': 
+            editor.execute(new AddObjectCommand(editor, points));
 
-			{
+          }, false);
+          reader.readAsText(file);
 
-				reader.addEventListener( 'load', function ( event ) {
+          break;
 
-					handleTG( event.target.result );
+        }
 
-				}, false);
-				reader.readAsText(file);
+      case 'zip':
 
-				break;
+        {
 
-			}
+          reader.addEventListener('load', function (event) {
 
-			default:
+            handleZIP(event.target.result);
 
-				console.error( 'Unsupported file format (' + extension + ').' );
-        alert( 'Unsupported file format (' + extension + ').' );
+          }, false);
+          reader.readAsArrayBuffer(file);
 
-				break;
+          break;
 
-		}
+        }
 
-	};
+      case 'tg':
 
-	function handleJSON( data ) {
+        {
 
-		if ( data.metadata === undefined ) { // 2.0
+          reader.addEventListener('load', function (event) {
 
-			data.metadata = { type: 'Geometry' };
+            handleTG(event.target.result);
 
-		}
+          }, false);
+          reader.readAsText(file);
 
-		if ( data.metadata.type === undefined ) { // 3.0
+          break;
 
-			data.metadata.type = 'Geometry';
+        }
 
-		}
+      default:
 
-		if ( data.metadata.formatVersion !== undefined ) {
+        console.error('Unsupported file format (' + extension + ').');
+        alert('Unsupported file format (' + extension + ').');
 
-			data.metadata.version = data.metadata.formatVersion;
+        break;
 
-		}
+    }
 
-		switch ( data.metadata.type.toLowerCase() ) {
+  };
 
-			case 'buffergeometry':
+  function handleJSON(data) {
 
-			{
+    if (data.metadata === undefined) { // 2.0
 
-				const loader = new THREE.BufferGeometryLoader();
-				const result = loader.parse( data );
+      data.metadata = { type: 'Geometry' };
 
-				const mesh = new THREE.Mesh( result );
+    }
 
-				editor.execute( new AddObjectCommand( editor, mesh ) );
+    if (data.metadata.type === undefined) { // 3.0
 
-				break;
+      data.metadata.type = 'Geometry';
 
-			}
+    }
 
-			case 'geometry':
+    if (data.metadata.formatVersion !== undefined) {
 
-				console.error( 'Loader: "Geometry" is no longer supported.' );
+      data.metadata.version = data.metadata.formatVersion;
 
-				break;
+    }
 
-			case 'object':
+    switch (data.metadata.type.toLowerCase()) {
 
-			{
+      case 'buffergeometry':
 
-				const loader = new THREE.ObjectLoader();
-				loader.setResourcePath( scope.texturePath );
+        {
 
-				loader.parse( data, function ( result ) {
+          const loader = new THREE.BufferGeometryLoader();
+          const result = loader.parse(data);
 
-					if ( result.isScene ) {
+          const mesh = new THREE.Mesh(result);
 
-						editor.execute( new SetSceneCommand( editor, result ) );
+          editor.execute(new AddObjectCommand(editor, mesh));
 
-					} else {
+          break;
 
-						editor.execute( new AddObjectCommand( editor, result ) );
+        }
 
-					}
+      case 'geometry':
 
-				} );
+        console.error('Loader: "Geometry" is no longer supported.');
 
-				break;
+        break;
 
-			}
+      case 'object':
 
-			case 'app':
+        {
 
-				editor.fromJSON( data );
+          const loader = new THREE.ObjectLoader();
+          loader.setResourcePath(scope.texturePath);
 
-				break;
+          loader.parse(data, function (result) {
 
-		}
+            if (result.isScene) {
 
-	}
+              editor.execute(new SetSceneCommand(editor, result));
 
-	async function handleZIP( contents ) {
+            } else {
 
-		const zip = unzipSync( new Uint8Array( contents ) );
+              editor.execute(new AddObjectCommand(editor, result));
 
-		// Poly
+            }
 
-		if ( zip[ 'model.obj' ] && zip[ 'materials.mtl' ] ) {
+          });
 
-			const { MTLLoader } = await import( 'three/addons/loaders/MTLLoader.js' );
-			const { OBJLoader } = await import( 'three/addons/loaders/OBJLoader.js' );
+          break;
 
-			const materials = new MTLLoader().parse( strFromU8( zip[ 'materials.mtl' ] ) );
-			const object = new OBJLoader().setMaterials( materials ).parse( strFromU8( zip[ 'model.obj' ] ) );
-			editor.execute( new AddObjectCommand( editor, object ) );
+        }
 
-		}
+      case 'app':
 
-		//
+        editor.fromJSON(data);
 
-		for ( const path in zip ) {
+        break;
 
-			const file = zip[ path ];
+    }
 
-			const manager = new THREE.LoadingManager();
-			manager.setURLModifier( function ( url ) {
+  }
 
-				const file = zip[ url ];
+  async function handleZIP(contents) {
 
-				if ( file ) {
+    const zip = unzipSync(new Uint8Array(contents));
 
-					console.log( 'Loading', url );
+    // Poly
 
-					const blob = new Blob( [ file.buffer ], { type: 'application/octet-stream' } );
-					return URL.createObjectURL( blob );
+    if (zip['model.obj'] && zip['materials.mtl']) {
 
-				}
+      const { MTLLoader } = await import('three/addons/loaders/MTLLoader.js');
+      const { OBJLoader } = await import('three/addons/loaders/OBJLoader.js');
 
-				return url;
+      const materials = new MTLLoader().parse(strFromU8(zip['materials.mtl']));
+      const object = new OBJLoader().setMaterials(materials).parse(strFromU8(zip['model.obj']));
+      editor.execute(new AddObjectCommand(editor, object));
 
-			} );
+    }
 
-			const extension = path.split( '.' ).pop().toLowerCase();
+    //
 
-			switch ( extension ) {
+    for (const path in zip) {
 
-				case 'fbx':
+      const file = zip[path];
 
-				{
+      const manager = new THREE.LoadingManager();
+      manager.setURLModifier(function (url) {
 
-					const { FBXLoader } = await import( 'three/addons/loaders/FBXLoader.js' );
+        const file = zip[url];
 
-					const loader = new FBXLoader( manager );
-					const object = loader.parse( file.buffer );
+        if (file) {
 
-					editor.execute( new AddObjectCommand( editor, object ) );
+          console.log('Loading', url);
 
-					break;
+          const blob = new Blob([file.buffer], { type: 'application/octet-stream' });
+          return URL.createObjectURL(blob);
 
-				}
+        }
 
-				case 'glb':
+        return url;
 
-				{
+      });
 
-					const { GLTFLoader } = await import( 'three/addons/loaders/GLTFLoader.js' );
-					const { DRACOLoader } = await import( 'three/addons/loaders/DRACOLoader.js' );
-					const { KTX2Loader } = await import( 'three/addons/loaders/KTX2Loader.js' );
-					const { MeshoptDecoder } = await import( 'three/addons/libs/meshopt_decoder.module.js' );
+      const extension = path.split('.').pop().toLowerCase();
 
-					const dracoLoader = new DRACOLoader();
-					dracoLoader.setDecoderPath( 'three/examples/jsm/libs/draco/gltf/' );
+      switch (extension) {
 
-					const ktx2Loader = new KTX2Loader();
-					ktx2Loader.setTranscoderPath( 'three/examples/jsm/libs/basis/' );
+        case 'fbx':
 
-					const loader = new GLTFLoader();
-					loader.setDRACOLoader( dracoLoader );
-					loader.setKTX2Loader( ktx2Loader );
-					loader.setMeshoptDecoder( MeshoptDecoder );
+          {
 
-					loader.parse( file.buffer, '', function ( result ) {
+            const { FBXLoader } = await import('three/addons/loaders/FBXLoader.js');
 
-						const scene = result.scene;
+            const loader = new FBXLoader(manager);
+            const object = loader.parse(file.buffer);
 
-						scene.animations.push( ...result.animations );
-						editor.execute( new AddObjectCommand( editor, scene ) );
+            editor.execute(new AddObjectCommand(editor, object));
 
-						dracoLoader.dispose();
+            break;
 
-					} );
+          }
 
-					break;
+        case 'glb':
 
-				}
+          {
 
-				case 'gltf':
+            const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+            const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+            const { KTX2Loader } = await import('three/addons/loaders/KTX2Loader.js');
+            const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
 
-				{
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/gltf/');
 
-					const { GLTFLoader } = await import( 'three/addons/loaders/GLTFLoader.js' );
-					const { DRACOLoader } = await import( 'three/addons/loaders/DRACOLoader.js' );
-					const { KTX2Loader } = await import( 'three/addons/loaders/KTX2Loader.js' );
-					const { MeshoptDecoder } = await import( 'three/addons/libs/meshopt_decoder.module.js' );
+            const ktx2Loader = new KTX2Loader();
+            ktx2Loader.setTranscoderPath('three/examples/jsm/libs/basis/');
 
-					const dracoLoader = new DRACOLoader();
-					dracoLoader.setDecoderPath( 'three/examples/jsm/libs/draco/gltf/' );
+            const loader = new GLTFLoader();
+            loader.setDRACOLoader(dracoLoader);
+            loader.setKTX2Loader(ktx2Loader);
+            loader.setMeshoptDecoder(MeshoptDecoder);
 
-					const ktx2Loader = new KTX2Loader();
-					ktx2Loader.setTranscoderPath( 'three/examples/jsm/libs/basis/' );
+            loader.parse(file.buffer, '', function (result) {
 
-					const loader = new GLTFLoader();
-					loader.setDRACOLoader( dracoLoader );
-					loader.setKTX2Loader( ktx2Loader );
-					loader.setMeshoptDecoder( MeshoptDecoder );
-					
-					loader.parse( strFromU8( file ), '', function ( result ) {
+              const scene = result.scene;
 
-						const scene = result.scene;
+              scene.animations.push(...result.animations);
+              editor.execute(new AddObjectCommand(editor, scene));
 
-						scene.animations.push( ...result.animations );
-						editor.execute( new AddObjectCommand( editor, scene ) );
+              dracoLoader.dispose();
 
-						dracoLoader.dispose();
+            });
 
-					} );
+            break;
 
-					break;
+          }
 
-				}
+        case 'gltf':
 
-			}
+          {
 
-		}
+            const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+            const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+            const { KTX2Loader } = await import('three/addons/loaders/KTX2Loader.js');
+            const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
 
-	}
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/gltf/');
 
-	async function handleTG( contents ){
+            const ktx2Loader = new KTX2Loader();
+            ktx2Loader.setTranscoderPath('three/examples/jsm/libs/basis/');
+
+            const loader = new GLTFLoader();
+            loader.setDRACOLoader(dracoLoader);
+            loader.setKTX2Loader(ktx2Loader);
+            loader.setMeshoptDecoder(MeshoptDecoder);
+
+            loader.parse(strFromU8(file), '', function (result) {
+
+              const scene = result.scene;
+
+              scene.animations.push(...result.animations);
+              editor.execute(new AddObjectCommand(editor, scene));
+
+              dracoLoader.dispose();
+
+            });
+
+            break;
+
+          }
+
+      }
+
+    }
+
+  }
+
+  async function handleTG(contents) {
 
     try {
       const tgText = contents.split("\n");
@@ -1044,120 +1088,120 @@ function Loader( editor ) {
       let volumeText = {};
       let placementText = {};
       let meshs = {};
-  
+
       let solids = [];
       let rotations = [];
       let volumes = [];
       let places = [];
-  
+
       tgText.forEach(rowtext => {
         const wordArray = rowtext.split(' ');
         const identify = wordArray[0];
-        
-        if( identify === ':solid' ) {
+
+        if (identify === ':solid') {
           solids.push(rowtext);
         }
       });
-  
-      solids.forEach( rowtext => {
+
+      solids.forEach(rowtext => {
         {
           const wordArray = rowtext.split(' ');
           const solidName = wordArray[1];
           const solidType = wordArray[2];
-  
+
           solidText[solidName] = rowtext;
           // set the new mesh 
-  
+
           switch (solidType) {
             case "BOX":
-    
+
               {
                 let x = Number(wordArray[3]);
                 let y = Number(wordArray[4]);
                 let z = Number(wordArray[5]);
-  
+
                 var geometry = new THREE.BoxGeometry(x, y, z);
                 var material = new THREE.MeshNormalMaterial();
-  
+
                 var mesh = new THREE.Mesh(geometry, material);
-  
-                
+
+
                 // set the name of mesh
-  
+
                 const meshName = solidName.split('_')[0];
-                
+
                 mesh.name = meshName;
-  
+
                 meshs[solidName] = mesh;
-  
+
               }
-  
+
               break;
-    
+
             case "SPHERE":
-    
+
               {
                 const radius = Number(wordArray[3]);
                 const startPhi = Number(wordArray[4]);
                 const deltaPhi = Number(wordArray[5]);
-  
+
                 const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
                 geometry.type = 'SphereGeometry2';
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
+
                 const meshName = solidName.split('_')[0];
-                
-                mesh.name = meshName;	
-  
+
+                mesh.name = meshName;
+
                 meshs[solidName] = mesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TUBS":
-              
+
               {
                 const pRMin = Number(wordArray[3]);
                 const pRMax = Number(wordArray[4]);
                 const pDz = Number(wordArray[5]);
                 const SPhi = Number(wordArray[6]);
                 const DPhi = Number(wordArray[7]);
-  
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
-  
+
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
-  
+
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 let aCSG;
                 aCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 let bCSG;
                 bCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 if (DPhi > 270) {
                   let v_DPhi = 360 - DPhi;
-  
+
                   boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / 2;
                     boxmesh.rotateZ(rotateVaule);
@@ -1171,16 +1215,16 @@ function Loader( editor ) {
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
                   aCSG = aCSG.subtract(bCSG);
-  
+
                 } else {
-  
+
                   boxmesh.rotateZ(SPhi / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / (-2);
                     boxmesh.rotateZ(rotateVaule);
@@ -1193,27 +1237,27 @@ function Loader( editor ) {
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 }
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aTubeGeometry';
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
-                
-                finalMesh.name = meshName;	
-  
+
+                finalMesh.name = meshName;
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "CONS":
-  
+
               {
                 const pRmin1 = Number(wordArray[3]);
                 const pRmin2 = Number(wordArray[4]);
@@ -1222,45 +1266,45 @@ function Loader( editor ) {
                 const pDz = Number(wordArray[7]);
                 const SPhi = Number(wordArray[8]);
                 const DPhi = Number(wordArray[9]);
-  
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 cylindermesh1.rotateX(Math.PI / 2);
                 cylindermesh1.updateMatrix();
-  
+
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
                 cylindermesh2.rotateX(Math.PI / 2);
                 cylindermesh2.updateMatrix();
-  
+
                 const maxRadius = Math.max(pRmax1, pRmax2);
                 const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 let aCSG;
-  
+
                 aCSG = MeshCSG2.subtract(MeshCSG1);
-  
+
                 let bCSG;
-  
+
                 bCSG = MeshCSG2.subtract(MeshCSG1);
-  
-  
+
+
                 if (DPhi > 270) {
                   let v_DPhi = 360 - DPhi;
-  
+
                   boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / 2;
                     boxmesh.rotateZ(rotateVaule);
@@ -1274,16 +1318,16 @@ function Loader( editor ) {
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
                   aCSG = aCSG.subtract(bCSG);
-  
+
                 } else {
-  
+
                   boxmesh.rotateZ(SPhi / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / (-2);
                     boxmesh.rotateZ(rotateVaule);
@@ -1296,26 +1340,26 @@ function Loader( editor ) {
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 }
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aConeGeometry';
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "PARA":
-    
+
               {
                 const dx = Number(wordArray[3]);
                 const dy = Number(wordArray[4]);
@@ -1323,24 +1367,24 @@ function Loader( editor ) {
                 const alpha = Number(wordArray[6]);
                 const theta = Number(wordArray[7]);
                 const phi = Number(wordArray[8]);
-  
+
                 const maxRadius = Math.max(dx, dy, dz);
                 const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
+
                 const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 boxmesh.geometry.translate(2 * maxRadius, 0, 0);
                 boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
                 boxmesh.position.set(0 + dx / 2, 0, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
                 boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
@@ -1348,7 +1392,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
                 boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
@@ -1356,7 +1400,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(0, 0, -4 * maxRadius);
                 boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
@@ -1364,116 +1408,116 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
                 boxmesh.position.set(0, dy / 2, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.geometry.translate(0, -4 * maxRadius, 0);
                 boxmesh.position.set(0, - dy / 2, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aParallGeometry';
-                finalMesh.rotateX(Math.PI/2);
+                finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TRD":
-              
+
               {
                 const x1 = Number(wordArray[3]);
                 const x2 = Number(wordArray[4]);
                 const y1 = Number(wordArray[5]);
                 const y2 = Number(wordArray[6]);
                 const z = Number(wordArray[7]);
-                
+
                 var trd = new THREE.BufferGeometry();
-  
+
                 const points = [
                   new THREE.Vector3(-x2, -y2, z),//2
                   new THREE.Vector3(-x2, y2, z),//1
                   new THREE.Vector3(x2, y2, z),//0
-  
+
                   new THREE.Vector3(x2, y2, z),//0
                   new THREE.Vector3(x2, -y2, z),//3
                   new THREE.Vector3(-x2, -y2, z),//2
-  
+
                   new THREE.Vector3(x1, y1, -z),//4
                   new THREE.Vector3(-x1, y1, -z),//5
                   new THREE.Vector3(-x1, -y1, -z),//6
-  
+
                   new THREE.Vector3(-x1, -y1, -z),//6
                   new THREE.Vector3(x1, -y1, -z),//7
                   new THREE.Vector3(x1, y1, -z),//4
-  
+
                   new THREE.Vector3(x2, y2, z),//0
                   new THREE.Vector3(x1, y1, -z),//4
                   new THREE.Vector3(x1, -y1, -z),//7
-  
+
                   new THREE.Vector3(x1, -y1, -z),//7
                   new THREE.Vector3(x2, -y2, z),//3
                   new THREE.Vector3(x2, y2, z),//0
-  
+
                   new THREE.Vector3(-x2, y2, z),//1
                   new THREE.Vector3(-x2, -y2, z),//2
                   new THREE.Vector3(-x1, -y1, -z),//6
-  
+
                   new THREE.Vector3(-x1, -y1, -z),//6
                   new THREE.Vector3(-x1, y1, -z),//5
                   new THREE.Vector3(-x2, y2, z),//1
-  
+
                   new THREE.Vector3(-x2, y2, z),//1
                   new THREE.Vector3(-x1, y1, -z),//5
                   new THREE.Vector3(x1, y1, -z),//4
-  
+
                   new THREE.Vector3(x1, y1, -z),//4
                   new THREE.Vector3(x2, y2, z),//0
                   new THREE.Vector3(-x2, y2, z),//1
-  
+
                   new THREE.Vector3(-x2, -y2, z),//2
                   new THREE.Vector3(x2, -y2, z),//3
                   new THREE.Vector3(x1, -y1, -z),//7
-  
+
                   new THREE.Vector3(x1, -y1, -z),//7
                   new THREE.Vector3(-x1, -y1, -z),//6
                   new THREE.Vector3(-x2, -y2, z),//2
                 ]
-  
+
                 trd.setFromPoints(points);
-  
+
                 const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
                 trd.parameters = param;
                 trd.type = 'aTrapeZoidGeometry';
                 const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
-            case "TRAP": 
-              
+
+            case "TRAP":
+
               {
                 const pDz = Number(wordArray[3]);
                 const pTheta = Number(wordArray[4]);
@@ -1485,27 +1529,27 @@ function Loader( editor ) {
                 const pDy2 = Number(wordArray[10]);
                 const pDx3 = Number(wordArray[11]);
                 const pDx4 = Number(wordArray[12]);
-  
-  
+
+
                 const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4,
-                 dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+                  dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
+
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 boxmesh.geometry.translate(2 * maxWidth, 0, 0);
                 boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
                 boxmesh.position.set(0 + dx / 2, 0, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
                 boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
@@ -1513,7 +1557,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
                 boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
@@ -1521,7 +1565,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
                 boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
@@ -1529,68 +1573,68 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
-  
+
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aTrapeZoidPGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TORUS":
-    
+
               {
                 const pRMin = Number(wordArray[3]);
                 const pRMax = Number(wordArray[4]);
                 const pRtor = Number(wordArray[5]);
                 const SPhi = Number(wordArray[6]);
                 const DPhi = Number(wordArray[7]);
-  
-  
+
+
                 const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
                 const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
                 tormesh1.rotateX(Math.PI / 2);
                 tormesh1.updateMatrix();
-  
+
                 const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
                 const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
                 tormesh2.rotateX(Math.PI / 2);
                 tormesh2.updateMatrix();
-  
+
                 const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
                 const MeshCSG1 = CSG.fromMesh(tormesh1);
                 const MeshCSG2 = CSG.fromMesh(tormesh2);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 let aCSG;
                 aCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 let bCSG;
                 bCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 if (DPhi > 270) {
                   let v_DPhi = 360 - DPhi;
-  
+
                   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / 2;
                     boxmesh.rotateY(rotateVaule);
@@ -1604,16 +1648,16 @@ function Loader( editor ) {
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
                   aCSG = aCSG.subtract(bCSG);
-  
+
                 } else {
-  
+
                   boxmesh.rotateY(SPhi / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / (-2);
                     boxmesh.rotateY(rotateVaule);
@@ -1626,31 +1670,31 @@ function Loader( editor ) {
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 }
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aTorusGeometry';
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-            
+
             case "ELLIPTICALTUBE":
-    
+
               {
                 const xSemiAxis = Number(wordArray[3]);
                 const semiAxisY = Number(wordArray[4]);
                 const Dz = Number(wordArray[5]);
-  
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
                 const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = semiAxisY / xSemiAxis;
@@ -1658,46 +1702,46 @@ function Loader( editor ) {
                 cylindermesh.updateMatrix();
                 const aCSG = CSG.fromMesh(cylindermesh);
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
+
                 const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-            
+
             case "ELLIPSOID":
-    
+
               {
                 const xSemiAxis = Number(wordArray[3]);
                 const ySemiAxis = Number(wordArray[4]);
                 const zSemiAxis = Number(wordArray[5]);
                 const zBottomCut = Number(wordArray[6]);
                 const zTopCut = Number(wordArray[7]);
-  
-  
+
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
-  
-                cylindergeometry1.translate(0, (zTopCut + zBottomCut)/2, 0);
-  
+
+                cylindergeometry1.translate(0, (zTopCut + zBottomCut) / 2, 0);
+
                 let positionAttribute = cylindergeometry1.getAttribute('position');
-  
+
                 let vertex = new THREE.Vector3();
-  
+
                 function calculate_normal_vector(x, y, z, a, b, c) {
                   // Calculate the components of the normal vector
                   let nx = 2 * (x / a ** 2)
                   let ny = 2 * (y / b ** 2)
                   let nz = 2 * (z / c ** 2)
-  
+
                   // Normalize the normal vector
                   let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
                   nx /= magnitude
@@ -1707,7 +1751,7 @@ function Loader( editor ) {
                   return normal;
                 }
                 for (let i = 0; i < positionAttribute.count; i++) {
-  
+
                   vertex.fromBufferAttribute(positionAttribute, i);
                   let x, y, z;
                   x = vertex.x, y = vertex.y;
@@ -1728,88 +1772,88 @@ function Loader( editor ) {
                     } else {
                       k += 0.01;
                     }
-  
+
                   } while (!z);
-  
-  
+
+
                   cylindergeometry1.attributes.position.array[i * 3] = x;
                   cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
                   cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
-  
+
                   let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
                   cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
                   cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
                   cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
-  
+
                 }
                 cylindergeometry1.attributes.position.needsUpdate = true;
-  
+
                 const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-  
+
                 const finalMesh = cylindermesh;
                 const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aEllipsoidGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
-  
+
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "ELLIPTICALCONE":
-    
+
               {
                 const xSemiAxis = Number(wordArray[3]);
                 const ySemiAxis = Number(wordArray[4]);
                 const height = Number(wordArray[5]);
                 const zTopCut = Number(wordArray[6]);
-  
-  
+
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
                 cylindergeometry1.translate(0, zTopCut / 2, 0)
                 const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const ratioZ = ySemiAxis / xSemiAxis;
-  
+
                 cylindermesh.scale.z = ratioZ;
                 cylindermesh.updateMatrix();
                 const aCSG = CSG.fromMesh(cylindermesh);
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
+
                 const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aEllipticalConeGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
-  
+
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TWISTEDBOX":
-    
+
               {
                 const twistedangle = Number(wordArray[3]);
                 const pDx = Number(wordArray[4]);
                 const pDy = Number(wordArray[5]);
                 const pDz = Number(wordArray[6]);
-  
+
                 const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
                 geometry.type = 'aTwistedBoxGeometry';
                 const positionAttribute = geometry.getAttribute('position');
-  
+
                 let vec3 = new THREE.Vector3();
                 let axis_vector = new THREE.Vector3(0, 1, 0);
                 for (let i = 0; i < positionAttribute.count; i++) {
@@ -1817,1332 +1861,25 @@ function Loader( editor ) {
                   vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
                   geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
-  
-                const param = { 'angle': twistedangle, 'width': pDx, 'height': pDy, 'depth': pDz  };
-                geometry.parameters = param;
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-                mesh.rotateX(Math.PI / 2);
-                mesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-  
-                mesh.name = meshName;
-  
-                meshs[solidName] = mesh;
-  
-              }
-              
-              break;
-    
-            case "TWISTEDTRD":
-    
-              {
-                const dx1 = Number(wordArray[3]);
-                const dx2 = Number(wordArray[4]);
-                const dy1 = Number(wordArray[5]);
-                const dy2 = Number(wordArray[6]);
-                const dz = Number(wordArray[7]);
-                const twistedangle = Number(wordArray[8]);
-  
-  
-                const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
-                const maxwidth = Math.max(dx1, dy1, dx2, dy2);
-                const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
-                const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                let MeshCSG1 = CSG.fromMesh(mesh);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                let alpha = Math.atan((dx1 - dx2) / 2 / dz);
-                let phi = Math.atan((dy1 - dy2) / 2 / dz);
-  
-                boxmesh.geometry.translate(maxdis, maxdis, 0);
-                boxmesh.rotation.set(0, 0, phi);
-                boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(-2 * maxdis, 0, 0);
-                boxmesh.rotation.set(0, 0, -phi);
-                boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(maxdis, 0, maxdis);
-                boxmesh.rotation.set(-alpha, 0, 0);
-                boxmesh.position.set(0, -dz / 2, dy1 / 2);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(0, 0, -2 * maxdis);
-                boxmesh.rotation.set(alpha, 0, 0);
-                boxmesh.position.set(0, -dz / 2, -dy1 / 2);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
-                finalMesh.geometry.parameters = param;
-  
-                const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
-                let vec3 = new THREE.Vector3();
-                let axis_vector = new THREE.Vector3(0, 1, 0);
-                for (let i = 0; i < positionAttribute.count; i++) {
-                  vec3.fromBufferAttribute(positionAttribute, i);
-                  vec3.applyAxisAngle(axis_vector, (vec3.y / dz) * twistedangle / 180 * Math.PI);
-                  finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-                }
-  
-                finalMesh.geometry.type = 'aTwistedTrdGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TWISTEDTRAP":
-              
-              {
-                const twistedangle = Number(wordArray[3]);
-                const pDx1 = Number(wordArray[4]);
-                const pDx2 = Number(wordArray[5]);
-                const pDy1 = Number(wordArray[6]);
-                const pDz = Number(wordArray[7]);
-  
-                ///////////////////////////////////////////////////// Please double check this angles ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-                const theta = Number(wordArray[8]);
-                const pDy2 = Number(wordArray[9]);
-                const pDx3 = Number(wordArray[10]);
-                const pDx4 = Number(wordArray[11]);
-  
-  
-                const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = theta, phi = theta;
-                const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
-                const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
-                const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                let MeshCSG1 = CSG.fromMesh(mesh);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                boxmesh.geometry.translate(2 * maxWidth, 0, 0);
-                boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
-                boxmesh.position.set(0 + dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
-                boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
-                boxmesh.position.set(0 - dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
-                boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-                boxmesh.position.set(0, 0, dy);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
-                boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
-                boxmesh.position.set(0, 0, -dy);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
-                finalMesh.geometry.parameters = param;
-  
-                const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
-                let vec3 = new THREE.Vector3();
-                let axis_vector = new THREE.Vector3(0, 1, 0);
-                for (let i = 0; i < positionAttribute.count; i++) {
-                  vec3.fromBufferAttribute(positionAttribute, i);
-                  vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
-                  finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-                }
-  
-                finalMesh.geometry.type = 'aTwistedTrapGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TWISTEDTUBS":
-    
-              {
-                const twistedangle = Number(wordArray[3])
-                const pRMin = Number(wordArray[4]);
-                const pRMax = Number(wordArray[5]);
-                const pDz = Number(wordArray[6]);
-                const DPhi = Number(wordArray[7]);
-                const SPhi = 0;
-                
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-  
-                const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-  
-                const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
-                const MeshCSG1 = CSG.fromMesh(cylindermesh1);
-                const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                let aCSG;
-                aCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                let bCSG;
-                bCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                if (DPhi > 270) {
-                  let v_DPhi = 360 - DPhi;
-  
-                  boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / 2;
-                    boxmesh.rotateY(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    bCSG = bCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateY(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-                  aCSG = aCSG.subtract(bCSG);
-  
-                } else {
-  
-                  boxmesh.rotateY(SPhi / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / (-2);
-                    boxmesh.rotateY(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    aCSG = aCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateY(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                }
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
-                finalMesh.geometry.parameters = param;
-  
-                const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
-                let vec3 = new THREE.Vector3();
-                let axis_vector = new THREE.Vector3(0, 1, 0);
-                for (let i = 0; i < positionAttribute.count; i++) {
-                  vec3.fromBufferAttribute(positionAttribute, i);
-                  vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
-                  finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-                }
-  
-                finalMesh.geometry.type = 'aTwistedTubeGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TET":
-    
-              {
-                let anchor = wordArray[3];
-                let p2 = wordArray[4];
-                let p3 = wordArray[5];
-                let p4 = wordArray[6];
-  
-  
-                function getArray(string) {
-                  return string.split(",").map(Number);
-                }
-      
-                anchor = getArray(anchor);
-                p2 = getArray(p2);
-                p3 = getArray(p3);
-                p4 = getArray(p4);
-      
-                var vertices = [], indices = [];
-                vertices.push(...anchor, ...p2, ...p3, ...p4);
-                indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
-      
-                // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
-                const geometry = new THREE.PolyhedronGeometry(vertices, indices);
-                const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
-                geometry.parameters = param;
-                geometry.type = 'aTetrahedraGeometry';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-                mesh.name = 'Tetrahedra';
-                mesh.rotateX(Math.PI / 2);
-                mesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-  
-                mesh.name = meshName;
-  
-                meshs[solidName] = mesh;
-  
-              }
-  
-              break;
-    
-            case "HYPE":
-    
-              {
-                const radiusIn = Number(wordArray[3]);
-                const radiusOut = Number(wordArray[4]);
-                const stereo1 = Number(wordArray[5]);
-                const stereo2 = Number(wordArray[6]);
-                const pDz = Number(wordArray[7]);
-  
-  
-                const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
-                const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
-                const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
-                const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
-  
-                let positionAttribute = cylindergeometry1.getAttribute('position');
-                let positionAttribute2 = cylindergeometry2.getAttribute('position');
-                let vertex = new THREE.Vector3();
-                let vertex2 = new THREE.Vector3();
-  
-                for (let i = 0; i < positionAttribute.count; i++) {
-  
-                  vertex.fromBufferAttribute(positionAttribute, i);
-                  vertex2.fromBufferAttribute(positionAttribute2, i);
-                  let x, y, z, x2, y2, z2;
-                  x = vertex.x;
-                  y = vertex.y;
-                  z = vertex.z;
-                  x2 = vertex2.x;
-                  y2 = vertex2.y;
-                  z2 = vertex2.z;
-                  let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
-                  let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
-  
-                  let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
-  
-                  if (vertex.z >= 0) {
-                    z = Math.abs(r * Math.sin(alpha));
-                    z2 = Math.abs(r2 * Math.sin(alpha));
-                  } else {
-                    z = - Math.abs(r * Math.sin(alpha));
-                    z2 = - Math.abs(r2 * Math.sin(alpha));
-                  }
-                  if (vertex.x >= 0) {
-                    x = r * Math.cos(alpha);
-                    x2 = r2 * Math.cos(alpha);
-                  } else {
-                    x = -r * Math.cos(alpha);
-                    x2 = -r2 * Math.cos(alpha);
-                  }
-  
-                  cylindergeometry1.attributes.position.array[i * 3] = x;
-                  cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
-                  cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
-  
-  
-                  cylindergeometry2.attributes.position.array[i * 3] = x2;
-                  cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
-                  cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
-  
-                }
-                cylindergeometry1.attributes.position.needsUpdate = true;
-                cylindergeometry2.attributes.position.needsUpdate = true;
-  
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-  
-                const MeshCSG1 = CSG.fromMesh(cylindermesh);
-                const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-  
-                let aCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
-                const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aHyperboloidGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-    
-            case "POLYCONE":
-    
-              {
-  
-                let SPhi = Number(wordArray[3]);
-                let DPhi = Number(wordArray[4]);
-                let numZPlanes = Number(wordArray[5]);
-                let z = wordArray[6];
-                let rOuter = wordArray[7];
-                let rInner = [];
-  
-                
-                function getArray(string) {
-                  return string.split(",").map(Number);
-                }
-      
-                rOuter = getArray(rOuter);
-                z = getArray(z);
-                
-                const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
-  
-                for (let i = 0; i < numZPlanes; i++) {
-                  rInner.push(0.000001);
-                }
-  
-                const meshOut = new THREE.Mesh(geometryOut, material);
-                let maxWidth = Math.max(...rOuter);
-                let maxHeight = Math.max(...z);
-  
-                const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
-  
-                const boxmesh = new THREE.Mesh(boxgeometry, material);
-                boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
-  
-                let MeshCSG1 = CSG.fromMesh(meshOut);
-  
-                const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
-                const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.computeVertexNormals();
-                finalMesh.geometry.type = 'aPolyconeGeometry';
-                finalMesh.updateMatrix();
-  
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-  
-              break;
-    
-            case "POLYHEDRA":
-              
-              {
-                let SPhi = Number(wordArray[3]);
-                let DPhi = Number(wordArray[4]);
-                let numSide = Number(wordArray[5]);
-                let numZPlanes = Number(wordArray[6]);
-                let z = wordArray[7];
-                let rOuter = wordArray[8];
-                let rInner = [];
-                
-                
-                function getArray(string) {
-                  return string.split(",").map(Number);
-                }
-      
-                rOuter = getArray(rOuter);
-                z = getArray(z);
-  
-                for (let i = 0; i < numZPlanes; i++) {
-                  rInner.push(0.000001);
-                }
-  
-                const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
-  
-                const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-  
-                let MeshCSG1 = CSG.fromMesh(meshOut);
-  
-                const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
-                const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide, 'rInner': rInner };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.computeVertexNormals();
-                finalMesh.geometry.type = 'aPolyhedraGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-            
-            default:
-    
-              break;
-          }
-  
-        }
-      })
-  
-      function getBooleanMesh (rowtext) {
-        const wordArray = rowtext.split(' ');
-          const solidName = wordArray[1];
-          const solidType = wordArray[2];
-  
-          solidText[solidName] = rowtext;
-          // set the new mesh 
-  
-          switch (solidType) {
-            case "BOX":
-    
-              {
-                let x = Number(wordArray[3]);
-                let y = Number(wordArray[4]);
-                let z = Number(wordArray[5]);
-  
-                var geometry = new THREE.BoxGeometry(x, y, z);
-                var material = new THREE.MeshNormalMaterial();
-  
-                var mesh = new THREE.Mesh(geometry, material);
-  
-                
-                // set the name of mesh
-  
-                const meshName = solidName.split('_')[0];
-                
-                mesh.name = meshName;
-  
-                meshs[solidName] = mesh;
-                return mesh;
-  
-              }
-  
-              break;
-    
-            case "SPHERE":
-    
-              {
-                const radius = Number(wordArray[3]);
-                const startPhi = Number(wordArray[4]);
-                const deltaPhi = Number(wordArray[5]);
-  
-                const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
-                geometry.type = 'SphereGeometry2';
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
-                const meshName = solidName.split('_')[0];
-                
-                mesh.name = meshName;	
-  
-                meshs[solidName] = mesh;
-  
-                return mesh;
-  
-              }
-              
-              break;
-    
-            case "TUBS":
-              
-              {
-                const pRMin = Number(wordArray[3]);
-                const pRMax = Number(wordArray[4]);
-                const pDz = Number(wordArray[5]);
-                const SPhi = Number(wordArray[6]);
-                const DPhi = Number(wordArray[7]);
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-                cylindermesh1.rotateX(Math.PI / 2);
-                cylindermesh1.updateMatrix();
-  
-                const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-                cylindermesh2.rotateX(Math.PI / 2);
-                cylindermesh2.updateMatrix();
-  
-                const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
-                const MeshCSG1 = CSG.fromMesh(cylindermesh1);
-                const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                let aCSG;
-                aCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                let bCSG;
-                bCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                if (DPhi > 270) {
-                  let v_DPhi = 360 - DPhi;
-  
-                  boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / 2;
-                    boxmesh.rotateZ(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    bCSG = bCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateZ(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-                  aCSG = aCSG.subtract(bCSG);
-  
-                } else {
-  
-                  boxmesh.rotateZ(SPhi / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / (-2);
-                    boxmesh.rotateZ(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    aCSG = aCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateZ(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                }
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aTubeGeometry';
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                
-                finalMesh.name = meshName;	
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-              }
-              
-              break;
-    
-            case "CONS":
-  
-              {
-                const pRmin1 = Number(wordArray[3]);
-                const pRmin2 = Number(wordArray[4]);
-                const pRmax1 = Number(wordArray[5]);
-                const pRmax2 = Number(wordArray[6]);
-                const pDz = Number(wordArray[7]);
-                const SPhi = Number(wordArray[8]);
-                const DPhi = Number(wordArray[9]);
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-                cylindermesh1.rotateX(Math.PI / 2);
-                cylindermesh1.updateMatrix();
-  
-                const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
-                const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-                cylindermesh2.rotateX(Math.PI / 2);
-                cylindermesh2.updateMatrix();
-  
-                const maxRadius = Math.max(pRmax1, pRmax2);
-                const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
-                const MeshCSG1 = CSG.fromMesh(cylindermesh1);
-                const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                let aCSG;
-  
-                aCSG = MeshCSG2.subtract(MeshCSG1);
-  
-                let bCSG;
-  
-                bCSG = MeshCSG2.subtract(MeshCSG1);
-  
-  
-                if (DPhi > 270) {
-                  let v_DPhi = 360 - DPhi;
-  
-                  boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / 2;
-                    boxmesh.rotateZ(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    bCSG = bCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateZ(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-                  aCSG = aCSG.subtract(bCSG);
-  
-                } else {
-  
-                  boxmesh.rotateZ(SPhi / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / (-2);
-                    boxmesh.rotateZ(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    aCSG = aCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateZ(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                }
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aConeGeometry';
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-    
-            case "PARA":
-    
-              {
-                const dx = Number(wordArray[3]);
-                const dy = Number(wordArray[4]);
-                const dz = Number(wordArray[5]);
-                const alpha = Number(wordArray[6]);
-                const theta = Number(wordArray[7]);
-                const phi = Number(wordArray[8]);
-  
-                const maxRadius = Math.max(dx, dy, dz);
-                const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
-                const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                let MeshCSG1 = CSG.fromMesh(mesh);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                boxmesh.geometry.translate(2 * maxRadius, 0, 0);
-                boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
-                boxmesh.position.set(0 + dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
-                boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
-                boxmesh.position.set(0 - dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
-                boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
-                boxmesh.position.set(0, 0, dz / 2);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(0, 0, -4 * maxRadius);
-                boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
-                boxmesh.position.set(0, 0, -dz / 2);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
-                boxmesh.position.set(0, dy / 2, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.geometry.translate(0, -4 * maxRadius, 0);
-                boxmesh.position.set(0, - dy / 2, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aParallGeometry';
-                finalMesh.rotateX(Math.PI/2);
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TRD":
-              
-              {
-                const x1 = Number(wordArray[3]);
-                const x2 = Number(wordArray[4]);
-                const y1 = Number(wordArray[5]);
-                const y2 = Number(wordArray[6]);
-                const z = Number(wordArray[7]);
-                
-                var trd = new THREE.BufferGeometry();
-  
-                const points = [
-                  new THREE.Vector3(-x2, -y2, z),//2
-                  new THREE.Vector3(-x2, y2, z),//1
-                  new THREE.Vector3(x2, y2, z),//0
-  
-                  new THREE.Vector3(x2, y2, z),//0
-                  new THREE.Vector3(x2, -y2, z),//3
-                  new THREE.Vector3(-x2, -y2, z),//2
-  
-                  new THREE.Vector3(x1, y1, -z),//4
-                  new THREE.Vector3(-x1, y1, -z),//5
-                  new THREE.Vector3(-x1, -y1, -z),//6
-  
-                  new THREE.Vector3(-x1, -y1, -z),//6
-                  new THREE.Vector3(x1, -y1, -z),//7
-                  new THREE.Vector3(x1, y1, -z),//4
-  
-                  new THREE.Vector3(x2, y2, z),//0
-                  new THREE.Vector3(x1, y1, -z),//4
-                  new THREE.Vector3(x1, -y1, -z),//7
-  
-                  new THREE.Vector3(x1, -y1, -z),//7
-                  new THREE.Vector3(x2, -y2, z),//3
-                  new THREE.Vector3(x2, y2, z),//0
-  
-                  new THREE.Vector3(-x2, y2, z),//1
-                  new THREE.Vector3(-x2, -y2, z),//2
-                  new THREE.Vector3(-x1, -y1, -z),//6
-  
-                  new THREE.Vector3(-x1, -y1, -z),//6
-                  new THREE.Vector3(-x1, y1, -z),//5
-                  new THREE.Vector3(-x2, y2, z),//1
-  
-                  new THREE.Vector3(-x2, y2, z),//1
-                  new THREE.Vector3(-x1, y1, -z),//5
-                  new THREE.Vector3(x1, y1, -z),//4
-  
-                  new THREE.Vector3(x1, y1, -z),//4
-                  new THREE.Vector3(x2, y2, z),//0
-                  new THREE.Vector3(-x2, y2, z),//1
-  
-                  new THREE.Vector3(-x2, -y2, z),//2
-                  new THREE.Vector3(x2, -y2, z),//3
-                  new THREE.Vector3(x1, -y1, -z),//7
-  
-                  new THREE.Vector3(x1, -y1, -z),//7
-                  new THREE.Vector3(-x1, -y1, -z),//6
-                  new THREE.Vector3(-x2, -y2, z),//2
-                ]
-  
-                trd.setFromPoints(points);
-  
-                const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
-                trd.parameters = param;
-                trd.type = 'aTrapeZoidGeometry';
-                const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TRAP": 
-              
-              {
-                const pDz = Number(wordArray[3]);
-                const pTheta = Number(wordArray[4]);
-                const pPhi = Number(wordArray[5]);
-                const pDy1 = Number(wordArray[6]);
-                const pDx1 = Number(wordArray[7]);
-                const pDx2 = Number(wordArray[8]);
-                const pAlpha = Number(wordArray[9]);
-                const pDy2 = Number(wordArray[10]);
-                const pDx3 = Number(wordArray[11]);
-                const pDx4 = Number(wordArray[12]);
-  
-  
-                const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4,
-                 dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
-                const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
-                const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
-                const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                let MeshCSG1 = CSG.fromMesh(mesh);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                boxmesh.geometry.translate(2 * maxWidth, 0, 0);
-                boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
-                boxmesh.position.set(0 + dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
-                boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
-                boxmesh.position.set(0 - dx / 2, 0, 0);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
-                boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
-                boxmesh.position.set(0, 0, dy);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-                boxmesh.rotation.set(0, 0, 0);
-                boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
-                boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
-                boxmesh.position.set(0, 0, -dy);
-                boxmesh.updateMatrix();
-                MeshCSG3 = CSG.fromMesh(boxmesh);
-                aCSG = aCSG.subtract(MeshCSG3);
-  
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aTrapeZoidPGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TORUS":
-    
-              {
-                const pRMin = Number(wordArray[3]);
-                const pRMax = Number(wordArray[4]);
-                const pRtor = Number(wordArray[5]);
-                const SPhi = Number(wordArray[6]);
-                const DPhi = Number(wordArray[7]);
-  
-  
-                const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
-                const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
-                tormesh1.rotateX(Math.PI / 2);
-                tormesh1.updateMatrix();
-  
-                const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
-                const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
-                tormesh2.rotateX(Math.PI / 2);
-                tormesh2.updateMatrix();
-  
-                const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
-                const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
-                boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
-                const MeshCSG1 = CSG.fromMesh(tormesh1);
-                const MeshCSG2 = CSG.fromMesh(tormesh2);
-                let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
-                let aCSG;
-                aCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                let bCSG;
-                bCSG = MeshCSG1.subtract(MeshCSG2);
-  
-                if (DPhi > 270) {
-                  let v_DPhi = 360 - DPhi;
-  
-                  boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / 2;
-                    boxmesh.rotateY(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    bCSG = bCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateY(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  bCSG = bCSG.subtract(MeshCSG3);
-                  aCSG = aCSG.subtract(bCSG);
-  
-                } else {
-  
-                  boxmesh.rotateY(SPhi / 180 * Math.PI);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                  let repeatCount = Math.floor((270 - DPhi) / 90);
-  
-                  for (let i = 0; i < repeatCount; i++) {
-                    let rotateVaule = Math.PI / (-2);
-                    boxmesh.rotateY(rotateVaule);
-                    boxmesh.updateMatrix();
-                    MeshCSG3 = CSG.fromMesh(boxmesh);
-                    aCSG = aCSG.subtract(MeshCSG3);
-                  }
-                  let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
-                  boxmesh.rotateY(rotateVaule);
-                  boxmesh.updateMatrix();
-                  MeshCSG3 = CSG.fromMesh(boxmesh);
-                  aCSG = aCSG.subtract(MeshCSG3);
-  
-                }
-  
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aTorusGeometry';
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-            
-            case "ELLIPTICALTUBE":
-    
-              {
-                const xSemiAxis = Number(wordArray[3]);
-                const semiAxisY = Number(wordArray[4]);
-                const Dz = Number(wordArray[5]);
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-                const ratioZ = semiAxisY / xSemiAxis;
-                cylindermesh.scale.z = ratioZ;
-                cylindermesh.updateMatrix();
-                const aCSG = CSG.fromMesh(cylindermesh);
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
-                const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-                
-                const meshName = solidName.split('_')[0];
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-            
-            case "ELLIPSOID":
-    
-              {
-                const xSemiAxis = Number(wordArray[3]);
-                const ySemiAxis = Number(wordArray[4]);
-                const zSemiAxis = Number(wordArray[5]);
-                const zBottomCut = Number(wordArray[6]);
-                const zTopCut = Number(wordArray[7]);
-  
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
-  
-                cylindergeometry1.translate(0, (zTopCut + zBottomCut)/2, 0);
-  
-                let positionAttribute = cylindergeometry1.getAttribute('position');
-  
-                let vertex = new THREE.Vector3();
-  
-                function calculate_normal_vector(x, y, z, a, b, c) {
-                  // Calculate the components of the normal vector
-                  let nx = 2 * (x / a ** 2)
-                  let ny = 2 * (y / b ** 2)
-                  let nz = 2 * (z / c ** 2)
-  
-                  // Normalize the normal vector
-                  let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
-                  nx /= magnitude
-                  ny /= magnitude
-                  nz /= magnitude
-                  let normal = { x: nx, y: ny, z: nz };
-                  return normal;
-                }
-                for (let i = 0; i < positionAttribute.count; i++) {
-  
-                  vertex.fromBufferAttribute(positionAttribute, i);
-                  let x, y, z;
-                  x = vertex.x, y = vertex.y;
-                  let k = 0;
-                  do {
-                    x = vertex.x + k;
-                    if (Math.abs(x) < 0) {
-                      x = vertex.x;
-                      break;
-                    }
-                    if (vertex.z > 0) {
-                      z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
-                    } else {
-                      z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
-                    }
-                    if (x > 0) {
-                      k -= 0.01
-                    } else {
-                      k += 0.01;
-                    }
-  
-                  } while (!z);
-  
-  
-                  cylindergeometry1.attributes.position.array[i * 3] = x;
-                  cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
-                  cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
-  
-                  let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
-                  cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
-                  cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
-                  cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
-  
-                }
-                cylindergeometry1.attributes.position.needsUpdate = true;
-  
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-  
-                const finalMesh = cylindermesh;
-                const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aEllipsoidGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-  
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-              }
-              
-              break;
-    
-            case "ELLIPTICALCONE":
-    
-              {
-                const xSemiAxis = Number(wordArray[3]);
-                const ySemiAxis = Number(wordArray[4]);
-                const height = Number(wordArray[5]);
-                const zTopCut = Number(wordArray[6]);
-  
-  
-                const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
-                cylindergeometry1.translate(0, zTopCut / 2, 0)
-                const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-                const ratioZ = ySemiAxis / xSemiAxis;
-  
-                cylindermesh.scale.z = ratioZ;
-                cylindermesh.updateMatrix();
-                const aCSG = CSG.fromMesh(cylindermesh);
-                const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
-                const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
-                finalMesh.geometry.parameters = param;
-                finalMesh.geometry.type = 'aEllipticalConeGeometry';
-                finalMesh.rotateX(Math.PI / 2);
-                finalMesh.updateMatrix();
-  
-                const meshName = solidName.split('_')[0];
-  
-                finalMesh.name = meshName;
-  
-                meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
-              }
-              
-              break;
-    
-            case "TWISTEDBOX":
-    
-              {
-                const twistedangle = Number(wordArray[3]);
-                const pDx = Number(wordArray[4]);
-                const pDy = Number(wordArray[5]);
-                const pDz = Number(wordArray[6]);
-  
-                const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
-                geometry.type = 'aTwistedBoxGeometry';
-                const positionAttribute = geometry.getAttribute('position');
-  
-                let vec3 = new THREE.Vector3();
-                let axis_vector = new THREE.Vector3(0, 1, 0);
-                for (let i = 0; i < positionAttribute.count; i++) {
-                  vec3.fromBufferAttribute(positionAttribute, i);
-                  vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
-                  geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
-                }
-  
+
                 const param = { 'angle': twistedangle, 'width': pDx, 'height': pDy, 'depth': pDz };
                 geometry.parameters = param;
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
-  
+
                 mesh.name = meshName;
-  
+
                 meshs[solidName] = mesh;
-                return mesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TWISTEDTRD":
-    
+
               {
                 const dx1 = Number(wordArray[3]);
                 const dx2 = Number(wordArray[4]);
@@ -3150,29 +1887,29 @@ function Loader( editor ) {
                 const dy2 = Number(wordArray[6]);
                 const dz = Number(wordArray[7]);
                 const twistedangle = Number(wordArray[8]);
-  
-  
+
+
                 const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
                 const maxwidth = Math.max(dx1, dy1, dx2, dy2);
                 const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
+
                 const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 let alpha = Math.atan((dx1 - dx2) / 2 / dz);
                 let phi = Math.atan((dy1 - dy2) / 2 / dz);
-  
+
                 boxmesh.geometry.translate(maxdis, maxdis, 0);
                 boxmesh.rotation.set(0, 0, phi);
                 boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(-2 * maxdis, 0, 0);
                 boxmesh.rotation.set(0, 0, -phi);
@@ -3180,7 +1917,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(maxdis, 0, maxdis);
                 boxmesh.rotation.set(-alpha, 0, 0);
@@ -3188,7 +1925,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(0, 0, -2 * maxdis);
                 boxmesh.rotation.set(alpha, 0, 0);
@@ -3196,13 +1933,13 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
                 finalMesh.geometry.parameters = param;
-  
+
                 const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
+
                 let vec3 = new THREE.Vector3();
                 let axis_vector = new THREE.Vector3(0, 1, 0);
                 for (let i = 0; i < positionAttribute.count; i++) {
@@ -3210,57 +1947,55 @@ function Loader( editor ) {
                   vec3.applyAxisAngle(axis_vector, (vec3.y / dz) * twistedangle / 180 * Math.PI);
                   finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
-  
+
                 finalMesh.geometry.type = 'aTwistedTrdGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-                
+
               }
-              
+
               break;
-    
+
             case "TWISTEDTRAP":
-              
+
               {
                 const twistedangle = Number(wordArray[3]);
                 const pDx1 = Number(wordArray[4]);
                 const pDx2 = Number(wordArray[5]);
                 const pDy1 = Number(wordArray[6]);
                 const pDz = Number(wordArray[7]);
-  
+
                 ///////////////////////////////////////////////////// Please double check this angles ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
                 const theta = Number(wordArray[8]);
                 const pDy2 = Number(wordArray[9]);
                 const pDx3 = Number(wordArray[10]);
                 const pDx4 = Number(wordArray[11]);
-  
-  
+
+
                 const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = theta, phi = theta;
                 const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
                 const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
                 const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-  
+
                 const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 let MeshCSG1 = CSG.fromMesh(mesh);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 boxmesh.geometry.translate(2 * maxWidth, 0, 0);
                 boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
                 boxmesh.position.set(0 + dx / 2, 0, 0);
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 let aCSG = MeshCSG1.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
                 boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
@@ -3268,7 +2003,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
                 boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
@@ -3276,7 +2011,7 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 boxmesh.rotation.set(0, 0, 0);
                 boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
                 boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
@@ -3284,14 +2019,14 @@ function Loader( editor ) {
                 boxmesh.updateMatrix();
                 MeshCSG3 = CSG.fromMesh(boxmesh);
                 aCSG = aCSG.subtract(MeshCSG3);
-  
-  
+
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
                 finalMesh.geometry.parameters = param;
-  
+
                 const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
+
                 let vec3 = new THREE.Vector3();
                 let axis_vector = new THREE.Vector3(0, 1, 0);
                 for (let i = 0; i < positionAttribute.count; i++) {
@@ -3299,24 +2034,22 @@ function Loader( editor ) {
                   vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
                   finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
-  
+
                 finalMesh.geometry.type = 'aTwistedTrapGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
-                return finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "TWISTEDTUBS":
-    
+
               {
                 const twistedangle = Number(wordArray[3])
                 const pRMin = Number(wordArray[4]);
@@ -3324,38 +2057,38 @@ function Loader( editor ) {
                 const pDz = Number(wordArray[6]);
                 const DPhi = Number(wordArray[7]);
                 const SPhi = 0;
-                
-  
+
+
                 const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-  
+
                 const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
                 const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-  
+
                 const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
                 const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
-  
+
                 boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
                 const MeshCSG1 = CSG.fromMesh(cylindermesh1);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
                 let MeshCSG3 = CSG.fromMesh(boxmesh);
-  
+
                 let aCSG;
                 aCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 let bCSG;
                 bCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 if (DPhi > 270) {
                   let v_DPhi = 360 - DPhi;
-  
+
                   boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - v_DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / 2;
                     boxmesh.rotateY(rotateVaule);
@@ -3369,16 +2102,16 @@ function Loader( editor ) {
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   bCSG = bCSG.subtract(MeshCSG3);
                   aCSG = aCSG.subtract(bCSG);
-  
+
                 } else {
-  
+
                   boxmesh.rotateY(SPhi / 180 * Math.PI);
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                   let repeatCount = Math.floor((270 - DPhi) / 90);
-  
+
                   for (let i = 0; i < repeatCount; i++) {
                     let rotateVaule = Math.PI / (-2);
                     boxmesh.rotateY(rotateVaule);
@@ -3391,15 +2124,15 @@ function Loader( editor ) {
                   boxmesh.updateMatrix();
                   MeshCSG3 = CSG.fromMesh(boxmesh);
                   aCSG = aCSG.subtract(MeshCSG3);
-  
+
                 }
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
                 const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
                 finalMesh.geometry.parameters = param;
-  
+
                 const positionAttribute = finalMesh.geometry.getAttribute('position');
-  
+
                 let vec3 = new THREE.Vector3();
                 let axis_vector = new THREE.Vector3(0, 1, 0);
                 for (let i = 0; i < positionAttribute.count; i++) {
@@ -3407,43 +2140,42 @@ function Loader( editor ) {
                   vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
                   finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
                 }
-  
+
                 finalMesh.geometry.type = 'aTwistedTubeGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
-                return mesh;
+
               }
-              
+
               break;
-    
+
             case "TET":
-    
+
               {
                 let anchor = wordArray[3];
                 let p2 = wordArray[4];
                 let p3 = wordArray[5];
                 let p4 = wordArray[6];
-  
-  
+
+
                 function getArray(string) {
                   return string.split(",").map(Number);
                 }
-      
+
                 anchor = getArray(anchor);
                 p2 = getArray(p2);
                 p3 = getArray(p3);
                 p4 = getArray(p4);
-      
+
                 var vertices = [], indices = [];
                 vertices.push(...anchor, ...p2, ...p3, ...p4);
                 indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
-      
+
                 // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
                 const geometry = new THREE.PolyhedronGeometry(vertices, indices);
                 const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
@@ -3453,41 +2185,39 @@ function Loader( editor ) {
                 mesh.name = 'Tetrahedra';
                 mesh.rotateX(Math.PI / 2);
                 mesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
-  
+
                 mesh.name = meshName;
-  
+
                 meshs[solidName] = mesh;
-  
-                return mesh;
-  
+
               }
-  
+
               break;
-    
+
             case "HYPE":
-    
+
               {
                 const radiusIn = Number(wordArray[3]);
                 const radiusOut = Number(wordArray[4]);
                 const stereo1 = Number(wordArray[5]);
                 const stereo2 = Number(wordArray[6]);
                 const pDz = Number(wordArray[7]);
-  
-  
+
+
                 const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
                 const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
                 const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
                 const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
-  
+
                 let positionAttribute = cylindergeometry1.getAttribute('position');
                 let positionAttribute2 = cylindergeometry2.getAttribute('position');
                 let vertex = new THREE.Vector3();
                 let vertex2 = new THREE.Vector3();
-  
+
                 for (let i = 0; i < positionAttribute.count; i++) {
-  
+
                   vertex.fromBufferAttribute(positionAttribute, i);
                   vertex2.fromBufferAttribute(positionAttribute2, i);
                   let x, y, z, x2, y2, z2;
@@ -3499,9 +2229,9 @@ function Loader( editor ) {
                   z2 = vertex2.z;
                   let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
                   let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
-  
+
                   let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
-  
+
                   if (vertex.z >= 0) {
                     z = Math.abs(r * Math.sin(alpha));
                     z2 = Math.abs(r2 * Math.sin(alpha));
@@ -3516,102 +2246,100 @@ function Loader( editor ) {
                     x = -r * Math.cos(alpha);
                     x2 = -r2 * Math.cos(alpha);
                   }
-  
+
                   cylindergeometry1.attributes.position.array[i * 3] = x;
                   cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
                   cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
-  
-  
+
+
                   cylindergeometry2.attributes.position.array[i * 3] = x2;
                   cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
                   cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
-  
+
                 }
                 cylindergeometry1.attributes.position.needsUpdate = true;
                 cylindergeometry2.attributes.position.needsUpdate = true;
-  
+
                 const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
                 const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
-  
+
                 const MeshCSG1 = CSG.fromMesh(cylindermesh);
                 const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-  
+
                 let aCSG = MeshCSG1.subtract(MeshCSG2);
-  
+
                 const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-  
+
                 const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.type = 'aHyperboloidGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-  
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-                return finalMesh;
-  
+
               }
-              
+
               break;
-    
+
             case "POLYCONE":
-    
+
               {
-  
+
                 let SPhi = Number(wordArray[3]);
                 let DPhi = Number(wordArray[4]);
                 let numZPlanes = Number(wordArray[5]);
                 let z = wordArray[6];
                 let rOuter = wordArray[7];
                 let rInner = [];
-  
-                
+
+
                 function getArray(string) {
                   return string.split(",").map(Number);
                 }
-      
+
                 rOuter = getArray(rOuter);
                 z = getArray(z);
-                
-                const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi/180*Math.PI, DPhi/180*Math.PI);
-  
+
+                const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
                 for (let i = 0; i < numZPlanes; i++) {
                   rInner.push(0.000001);
                 }
-  
+
                 const meshOut = new THREE.Mesh(geometryOut, material);
                 let maxWidth = Math.max(...rOuter);
                 let maxHeight = Math.max(...z);
-  
+
                 const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
-  
+
                 const boxmesh = new THREE.Mesh(boxgeometry, material);
                 boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
-  
+
                 let MeshCSG1 = CSG.fromMesh(meshOut);
-  
+
                 const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
                 const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
                 finalMesh.geometry.parameters = param;
                 finalMesh.geometry.computeVertexNormals();
                 finalMesh.geometry.type = 'aPolyconeGeometry';
                 finalMesh.updateMatrix();
-  
-                
+
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-  
-                return finalMesh;
+
               }
-  
+
               break;
-    
+
             case "POLYHEDRA":
-              
+
               {
                 let SPhi = Number(wordArray[3]);
                 let DPhi = Number(wordArray[4]);
@@ -3620,25 +2348,25 @@ function Loader( editor ) {
                 let z = wordArray[7];
                 let rOuter = wordArray[8];
                 let rInner = [];
-                
-                
+
+
                 function getArray(string) {
                   return string.split(",").map(Number);
                 }
-      
+
                 rOuter = getArray(rOuter);
                 z = getArray(z);
-  
+
                 for (let i = 0; i < numZPlanes; i++) {
                   rInner.push(0.000001);
                 }
-  
+
                 const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
-  
+
                 const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
-  
+
                 let MeshCSG1 = CSG.fromMesh(meshOut);
-  
+
                 const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
                 const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide, 'rInner': rInner };
                 finalMesh.geometry.parameters = param;
@@ -3646,230 +2374,1546 @@ function Loader( editor ) {
                 finalMesh.geometry.type = 'aPolyhedraGeometry';
                 finalMesh.rotateX(Math.PI / 2);
                 finalMesh.updateMatrix();
-                
+
                 const meshName = solidName.split('_')[0];
                 finalMesh.name = meshName;
-  
+
                 meshs[solidName] = finalMesh;
-                return finalMesh;
-  
+
               }
-              
+
               break;
-                
-            case "UNION":
-        
-              {
-                let firstchildName = wordArray[3];
-                let secondchildName = wordArray[4];
-                let rotationName = wordArray[5];
-                let positionX = Number(wordArray[6]);
-                let positionY = Number(wordArray[7]);
-                let positionZ = Number(wordArray[8]);
-  
-                let firstchild = meshs[firstchildName];
-                let secondchild = meshs[secondchildName];
-  
-                if(!firstchild) {
-                  firstchild = getBooleanMesh(solidText[firstchildName]);
-                } 
-  
-                if(!secondchild) {
-                  secondchild = getBooleanMesh(solidText[secondchildName]);
-                }
-  
-                let rotation = rotationText[rotationName];
-                let rotationX = rotation.x / 180 * Math.PI;
-                let rotationY = rotation.y / 180 * Math.PI;
-                let rotationZ = rotation.z / 180 * Math.PI;
-  
-                secondchild.position.set(positionX, positionY, positionZ);
-                secondchild.rotation.set(rotationX, rotationY, rotationZ);
-                secondchild.updateMatrix();
-  
-                var mesh;
-                          
-                let aCSG = CSG.fromMesh(firstchild);
-                let bCSG = CSG.fromMesh(secondchild);
-  
-                aCSG = aCSG.union(bCSG);
-  
-                mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                
-                let meshRotationName = rotationName.replace('_rel', '');
-                const meshRotation = rotationText[meshRotationName];
-  
-                if(meshRotation) {
-                  mesh.rotation.copy(meshRotation);
-                }
-  
-                const meshName = solidName.split('_')[0];
-  
-                mesh.name = meshName;
-                meshs[solidName] = mesh;
-  
-                return mesh;
-  
-              }
-              
-              break;
-    
-            case "SUBTRACTION":
-    
-              {
-                let firstchildName = wordArray[3];
-                let secondchildName = wordArray[4];
-                let rotationName = wordArray[5];
-                let positionX = Number(wordArray[6]);
-                let positionY = Number(wordArray[7]);
-                let positionZ = Number(wordArray[8]);
-  
-                let firstchild = meshs[firstchildName];
-                let secondchild = meshs[secondchildName];
-                
-                if(!firstchild) {
-                  firstchild = getBooleanMesh(solidText[firstchildName]);
-                } 
-  
-                if(!secondchild) {
-                  secondchild = getBooleanMesh(solidText[secondchildName]);
-                }
-  
-                let rotation = rotationText[rotationName];
-                let rotationX = rotation.x / 180 * Math.PI;
-                let rotationY = rotation.y / 180 * Math.PI;
-                let rotationZ = rotation.z / 180 * Math.PI;
-  
-                secondchild.rotation.set(rotationX, rotationY, rotationZ);
-                secondchild.position.set(positionX, positionY, positionZ);
-  
-                var mesh;
-                          
-                let aCSG = CSG.fromMesh(firstchild);
-                let bCSG = CSG.fromMesh(secondchild);
-  
-                aCSG = aCSG.subtract(bCSG);
-  
-                mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                
-                let meshRotationName = rotationName.replace('_rel', '');
-                const meshRotation = rotationText[meshRotationName];
-  
-                if(meshRotation) {
-                  mesh.rotation.copy(meshRotation);
-                }
-  
-                const meshName = solidName.split('_')[0];
-  
-                mesh.name = meshName;
-                meshs[solidName] = mesh;
-  
-                return mesh;
-  
-              }
-              
-              break;
-              
-            case "INTERSECTION":
-    
-              {
-                let firstchildName = wordArray[3];
-                let secondchildName = wordArray[4];
-                let rotationName = wordArray[5];
-                let positionX = Number(wordArray[6]);
-                let positionY = Number(wordArray[7]);
-                let positionZ = Number(wordArray[8]);
-  
-  
-                let firstchild = meshs[firstchildName];
-                let secondchild = meshs[secondchildName];
-  
-                if(!firstchild) {
-                  firstchild = getBooleanMesh(solidText[firstchildName]);
-                } 
-  
-                if(!secondchild) {
-                  secondchild = getBooleanMesh(solidText[secondchildName]);
-                }
-  
-                let rotation = rotationText[rotationName];
-                let rotationX = rotation.x / 180 * Math.PI;
-                let rotationY = rotation.y / 180 * Math.PI;
-                let rotationZ = rotation.z / 180 * Math.PI;
-  
-                secondchild.rotation.set(rotationX, rotationY, rotationZ);
-                secondchild.position.set(positionX, positionY, positionZ);
-  
-                var mesh;
-                          
-                let aCSG = CSG.fromMesh(firstchild);
-                let bCSG = CSG.fromMesh(secondchild);
-  
-                aCSG = aCSG.intersect(bCSG);
-  
-                mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                
-                let meshRotationName = rotationName.replace('_rel', '');
-                const meshRotation = rotationText[meshRotationName];
-  
-                if(meshRotation) {
-                  mesh.rotation.copy(meshRotation);
-                }
-                
-                const meshName = solidName.split('_')[0];
-  
-                mesh.name = meshName;
-                meshs[solidName] = mesh;
-  
-                return mesh;
-  
-              }
-  
-              break;          
-  
+
             default:
-    
+
               break;
           }
-  
+
+        }
+      })
+
+      function getBooleanMesh(rowtext) {
+        const wordArray = rowtext.split(' ');
+        const solidName = wordArray[1];
+        const solidType = wordArray[2];
+
+        solidText[solidName] = rowtext;
+        // set the new mesh 
+
+        switch (solidType) {
+          case "BOX":
+
+            {
+              let x = Number(wordArray[3]);
+              let y = Number(wordArray[4]);
+              let z = Number(wordArray[5]);
+
+              var geometry = new THREE.BoxGeometry(x, y, z);
+              var material = new THREE.MeshNormalMaterial();
+
+              var mesh = new THREE.Mesh(geometry, material);
+
+
+              // set the name of mesh
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+
+              meshs[solidName] = mesh;
+              return mesh;
+
+            }
+
+            break;
+
+          case "SPHERE":
+
+            {
+              const radius = Number(wordArray[3]);
+              const startPhi = Number(wordArray[4]);
+              const deltaPhi = Number(wordArray[5]);
+
+              const geometry = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.PI);
+              geometry.type = 'SphereGeometry2';
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+
+              meshs[solidName] = mesh;
+
+              return mesh;
+
+            }
+
+            break;
+
+          case "TUBS":
+
+            {
+              const pRMin = Number(wordArray[3]);
+              const pRMax = Number(wordArray[4]);
+              const pDz = Number(wordArray[5]);
+              const SPhi = Number(wordArray[6]);
+              const DPhi = Number(wordArray[7]);
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+              cylindermesh1.rotateX(Math.PI / 2);
+              cylindermesh1.updateMatrix();
+
+              const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
+              cylindermesh2.rotateX(Math.PI / 2);
+              cylindermesh2.updateMatrix();
+
+              const boxgeometry = new THREE.BoxGeometry(pRMax, pRMax, pDz);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              boxmesh.geometry.translate(pRMax / 2, pRMax / 2, 0);
+              const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+              const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              let aCSG;
+              aCSG = MeshCSG1.subtract(MeshCSG2);
+
+              let bCSG;
+              bCSG = MeshCSG1.subtract(MeshCSG2);
+
+              if (DPhi > 270) {
+                let v_DPhi = 360 - DPhi;
+
+                boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / 2;
+                  boxmesh.rotateZ(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  bCSG = bCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateZ(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+                aCSG = aCSG.subtract(bCSG);
+
+              } else {
+
+                boxmesh.rotateZ(SPhi / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / (-2);
+                  boxmesh.rotateZ(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  aCSG = aCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateZ(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+              }
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aTubeGeometry';
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+            }
+
+            break;
+
+          case "CONS":
+
+            {
+              const pRmin1 = Number(wordArray[3]);
+              const pRmin2 = Number(wordArray[4]);
+              const pRmax1 = Number(wordArray[5]);
+              const pRmax2 = Number(wordArray[6]);
+              const pDz = Number(wordArray[7]);
+              const SPhi = Number(wordArray[8]);
+              const DPhi = Number(wordArray[9]);
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(pRmin1, pRmin2, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+              cylindermesh1.rotateX(Math.PI / 2);
+              cylindermesh1.updateMatrix();
+
+              const cylindergeometry2 = new THREE.CylinderGeometry(pRmax1, pRmax2, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
+              cylindermesh2.rotateX(Math.PI / 2);
+              cylindermesh2.updateMatrix();
+
+              const maxRadius = Math.max(pRmax1, pRmax2);
+              const boxgeometry = new THREE.BoxGeometry(maxRadius, maxRadius, pDz);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              boxmesh.geometry.translate(maxRadius / 2, maxRadius / 2, 0);
+              const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+              const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              let aCSG;
+
+              aCSG = MeshCSG2.subtract(MeshCSG1);
+
+              let bCSG;
+
+              bCSG = MeshCSG2.subtract(MeshCSG1);
+
+
+              if (DPhi > 270) {
+                let v_DPhi = 360 - DPhi;
+
+                boxmesh.rotateZ((SPhi + 90) / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / 2;
+                  boxmesh.rotateZ(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  bCSG = bCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateZ(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+                aCSG = aCSG.subtract(bCSG);
+
+              } else {
+
+                boxmesh.rotateZ(SPhi / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / (-2);
+                  boxmesh.rotateZ(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  aCSG = aCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateZ(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+              }
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'pRMax1': pRmax1, 'pRMin1': pRmin1, 'pRMax2': pRmax2, 'pRMin2': pRmin2, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aConeGeometry';
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "PARA":
+
+            {
+              const dx = Number(wordArray[3]);
+              const dy = Number(wordArray[4]);
+              const dz = Number(wordArray[5]);
+              const alpha = Number(wordArray[6]);
+              const theta = Number(wordArray[7]);
+              const phi = Number(wordArray[8]);
+
+              const maxRadius = Math.max(dx, dy, dz);
+              const geometry = new THREE.BoxGeometry(2 * maxRadius, 2 * maxRadius, 2 * maxRadius, 1, 1, 1);
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+              const boxgeometry = new THREE.BoxGeometry(4 * maxRadius, 4 * maxRadius, 4 * maxRadius);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              let MeshCSG1 = CSG.fromMesh(mesh);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              boxmesh.geometry.translate(2 * maxRadius, 0, 0);
+              boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+              boxmesh.position.set(0 + dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(-4 * maxRadius, 0, 0);
+              boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+              boxmesh.position.set(0 - dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(2 * maxRadius, 0, 2 * maxRadius);
+              boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+              boxmesh.position.set(0, 0, dz / 2);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(0, 0, -4 * maxRadius);
+              boxmesh.rotation.set(alpha / 180 * Math.PI, phi / 180 * Math.PI, theta / 180 * Math.PI);
+              boxmesh.position.set(0, 0, -dz / 2);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(0, 2 * maxRadius, 2 * maxRadius);
+              boxmesh.position.set(0, dy / 2, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.geometry.translate(0, -4 * maxRadius, 0);
+              boxmesh.position.set(0, - dy / 2, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'dx': dx, 'dy': dy, 'dz': dz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aParallGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TRD":
+
+            {
+              const x1 = Number(wordArray[3]);
+              const x2 = Number(wordArray[4]);
+              const y1 = Number(wordArray[5]);
+              const y2 = Number(wordArray[6]);
+              const z = Number(wordArray[7]);
+
+              var trd = new THREE.BufferGeometry();
+
+              const points = [
+                new THREE.Vector3(-x2, -y2, z),//2
+                new THREE.Vector3(-x2, y2, z),//1
+                new THREE.Vector3(x2, y2, z),//0
+
+                new THREE.Vector3(x2, y2, z),//0
+                new THREE.Vector3(x2, -y2, z),//3
+                new THREE.Vector3(-x2, -y2, z),//2
+
+                new THREE.Vector3(x1, y1, -z),//4
+                new THREE.Vector3(-x1, y1, -z),//5
+                new THREE.Vector3(-x1, -y1, -z),//6
+
+                new THREE.Vector3(-x1, -y1, -z),//6
+                new THREE.Vector3(x1, -y1, -z),//7
+                new THREE.Vector3(x1, y1, -z),//4
+
+                new THREE.Vector3(x2, y2, z),//0
+                new THREE.Vector3(x1, y1, -z),//4
+                new THREE.Vector3(x1, -y1, -z),//7
+
+                new THREE.Vector3(x1, -y1, -z),//7
+                new THREE.Vector3(x2, -y2, z),//3
+                new THREE.Vector3(x2, y2, z),//0
+
+                new THREE.Vector3(-x2, y2, z),//1
+                new THREE.Vector3(-x2, -y2, z),//2
+                new THREE.Vector3(-x1, -y1, -z),//6
+
+                new THREE.Vector3(-x1, -y1, -z),//6
+                new THREE.Vector3(-x1, y1, -z),//5
+                new THREE.Vector3(-x2, y2, z),//1
+
+                new THREE.Vector3(-x2, y2, z),//1
+                new THREE.Vector3(-x1, y1, -z),//5
+                new THREE.Vector3(x1, y1, -z),//4
+
+                new THREE.Vector3(x1, y1, -z),//4
+                new THREE.Vector3(x2, y2, z),//0
+                new THREE.Vector3(-x2, y2, z),//1
+
+                new THREE.Vector3(-x2, -y2, z),//2
+                new THREE.Vector3(x2, -y2, z),//3
+                new THREE.Vector3(x1, -y1, -z),//7
+
+                new THREE.Vector3(x1, -y1, -z),//7
+                new THREE.Vector3(-x1, -y1, -z),//6
+                new THREE.Vector3(-x2, -y2, z),//2
+              ]
+
+              trd.setFromPoints(points);
+
+              const param = { 'dx1': x1, 'dy1': y1, 'dz': z, 'dx2': x2, 'dy2': y2 };
+              trd.parameters = param;
+              trd.type = 'aTrapeZoidGeometry';
+              const finalMesh = new THREE.Mesh(trd, new THREE.MeshBasicMaterial())
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TRAP":
+
+            {
+              const pDz = Number(wordArray[3]);
+              const pTheta = Number(wordArray[4]);
+              const pPhi = Number(wordArray[5]);
+              const pDy1 = Number(wordArray[6]);
+              const pDx1 = Number(wordArray[7]);
+              const pDx2 = Number(wordArray[8]);
+              const pAlpha = Number(wordArray[9]);
+              const pDy2 = Number(wordArray[10]);
+              const pDx3 = Number(wordArray[11]);
+              const pDx4 = Number(wordArray[12]);
+
+
+              const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4,
+                dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = pAlpha, theta = pTheta, phi = pPhi;
+              const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+              const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+              const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              let MeshCSG1 = CSG.fromMesh(mesh);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+              boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+              boxmesh.position.set(0 + dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+              boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+              boxmesh.position.set(0 - dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+              boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+              boxmesh.position.set(0, 0, dy);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+              boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+              boxmesh.position.set(0, 0, -dy);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aTrapeZoidPGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TORUS":
+
+            {
+              const pRMin = Number(wordArray[3]);
+              const pRMax = Number(wordArray[4]);
+              const pRtor = Number(wordArray[5]);
+              const SPhi = Number(wordArray[6]);
+              const DPhi = Number(wordArray[7]);
+
+
+              const torgeometry1 = new THREE.TorusGeometry(pRtor, pRMax, 16, 48);
+              const tormesh1 = new THREE.Mesh(torgeometry1, new THREE.MeshBasicMaterial());
+              tormesh1.rotateX(Math.PI / 2);
+              tormesh1.updateMatrix();
+
+              const torgeometry2 = new THREE.TorusGeometry(pRtor, pRMin, 16, 48);
+              const tormesh2 = new THREE.Mesh(torgeometry2, new THREE.MeshBasicMaterial());
+              tormesh2.rotateX(Math.PI / 2);
+              tormesh2.updateMatrix();
+
+              const boxgeometry = new THREE.BoxGeometry(pRtor + pRMax, pRtor + pRMax, pRtor + pRMax);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              boxmesh.geometry.translate((pRtor + pRMax) / 2, 0, (pRtor + pRMax) / 2);
+              const MeshCSG1 = CSG.fromMesh(tormesh1);
+              const MeshCSG2 = CSG.fromMesh(tormesh2);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              let aCSG;
+              aCSG = MeshCSG1.subtract(MeshCSG2);
+
+              let bCSG;
+              bCSG = MeshCSG1.subtract(MeshCSG2);
+
+              if (DPhi > 270) {
+                let v_DPhi = 360 - DPhi;
+
+                boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / 2;
+                  boxmesh.rotateY(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  bCSG = bCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateY(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+                aCSG = aCSG.subtract(bCSG);
+
+              } else {
+
+                boxmesh.rotateY(SPhi / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / (-2);
+                  boxmesh.rotateY(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  aCSG = aCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateY(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+              }
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pRTor': pRtor, 'pSPhi': SPhi, 'pDPhi': DPhi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aTorusGeometry';
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "ELLIPTICALTUBE":
+
+            {
+              const xSemiAxis = Number(wordArray[3]);
+              const semiAxisY = Number(wordArray[4]);
+              const Dz = Number(wordArray[5]);
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, Dz, 32, 1, false, 0, Math.PI * 2);
+              const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+              const ratioZ = semiAxisY / xSemiAxis;
+              cylindermesh.scale.z = ratioZ;
+              cylindermesh.updateMatrix();
+              const aCSG = CSG.fromMesh(cylindermesh);
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              const param = { 'xSemiAxis': xSemiAxis, 'semiAxisY': semiAxisY, 'Dz': Dz };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aEllipticalCylinderGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "ELLIPSOID":
+
+            {
+              const xSemiAxis = Number(wordArray[3]);
+              const ySemiAxis = Number(wordArray[4]);
+              const zSemiAxis = Number(wordArray[5]);
+              const zBottomCut = Number(wordArray[6]);
+              const zTopCut = Number(wordArray[7]);
+
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis, xSemiAxis, zTopCut - zBottomCut, 32, 256, false, 0, Math.PI * 2);
+
+              cylindergeometry1.translate(0, (zTopCut + zBottomCut) / 2, 0);
+
+              let positionAttribute = cylindergeometry1.getAttribute('position');
+
+              let vertex = new THREE.Vector3();
+
+              function calculate_normal_vector(x, y, z, a, b, c) {
+                // Calculate the components of the normal vector
+                let nx = 2 * (x / a ** 2)
+                let ny = 2 * (y / b ** 2)
+                let nz = 2 * (z / c ** 2)
+
+                // Normalize the normal vector
+                let magnitude = Math.sqrt(nx ** 2 + ny ** 2 + nz ** 2)
+                nx /= magnitude
+                ny /= magnitude
+                nz /= magnitude
+                let normal = { x: nx, y: ny, z: nz };
+                return normal;
+              }
+              for (let i = 0; i < positionAttribute.count; i++) {
+
+                vertex.fromBufferAttribute(positionAttribute, i);
+                let x, y, z;
+                x = vertex.x, y = vertex.y;
+                let k = 0;
+                do {
+                  x = vertex.x + k;
+                  if (Math.abs(x) < 0) {
+                    x = vertex.x;
+                    break;
+                  }
+                  if (vertex.z > 0) {
+                    z = ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+                  } else {
+                    z = -ySemiAxis * Math.sqrt(1 - Math.pow(y / zSemiAxis, 2) - Math.pow(x / xSemiAxis, 2));
+                  }
+                  if (x > 0) {
+                    k -= 0.01
+                  } else {
+                    k += 0.01;
+                  }
+
+                } while (!z);
+
+
+                cylindergeometry1.attributes.position.array[i * 3] = x;
+                cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+                cylindergeometry1.attributes.position.array[i * 3 + 2] = z ? z : vertex.z;
+
+                let normal = calculate_normal_vector(x, y, z, xSemiAxis, zSemiAxis, ySemiAxis)
+                cylindergeometry1.attributes.normal.array[i * 3] = normal.x;
+                cylindergeometry1.attributes.normal.array[i * 3 + 1] = normal.y;
+                cylindergeometry1.attributes.normal.array[i * 3 + 2] = normal.z;
+
+              }
+              cylindergeometry1.attributes.position.needsUpdate = true;
+
+              const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+
+              const finalMesh = cylindermesh;
+              const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'zSemiAxis': zSemiAxis, 'zTopCut': zTopCut, 'zBottomCut': zBottomCut };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aEllipsoidGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+            }
+
+            break;
+
+          case "ELLIPTICALCONE":
+
+            {
+              const xSemiAxis = Number(wordArray[3]);
+              const ySemiAxis = Number(wordArray[4]);
+              const height = Number(wordArray[5]);
+              const zTopCut = Number(wordArray[6]);
+
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(xSemiAxis * ((height - zTopCut) / height), xSemiAxis, zTopCut, 32, 32, false, 0, Math.PI * 2);
+              cylindergeometry1.translate(0, zTopCut / 2, 0)
+              const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+              const ratioZ = ySemiAxis / xSemiAxis;
+
+              cylindermesh.scale.z = ratioZ;
+              cylindermesh.updateMatrix();
+              const aCSG = CSG.fromMesh(cylindermesh);
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              const param = { 'xSemiAxis': xSemiAxis, 'ySemiAxis': ySemiAxis, 'height': height, 'zTopCut': zTopCut };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aEllipticalConeGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TWISTEDBOX":
+
+            {
+              const twistedangle = Number(wordArray[3]);
+              const pDx = Number(wordArray[4]);
+              const pDy = Number(wordArray[5]);
+              const pDz = Number(wordArray[6]);
+
+              const geometry = new THREE.BoxGeometry(pDx, pDy, pDz, 32, 32, 32);
+              geometry.type = 'aTwistedBoxGeometry';
+              const positionAttribute = geometry.getAttribute('position');
+
+              let vec3 = new THREE.Vector3();
+              let axis_vector = new THREE.Vector3(0, 1, 0);
+              for (let i = 0; i < positionAttribute.count; i++) {
+                vec3.fromBufferAttribute(positionAttribute, i);
+                vec3.applyAxisAngle(axis_vector, (vec3.y / pDy) * twistedangle / 180 * Math.PI);
+                geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+              }
+
+              const param = { 'angle': twistedangle, 'width': pDx, 'height': pDy, 'depth': pDz };
+              geometry.parameters = param;
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+              mesh.rotateX(Math.PI / 2);
+              mesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+
+              meshs[solidName] = mesh;
+              return mesh;
+
+            }
+
+            break;
+
+          case "TWISTEDTRD":
+
+            {
+              const dx1 = Number(wordArray[3]);
+              const dx2 = Number(wordArray[4]);
+              const dy1 = Number(wordArray[5]);
+              const dy2 = Number(wordArray[6]);
+              const dz = Number(wordArray[7]);
+              const twistedangle = Number(wordArray[8]);
+
+
+              const maxdis = Math.max(dx1, dy1, dx2, dy2, dz);
+              const maxwidth = Math.max(dx1, dy1, dx2, dy2);
+              const geometry = new THREE.BoxGeometry(maxwidth, dz, maxwidth, 32, 32, 32);
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+              const boxgeometry = new THREE.BoxGeometry(maxdis * 2, maxdis * 2, maxdis * 2, 32, 32, 32);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              let MeshCSG1 = CSG.fromMesh(mesh);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              let alpha = Math.atan((dx1 - dx2) / 2 / dz);
+              let phi = Math.atan((dy1 - dy2) / 2 / dz);
+
+              boxmesh.geometry.translate(maxdis, maxdis, 0);
+              boxmesh.rotation.set(0, 0, phi);
+              boxmesh.position.set(0 + dx1 / 2, -dz / 2, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(-2 * maxdis, 0, 0);
+              boxmesh.rotation.set(0, 0, -phi);
+              boxmesh.position.set(0 - dx1 / 2, -dz / 2, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(maxdis, 0, maxdis);
+              boxmesh.rotation.set(-alpha, 0, 0);
+              boxmesh.position.set(0, -dz / 2, dy1 / 2);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(0, 0, -2 * maxdis);
+              boxmesh.rotation.set(alpha, 0, 0);
+              boxmesh.position.set(0, -dz / 2, -dy1 / 2);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'dx1': dx1, 'dy1': dy1, 'dz': dz, 'dx2': dx2, 'dy2': dy2, 'twistedangle': twistedangle };
+              finalMesh.geometry.parameters = param;
+
+              const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+              let vec3 = new THREE.Vector3();
+              let axis_vector = new THREE.Vector3(0, 1, 0);
+              for (let i = 0; i < positionAttribute.count; i++) {
+                vec3.fromBufferAttribute(positionAttribute, i);
+                vec3.applyAxisAngle(axis_vector, (vec3.y / dz) * twistedangle / 180 * Math.PI);
+                finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+              }
+
+              finalMesh.geometry.type = 'aTwistedTrdGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TWISTEDTRAP":
+
+            {
+              const twistedangle = Number(wordArray[3]);
+              const pDx1 = Number(wordArray[4]);
+              const pDx2 = Number(wordArray[5]);
+              const pDy1 = Number(wordArray[6]);
+              const pDz = Number(wordArray[7]);
+
+              ///////////////////////////////////////////////////// Please double check this angles ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+              const theta = Number(wordArray[8]);
+              const pDy2 = Number(wordArray[9]);
+              const pDx3 = Number(wordArray[10]);
+              const pDx4 = Number(wordArray[11]);
+
+
+              const dx = (pDx1 + pDx2 + pDx3 + pDx4) / 4, dy = (pDy1 + pDy2) / 2, dz = pDz, alpha = theta, phi = theta;
+              const maxWidth = Math.max(dx, pDx2, pDx3, pDx4);
+              const geometry = new THREE.BoxGeometry(2 * maxWidth, dz, 2 * maxWidth, 1, 1, 1);
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+
+              const boxgeometry = new THREE.BoxGeometry(4 * maxWidth, 4 * dz, 4 * maxWidth, 32, 32, 32);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              let MeshCSG1 = CSG.fromMesh(mesh);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              boxmesh.geometry.translate(2 * maxWidth, 0, 0);
+              boxmesh.rotation.set(0, Math.atan((pDy2 - pDy1) / 2 / pDz) + phi / 180 * Math.PI, alpha / 180 * Math.PI + Math.atan((pDy1 - pDy2) / 2 / dz));
+              boxmesh.position.set(0 + dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              let aCSG = MeshCSG1.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(-4 * maxWidth, 0, 0);
+              boxmesh.rotation.set(0, Math.atan((pDy1 - pDy2) / 2 / pDz) - phi / 180 * Math.PI, alpha / 180 * Math.PI - Math.atan((pDy1 - pDy2) / 2 / dz));
+              boxmesh.position.set(0 - dx / 2, 0, 0);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(2 * maxWidth, 0, 2 * maxWidth);
+              boxmesh.rotation.set(-theta / 180 * Math.PI - Math.tan((pDx1 - pDx3) / 2 / pDz), 0, 0);
+              boxmesh.position.set(0, 0, dy);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+              boxmesh.rotation.set(0, 0, 0);
+              boxmesh.geometry.translate(0, 0, - 4 * maxWidth);
+              boxmesh.rotation.set(theta / 180 * Math.PI + Math.tan((pDx2 - pDx4) / 2 / pDz), 0, 0);
+              boxmesh.position.set(0, 0, -dy);
+              boxmesh.updateMatrix();
+              MeshCSG3 = CSG.fromMesh(boxmesh);
+              aCSG = aCSG.subtract(MeshCSG3);
+
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'dx1': pDx1, 'dx2': pDx2, 'dy1': pDy1, 'dx3': pDx3, 'dx4': pDx4, 'dy2': pDy2, 'dz': pDz, 'alpha': alpha, 'theta': theta, 'phi': phi, 'twistedangle': twistedangle };
+              finalMesh.geometry.parameters = param;
+
+              const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+              let vec3 = new THREE.Vector3();
+              let axis_vector = new THREE.Vector3(0, 1, 0);
+              for (let i = 0; i < positionAttribute.count; i++) {
+                vec3.fromBufferAttribute(positionAttribute, i);
+                vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+                finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+              }
+
+              finalMesh.geometry.type = 'aTwistedTrapGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "TWISTEDTUBS":
+
+            {
+              const twistedangle = Number(wordArray[3])
+              const pRMin = Number(wordArray[4]);
+              const pRMax = Number(wordArray[5]);
+              const pDz = Number(wordArray[6]);
+              const DPhi = Number(wordArray[7]);
+              const SPhi = 0;
+
+
+              const cylindergeometry1 = new THREE.CylinderGeometry(pRMax, pRMax, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh1 = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+
+              const cylindergeometry2 = new THREE.CylinderGeometry(pRMin, pRMin, pDz, 32, 32, false, 0, Math.PI * 2);
+              const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
+
+              const boxgeometry = new THREE.BoxGeometry(pRMax, pDz, pRMax, 32, 32, 32);
+              const boxmesh = new THREE.Mesh(boxgeometry, new THREE.MeshBasicMaterial());
+
+              boxmesh.geometry.translate(pRMax / 2, 0, pRMax / 2);
+              const MeshCSG1 = CSG.fromMesh(cylindermesh1);
+              const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+              let MeshCSG3 = CSG.fromMesh(boxmesh);
+
+              let aCSG;
+              aCSG = MeshCSG1.subtract(MeshCSG2);
+
+              let bCSG;
+              bCSG = MeshCSG1.subtract(MeshCSG2);
+
+              if (DPhi > 270) {
+                let v_DPhi = 360 - DPhi;
+
+                boxmesh.rotateY((SPhi + 90) / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - v_DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / 2;
+                  boxmesh.rotateY(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  bCSG = bCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (270 - v_DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateY(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                bCSG = bCSG.subtract(MeshCSG3);
+                aCSG = aCSG.subtract(bCSG);
+
+              } else {
+
+                boxmesh.rotateY(SPhi / 180 * Math.PI);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+                let repeatCount = Math.floor((270 - DPhi) / 90);
+
+                for (let i = 0; i < repeatCount; i++) {
+                  let rotateVaule = Math.PI / (-2);
+                  boxmesh.rotateY(rotateVaule);
+                  boxmesh.updateMatrix();
+                  MeshCSG3 = CSG.fromMesh(boxmesh);
+                  aCSG = aCSG.subtract(MeshCSG3);
+                }
+                let rotateVaule = (-1) * (270 - DPhi - repeatCount * 90) / 180 * Math.PI;
+                boxmesh.rotateY(rotateVaule);
+                boxmesh.updateMatrix();
+                MeshCSG3 = CSG.fromMesh(boxmesh);
+                aCSG = aCSG.subtract(MeshCSG3);
+
+              }
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+              const param = { 'pRMax': pRMax, 'pRMin': pRMin, 'pDz': pDz, 'pSPhi': SPhi, 'pDPhi': DPhi, 'twistedangle': twistedangle };
+              finalMesh.geometry.parameters = param;
+
+              const positionAttribute = finalMesh.geometry.getAttribute('position');
+
+              let vec3 = new THREE.Vector3();
+              let axis_vector = new THREE.Vector3(0, 1, 0);
+              for (let i = 0; i < positionAttribute.count; i++) {
+                vec3.fromBufferAttribute(positionAttribute, i);
+                vec3.applyAxisAngle(axis_vector, (vec3.y / pDz) * twistedangle / 180 * Math.PI);
+                finalMesh.geometry.attributes.position.setXYZ(i, vec3.x, vec3.y, vec3.z);
+              }
+
+              finalMesh.geometry.type = 'aTwistedTubeGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return mesh;
+            }
+
+            break;
+
+          case "TET":
+
+            {
+              let anchor = wordArray[3];
+              let p2 = wordArray[4];
+              let p3 = wordArray[5];
+              let p4 = wordArray[6];
+
+
+              function getArray(string) {
+                return string.split(",").map(Number);
+              }
+
+              anchor = getArray(anchor);
+              p2 = getArray(p2);
+              p3 = getArray(p3);
+              p4 = getArray(p4);
+
+              var vertices = [], indices = [];
+              vertices.push(...anchor, ...p2, ...p3, ...p4);
+              indices.push(0, 1, 2, 0, 2, 1, 0, 2, 3, 0, 3, 2, 0, 1, 3, 0, 3, 1, 1, 2, 3, 1, 3, 2);
+
+              // vertices = vertices.join("").match(/-?(?:\d+\.\d*|\.\d+|\d+)/g);
+              const geometry = new THREE.PolyhedronGeometry(vertices, indices);
+              const param = { 'anchor': anchor, 'p2': p2, 'p3': p3, 'p4': p4 };
+              geometry.parameters = param;
+              geometry.type = 'aTetrahedraGeometry';
+              const mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+              mesh.name = 'Tetrahedra';
+              mesh.rotateX(Math.PI / 2);
+              mesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+
+              meshs[solidName] = mesh;
+
+              return mesh;
+
+            }
+
+            break;
+
+          case "HYPE":
+
+            {
+              const radiusIn = Number(wordArray[3]);
+              const radiusOut = Number(wordArray[4]);
+              const stereo1 = Number(wordArray[5]);
+              const stereo2 = Number(wordArray[6]);
+              const pDz = Number(wordArray[7]);
+
+
+              const c_z1 = Math.tan(stereo1 * Math.PI / 180 / 2);
+              const c_z2 = Math.tan(stereo2 * Math.PI / 180 / 2);
+              const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz, 32, 16, false, 0, Math.PI * 2);
+              const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz, 32, 16, false, 0, Math.PI * 2);
+
+              let positionAttribute = cylindergeometry1.getAttribute('position');
+              let positionAttribute2 = cylindergeometry2.getAttribute('position');
+              let vertex = new THREE.Vector3();
+              let vertex2 = new THREE.Vector3();
+
+              for (let i = 0; i < positionAttribute.count; i++) {
+
+                vertex.fromBufferAttribute(positionAttribute, i);
+                vertex2.fromBufferAttribute(positionAttribute2, i);
+                let x, y, z, x2, y2, z2;
+                x = vertex.x;
+                y = vertex.y;
+                z = vertex.z;
+                x2 = vertex2.x;
+                y2 = vertex2.y;
+                z2 = vertex2.z;
+                let r = radiusOut * Math.sqrt((1 + Math.pow((y / c_z1), 2)));
+                let r2 = radiusIn * Math.sqrt((1 + Math.pow((y2 / c_z2), 2)));
+
+                let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
+
+                if (vertex.z >= 0) {
+                  z = Math.abs(r * Math.sin(alpha));
+                  z2 = Math.abs(r2 * Math.sin(alpha));
+                } else {
+                  z = - Math.abs(r * Math.sin(alpha));
+                  z2 = - Math.abs(r2 * Math.sin(alpha));
+                }
+                if (vertex.x >= 0) {
+                  x = r * Math.cos(alpha);
+                  x2 = r2 * Math.cos(alpha);
+                } else {
+                  x = -r * Math.cos(alpha);
+                  x2 = -r2 * Math.cos(alpha);
+                }
+
+                cylindergeometry1.attributes.position.array[i * 3] = x;
+                cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
+                cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
+
+
+                cylindergeometry2.attributes.position.array[i * 3] = x2;
+                cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
+                cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
+
+              }
+              cylindergeometry1.attributes.position.needsUpdate = true;
+              cylindergeometry2.attributes.position.needsUpdate = true;
+
+              const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
+              const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
+
+              const MeshCSG1 = CSG.fromMesh(cylindermesh);
+              const MeshCSG2 = CSG.fromMesh(cylindermesh2);
+
+              let aCSG = MeshCSG1.subtract(MeshCSG2);
+
+              const finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pDz };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.type = 'aHyperboloidGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "POLYCONE":
+
+            {
+
+              let SPhi = Number(wordArray[3]);
+              let DPhi = Number(wordArray[4]);
+              let numZPlanes = Number(wordArray[5]);
+              let z = wordArray[6];
+              let rOuter = wordArray[7];
+              let rInner = [];
+
+
+              function getArray(string) {
+                return string.split(",").map(Number);
+              }
+
+              rOuter = getArray(rOuter);
+              z = getArray(z);
+
+              const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, 32, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+              for (let i = 0; i < numZPlanes; i++) {
+                rInner.push(0.000001);
+              }
+
+              const meshOut = new THREE.Mesh(geometryOut, material);
+              let maxWidth = Math.max(...rOuter);
+              let maxHeight = Math.max(...z);
+
+              const boxgeometry = new THREE.BoxGeometry(maxWidth, maxHeight, maxWidth, 32, 32, 32);
+
+              const boxmesh = new THREE.Mesh(boxgeometry, material);
+              boxmesh.geometry.translate(maxWidth / 2, maxHeight / 2, maxWidth / 2);
+
+              let MeshCSG1 = CSG.fromMesh(meshOut);
+
+              const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+              const param = { 'rInner': rInner, 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.computeVertexNormals();
+              finalMesh.geometry.type = 'aPolyconeGeometry';
+              finalMesh.updateMatrix();
+
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+
+              return finalMesh;
+            }
+
+            break;
+
+          case "POLYHEDRA":
+
+            {
+              let SPhi = Number(wordArray[3]);
+              let DPhi = Number(wordArray[4]);
+              let numSide = Number(wordArray[5]);
+              let numZPlanes = Number(wordArray[6]);
+              let z = wordArray[7];
+              let rOuter = wordArray[8];
+              let rInner = [];
+
+
+              function getArray(string) {
+                return string.split(",").map(Number);
+              }
+
+              rOuter = getArray(rOuter);
+              z = getArray(z);
+
+              for (let i = 0; i < numZPlanes; i++) {
+                rInner.push(0.000001);
+              }
+
+              const geometryOut = new PolyconeGeometry(numZPlanes, rOuter, z, numSide, 1, false, SPhi / 180 * Math.PI, DPhi / 180 * Math.PI);
+
+              const meshOut = new THREE.Mesh(geometryOut, new THREE.MeshBasicMaterial());
+
+              let MeshCSG1 = CSG.fromMesh(meshOut);
+
+              const finalMesh = CSG.toMesh(MeshCSG1, new THREE.Matrix4());
+              const param = { 'rOuter': rOuter, 'z': z, 'numZPlanes': numZPlanes, 'SPhi': SPhi, 'DPhi': DPhi, 'numSide': numSide, 'rInner': rInner };
+              finalMesh.geometry.parameters = param;
+              finalMesh.geometry.computeVertexNormals();
+              finalMesh.geometry.type = 'aPolyhedraGeometry';
+              finalMesh.rotateX(Math.PI / 2);
+              finalMesh.updateMatrix();
+
+              const meshName = solidName.split('_')[0];
+              finalMesh.name = meshName;
+
+              meshs[solidName] = finalMesh;
+              return finalMesh;
+
+            }
+
+            break;
+
+          case "UNION":
+
+            {
+              let firstchildName = wordArray[3];
+              let secondchildName = wordArray[4];
+              let rotationName = wordArray[5];
+              let positionX = Number(wordArray[6]);
+              let positionY = Number(wordArray[7]);
+              let positionZ = Number(wordArray[8]);
+
+              let firstchild = meshs[firstchildName];
+              let secondchild = meshs[secondchildName];
+
+              if (!firstchild) {
+                firstchild = getBooleanMesh(solidText[firstchildName]);
+              }
+
+              if (!secondchild) {
+                secondchild = getBooleanMesh(solidText[secondchildName]);
+              }
+
+              let rotation = rotationText[rotationName];
+              let rotationX = rotation.x / 180 * Math.PI;
+              let rotationY = rotation.y / 180 * Math.PI;
+              let rotationZ = rotation.z / 180 * Math.PI;
+
+              secondchild.position.set(positionX, positionY, positionZ);
+              secondchild.rotation.set(rotationX, rotationY, rotationZ);
+              secondchild.updateMatrix();
+
+              var mesh;
+
+              let aCSG = CSG.fromMesh(firstchild);
+              let bCSG = CSG.fromMesh(secondchild);
+
+              aCSG = aCSG.union(bCSG);
+
+              mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              let meshRotationName = rotationName.replace('_rel', '');
+              const meshRotation = rotationText[meshRotationName];
+
+              if (meshRotation) {
+                mesh.rotation.copy(meshRotation);
+              }
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+              meshs[solidName] = mesh;
+
+              return mesh;
+
+            }
+
+            break;
+
+          case "SUBTRACTION":
+
+            {
+              let firstchildName = wordArray[3];
+              let secondchildName = wordArray[4];
+              let rotationName = wordArray[5];
+              let positionX = Number(wordArray[6]);
+              let positionY = Number(wordArray[7]);
+              let positionZ = Number(wordArray[8]);
+
+              let firstchild = meshs[firstchildName];
+              let secondchild = meshs[secondchildName];
+
+              if (!firstchild) {
+                firstchild = getBooleanMesh(solidText[firstchildName]);
+              }
+
+              if (!secondchild) {
+                secondchild = getBooleanMesh(solidText[secondchildName]);
+              }
+
+              let rotation = rotationText[rotationName];
+              let rotationX = rotation.x / 180 * Math.PI;
+              let rotationY = rotation.y / 180 * Math.PI;
+              let rotationZ = rotation.z / 180 * Math.PI;
+
+              secondchild.rotation.set(rotationX, rotationY, rotationZ);
+              secondchild.position.set(positionX, positionY, positionZ);
+
+              var mesh;
+
+              let aCSG = CSG.fromMesh(firstchild);
+              let bCSG = CSG.fromMesh(secondchild);
+
+              aCSG = aCSG.subtract(bCSG);
+
+              mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              let meshRotationName = rotationName.replace('_rel', '');
+              const meshRotation = rotationText[meshRotationName];
+
+              if (meshRotation) {
+                mesh.rotation.copy(meshRotation);
+              }
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+              meshs[solidName] = mesh;
+
+              return mesh;
+
+            }
+
+            break;
+
+          case "INTERSECTION":
+
+            {
+              let firstchildName = wordArray[3];
+              let secondchildName = wordArray[4];
+              let rotationName = wordArray[5];
+              let positionX = Number(wordArray[6]);
+              let positionY = Number(wordArray[7]);
+              let positionZ = Number(wordArray[8]);
+
+
+              let firstchild = meshs[firstchildName];
+              let secondchild = meshs[secondchildName];
+
+              if (!firstchild) {
+                firstchild = getBooleanMesh(solidText[firstchildName]);
+              }
+
+              if (!secondchild) {
+                secondchild = getBooleanMesh(solidText[secondchildName]);
+              }
+
+              let rotation = rotationText[rotationName];
+              let rotationX = rotation.x / 180 * Math.PI;
+              let rotationY = rotation.y / 180 * Math.PI;
+              let rotationZ = rotation.z / 180 * Math.PI;
+
+              secondchild.rotation.set(rotationX, rotationY, rotationZ);
+              secondchild.position.set(positionX, positionY, positionZ);
+
+              var mesh;
+
+              let aCSG = CSG.fromMesh(firstchild);
+              let bCSG = CSG.fromMesh(secondchild);
+
+              aCSG = aCSG.intersect(bCSG);
+
+              mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+
+              let meshRotationName = rotationName.replace('_rel', '');
+              const meshRotation = rotationText[meshRotationName];
+
+              if (meshRotation) {
+                mesh.rotation.copy(meshRotation);
+              }
+
+              const meshName = solidName.split('_')[0];
+
+              mesh.name = meshName;
+              meshs[solidName] = mesh;
+
+              return mesh;
+
+            }
+
+            break;
+
+          default:
+
+            break;
+        }
+
       }
       tgText.forEach(rowtext => {
         const wordArray = rowtext.split(' ');
         const identify = wordArray[0];
-        
-        switch ( identify ){
-  
+
+        switch (identify) {
+
           case ':rotm':
-  
+
             {
               const rotmName = wordArray[1];
-  
+
               let newRotation = new THREE.Vector3(0, 0, 0);
-  
+
               const x = Number(wordArray[2]);
               const y = Number(wordArray[3]);
               const z = Number(wordArray[4]);
-  
+
               newRotation.set(x, y, z);
-  
+
               rotationText[rotmName] = newRotation;
-  
+
             }
-  
+
             break;
-  
+
           case ':solid':
-  
+
             {
               const solidName = wordArray[1];
               const solidType = wordArray[2];
-  
+
               // set the new mesh 
-  
+
               switch (solidType) {
-                
+
                 case "UNION":
-        
+
                   {
                     let firstchildName = wordArray[3];
                     let secondchildName = wordArray[4];
@@ -3877,47 +3921,47 @@ function Loader( editor ) {
                     let positionX = Number(wordArray[6]);
                     let positionY = Number(wordArray[7]);
                     let positionZ = Number(wordArray[8]);
-  
+
                     let firstchild = meshs[firstchildName];
                     let secondchild = meshs[secondchildName];
-  
-                    if(!firstchild) {
+
+                    if (!firstchild) {
                       firstchild = getBooleanMesh(solidText[firstchildName]);
-                    } 
-  
-                    if(!secondchild) {
+                    }
+
+                    if (!secondchild) {
                       secondchild = getBooleanMesh(solidText[secondchildName]);
                     }
-  
+
                     let rotation = rotationText[rotationName];
                     let rotationX = rotation.x / 180 * Math.PI;
                     let rotationY = rotation.y / 180 * Math.PI;
                     let rotationZ = rotation.z / 180 * Math.PI;
-  
+
                     secondchild.position.set(positionX, positionY, positionZ);
                     secondchild.rotation.set(rotationX, rotationY, rotationZ);
                     secondchild.updateMatrix();
-  
+
                     var mesh;
-                              
+
                     let aCSG = CSG.fromMesh(firstchild);
                     let bCSG = CSG.fromMesh(secondchild);
-  
+
                     aCSG = aCSG.union(bCSG);
-  
+
                     mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                    
+
                     const meshName = solidName.split('_')[0];
-  
+
                     mesh.name = meshName;
                     meshs[solidName] = mesh;
-  
+
                   }
-                  
+
                   break;
-        
+
                 case "SUBTRACTION":
-        
+
                   {
                     let firstchildName = wordArray[3];
                     let secondchildName = wordArray[4];
@@ -3925,46 +3969,46 @@ function Loader( editor ) {
                     let positionX = Number(wordArray[6]);
                     let positionY = Number(wordArray[7]);
                     let positionZ = Number(wordArray[8]);
-  
+
                     let firstchild = meshs[firstchildName];
                     let secondchild = meshs[secondchildName];
-                    
-                    if(!firstchild) {
+
+                    if (!firstchild) {
                       firstchild = getBooleanMesh(solidText[firstchildName]);
-                    } 
-  
-                    if(!secondchild) {
+                    }
+
+                    if (!secondchild) {
                       secondchild = getBooleanMesh(solidText[secondchildName]);
                     }
-  
+
                     let rotation = rotationText[rotationName];
                     let rotationX = rotation.x / 180 * Math.PI;
                     let rotationY = rotation.y / 180 * Math.PI;
                     let rotationZ = rotation.z / 180 * Math.PI;
-  
+
                     secondchild.rotation.set(rotationX, rotationY, rotationZ);
                     secondchild.position.set(positionX, positionY, positionZ);
-  
+
                     var mesh;
-                              
+
                     let aCSG = CSG.fromMesh(firstchild);
                     let bCSG = CSG.fromMesh(secondchild);
-  
+
                     aCSG = aCSG.subtract(bCSG);
-  
+
                     mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                    
+
                     const meshName = solidName.split('_')[0];
-  
+
                     mesh.name = meshName;
                     meshs[solidName] = mesh;
-  
+
                   }
-                  
+
                   break;
-                  
+
                 case "INTERSECTION":
-        
+
                   {
                     let firstchildName = wordArray[3];
                     let secondchildName = wordArray[4];
@@ -3972,144 +4016,144 @@ function Loader( editor ) {
                     let positionX = Number(wordArray[6]);
                     let positionY = Number(wordArray[7]);
                     let positionZ = Number(wordArray[8]);
-  
-  
+
+
                     let firstchild = meshs[firstchildName];
                     let secondchild = meshs[secondchildName];
-  
-                    if(!firstchild) {
+
+                    if (!firstchild) {
                       firstchild = getBooleanMesh(solidText[firstchildName]);
-                    } 
-  
-                    if(!secondchild) {
+                    }
+
+                    if (!secondchild) {
                       secondchild = getBooleanMesh(solidText[secondchildName]);
                     }
-  
+
                     let rotation = rotationText[rotationName];
                     let rotationX = rotation.x / 180 * Math.PI;
                     let rotationY = rotation.y / 180 * Math.PI;
                     let rotationZ = rotation.z / 180 * Math.PI;
-  
+
                     secondchild.rotation.set(rotationX, rotationY, rotationZ);
                     secondchild.position.set(positionX, positionY, positionZ);
-  
+
                     var mesh;
-                              
+
                     let aCSG = CSG.fromMesh(firstchild);
                     let bCSG = CSG.fromMesh(secondchild);
-  
+
                     aCSG = aCSG.intersect(bCSG);
-  
+
                     mesh = CSG.toMesh(aCSG, new THREE.Matrix4());
-                    
+
                     const meshName = solidName.split('_')[0];
-  
+
                     mesh.name = meshName;
                     meshs[solidName] = mesh;
-  
+
                   }
-  
+
                   break;
-                  
+
                 default:
-        
+
                   break;
               }
-  
+
             }
-  
+
             break;
-  
+
           case ':volu':
-  
+
             {
               const voluName = wordArray[1];
               const solidName = wordArray[2];
               const materialName = wordArray[3];
-  
+
               // set material of mesh
               volumeText[voluName] = solidName;
-  
+
               var newMesh = meshs[solidName];
-  
-              if(newMesh && materialName && materialName !== 'undefined') {
+
+              if (newMesh && materialName && materialName !== 'undefined') {
                 const materialElement = materialTypeOptions[materialName];
                 newMesh.material.newmaterial = materialElement;
-  
+
                 meshs[solidName] = newMesh;
-    
+
               }
-  
+
             }
-  
+
             break;
-  
+
           case ':place':
-  
+
             {
               const voluName = wordArray[1];
               const solidName = volumeText[voluName];
-  
+
               const worldName = wordArray[3];
-  
-              if ( worldName === 'world' ) {
-  
+
+              if (worldName === 'world') {
+
                 // rotationName 
                 const rotmName = wordArray[4];
-  
+
                 // the Position of mesh
-  
+
                 const x = Number(wordArray[5]);
                 const y = Number(wordArray[6]);
                 const z = Number(wordArray[7]);
-  
+
                 const meshPosition = new THREE.Vector3(0, 0, 0);
-  
+
                 meshPosition.set(x, y, z);
-  
+
                 let newMesh = meshs[solidName];
-  
-                if ( newMesh ) {
-    
-                  
+
+                if (newMesh) {
+
+
                   // setting the rotation and position of mesh
-  
+
                   const newRotation = rotationText[rotmName];
-  
+
                   newMesh.position.copy(meshPosition);
-                  
+
                   const rotateX = newRotation.x / 180 * Math.PI;
                   const rotateY = newRotation.y / 180 * Math.PI;
                   const rotateZ = newRotation.z / 180 * Math.PI;
-  
+
                   newMesh.rotation.set(rotateX, rotateY, rotateZ);
-  
+
                   newMesh.updateMatrixWorld();
-  
+
                   meshs[solidName] = newMesh;
-                  
+
                   editor.execute(new AddObjectCommand(editor, newMesh));
-  
+
                 }
-  
-                
+
+
               }
             }
-  
+
             break;
-  
-          default :
-  
+
+          default:
+
             break;
         }
       });
     } catch (error) {
       alert(error.message);
     }
-		
-	}
 
-	const materialTypeOptions = {
+  }
+
+  const materialTypeOptions = {
     G4_H: {
       id: 1,
       elementType: "G4_H",

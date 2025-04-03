@@ -6,6 +6,12 @@ class PatternEraser {
         return vrmlText.replace(solidShapeRegex, '');
     }
 
+    static addDEFTokens(vrmlText) {
+        return vrmlText.replace(/(#---------- SOLID: (\w+):\d+\s*)\n(\s*)Shape \{/g, (match, comment, solidName, indent) => {
+            return `${comment}\n${indent}DEF ${solidName} Shape {`;
+        });
+    }
+
 }
 
 export { PatternEraser }

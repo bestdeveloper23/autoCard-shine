@@ -271,11 +271,11 @@ function SidebarProjects(editor) {
                             progressModal.setProgress(60);
 
                             try {
-                                const wrlContent = PatternEraser.removeSolids(await ProjectAPI.getFileContent(
+                                const wrlContent = await ProjectAPI.getFileContent(
                                     userEmail,
                                     title,
                                     result.filename
-                                ));
+                                );
 
                                 progressModal.setProgress(100);
                                 await progressModal.hide();
