@@ -1,26 +1,25 @@
 import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
-// Alternative implementation using a transformed box geometry
 class aParallGeometry extends THREE.BufferGeometry {
     constructor(dX, dY, dZ, alpha, theta, phi) {
         super();
         
         this.type = 'aParallGeometry';
         
-        const dx = dX * 10;
-        const dy = dY * 10;
-        const dz = dZ * 10;
+        const dx = dX * 10 *2;
+        const dy = dY * 10 *2;
+        const dz = dZ * 10 *2;
         
         const alphaRad = -alpha * Math.PI / 180;
         const thetaRad = -theta * Math.PI / 180;
-        const phiRad = phi * Math.PI / 180;
+        const phiRad = -phi * Math.PI / 180;
         
         const boxGeometry = new THREE.BoxGeometry(dx, dy, dz);
         
-        const shearYZ = new THREE.Matrix4().set(
-            1, 0, 0, 0,
-            0, 1, Math.tan(alphaRad), 0,
+        const shearYX = new THREE.Matrix4().set(
+            1, Math.tan(alphaRad), 0, 0,   
+            0, 1, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
         );
@@ -33,14 +32,14 @@ class aParallGeometry extends THREE.BufferGeometry {
             0, 0, 0, 1
         );
         
-        const transformMatrix = new THREE.Matrix4().multiply(shearXZ).multiply(shearYZ);
+        const transformMatrix = new THREE.Matrix4().multiply(shearXZ).multiply(shearYX);
         boxGeometry.applyMatrix4(transformMatrix);
+        boxGeometry.rotateX(Math.PI)
         
         this.copy(boxGeometry);
         
         this.computeVertexNormals();
         
-        // Store parameters
         this.type = 'aParallGeometry';
         this.parameters = {
             'dx': dX,

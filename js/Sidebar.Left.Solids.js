@@ -637,6 +637,52 @@ function BasicSolids(editor) {
 
     options.add(item);
 
+    // Parallelepiped model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${paraImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/apara'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Parallelediped');
+
+    tippy(item.dom, { //For comment
+        content: 'Click or drag to add it.',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
+        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Parallelepiped';
+
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
+        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Parallelepiped';
+        
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
 
     // GenericTrap model
 
@@ -679,52 +725,6 @@ function BasicSolids(editor) {
         const geometry = new aGenericTrapGeometry( pDz, px, py );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'GenericTrap'
-        
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-    // Parallelepiped model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${paraImg})`;
-    // item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/apara'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Parallelediped');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
-        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Parallelepiped';
-
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const dx = 10, dy = 10, dz = 10, alpha = 10, theta = 10, phi = 10;
-        const geometry = new aParallGeometry(dx, dy, dz, alpha, theta, phi);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Parallelepiped';
         
         finalMesh.position.copy(position);
 
@@ -847,7 +847,7 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = - 30;
+        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = 30;
         const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTwistedTrapGeometry'
@@ -860,7 +860,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = - 30;
+        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = 30;
         const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTwistedTrapGeometry'

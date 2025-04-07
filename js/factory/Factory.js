@@ -115,8 +115,7 @@ class Factory {
 
 				case "aEllipticalConeGeometry":
 
-					solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICALTUBE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.semiAxisY}*cm ${children.geometry.parameters.Dz}*cm\n`
-
+					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} ELLIPTICALCONE ${object.geometry.parameters.xSemiAxis}*cm ${object.geometry.parameters.ySemiAxis}*cm ${object.geometry.parameters.height}*cm ${object.geometry.parameters.zTopCut}*cm\n`
 					break;
 
 				case "aTwistedBoxGeometry":
@@ -286,6 +285,7 @@ class Factory {
 							break;
 
 						case "aParallGeometry":
+							variableText += `// half x, y, z in cm, alpha, theta, phi in degrees\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} PARA ${children.geometry.parameters.dx}*cm ${children.geometry.parameters.dy}*cm ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.theta} ${children.geometry.parameters.phi}\n`
 							break;
@@ -322,8 +322,9 @@ class Factory {
 							break;
 
 						case "aTwistedBoxGeometry":
+							variableText += `// twist angle in degree, half x, y, z in cm\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDBOX ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDBOX ${children.geometry.parameters.angle}*degree ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
 							break;
 
 						case "aTwistedTrdGeometry":
@@ -333,8 +334,9 @@ class Factory {
 							break;
 
 						case "aTwistedTrapGeometry":
+							variableText += `// (twisted angle in degree, (half dz), theta, phi, (half (y at -dz), (x at -dz and -dy), (x at -dz and +dy), (y at dz), (x dz and -dy), (x at dz and +dy)), alpha)\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTRAP ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTRAP ${children.geometry.parameters.twistedangle}*degree ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta}*degree ${children.geometry.parameters.phi}*degree ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.alpha}*degree\n`
 							break;
 
 						case "aTwistedTubeGeometry":
