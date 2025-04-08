@@ -1,6 +1,6 @@
 import { UIButton, UIPanel, UIRow, UIText, UINotification, UIModal, UIProgressModal, UITextArea, UIDiv } from './libs/ui.js';
 import { ProjectAPI } from './factory/ProjectAPIs.js';
-import { PatternEraser } from './factory/PatternEraser.js';
+import { PatternModifier } from './factory/PatternModifier.js';
 import { Factory } from './factory/Factory.js'
 
 

@@ -6,7 +6,7 @@ import { AddObjectCommand } from './commands/AddObjectCommand.js';
 import { SetSceneCommand } from './commands/SetSceneCommand.js';
 
 import { LoaderUtils } from './LoaderUtils.js';
-import { PatternEraser } from './factory/PatternEraser.js';
+import { PatternModifier } from './factory/PatternModifier.js';
 
 import { unzipSync, strFromU8 } from 'three/addons/libs/fflate.module.js';
 import { CSG } from './libs/CSGMesh.js';
@@ -777,9 +777,9 @@ function Loader(editor) {
 
               let contents = '';
               if (hasObjects) {
-                contents = PatternEraser.removeSolids(event.target.result);
+                contents = PatternModifier.removeSolids(PatternModifier.removeAxes(event.target.result));
               } else {
-                contents = PatternEraser.addDEFTokens(event.target.result);
+                contents = PatternModifier.removeAxes(PatternModifier.addDEFTokens(event.target.result));
               }
 
               const { VRMLLoader } = await import('./libs/VRMLLoader.js');
