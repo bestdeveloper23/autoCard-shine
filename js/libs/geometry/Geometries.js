@@ -17,5 +17,6 @@ export * from './Tetrahedra.js';
 export * from './GenericTrap.js';
 export * from './Paraboloid.js';
 export * from './Hyperboloid.js';
-export * from './Polycons.js'
-export * from './PolyHedra.js'
+export * from './Polycons.js';
+export * from './PolyHedra.js';
+export * from './Trap4.js';

@@ -129,6 +129,9 @@ class Factory {
 					solidText1 += `:solid ${object.geometry.name ? object.geometry.name : object.name} TWISTEDTRD ${object.geometry.parameters.dx1}*cm ${object.geometry.parameters.dx2}*cm ${object.geometry.parameters.dy1}*cm ${object.geometry.parameters.dy2}*cm ${object.geometry.parameters.dz}*cm ${object.geometry.parameters.twistedangle}\n`
 
 					break;
+				case "aTrap4Geometry":
+					solidText1 += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.pZ}*cm ${children.geometry.parameters.pY}*cm ${children.geometry.parameters.pX}*cm ${children.geometry.parameters.pLTX}*cm\n`
+					break;
 
 				case "aTwistedTrapGeometry":
 
@@ -338,6 +341,14 @@ class Factory {
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTRAP ${children.geometry.parameters.twistedangle}*degree ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta}*degree ${children.geometry.parameters.phi}*degree ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.alpha}*degree\n`
 							break;
+
+						case "aTrap4Geometry":
+							variableText += `// pDz, pDy, pDx, pdx2(Top x) in cm\n`
+							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.pZ}*cm ${children.geometry.parameters.pY}*cm ${children.geometry.parameters.pX}*cm ${children.geometry.parameters.pLTX}*cm\n`
+							break;
+
+	
 
 						case "aTwistedTubeGeometry":
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`

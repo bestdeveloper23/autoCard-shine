@@ -28,6 +28,7 @@ import paraboloidImg from '../images/basicmodels/aParaboloid.jpg';
 import hyperboloidImg from '../images/basicmodels/aHyperboloid.jpg';
 import solidconeImg from '../images/basicmodels/aBREPSolidPCone.jpg';
 import solidpolyhedraImg from '../images/basicmodels/aBREPSolidPolyhedra.jpg';
+import Trap2Img from '../images/basicmodels/Trap2.jpg'
 
 import { BoxGeometry } from './libs/geometry/Box.js';
 import { SphereGeometry2 } from './libs/geometry/Sphere.js';
@@ -38,20 +39,20 @@ import { aEllipticalCylinderGeometry } from './libs/geometry/EllipticalCylinder.
 import { aEllipsoidGeometry } from './libs/geometry/Ellipsoid.js';
 import { aTwistedBoxGeometry } from './libs/geometry/TwistedBox.js';
 import { aTrapeZoidGeometry } from './libs/geometry/TrapeZoid.js';
-
 import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
-
 import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
 import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
 import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
-import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
-import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
 import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
 import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
 import { aPolyhedraGeometry } from './libs/geometry/PolyHedra.js';
+import { aTrap4Geometry } from './libs/geometry/Trap4.js';
+
+// import { aGenericTrapGeometry } from './libs/geometry/GenericTrap.js';
+// import { aParaboloidGeometry } from './libs/geometry/Paraboloid.js';
 
 
 function BasicSolids(editor) {
@@ -684,81 +685,74 @@ function BasicSolids(editor) {
     options.add(item);
 
 
-    // GenericTrap model
+
+    // Trap model (Trap2)
 
     item = new UIDiv();
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${generictrapImg})`;
+    item.dom.style.backgroundImage = `url(${Trap2Img})`;
     // item.dom.style.filter = 'blur(2px)';
 
-    item.setTextContent(strings.getKey('menubar/add/generictrap'));
+    item.setTextContent(strings.getKey('menubar/add/atrapezoid4'));
     item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'GenericTrap');
+    item.dom.setAttribute('item-type', 'Trapezoid5');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag to add it.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        const pDz = 10;
-        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
-        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
-        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const pDz = 20, pY = 20, pX = 20, pLTX=4;
+        const geometry = new aTrap4Geometry(pDz,pY,pX,pLTX);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'GenericTrap'
-
-        
+        finalMesh.name = 'Trapezoid4'    
         editor.execute(new AddObjectCommand(editor, finalMesh));
-
     });
 
     item.dom.addEventListener('dragend', function (event) {
 
         var position = getPositionFromMouse(event);        
 
-        const pDz = 10;
-        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
-        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
-        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const pDz = 20, pY = 20, pX = 20, pLTX=4;
+        const geometry = new aTrap4Geometry(pDz,pY,pX,pLTX);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'GenericTrap'
-        
-        finalMesh.position.copy(position);
+        finalMesh.name = 'Trapezoid4'
+        editor.execute(new AddObjectCommand(editor, finalMesh));
 
+        finalMesh.position.copy(position);
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
     });
 
     options.add(item);
 
-    // TwitsedTube model
+
+    // TwistedTrap model (TwistedTrap4)
 
     item = new UIDiv();
     item.setClass('Category-item');
 
-    item.dom.style.backgroundImage = `url(${twistedtubImg})`;
+    item.dom.style.backgroundImage = `url(${twistedtrapImg})`;
     // item.dom.style.filter = 'blur(2px)';
 
-    item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
+    item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
     item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'TwistedTube');
+    item.dom.setAttribute('item-type', 'Trapezoid4');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag to add it.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        // we need to new each geometry module
-
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 90;
-        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const pDx1 = 3, pDx2 = 1, pDy1 = 4, pDx3 = 4, pDx4 = 1.4, pDy2 = 1.6, pDz = 15, pTheta = 0, pPhi = 0, pAlpha = 0, twistedangle = 1;
+        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTubs';
+        finalMesh.name = 'aTwistedTrapGeometry'
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
 
@@ -768,10 +762,10 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
-        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const pDx1 = 3, pDx2 = 1, pDy1 = 4, pDx3 = 4, pDx4 = 1.4, pDy2 = 1.6, pDz = 15, pTheta = 0, pPhi = 0, pAlpha = 0, twistedangle = 1;
+        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'TwistedTubs';
+        finalMesh.name = 'aTwistedTrapGeometry'
 
         finalMesh.position.copy(position);
 
@@ -780,6 +774,7 @@ function BasicSolids(editor) {
     });
 
     options.add(item);
+
 
     // TrapeZoid-P(2) model
 
@@ -826,102 +821,6 @@ function BasicSolids(editor) {
     });
 
     options.add(item);
-
-
-    // TwistedTrap model (TwistedTrap4)
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${twistedtrapImg})`;
-    // item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/atwistedtrap'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Trapezoid4');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = 30;
-        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'aTwistedTrapGeometry'
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        const pDx1 = 2.5, pDx2 = 5, pDy1 = 8, pDx3 = 8, pDx4 = 10, pDy2 = 8, pDz = 15, pTheta = 10, pPhi = 10, pAlpha = 10, twistedangle = 30;
-        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'aTwistedTrapGeometry'
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
-    // PrabolicCylinder model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-
-    item.dom.style.backgroundImage = `url(${paraboloidImg})`;
-    // item.dom.style.filter = 'blur(2px)';
-
-    item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Paraboloid');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var radius1 = 5, radius2 = 7, pDz = 10;
-        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Paraboloid';
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        var radius1 = 5, radius2 = 7, pDz = 10;
-        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Paraboloid';
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
 
     // Hyperboloid model
 
@@ -1061,6 +960,153 @@ function BasicSolids(editor) {
     });
 
     options.add(item);
+
+
+    // TwitsedTube model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${twistedtubImg})`;
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/atwistedtube'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'TwistedTube');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 90;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 30;
+        const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'TwistedTubs';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // GenericTrap model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${generictrapImg})`;
+    item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/generictrap'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'GenericTrap');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        const pDz = 10;
+        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
+        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
+
+        
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        const pDz = 10;
+        const px = [-10, -10, 10, 10, -5, -5, 5, 5];
+        const py = [-10, 10, 10, -10, -5, 5, 5, -5];
+        const geometry = new aGenericTrapGeometry( pDz, px, py );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'GenericTrap'
+        
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+    // PrabolicCylinder model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+
+    item.dom.style.backgroundImage = `url(${paraboloidImg})`;
+    item.dom.style.filter = 'blur(2px)';
+
+    item.setTextContent(strings.getKey('menubar/add/aparaboloid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Paraboloid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var radius1 = 5, radius2 = 7, pDz = 10;
+        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Paraboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var radius1 = 5, radius2 = 7, pDz = 10;
+        const geometry = new aParaboloidGeometry( radius1 , radius2 , pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Paraboloid';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
 
 
     return container;
