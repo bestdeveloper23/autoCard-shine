@@ -43,8 +43,8 @@ import { aEllipticalConeGeometry } from './libs/geometry/EllipticalCone.js';
 import { aParallGeometry } from './libs/geometry/Parallelepiped.js';
 import { aTwistedTubeGeometry } from './libs/geometry/TwistedTube.js';
 import { aTrapeZoidPGeometry } from './libs/geometry/TrapeZoid2P.js';
-import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
-import { aTwistedTrapGeometry } from './libs/geometry/TrapeZoid4.js';
+import { aTwistedTrdGeometry } from './libs/geometry/TwistedTRD.js';
+import { aTwistedTrapGeometry } from './libs/geometry/TwistedTrap.js';
 import { aTetrahedraGeometry } from './libs/geometry/Tetrahedra.js';
 import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
 import { aPolyconeGeometry } from './libs/geometry/Polycons.js';
@@ -175,10 +175,14 @@ function BasicSolids(editor) {
     // Tube model
     item = new UIDiv();
     item.setClass('Category-item');
-    item.setTextContent(strings.getKey('menubar/add/g4tube'));
+    // item.setTextContent(strings.getKey('menubar/add/g4tube'));
     item.dom.style.backgroundImage = `url(${tubImg})`;
     item.dom.setAttribute('draggable', true);
     item.dom.setAttribute('item-type', 'eTub');
+
+    let textDiv = document.createElement('div');
+    textDiv.textContent = strings.getKey('menubar/add/g4tube');
+    item.dom.appendChild(textDiv);
 
     tippy(item.dom, { //For comment
         content: 'Click or drag it to add.',
@@ -749,8 +753,8 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const pDx1 = 3, pDx2 = 1, pDy1 = 4, pDx3 = 4, pDx4 = 1.4, pDy2 = 1.6, pDz = 15, pTheta = 0, pPhi = 0, pAlpha = 0, twistedangle = 1;
-        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const pDx1 = 3, pDx2 = 4, pDy1 = 4, pDx3 = 1, pDx4 = 1.4, pDy2 = 1.6, pDz = 15, pTheta = 0, pPhi = 0, pAlpha = 0, twistedangle = 1;
+        const geometry = new aTwistedTrapGeometry(twistedangle, pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4,  pAlpha);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTwistedTrapGeometry'
 
@@ -763,7 +767,7 @@ function BasicSolids(editor) {
         var position = getPositionFromMouse(event);        
 
         const pDx1 = 3, pDx2 = 1, pDy1 = 4, pDx3 = 4, pDx4 = 1.4, pDy2 = 1.6, pDz = 15, pTheta = 0, pPhi = 0, pAlpha = 0, twistedangle = 1;
-        const geometry = new aTwistedTrapGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha, twistedangle, material);
+        const geometry = new aTwistedTrapGeometry(twistedangle, pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4,  pAlpha);
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTwistedTrapGeometry'
 
@@ -789,14 +793,14 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Parallelediped');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        const pDx1 = 5, pDx2 = 10, pDy1 = 15, pDx3 = 15, pDx4 = 2, pDy2 = 14, pDz = 10, pTheta = 20, pPhi = 5, pAlpha = 10;
-        const geometry = new aTrapeZoidPGeometry(pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
+        const pDz = 10, pTheta = 0, pPhi = 0, pDy1 = 4, pDx1 = 2, pDx2 = 2,  pAlpha1 = 15, pDy2 = 2,   pDx3 = 4, pDx4 = 4, pAlpha2=15;
+        const geometry = new aTrapeZoidPGeometry(pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlpha1, pDy2, pDx3, pDx4, pAlpha2 );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTrapezoidParallePiped'
         
@@ -809,8 +813,8 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const pDx1 = 5, pDx2 = 10, pDy1 = 15, pDx3 = 15, pDx4 = 2, pDy2 = 14, pDz = 10, pTheta = 20, pPhi = 5, pAlpha = 10;
-        const geometry = new aTrapeZoidPGeometry(pDx1 , pDx2 , pDy1 , pDx3 , pDx4 , pDy2 , pDz , pTheta , pPhi , pAlpha );
+        const pDz = 10, pTheta = 0, pPhi = 0, pDy1 = 4, pDx1 = 2, pDx2 = 2,  pAlpha1 = 15, pDy2 = 2,   pDx3 = 4, pDx4 = 4, pAlpha2=15;
+        const geometry = new aTrapeZoidPGeometry(pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlpha1, pDy2, pDx3, pDx4, pAlpha2 );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'aTrapezoidParallePiped'
 
@@ -934,10 +938,18 @@ function BasicSolids(editor) {
 
     item.onClick(function () {
 
-        const SPhi = 30 , DPhi = 210 , numSide = 3 , numZPlanes = 9 , rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01] , rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const geometry = new aPolyhedraGeometry( SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
-        finalMesh.name = 'Polyhedra';
+        const SPhi = 0, DPhi = 180, numSide = 5, numZPlanes = 3;
+        const z = [-20, 0, 20];         // z-coordinates of the planes
+        const rInner = [2, 3, 5];       // inner radii at each z-plane
+        const rOuter = [10, 8, 10];     // outer radii at each z-plane
+        const geometry = new aPolyhedraGeometry(SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z);
+        const finalMesh = new THREE.Mesh(
+            geometry,
+            new THREE.MeshLambertMaterial({
+              side: THREE.DoubleSide
+            })
+          );
+                  finalMesh.name = 'Polyhedra';
 
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -948,7 +960,7 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const SPhi = 30, DPhi = 210, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
+        const SPhi = 0, DPhi = 90, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
         const geometry = new aPolyhedraGeometry( SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         finalMesh.name = 'Polyhedra';

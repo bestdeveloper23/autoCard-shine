@@ -3,7 +3,7 @@ import { CSG } from './libs/CSGMesh.js';
 import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
-import { aTwistedTrdGeometry } from './libs/geometry/TrapeZoid3.js';
+import { aTwistedTrdGeometry } from './libs/geometry/TwistedTRD.js';
 
 function GeometryParametersPanel(editor, object) {
 

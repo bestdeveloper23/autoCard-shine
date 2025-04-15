@@ -77,18 +77,29 @@ function GeometryParametersPanel(editor, object) {
 
   container.add(widthRow1);
 
-  // width3
+  // width2
 
-  const widthRow3 = new UIRow();
-  const width3 = new UINumber(parameters.dx3).setRange(0, Infinity).onChange(update);
+  const widthRow2 = new UIRow();
+  const width2 = new UINumber(parameters.dx2).setRange(0, Infinity).onChange(update);
 
-  widthRow3.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx3')).setWidth('90px'));
-  widthRow3.add(width3);
+  widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx2')).setWidth('90px'));
+  widthRow2.add(width2);
 
-  widthRow3.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+  widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
-  container.add(widthRow3);
+  container.add(widthRow2);
 
+
+  // alpha1
+
+  const alphaRow = new UIRow();
+  const alphaI = new UINumber(parameters.alpha1).setRange(-90, 90).onChange(update);
+
+  alphaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/alpha1')).setWidth('90px'));
+  alphaRow.add(alphaI);
+  alphaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+
+  container.add(alphaRow);
 
   // depth2
 
@@ -102,17 +113,17 @@ function GeometryParametersPanel(editor, object) {
 
   container.add(depthRow2);
 
-  //width2
-  const widthRow2 = new UIRow();
-  const width2 = new UINumber(parameters.dx2).setRange(0, Infinity).onChange(update);
 
-  widthRow2.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx2')).setWidth('90px'));
-  widthRow2.add(width2);
+  //width3
+  const widthRow3 = new UIRow();
+  const width3 = new UINumber(parameters.dx3).setRange(0, Infinity).onChange(update);
 
-  widthRow2.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+  widthRow3.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/dx3')).setWidth('90px'));
+  widthRow3.add(width3);
 
-  container.add(widthRow2);
+  widthRow3.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
+  container.add(widthRow3);
 
 
   // width4
@@ -128,34 +139,37 @@ function GeometryParametersPanel(editor, object) {
   container.add(widthRow4);
 
 
-  // alpha
+  // alpha2
 
-  const alphaRow = new UIRow();
-  const alphaI = new UINumber(parameters.alpha).setRange(-90, 90).onChange(update);
+  const alpha2Row = new UIRow();
+  const alpha2 = new UINumber(parameters.alpha2).setRange(-90, 90).onChange(update);
 
-  alphaRow.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/alpha')).setWidth('90px'));
-  alphaRow.add(alphaI);
-  alphaRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+  alpha2Row.add(new UIText(strings.getKey('sidebar/geometry/atrapezoidp_geometry/alpha2')).setWidth('90px'));
+  alpha2Row.add(alpha2);
+  alpha2Row.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
-  container.add(alphaRow);
+  container.add(alpha2Row);
 
   //
 
   function update() {
+    // Get all parameters in the correct order for the constructor
+    const pDz = height.getValue();
+    const pTheta = thetaI.getValue();
+    const pPhi = phiI.getValue();
+    const pDy1 = depth1.getValue();
+    const pDx1 = width1.getValue();
+    const pDx2 = width2.getValue();
+    const pAlpha = alphaI.getValue();
+    const pDy2 = depth2.getValue();
+    const pDx3 = width3.getValue();
+    const pDx4 = width4.getValue();
+    const pAlpha2 = alpha2.getValue();
 
-    // we need to new each geometry module
-
-    const pDx1 = width1.getValue(), pDx2 = width2.getValue(), pDy1 = depth1.getValue(),
-      pDx3 = width3.getValue(), pDx4 = width4.getValue(), pDy2 = depth2.getValue(),
-      pDz = height.getValue(), pTheta = thetaI.getValue(), pPhi = phiI.getValue(),
-      pAlpha = alphaI.getValue();
-
-
-    editor.execute(new SetGeometryCommand(editor, object, new aTrapeZoidPGeometry(pDx1, pDx2, pDy1, pDx3, pDx4, pDy2, pDz, pTheta, pPhi, pAlpha)));
+    editor.execute(new SetGeometryCommand(editor, object, new aTrapeZoidPGeometry(pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlpha, pDy2, pDx3, pDx4, pAlpha2)));
   }
 
   return container;
-
 }
 
 export { GeometryParametersPanel };

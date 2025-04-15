@@ -2,11 +2,16 @@ import * as THREE from "three";
 import { CSG } from "../CSGMesh.js";
 
 class aHyperboloidGeometry extends THREE.BufferGeometry {
-    constructor(radiusOut, radiusIn, stereo1, stereo2, pdz) {
+    constructor(radiusout, radiusin, stereo1, stereo2, pdz) {
         super();
         this.type = "aHyperboloidGeometry";
-
+        // radiusOut(outer radius)
+        //radiusIn(Inner radius)
+        //stereo1(Outer Stereo)
+        //stereo2(Inner Stereo)
         const pDz = pdz*10;
+        const radiusOut = radiusout;
+        const  radiusIn = radiusin;
 
         const c_z1 = Math.tan(stereo1 * Math.PI / 90);
         const c_z2 = Math.tan(stereo2 * Math.PI / 90);
@@ -86,7 +91,7 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
         const finalGeometry = CSG.toGeometry(aCSG); 
         
         finalGeometry.type = "aHyperboloidGeometry";
-        const param = { 'radiusOut': radiusOut, 'radiusIn': radiusIn, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pdz };
+        const param = { 'radiusOut': radiusout, 'radiusIn': radiusin, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pdz };
         finalGeometry.parameters = param;
         
         Object.assign(this, finalGeometry);

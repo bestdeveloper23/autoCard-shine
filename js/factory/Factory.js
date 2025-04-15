@@ -299,8 +299,9 @@ class Factory {
 							break;
 
 						case "aTrapeZoidPGeometry":
+							variableText += `// pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pAlp1, pDy2, pDx3, pDx4, pAlp2y\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.alpha} ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.phi}\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRAP ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta} ${children.geometry.parameters.phi} ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.alpha1} ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.alpha2}\n`
 							break;
 
 						case "aTorusGeometry":
@@ -339,7 +340,7 @@ class Factory {
 						case "aTwistedTrapGeometry":
 							variableText += `// (twisted angle in degree, (half dz), theta, phi, (half (y at -dz), (x at -dz and -dy), (x at -dz and +dy), (y at dz), (x dz and -dy), (x at dz and +dy)), alpha)\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTRAP ${children.geometry.parameters.twistedangle}*degree ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta}*degree ${children.geometry.parameters.phi}*degree ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.alpha}*degree\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTRAP ${children.geometry.parameters.twistedangle}*degree ${children.geometry.parameters.dz}*cm ${children.geometry.parameters.theta}*degree ${children.geometry.parameters.phi}*degree ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dx3}*cm ${children.geometry.parameters.dx4}*cm ${children.geometry.parameters.alpha}*degree\n`
 							break;
 
 						case "aTrap4Geometry":
