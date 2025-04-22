@@ -26,7 +26,7 @@ function SidebarSceneTool(editor) {
 
     function clearWorld(confirmation) {
 
-        const worldObjects = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true);
+        const worldObjects = scene.children?.filter(obj => obj.isMesh === true || obj.isGroup === true || obj.isScene === true || (obj.isLight && !obj.name.startsWith('default')));
         const VRMLMesh = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isMesh === true)).flat();
         const particles = scene.children?.filter(obj => obj.isScene === true).map(obj => obj.children?.filter(obj => obj.isGroup === true)).flat();
         worldObjects.push(...particles, ...VRMLMesh);

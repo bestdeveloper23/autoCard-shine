@@ -77,7 +77,7 @@ function Viewport(editor, measureValue) {
 
 	signals.measureEventChanged.add((measurement) => {
 		measurement ? (measurementEventAvailability = true) : (measurementEventAvailability = false);
-		if( measurement ) {
+		if (measurement) {
 
 			editor.addObject(editor.markers[0]);
 			editor.addObject(editor.markers[1]);
@@ -98,7 +98,7 @@ function Viewport(editor, measureValue) {
 
 			editor.markers[0].position.set(0, 0, 0);
 			editor.markers[1].position.set(0, 0, 0);
-			
+
 			editor.clicks = 0;
 		}
 	})
@@ -193,7 +193,7 @@ function Viewport(editor, measureValue) {
 
 	// events
 
-	
+
 	function updateAspectRatio() {
 
 		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
@@ -260,10 +260,10 @@ function Viewport(editor, measureValue) {
 	function onMouseDown(event) {
 
 		// event.preventDefault();
-		if ( measurementEventAvailability ) {
+		if (measurementEventAvailability) {
 			const array = getMousePosition(container.dom, event.clientX, event.clientY);
 			mousePosition.fromArray(array);
-				
+
 			const intersects = getIntersects(mousePosition);
 
 			if (intersects.length > 0) {
@@ -275,14 +275,14 @@ function Viewport(editor, measureValue) {
 				editor.markers[editor.clicks].position.copy(intersect.point);
 				setLine(intersect.point, intersect.point);
 				editor.clicks++;
-				if (editor.clicks > 1){
+				if (editor.clicks > 1) {
 					var distance = editor.measurementPoints[0].distanceTo(editor.measurementPoints[1]);
 					measureValue.setValue(distance);
 					setLine(editor.measurementPoints[0], editor.measurementPoints[1]);
 					editor.clicks = 0;
 				}
 			}
-				
+
 		}
 		if (event.target !== renderer.domElement) return;
 
@@ -348,7 +348,7 @@ function Viewport(editor, measureValue) {
 	function onKeyDown(event) {
 
 		// Pressing 0 moves the object to the (0,0,0) position.
-		
+
 		if (event.keyCode == 48) {
 			if (editor.selected) {
 				let uuid = editor.selected.uuid;
@@ -501,7 +501,7 @@ function Viewport(editor, measureValue) {
 			}
 
 
-			if(object.parent.name !== 'RadiationSource') {
+			if (object.parent.name !== 'RadiationSource') {
 				transformControls.attach(object);
 			} else {
 				transformControls.attach(object.parent);
@@ -769,7 +769,7 @@ function Viewport(editor, measureValue) {
 
 	});
 
-	signals.showLightHelperChanged.add(function(lightHelper, state){
+	signals.showLightHelperChanged.add(function (lightHelper, state) {
 		let helper = editor.helpers[lightHelper.id];
 		helper.visible = state;
 
@@ -785,29 +785,29 @@ function Viewport(editor, measureValue) {
 
 	});
 
-	signals.showDefaultLightChanged.add(function(showDefaultLights = true){
+	signals.showDefaultLightChanged.add(function (showDefaultLights = true) {
 
 		//Default SpotLight
-		const SpotLight = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI * 0.233,  0 );
+		const SpotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI * 0.233, 0);
 		SpotLight.name = 'defaultSpotLight';
 		SpotLight.target.name = 'SpotLight Target';
 		SpotLight.decay = 0;
-		SpotLight.position.set( 1136, 1058, 178 );
-		
-		// Default AmbientLight
-		const ambientLight = new THREE.AmbientLight( 0xffffff, .1 );
-		ambientLight.name = 'defaultAmbientLight';
-		
-		const lights =  scene.children?.filter(child => child.name.startsWith('default'))
+		SpotLight.position.set(1136, 1058, 178);
 
-		if(showDefaultLights){
-			
+		// Default AmbientLight
+		const ambientLight = new THREE.AmbientLight(0xffffff, .1);
+		ambientLight.name = 'defaultAmbientLight';
+
+		const lights = scene.children?.filter(child => child.name.startsWith('default'))
+
+		if (showDefaultLights) {
+
 			editor.addObject(SpotLight)
 			editor.addObject(ambientLight)
 
 
 			render()
-		} else{
+		} else {
 			lights.forEach(light => {
 				editor.removeObject(light)
 			});
