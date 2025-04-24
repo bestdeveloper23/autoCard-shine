@@ -1,110 +1,84 @@
 import * as THREE from "three";
-import { CSG } from "../CSGMesh.js";
 
 class aHyperboloidGeometry extends THREE.BufferGeometry {
-    constructor(radiusout, radiusin, stereo1, stereo2, pdz) {
+    constructor(radiusIn, radiusOut, innerStereo, outerStereo, pdz, openEnded = false) {
         super();
         this.type = "aHyperboloidGeometry";
-        // radiusOut(outer radius)
-        //radiusIn(Inner radius)
-        //stereo1(Outer Stereo)
-        //stereo2(Inner Stereo)
-        const pDz = pdz*10;
-        const radiusOut = radiusout;
-        const  radiusIn = radiusin;
 
-        const c_z1 = Math.tan(stereo1 * Math.PI / 90);
-        const c_z2 = Math.tan(stereo2 * Math.PI / 90);
-        const cylindergeometry1 = new THREE.CylinderGeometry(radiusOut, radiusOut, pDz*2, 16, 8, false, 0, Math.PI * 2);
-        const cylindergeometry2 = new THREE.CylinderGeometry(radiusIn, radiusIn, pDz*2, 16, 8, false, 0, Math.PI * 2);
+        const mmTOcm = 10;
+        const halfZ = pdz * mmTOcm;
 
-        let positionAttribute = cylindergeometry1.getAttribute('position');
-        let positionAttribute2 = cylindergeometry2.getAttribute('position');
-        let vertex = new THREE.Vector3();
-        let vertex2 = new THREE.Vector3();
+        const rMin = radiusIn * mmTOcm;
+        const rMax = radiusOut * mmTOcm;
 
-        for (let i = 0; i < positionAttribute.count; i++) {
+        const stInRad = innerStereo * Math.PI / 180;
+        const stOutRad = outerStereo * Math.PI / 180;
 
-            vertex.fromBufferAttribute(positionAttribute, i);
-            vertex2.fromBufferAttribute(positionAttribute2, i);
-            let x, y, z, x2, y2, z2;
-            x = vertex.x;
-            y = vertex.y;
-            z = vertex.z;
-            x2 = vertex2.x;
-            y2 = vertex2.y;
-            z2 = vertex2.z;
-            let r = radiusOut*Math.sqrt((1+ Math.pow((y/c_z1), 2)));
-            let r2 = radiusIn*Math.sqrt((1+ Math.pow((y2/c_z2), 2)));
+        const radialSegments = 64;
+        const heightSegments = 64;
 
-            let alpha = Math.atan(z / x) ? Math.atan(z / x) : cylindergeometry1.attributes.position.array[i * 3 + 2] >= 0 ? Math.PI / 2 : Math.PI / (-2);
-
-            if (vertex.z >= 0) {
-                z = Math.abs(r * Math.sin(alpha));
-                z2 = Math.abs(r2 * Math.sin(alpha));
-            } else {
-                z = - Math.abs(r * Math.sin(alpha));
-                z2 = - Math.abs(r2 * Math.sin(alpha));
-            }
-            if (vertex.x >= 0) {
-                x = r * Math.cos(alpha);
-                x2 = r2 * Math.cos(alpha);
-            } else {
-                x = -r * Math.cos(alpha);
-                x2 = -r2 * Math.cos(alpha);
-            }
-
-            cylindergeometry1.attributes.position.array[i * 3] = x;
-            cylindergeometry1.attributes.position.array[i * 3 + 1] = y;
-            cylindergeometry1.attributes.position.array[i * 3 + 2] = z;
-
-            
-            cylindergeometry2.attributes.position.array[i * 3] = x2;
-            cylindergeometry2.attributes.position.array[i * 3 + 1] = y2;
-            cylindergeometry2.attributes.position.array[i * 3 + 2] = z2;
-
+        const outerProfile = [];
+        for (let i = 0; i <= heightSegments; i++) {
+            const z = (i / heightSegments) * 2 * halfZ - halfZ;  // from -halfZ to +halfZ
+            const r = rMax + (Math.abs(z) * Math.tan(stOutRad));
+            outerProfile.push(new THREE.Vector2(r, z));
         }
-        cylindergeometry1.attributes.position.needsUpdate = true;
-        cylindergeometry2.attributes.position.needsUpdate = true;
 
-        const cylindermesh = new THREE.Mesh(cylindergeometry1, new THREE.MeshBasicMaterial());
-        const cylindermesh2 = new THREE.Mesh(cylindergeometry2, new THREE.MeshBasicMaterial());
+        let innerProfile = [];
+        if (rMin > 0) {
+            for (let i = heightSegments; i >= 0; i--) {
+                const z = (i / heightSegments) * 2 * halfZ - halfZ;
+                const r = rMin + (Math.abs(z) * Math.tan(stInRad));
+                innerProfile.push(new THREE.Vector2(r, z));
+            }
+        }
 
-        const MeshCSG1 = CSG.fromMesh(cylindermesh);
-        const MeshCSG2 = CSG.fromMesh(cylindermesh2);
-
-        let aCSG;
-        if(radiusIn === 0 ) {
-            aCSG = MeshCSG1;
+        // Combine outer and inner for lathe (if hollow)
+        let profilePoints = [];
+        if (rMin > 0) {
+            profilePoints = [...outerProfile, ...innerProfile, outerProfile[0].clone()];
         } else {
-            aCSG = MeshCSG1.subtract(MeshCSG2);
+            profilePoints = outerProfile;
         }
-        
 
+        //  LatheGeometry revolves the profile around the Y-axis
+        const latheGeometry = new THREE.LatheGeometry(
+            profilePoints,
+            radialSegments,
+            0,
+            Math.PI * 2
+        );
 
-        let finalMesh = CSG.toMesh(aCSG, new THREE.Matrix4());
+        this.copy(latheGeometry);
+        this.rotateX(Math.PI / 2); 
+        this.computeVertexNormals();
 
-        
-        finalMesh.rotateX(Math.PI / 2);
-        finalMesh.updateMatrix();
-        aCSG = CSG.fromMesh(finalMesh);
-        const finalGeometry = CSG.toGeometry(aCSG); 
-        
-        finalGeometry.type = "aHyperboloidGeometry";
-        const param = { 'radiusOut': radiusout, 'radiusIn': radiusin, 'stereo1': stereo1, 'stereo2': stereo2, 'pDz': pdz };
-        finalGeometry.parameters = param;
-        
-        Object.assign(this, finalGeometry);
+        // Store parameters
+        this.parameters = {
+            'radiusOut': radiusOut, 
+            'radiusIn': radiusIn,
+            'stereo1': outerStereo,
+            'stereo2': innerStereo,
+            'pDz': pdz
+        };
     }
 
     copy(source) {
         super.copy(source);
-        this.parameters = Object.assign({}, source.parameters);
+        if (source.parameters) {
+            this.parameters = { ...source.parameters };
+        }
         return this;
     }
 
     static fromJSON(data) {
-        return new aHyperboloidGeometry(data.radiusOut, data.radiusIn, data.stereo1, data.stereo2, data.pDz);
+        return new aHyperboloidGeometry(
+            data.radiusIn,
+            data.radiusOut,
+            data.stereo2,
+            data.stereo1,
+            data.pDz
+        );
     }
 }
 

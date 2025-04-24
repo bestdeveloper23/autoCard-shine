@@ -436,6 +436,7 @@ function Strings(config) {
 			'sidebar/geometry/apolyhedra_geometry/znumber': 'Number of Z planes',
 			'sidebar/geometry/apolyhedra_geometry/sphi': 'Initial Phi starting angle',
 			'sidebar/geometry/apolyhedra_geometry/dphi': 'Total Phi angle',
+			'sidebar/geometry/apolyhedra_geometry/zplanedata': 'Z-Plane Data (z–x,r-in,r-out)',
 
 
 			'sidebar/material/new': 'New',

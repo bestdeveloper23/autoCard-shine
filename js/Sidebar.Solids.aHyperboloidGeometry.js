@@ -15,58 +15,57 @@ function GeometryParametersPanel( editor, object ) {
 	const geometry = object.geometry;
 	const parameters = geometry.parameters;
 
-	// radius1
+	// radiusIn
 
-	const radius1Row = new UIRow();
-	const radius1I = new UINumber( parameters.radiusOut ).setRange(0, Infinity).onChange( update );
+	const radiusInRow = new UIRow();
+	const radiusInInput = new UINumber( parameters.radiusIn ).setRange(0, Infinity).onChange( update );
 
-	radius1Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusout' ) ).setWidth( '90px' ) );
-	radius1Row.add( radius1I );
+	radiusInRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusin' ) ).setWidth( '90px' ) );
+	radiusInRow.add( radiusInInput );
 
-    radius1Row.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+	radiusInRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
-	container.add( radius1Row );
+	container.add( radiusInRow );
 
-	// radius2
+	// radiusOut
 
-	const radius2Row = new UIRow();
-	const radius2I = new UINumber( parameters.radiusIn ).setRange(0, Infinity).onChange( update );
+	const radiusOutRow = new UIRow();
+	const radiusOutInput = new UINumber( parameters.radiusOut ).setRange(0, Infinity).onChange( update );
 
-	radius2Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusin' ) ).setWidth( '90px' ) );
-	radius2Row.add( radius2I );
+	radiusOutRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusout' ) ).setWidth( '90px' ) );
+	radiusOutRow.add( radiusOutInput );
 
-    radius2Row.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    radiusOutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
-	container.add( radius2Row );
+	container.add( radiusOutRow );
 
-	
-	// stereo1
+	// innerStereo (maps to stereo2 in parameters)
 
-	const stereo1Row = new UIRow();
-	const stereo1I = new UINumber( parameters.stereo1 ).setRange(0, 180).onChange( update );
+	const innerStereoRow = new UIRow();
+	const innerStereoInput = new UINumber( parameters.stereo2 ).setRange(0, 180).onChange( update );
 
-	stereo1Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoout' ) ).setWidth( '90px' ) );
-	stereo1Row.add( stereo1I );
+	innerStereoRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoin' ) ).setWidth( '90px' ) );
+	innerStereoRow.add( innerStereoInput );
 
-	container.add( stereo1Row );
+	container.add( innerStereoRow );
 
-	// stereo2
+	// outerStereo (maps to stereo1 in parameters)
 
-	const stereo2Row = new UIRow();
-	const stereo2I = new UINumber( parameters.stereo2 ).setRange(0, 180).onChange( update );
+	const outerStereoRow = new UIRow();
+	const outerStereoInput = new UINumber( parameters.stereo1 ).setRange(0, 180).onChange( update );
 
-	stereo2Row.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoin' ) ).setWidth( '90px' ) );
-	stereo2Row.add( stereo2I );
+	outerStereoRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoout' ) ).setWidth( '90px' ) );
+	outerStereoRow.add( outerStereoInput );
 
-	container.add( stereo2Row );
+	container.add( outerStereoRow );
 
-	// height
+	// height (pDz)
 	
 	const heightRow = new UIRow();
-	const heightI = new UINumber( parameters.pDz ).setRange(0, Infinity).onChange( update );
+	const heightInput = new UINumber( parameters.pDz ).setRange(0, Infinity).onChange( update );
 
 	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/height' ) ).setWidth( '90px' ) );
-	heightRow.add( heightI );
+	heightRow.add( heightInput );
 
     heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
 
@@ -74,25 +73,24 @@ function GeometryParametersPanel( editor, object ) {
 
 
 	function update() {
-
-
-        var radiusOut = radius1I.getValue(), radiusIn = radius2I.getValue(), stereo1 = stereo1I.getValue(), stereo2 = stereo2I.getValue(), pDz = heightI.getValue();
-        // const  finalMesh = CreateHyperboloid(radiusOut, radiusIn, stereo1, stereo2, pDz);
-
-
-        // finalMesh.geometry.name = object.geometry.name;
+        // Get values from the UI inputs
+        const radiusIn = radiusInInput.getValue();
+        const radiusOut = radiusOutInput.getValue();
+        const innerStereo = innerStereoInput.getValue();
+        const outerStereo = outerStereoInput.getValue();
+        const pdz = heightInput.getValue();
         
-		editor.execute( new SetGeometryCommand( editor, object, new aHyperboloidGeometry(radiusOut, radiusIn, stereo1, stereo2, pDz) ) );
-
-        radius1I.setRange(radiusIn + 0.001, Infinity);
-        radius2I.setRange(0, radiusOut - 0.001);
-        stereo1I.setRange(stereo2 + 0.001, Infinity);
-        stereo2I.setRange(0, stereo1 - 0.001);
-
+        // Create new geometry with the correct parameter order
+		editor.execute( new SetGeometryCommand( editor, object, new aHyperboloidGeometry(
+            radiusIn, 
+            radiusOut, 
+            innerStereo, 
+            outerStereo, 
+            pdz
+        )));
 	}
 
 	return container;
-
 }
 
 export { GeometryParametersPanel };

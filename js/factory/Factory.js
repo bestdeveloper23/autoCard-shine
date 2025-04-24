@@ -262,17 +262,19 @@ class Factory {
 
 					switch (children.geometry.type) {
 						case "BoxGeometry":
-							variableText += `//Half x, Half y, Half z`
+							variableText += `//Half x, Half y, Half z\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} BOX ${children.geometry.parameters.width}*cm ${children.geometry.parameters.height}*cm ${children.geometry.parameters.depth}*cm\n`
 							break;
 
 						case "SphereGeometry2":
+							variableText += `// inner, outer radius, starting, delta phi, starting, delta theta of the segment\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} SPHERE ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi} ${children.geometry.parameters.pSTheta} ${children.geometry.parameters.pDTheta}\n`
 							break;
 
 						case "aTubeGeometry":
+							variableText += `// Rin, Rout, half z in mm, start phi, dphi in degree\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TUBS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 							break;
@@ -283,6 +285,7 @@ class Factory {
 							break;
 
 						case "aConeGeometry":
+							variableText += `// Rin at -z/2, Rout at -z/2, Rin at  z/2, Rout at  z/2, z/2, start phi, dphi in degree\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} CONS ${children.geometry.parameters.pRMin2}*cm ${children.geometry.parameters.pRMax2}*cm ${children.geometry.parameters.pRMin1}*cm ${children.geometry.parameters.pRMax1}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 							break;
@@ -294,6 +297,7 @@ class Factory {
 							break;
 
 						case "aTrapeZoidGeometry":
+							variableText += `//half (X at -dz, X at +dz, Y at +dz, Y at -dz, dz)\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TRD ${children.geometry.parameters.dx1}*cm ${children.geometry.parameters.dx2}*cm ${children.geometry.parameters.dy1}*cm ${children.geometry.parameters.dy2}*cm ${children.geometry.parameters.dz}*cm\n`
 							break;
@@ -305,16 +309,19 @@ class Factory {
 							break;
 
 						case "aTorusGeometry":
+							variableText += `// inner radius , outer radius , swept radius, starting phi, delta phi\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TORUS ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pRTor}*cm ${children.geometry.parameters.pSPhi} ${children.geometry.parameters.pDPhi}\n`
 							break;
 
 						case "aEllipticalCylinderGeometry":
+							variableText += `// half x, y, z\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPTICALTUBE ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.semiAxisY}*cm ${children.geometry.parameters.Dz}*cm\n`
 							break;
 
 						case "aEllipsoidGeometry":
+							variableText += `// semi axis in x, y, z, z of bottom, z of top surface\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} ELLIPSOID ${children.geometry.parameters.xSemiAxis}*cm ${children.geometry.parameters.ySemiAxis}*cm ${children.geometry.parameters.zSemiAxis}*cm ${children.geometry.parameters.zBottomCut}*cm ${children.geometry.parameters.zTopCut}*cm\n`
 							break;
@@ -352,6 +359,7 @@ class Factory {
 	
 
 						case "aTwistedTubeGeometry":
+							// variableText += `// twist angle in degree, half x, y, z, dPhi\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
 							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pDPhi}\n`
 							break;
@@ -363,18 +371,21 @@ class Factory {
 							break;
 
 						case "aHyperboloidGeometry":
+							variableText += `// Inner radius , Outer radius , Inner stereo angle , outer stereo angle , Half length in Z\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} HYPE ${children.geometry.parameters.radiusIn}*cm ${children.geometry.parameters.radiusOut}*cm ${children.geometry.parameters.stereo1} ${children.geometry.parameters.stereo2} ${children.geometry.parameters.pDz}*cm\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} HYPE ${children.geometry.parameters.radiusIn}*cm ${children.geometry.parameters.radiusOut}*cm ${children.geometry.parameters.stereo2} ${children.geometry.parameters.stereo1} ${children.geometry.parameters.pDz}*cm\n`
 							break;
 
 						case "aPolyconeGeometry":
+							variableText += `// start phi, dphi in degree, # of sides, # of z planes, (z0, R0in, R0out, z1, R1out, R1in,...)\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYCONE ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.zPlaneData.join(' ')}\n`
 							break;
 
 						case "aPolyhedraGeometry":
+							variableText += `// start phi, dphi in degree, # of sides, # of z planes, (z0, R0in, R0out, z1, R1out, R1in,...)\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.z} ${children.geometry.parameters.rOuter}\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} POLYHEDRA ${children.geometry.parameters.SPhi} ${children.geometry.parameters.DPhi} ${children.geometry.parameters.numSide} ${children.geometry.parameters.numZPlanes} ${children.geometry.parameters.zPlaneData.join(' ')}\n`
 							break;
 
 						case "unitedGeometry":

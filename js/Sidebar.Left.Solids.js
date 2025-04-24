@@ -826,54 +826,6 @@ function BasicSolids(editor) {
 
     options.add(item);
 
-    // Hyperboloid model
-
-    item = new UIDiv();
-    item.setClass('Category-item');
-    // item.dom.style.filter = 'blur(2px)';
-
-    item.dom.style.backgroundImage = `url(${hyperboloidImg})`;
-
-    item.setTextContent(strings.getKey('menubar/add/ahyperboloid'));
-    item.dom.setAttribute('draggable', true);
-    item.dom.setAttribute('item-type', 'Hyperboloid');
-
-    tippy(item.dom, { //For comment
-        content: 'Under Development',
-        placement: 'top', 
-    });
-
-    item.onClick(function () {
-
-        // we need to new each geometry module
-
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 10;
-        const geometry = new aHyperboloidGeometry( radiusOut, radiusIn, stereo1, stereo2, pDz );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Hyperboloid';
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    item.dom.addEventListener('dragend', function (event) {
-
-        var position = getPositionFromMouse(event);        
-
-        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 10;
-        const geometry = new aHyperboloidGeometry( radiusOut, radiusIn, stereo1, stereo2, pDz );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
-        finalMesh.name = 'Hyperboloid';
-
-        finalMesh.position.copy(position);
-
-        editor.execute(new AddObjectCommand(editor, finalMesh));
-
-    });
-
-    options.add(item);
-
-
     //Polycons model
 
     item = new UIDiv();
@@ -887,15 +839,15 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Polycone');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , rInner , rOuter , z );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        const SPhi = 0, DPhi = 270, numZPlanes = 4, z = [-6, 4, 5,  5.75, 4, 5 , 6, 5, 6,  7, 5, 6]
+        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , z );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'Polycone';
         
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -906,8 +858,8 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const SPhi = 0, DPhi = 270, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , rInner , rOuter , z );
+        const SPhi = 0, DPhi = 270, numZPlanes = 4, z = [-6, 4, 5,  5.75, 4, 5 , 6, 5, 6,  7, 5, 6]
+        const geometry = new aPolyconeGeometry( SPhi , DPhi , numZPlanes , z );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
         finalMesh.name = 'Polycone';
 
@@ -932,24 +884,17 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Polyhedra');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
     item.onClick(function () {
 
-        const SPhi = 0, DPhi = 180, numSide = 5, numZPlanes = 3;
-        const z = [-20, 0, 20];         // z-coordinates of the planes
-        const rInner = [2, 3, 5];       // inner radii at each z-plane
-        const rOuter = [10, 8, 10];     // outer radii at each z-plane
-        const geometry = new aPolyhedraGeometry(SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z);
-        const finalMesh = new THREE.Mesh(
-            geometry,
-            new THREE.MeshLambertMaterial({
-              side: THREE.DoubleSide
-            })
-          );
-                  finalMesh.name = 'Polyhedra';
+        const SPhi = 0, DPhi = 180, numSide = 4, numZPlanes = 3;
+        const z = [-8, 2, 6, 5, 3, 4, 8, 5, 6];
+        const geometry = new aPolyhedraGeometry(SPhi, DPhi, numSide, numZPlanes, z);
+        const finalMesh = new THREE.Mesh(geometry,new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Polyhedra';
 
 
         editor.execute(new AddObjectCommand(editor, finalMesh));
@@ -960,10 +905,60 @@ function BasicSolids(editor) {
 
         var position = getPositionFromMouse(event);        
 
-        const SPhi = 0, DPhi = 90, numSide = 3, numZPlanes = 9, rInner = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01], rOuter = [0, 1.0, 1.0, .5, .5, 1.0, 1.0, .2, .2], z = [.5, .7, .9, 1.1, 2.5, 2.7, 2.9, 3.1, 3.5];
-        const geometry = new aPolyhedraGeometry( SPhi, DPhi, numSide, numZPlanes, rInner, rOuter, z );
-        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        const SPhi = 0, DPhi = 180, numSide = 5, numZPlanes = 3;
+        const z = [-8, 2, 6, 5, 3, 4, 8, 5, 6];
+        const geometry = new aPolyhedraGeometry(SPhi, DPhi, numSide, numZPlanes, z);
+        const finalMesh = new THREE.Mesh(geometry,new THREE.MeshLambertMaterial());
         finalMesh.name = 'Polyhedra';
+
+        finalMesh.position.copy(position);
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    options.add(item);
+
+
+    // Hyperboloid model
+
+    item = new UIDiv();
+    item.setClass('Category-item');
+    // item.dom.style.filter = 'blur(2px)';
+
+    item.dom.style.backgroundImage = `url(${hyperboloidImg})`;
+
+    item.setTextContent(strings.getKey('menubar/add/ahyperboloid'));
+    item.dom.setAttribute('draggable', true);
+    item.dom.setAttribute('item-type', 'Hyperboloid');
+
+    tippy(item.dom, { //For comment
+        content: 'Under Development',
+        placement: 'top', 
+    });
+
+    item.onClick(function () {
+
+        // we need to new each geometry module
+
+        var radiusOut = 8, radiusIn = 6, innerStereo = 30, outerStereo = 45, pdz = 10;
+        const geometry = new aHyperboloidGeometry( radiusIn, radiusOut, innerStereo, outerStereo, pdz );
+        
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Hyperboloid';
+
+        editor.execute(new AddObjectCommand(editor, finalMesh));
+
+    });
+
+    item.dom.addEventListener('dragend', function (event) {
+
+        var position = getPositionFromMouse(event);        
+
+        var radiusOut = 1, radiusIn = 0.5, stereo1 = 70, stereo2 = 70, pDz = 10;
+        const geometry = new aHyperboloidGeometry( radiusOut, radiusIn, stereo1, stereo2, pDz );
+        const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
+        finalMesh.name = 'Hyperboloid';
 
         finalMesh.position.copy(position);
 
