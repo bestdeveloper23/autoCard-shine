@@ -51,10 +51,10 @@ function GeometryParametersPanel(editor, object) {
     const height = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dz', parameters.dz, 'sidebar/properties/demensionunit');
     const thetaI = createParameterRow('sidebar/geometry/atrapezoidp_geometry/theta', parameters.theta, 'sidebar/properties/angleunit', [-90, 90]);
     const phiI = createParameterRow('sidebar/geometry/atrapezoidp_geometry/phi', parameters.phi, 'sidebar/properties/angleunit', [-90, 90]);
-    const depth1 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dy1', parameters.dy1, 'sidebar/properties/demensionunit');
-    const width1 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dx1', parameters.dx1, 'sidebar/properties/demensionunit');
-    const width2 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dx2', parameters.dx2, 'sidebar/properties/demensionunit');
-    const depth2 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dy2', parameters.dy2, 'sidebar/properties/demensionunit');
+    const depth1 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dy1', parameters.dy1, 'sidebar/properties/demensionunit',[0.0001, Infinity]);
+    const width1 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dx1', parameters.dx1, 'sidebar/properties/demensionunit',[0, Infinity]);
+    const width2 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dx2', parameters.dx2, 'sidebar/properties/demensionunit',[0.0001, Infinity]);
+    const depth2 = createParameterRow('sidebar/geometry/atrapezoidp_geometry/dy2', parameters.dy2, 'sidebar/properties/demensionunit',[0.0001, Infinity]);
 
     // Add Calculate dy2 button
     const calculateDy2Row = new UIRow();

@@ -359,9 +359,9 @@ class Factory {
 	
 
 						case "aTwistedTubeGeometry":
-							// variableText += `// twist angle in degree, half x, y, z, dPhi\n`
+							variableText += `// twist angle, Radius-in, Radius-out, half z, dphi\n`
 							rotationText += `:rotm ${children.name}_rot ${children.rotation.x * 180 / Math.PI} ${children.rotation.y * 180 / Math.PI} ${children.rotation.z * 180 / Math.PI}\n`
-							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTUBS ${children.geometry.parameters.twistedangle} ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pDPhi}\n`
+							solidText += `:solid ${children.geometry.name ? children.geometry.name : children.name} TWISTEDTUBS ${children.geometry.parameters.twistedangle}*degree ${children.geometry.parameters.pRMin}*cm ${children.geometry.parameters.pRMax}*cm ${children.geometry.parameters.pDz}*cm ${children.geometry.parameters.pDPhi}*degree\n`
 							break;
 
 						case "aTetrahedraGeometry":

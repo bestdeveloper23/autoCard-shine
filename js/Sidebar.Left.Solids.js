@@ -933,7 +933,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'Hyperboloid');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
@@ -982,7 +982,7 @@ function BasicSolids(editor) {
     item.dom.setAttribute('item-type', 'TwistedTube');
 
     tippy(item.dom, { //For comment
-        content: 'Under Development',
+        content: 'Click or drag it to add.',
         placement: 'top', 
     });
 
@@ -990,7 +990,7 @@ function BasicSolids(editor) {
 
         // we need to new each geometry module
 
-        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 90;
+        var pRMin = 6, pRMax = 11, pDz = 10, SPhi = 0, DPhi = 90, twistedangle = 45;
         const geometry = new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle );
         const finalMesh = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial());
         finalMesh.name = 'TwistedTubs';

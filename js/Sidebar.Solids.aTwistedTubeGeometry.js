@@ -18,7 +18,7 @@ function GeometryParametersPanel(editor, object) {
  // maxRadius
 
  const maxRadiusRow = new UIRow();
- const maxRadius = new UINumber(parameters.pRMax).setRange(parameters.pRMin + 0.001, Infinity).onChange(update);
+ const maxRadius = new UINumber(parameters.pRMax).setRange(0, Infinity).onChange(update);
 
  maxRadiusRow.add(new UIText(strings.getKey('sidebar/geometry/atube_geometry/maxradius')).setWidth('90px'));
  maxRadiusRow.add(maxRadius);
@@ -59,7 +59,7 @@ function GeometryParametersPanel(editor, object) {
  pSPhiRow.add(pSPhi);
  pSPhiRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
 
- container.add(pSPhiRow);
+//  container.add(pSPhiRow);
 
  // dphi
 
@@ -97,7 +97,7 @@ function GeometryParametersPanel(editor, object) {
 //   minRadius.setRange(0, pRMax - 0.001);
 
   
-  editor.execute(new SetGeometryCommand(editor, object, new aTwistedTubeGeometry( pRMin, pRMax , pDz , SPhi , DPhi , twistedangle )));
+  editor.execute(new SetGeometryCommand(editor, object, new aTwistedTubeGeometry( pRMin, pRMax , pDz , 0, DPhi , twistedangle )));
 
  }
 

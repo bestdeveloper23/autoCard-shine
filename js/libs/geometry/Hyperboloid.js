@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 class aHyperboloidGeometry extends THREE.BufferGeometry {
-    constructor(radiusIn, radiusOut, innerStereo, outerStereo, pdz, openEnded = false) {
+    constructor(radiusIn, radiusOut, innerStereo, outerStereo, pdz) {
         super();
         this.type = "aHyperboloidGeometry";
 
@@ -14,13 +14,22 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
         const stInRad = innerStereo * Math.PI / 180;
         const stOutRad = outerStereo * Math.PI / 180;
 
-        const radialSegments = 64;
-        const heightSegments = 64;
+        const radialSegments = 150;
+        const heightSegments = 150;
+
+        const slopeOut = Math.tan(stOutRad);
+        const slopeIn = Math.tan(stInRad);
 
         const outerProfile = [];
         for (let i = 0; i <= heightSegments; i++) {
-            const z = (i / heightSegments) * 2 * halfZ - halfZ;  // from -halfZ to +halfZ
-            const r = rMax + (Math.abs(z) * Math.tan(stOutRad));
+            const z = (i / heightSegments) * 2 * halfZ - halfZ;
+            
+            // hyperbolic radius: r^2 = (r0)^2 + (z*tan(θ))^2)
+
+            const asymptote = Math.abs(z) * slopeOut;
+            //calculate the hyperbolic radius
+            const r = Math.sqrt(rMax*rMax + asymptote*asymptote);
+            
             outerProfile.push(new THREE.Vector2(r, z));
         }
 
@@ -28,12 +37,14 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
         if (rMin > 0) {
             for (let i = heightSegments; i >= 0; i--) {
                 const z = (i / heightSegments) * 2 * halfZ - halfZ;
-                const r = rMin + (Math.abs(z) * Math.tan(stInRad));
+                
+                const asymptote = Math.abs(z) * slopeIn;
+                const r = Math.sqrt(rMin*rMin + asymptote*asymptote);
+                
                 innerProfile.push(new THREE.Vector2(r, z));
             }
         }
 
-        // Combine outer and inner for lathe (if hollow)
         let profilePoints = [];
         if (rMin > 0) {
             profilePoints = [...outerProfile, ...innerProfile, outerProfile[0].clone()];
@@ -41,7 +52,6 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
             profilePoints = outerProfile;
         }
 
-        //  LatheGeometry revolves the profile around the Y-axis
         const latheGeometry = new THREE.LatheGeometry(
             profilePoints,
             radialSegments,
@@ -53,7 +63,6 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
         this.rotateX(Math.PI / 2); 
         this.computeVertexNormals();
 
-        // Store parameters
         this.parameters = {
             'radiusOut': radiusOut, 
             'radiusIn': radiusIn,
