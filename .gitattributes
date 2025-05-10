@@ -1,0 +1,4 @@
+assets/CoA1_Website_Model_0508.ply filter=lfs diff=lfs merge=lfs -text
+assets/CoA1_Website_Model_WHOLE.ply filter=lfs diff=lfs merge=lfs -text
+assets/CoAl_Website_Model_0508.ply filter=lfs diff=lfs merge=lfs -text
+assets/CoAl_Website_Model_WHOLE.ply filter=lfs diff=lfs merge=lfs -text
