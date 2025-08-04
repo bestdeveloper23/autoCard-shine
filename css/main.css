@@ -1,4 +1,21 @@
+@import './components/navbar.css';
+@import './components/hero.css';
+@import './components/features.css';
+@import './components/pricing.css';
+@import './components/testimonials.css';
+@import './components/footer.css';
+/* @import url('settings.css'); */
+
 :root {
+    --primary-color: #5f5bd1;
+  --secondary-color: #4a47d1;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --text-color: #2c3e50;
+  --text-light: #6c757d;
   color-scheme: light dark;
 }
 
@@ -532,7 +549,7 @@ select:hover {
 #viewport {
   position: absolute;
   top: 32px;
-  left: 195px;
+  left: 210px;
   right: 290px;
   bottom: 0;
 }
@@ -557,6 +574,25 @@ select:hover {
   left: 260px;
   right: 300px;
   bottom: 0;
+}
+
+/* home page */
+.home-container {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animation classes */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 #menubar {

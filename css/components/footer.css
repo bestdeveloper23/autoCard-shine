@@ -1,0 +1,201 @@
+.home-footer {
+    background: #f8f9fa;
+    padding: 4rem 0 0;
+    border-top: 1px solid var(--glass-border);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 3fr 2fr 2fr 5fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.footer-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.about-text {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.social-link {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    transition: all 0.2s ease;
+}
+
+.social-link:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.footer-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-link {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.footer-link:hover {
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.subscribe-form {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.subscribe-input {
+    flex: 1;
+    height: 40px;
+    padding: 0 1.25rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    color: var(--text-color);
+}
+
+.subscribe-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(95, 91, 209, 0.1);
+    background: white;
+}
+
+.subscribe-btn {
+    height: 40px;
+    padding: 0 1.5rem;
+    border-radius: 20px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.subscribe-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.contact-icon {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.contact-text {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.footer-bottom {
+    margin-top: 4rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+}
+
+.copyright {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+@media (max-width: 1200px) {
+    .footer-content {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .contact-section {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 576px) {
+    .home-footer {
+        padding: 3rem 0 0;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+    }
+
+    .contact-section {
+        grid-column: span 1;
+    }
+
+    .footer-bottom {
+        margin-top: 3rem;
+        padding: 1.25rem 1.5rem;
+    }
+}

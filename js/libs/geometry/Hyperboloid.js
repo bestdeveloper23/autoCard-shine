@@ -8,7 +8,7 @@ class aHyperboloidGeometry extends THREE.BufferGeometry {
         const mmTOcm = 10;
         const halfZ = pdz * mmTOcm;
 
-        const rMin = radiusIn * mmTOcm;
+        const rMin = (radiusIn === 0 ? 0.001 : radiusIn) * mmTOcm;
         const rMax = radiusOut * mmTOcm;
 
         const stInRad = innerStereo * Math.PI / 180;

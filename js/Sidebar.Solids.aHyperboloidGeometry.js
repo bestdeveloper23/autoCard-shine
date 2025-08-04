@@ -1,96 +1,141 @@
 import * as THREE from 'three';
 import { CSG } from './libs/CSGMesh.js';
-
-import { UIDiv, UIRow, UIText, UINumber } from './libs/ui.js';
+import { UIDiv, UIRow, UIText, UINumber, UISelect } from './libs/ui.js';
 
 import { SetGeometryCommand } from './commands/SetGeometryCommand.js';
 import { aHyperboloidGeometry } from './libs/geometry/Hyperboloid.js';
 
-function GeometryParametersPanel( editor, object ) {
+function GeometryParametersPanel(editor, object) {
 
-	const strings = editor.strings;
+    const strings = editor.strings;
 
-	const container = new UIDiv();
+    const container = new UIDiv();
 
-	const geometry = object.geometry;
-	const parameters = geometry.parameters;
+    const geometry = object.geometry;
+    const parameters = geometry.parameters;
 
-	// radiusIn
+    // Define unit options and multipliers
+    const unitOptions = { cm: 'cm', mm: 'mm', inch: 'inch' };
+    const unitMultiplier = { cm: 1, mm: 0.1, inch: 2.54 }; // Conversion factor relative to cm
+    let baseDimensions = {
+        radiusIn: parameters.radiusIn,
+        radiusOut: parameters.radiusOut,
+        pDz: parameters.pDz
+    };
+    let isUnitChange = false; // Prevents unnecessary updates during unit switching
 
-	const radiusInRow = new UIRow();
-	const radiusInInput = new UINumber( parameters.radiusIn ).setRange(0, Infinity).onChange( update );
+    // Default Unit Selection
+    const defaultUnitRow = new UIRow();
+    const defaultUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(updateDefaultUnit);
+    defaultUnitRow.add(new UIText('Default Unit').setWidth('90px'), defaultUnitSelect);
+    container.add(defaultUnitRow);
 
-	radiusInRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusin' ) ).setWidth( '90px' ) );
-	radiusInRow.add( radiusInInput );
+    // radiusIn with unit select
+    const radiusInRow = new UIRow();
+    const radiusInInput = new UINumber(parameters.radiusIn).onChange(updateDimensions);
+    const radiusInUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    radiusInRow.add(new UIText(strings.getKey('sidebar/geometry/ahyperboloid_geometry/radiusin')).setWidth('90px'), radiusInInput, radiusInUnitSelect);
+    container.add(radiusInRow);
 
-	radiusInRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+    // radiusOut with unit select
+    const radiusOutRow = new UIRow();
+    const radiusOutInput = new UINumber(parameters.radiusOut).onChange(updateDimensions);
+    const radiusOutUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    radiusOutRow.add(new UIText(strings.getKey('sidebar/geometry/ahyperboloid_geometry/radiusout')).setWidth('90px'), radiusOutInput, radiusOutUnitSelect);
+    container.add(radiusOutRow);
 
-	container.add( radiusInRow );
+    // innerStereo (maps to stereo2 in parameters) - no unit conversion needed
+    const innerStereoRow = new UIRow();
+    const innerStereoInput = new UINumber(parameters.stereo2).setRange(0, Infinity).onChange(update);
+    innerStereoRow.add(new UIText(strings.getKey('sidebar/geometry/ahyperboloid_geometry/stereoin')).setWidth('90px'));
+    innerStereoRow.add(innerStereoInput);
+    innerStereoRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    container.add(innerStereoRow);
 
-	// radiusOut
+    // outerStereo (maps to stereo1 in parameters) - no unit conversion needed
+    const outerStereoRow = new UIRow();
+    const outerStereoInput = new UINumber(parameters.stereo1).setRange(0, Infinity).onChange(update);
+    outerStereoRow.add(new UIText(strings.getKey('sidebar/geometry/ahyperboloid_geometry/stereoout')).setWidth('90px'));
+    outerStereoRow.add(outerStereoInput);
+    outerStereoRow.add(new UIText(strings.getKey('sidebar/properties/angleunit')).setWidth('20px'));
+    container.add(outerStereoRow);
 
-	const radiusOutRow = new UIRow();
-	const radiusOutInput = new UINumber( parameters.radiusOut ).setRange(0, Infinity).onChange( update );
+    // height (pDz) with unit select
+    const heightRow = new UIRow();
+    const heightInput = new UINumber(parameters.pDz).onChange(updateDimensions);
+    const heightUnitSelect = new UISelect().setOptions(unitOptions).setValue('cm').onChange(handleUnitChange);
+    heightRow.add(new UIText(strings.getKey('sidebar/geometry/ahyperboloid_geometry/height')).setWidth('90px'), heightInput, heightUnitSelect);
+    container.add(heightRow);
 
-	radiusOutRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/radiusout' ) ).setWidth( '90px' ) );
-	radiusOutRow.add( radiusOutInput );
+    // Function to update dimensions when the default unit changes
+    function updateDefaultUnit() {
+        isUnitChange = true;
+        const selectedUnit = defaultUnitSelect.getValue();
 
-    radiusOutRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
+        radiusInInput.setValue(baseDimensions.radiusIn / unitMultiplier[selectedUnit]);
+        radiusOutInput.setValue(baseDimensions.radiusOut / unitMultiplier[selectedUnit]);
+        heightInput.setValue(baseDimensions.pDz / unitMultiplier[selectedUnit]);
 
-	container.add( radiusOutRow );
+        radiusInUnitSelect.setValue(selectedUnit);
+        radiusOutUnitSelect.setValue(selectedUnit);
+        heightUnitSelect.setValue(selectedUnit);
 
-	// innerStereo (maps to stereo2 in parameters)
+        isUnitChange = false;
+        update();
+    }
 
-	const innerStereoRow = new UIRow();
-	const innerStereoInput = new UINumber( parameters.stereo2 ).setRange(0, 180).onChange( update );
+    // Function to update base dimensions when values change
+    function updateDimensions() {
+        if (!isUnitChange) {
+            const radiusInUnit = radiusInUnitSelect.getValue();
+            const radiusOutUnit = radiusOutUnitSelect.getValue();
+            const heightUnit = heightUnitSelect.getValue();
 
-	innerStereoRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoin' ) ).setWidth( '90px' ) );
-	innerStereoRow.add( innerStereoInput );
+            baseDimensions.radiusIn = radiusInInput.getValue() * unitMultiplier[radiusInUnit];
+            baseDimensions.radiusOut = Math.max(radiusOutInput.getValue() * unitMultiplier[radiusOutUnit], 0.01);
+            baseDimensions.pDz = Math.max(heightInput.getValue() * unitMultiplier[heightUnit], 0.01);
 
-	container.add( innerStereoRow );
+            // Update UI to reflect any corrections
+            radiusOutInput.setValue(baseDimensions.radiusOut / unitMultiplier[radiusOutUnit]);
+            heightInput.setValue(baseDimensions.pDz / unitMultiplier[heightUnit]);
 
-	// outerStereo (maps to stereo1 in parameters)
+            update();
+        }
+    }
 
-	const outerStereoRow = new UIRow();
-	const outerStereoInput = new UINumber( parameters.stereo1 ).setRange(0, 180).onChange( update );
+    // Function to handle unit changes for specific dimensions
+    function handleUnitChange() {
+        isUnitChange = true;
+        const selectedRadiusInUnit = radiusInUnitSelect.getValue();
+        const selectedRadiusOutUnit = radiusOutUnitSelect.getValue();
+        const selectedHeightUnit = heightUnitSelect.getValue();
 
-	outerStereoRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/stereoout' ) ).setWidth( '90px' ) );
-	outerStereoRow.add( outerStereoInput );
+        radiusInInput.setValue(baseDimensions.radiusIn / unitMultiplier[selectedRadiusInUnit]);
+        radiusOutInput.setValue(baseDimensions.radiusOut / unitMultiplier[selectedRadiusOutUnit]);
+        heightInput.setValue(baseDimensions.pDz / unitMultiplier[selectedHeightUnit]);
 
-	container.add( outerStereoRow );
+        isUnitChange = false;
+    }
 
-	// height (pDz)
-	
-	const heightRow = new UIRow();
-	const heightInput = new UINumber( parameters.pDz ).setRange(0, Infinity).onChange( update );
-
-	heightRow.add( new UIText( strings.getKey( 'sidebar/geometry/ahyperboloid_geometry/height' ) ).setWidth( '90px' ) );
-	heightRow.add( heightInput );
-
-    heightRow.add(new UIText(strings.getKey('sidebar/properties/demensionunit')).setWidth('20px'));
-
-	container.add( heightRow );
-
-
-	function update() {
-        // Get values from the UI inputs
-        const radiusIn = radiusInInput.getValue();
-        const radiusOut = radiusOutInput.getValue();
+    function update() {
+        // Get values from the UI inputs or base dimensions
+        const radiusIn = baseDimensions.radiusIn;
+        const radiusOut = baseDimensions.radiusOut;
         const innerStereo = innerStereoInput.getValue();
         const outerStereo = outerStereoInput.getValue();
-        const pdz = heightInput.getValue();
-        
-        // Create new geometry with the correct parameter order
-		editor.execute( new SetGeometryCommand( editor, object, new aHyperboloidGeometry(
-            radiusIn, 
-            radiusOut, 
-            innerStereo, 
-            outerStereo, 
+        const pdz = baseDimensions.pDz;
+
+        // Create new geometry with the correct parameter order 
+        editor.execute(new SetGeometryCommand(editor, object, new aHyperboloidGeometry(
+            radiusIn,
+            radiusOut,
+            innerStereo,
+            outerStereo,
             pdz
         )));
-	}
+    }
 
-	return container;
+    return container;
 }
 
 export { GeometryParametersPanel };
