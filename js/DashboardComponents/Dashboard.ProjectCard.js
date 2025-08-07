@@ -22,6 +22,33 @@ function DashboardProjectCard(projectId, project, actions, utils) {
   visibilityInfo.add(visibilityIcon);
   visibilityInfo.add(visibilityText);
 
+  if (project.isPublic) {
+    const publicLinkBtn = new UIButton('🔗');
+    publicLinkBtn.setClass('public-link-btn');
+    publicLinkBtn.dom.title = 'Copy Public Link';
+    
+    publicLinkBtn.onClick((e) => {
+      e.stopPropagation();
+      const publicUrl = `${window.location.origin}${window.location.pathname}#/editor/${projectId}`;
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(publicUrl).then(() => {
+          const originalText = publicLinkBtn.dom.innerHTML;
+          publicLinkBtn.dom.innerHTML = '✅';
+          setTimeout(() => {
+            publicLinkBtn.dom.innerHTML = originalText;
+          }, 2000);
+        }).catch(() => {
+          prompt('Copy this public link:', publicUrl);
+        });
+      } else {
+        prompt('Copy this public link:', publicUrl);
+      }
+    });
+    
+    visibilityInfo.add(publicLinkBtn);
+  }
+
   // Action buttons on the right (context-aware based on project status)
   const topActions = new UIPanel();
   topActions.setClass('top-actions');
@@ -134,7 +161,6 @@ function DashboardProjectCard(projectId, project, actions, utils) {
   const thumbnail = new UIPanel();
   thumbnail.setClass('project-thumbnail');
 
-  // Add a 3D scene preview (UPDATED VERSION)
   const scenePreview = new UIPanel();
   scenePreview.setClass('scene-preview');
   
@@ -149,7 +175,6 @@ function DashboardProjectCard(projectId, project, actions, utils) {
   fallbackText.dom.style.display = 'none'; // Hidden by default
   scenePreview.add(fallbackText);
   
-  // Add object count badge (SAME AS ORIGINAL)
   const objectCount = utils.getObjectCount(project.data);
   const objectCountBadge = new UIText(`${objectCount} objects`);
   objectCountBadge.setClass('object-count-badge');
@@ -243,8 +268,7 @@ function DashboardProjectCard(projectId, project, actions, utils) {
   // Card click handler (open project) - but not on action buttons
   // Only allow opening if project is not deleted
   card.onClick((e) => {
-    // Don't open if clicking on action buttons
-    if (e.target.closest('.top-action-btn')) {
+    if (e.target.closest('.top-action-btn') || e.target.closest('.public-link-btn')) {
       return;
     }
     
@@ -258,7 +282,7 @@ function DashboardProjectCard(projectId, project, actions, utils) {
     }
   });
 
-  // Public methods (SAME AS ORIGINAL)
+  // Public methods
   card.updateProject = function(updatedProject) {
     title.setValue(updatedProject.name || 'Untitled Project');
     

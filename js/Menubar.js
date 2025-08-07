@@ -1,5 +1,4 @@
 import { UIPanel } from './libs/ui.js';
-
 import { MenubarAdd } from './Menubar.Add.js';
 import { MenubarEdit } from './Menubar.Edit.js';
 import { MenubarFile } from './Menubar.File.js';
@@ -8,6 +7,7 @@ import { MenubarView } from './Menubar.View.js';
 import { MenubarHelp } from './Menubar.Help.js';
 import { MenubarPlay } from './Menubar.Play.js';
 import { MenubarLogin } from './login.js';
+import { MenubarFork } from './Menubar.Fork.js';
 
 function Menubar( editor ) {
 
@@ -21,6 +21,7 @@ function Menubar( editor ) {
 	container.add( new MenubarExamples( editor ) );
 	container.add( new MenubarView( editor ) );
 	container.add( new MenubarHelp( editor ) );
+	container.add( new MenubarFork( editor ) );
 
 	container.add( new MenubarLogin( editor ) );
 

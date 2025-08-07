@@ -89,16 +89,16 @@ function HomeNavbar() {
         const currentUser = window.router.getCurrentUser();
         if (currentUser) {
             // User is logged in, go to dashboard
-            window.router.navigate('/shine/dashboard');
+            window.router.navigate('/dashboard');
         } else {
             // User is not logged in, go to auth
-            window.router.navigate('shine/auth');
+            window.router.navigate('/auth');
         }
     });
 
     const signupBtn = new UIButton('Try a Demo');
     signupBtn.setClass('auth-btn signup-btn');
-    signupBtn.onClick(() => window.router.navigate('/shine/demo'));
+    signupBtn.onClick(() => window.router.navigate('/demo'));
 
     authSection.add(loginBtn);
     authSection.add(signupBtn);

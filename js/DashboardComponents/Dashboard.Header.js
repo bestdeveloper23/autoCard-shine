@@ -105,8 +105,15 @@ function DashboardHeader(onLogout) {
     }
   });
 
+  const homeButton = new UIButton('HOME');
+  homeButton.setClass('header-button logout-btn');
+  homeButton.onClick(function () {
+    window.router.navigate('/');
+  });
+
   userActions.add(settingsBtn);
   userActions.add(logoutBtn);
+  userActions.add(homeButton);
 
   rightSection.add(userInfo);
   rightSection.add(userActions);

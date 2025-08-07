@@ -3,402 +3,566 @@ import { ProjectAPI } from './factory/ProjectAPIs.js';
 import { PatternModifier } from './factory/PatternModifier.js';
 import { Factory } from './factory/Factory.js'
 
-
 function SidebarProjects(editor) {
     const signals = editor.signals;
     const strings = editor.strings;
     const container = new UIPanel();
-    const projectsList = new UIPanel();
     const notification = new UINotification();
+    
+    let currentSimulationProject = null;
+    let currentDashboardProjectId = null;
+    let simulationExists = false;
+    let isOperationInProgress = false;
+    let projectChangeInterval = null;
+    let isDestroyed = false;
+    let currentModal = null; // Track current modal
 
-    function clearProjectsList() {
-        while (projectsList.dom.firstChild) {
-            projectsList.dom.removeChild(projectsList.dom.firstChild);
+    const projectRow = new UIRow();
+    projectRow.setClass('simulation-project-row');
+    
+    const projectDisplay = new UIDiv();
+    projectDisplay.setClass('project-display');
+    
+    const projectNameSpan = new UIDiv();
+    projectNameSpan.setClass('project-name-display');
+    
+    const buttonsContainer = new UIDiv();
+    buttonsContainer.setClass('project-buttons');
+
+    const simulateButton = new UIButton('▶');
+    simulateButton.setClass('simulate-btn');
+    simulateButton.dom.title = 'Simulate';
+
+    function getCurrentProjectInfo() {
+        const editorInstance = window.editorPageInstance;
+        if (!editorInstance || !editorInstance.projectId) return null;
+
+        const originalName = editorInstance.projectName || 'Untitled Project';
+        const projectName = originalName.replace(/[^a-zA-Z0-9]/g, '_');
+        
+        return {
+            id: editorInstance.projectId,
+            name: originalName || 'Untitled Project',
+            simulationName: projectName || 'Untitled Project'
+        };
+    }
+
+    function updateProjectNameOnly() {
+        const projectInfo = getCurrentProjectInfo();
+        if (!projectInfo) {
+            projectNameSpan.dom.textContent = 'No Project';
+            simulateButton.dom.style.display = 'none';
+            projectDisplay.removeClass('has-simulation');
+            projectDisplay.addClass('no-simulation');
+            return;
+        }
+
+        projectNameSpan.dom.textContent = projectInfo.name;
+        simulateButton.dom.style.display = 'inline-block';
+        simulateButton.dom.disabled = false;
+        simulateButton.dom.title = 'Simulate';
+        
+        // Check if simulation exists when project changes
+        checkSimulationExists().then(() => {
+            updateProjectDisplay();
+        });
+    }
+
+    function updateProjectDisplay() {
+        const projectInfo = getCurrentProjectInfo();
+        if (!projectInfo) {
+            projectNameSpan.dom.textContent = 'No Project';
+            projectDisplay.removeClass('has-simulation');
+            projectDisplay.addClass('no-simulation');
+            simulateButton.dom.style.display = 'none';
+            return;
+        }
+
+        projectNameSpan.dom.textContent = projectInfo.name;
+        simulateButton.dom.style.display = 'inline-block';
+        
+        if (isOperationInProgress) {
+            simulateButton.dom.disabled = true;
+            simulateButton.dom.title = 'Creating simulation...';
+        } else {
+            simulateButton.dom.disabled = false;
+            simulateButton.dom.title = 'Simulate';
+            
+            if (simulationExists) {
+                projectDisplay.removeClass('no-simulation');
+                projectDisplay.addClass('has-simulation');
+            } else {
+                projectDisplay.removeClass('has-simulation');
+                projectDisplay.addClass('no-simulation');
+            }
         }
     }
 
-    // Store project order
-    function saveProjectOrder() {
-        const userEmail = localStorage.getItem('userEmail');
-        const projects = Array.from(projectsList.dom.children).map(row =>
-            row.getAttribute('data-project')
-        );
-        localStorage.setItem(`projectOrder_${userEmail}`, JSON.stringify(projects));
+    async function retryApiCall(apiCall, maxRetries = 3, delay = 1000) {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                return await apiCall();
+            } catch (error) {
+                if (attempt === maxRetries) throw error;
+                await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            }
+        }
     }
 
-    // Load project order
-    function loadProjectOrder() {
+    async function checkSimulationExists() {
+        const projectInfo = getCurrentProjectInfo();
+        if (!projectInfo) {
+            simulationExists = false;
+            return false;
+        }
+
         const userEmail = localStorage.getItem('userEmail');
-        const order = JSON.parse(localStorage.getItem(`projectOrder_${userEmail}`) || '[]');
-        return order;
+        if (!userEmail) {
+            simulationExists = false;
+            return false;
+        }
+
+        try {
+            const response = await retryApiCall(() => ProjectAPI.getUserProjects(userEmail));
+            const projects = response.projects || [];
+            
+            const simProject = projects.find(p => p['project-name'] === projectInfo.simulationName);
+            simulationExists = !!simProject;
+            currentSimulationProject = simProject;
+            
+            return simulationExists;
+        } catch (error) {
+            console.warn('Failed to check simulation existence:', error);
+            simulationExists = false;
+            return false;
+        }
     }
 
-    async function loadUserProjects() {
+    async function cleanupAllProjects() {
         const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) return;
 
         try {
-            clearProjectsList();
             const response = await ProjectAPI.getUserProjects(userEmail);
-
-            if (!response.projects) {
-                throw new Error('Invalid server response');
-            }
-
-            const projects = response.projects;
-            const order = loadProjectOrder();
-
-            // Sort projects based on saved order
-            const sortedProjects = projects.sort((a, b) => {
-                const indexA = order.indexOf(a['project-name']);
-                const indexB = order.indexOf(b['project-name']);
-                return indexA - indexB;
-            });
-
-            sortedProjects.forEach(project => {
-                if (project['project-name']) {
-                    addProjectButton(project['project-name']);
+            const projects = response.projects || [];
+            
+            // Delete all existing projects
+            for (const project of projects) {
+                try {
+                    await ProjectAPI.deleteProject(userEmail, project['project-name']);
+                    console.log(`Cleaned up project: ${project['project-name']}`);
+                } catch (error) {
+                    console.warn(`Failed to cleanup project ${project['project-name']}:`, error);
                 }
-            });
+            }
         } catch (error) {
-            notification.show(error.message || 'Failed to load projects', 'error');
+            console.warn('Failed to cleanup projects:', error);
         }
     }
 
-    function addProjectButton(title) {
-        const projectRow = new UIRow();
-
-        projectRow.dom.draggable = true;
-        projectRow.dom.setAttribute('data-project', title);
-
-        // Drag events
-        projectRow.dom.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', title);
-            e.target.style.opacity = '0.4';
-        });
-
-        projectRow.dom.addEventListener('dragend', (e) => {
-            e.target.style.opacity = '1';
-            saveProjectOrder();
-        });
-
-        projectRow.dom.addEventListener('dragover', (e) => {
-            e.preventDefault();
-        });
-
-        projectRow.dom.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const draggedTitle = e.dataTransfer.getData('text/plain');
-            const draggedRow = projectsList.dom.querySelector(`[data-project="${draggedTitle}"]`);
-            const targetRow = e.currentTarget;
-
-            if (draggedRow && targetRow !== draggedRow) {
-                const rect = targetRow.getBoundingClientRect();
-                const mid = rect.top + rect.height / 2;
-                if (e.clientY < mid) {
-                    targetRow.parentNode.insertBefore(draggedRow, targetRow);
-                } else {
-                    targetRow.parentNode.insertBefore(draggedRow, targetRow.nextSibling);
-                }
-            }
-        });
-
-        // Project Title
-        const projectTitle = new UIDiv();
-        projectTitle.dom.textContent = title;
-        projectTitle.dom.style.padding = '8px 12px';
-        projectTitle.dom.style.fontSize = '13px';
-        projectTitle.dom.style.fontFamily = 'Arial, sans-serif';
-        projectTitle.dom.style.borderRadius = '4px';
-        projectTitle.dom.style.flex = '1';
-        projectTitle.dom.style.overflow = 'hidden';
-        projectTitle.dom.style.textOverflow = 'ellipsis';
-        projectTitle.dom.style.whiteSpace = 'nowrap';
-
-        projectTitle.dom.addEventListener('mouseover', function () {
-            this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-        });
-
-        projectTitle.dom.addEventListener('mouseout', function () {
-            this.style.backgroundColor = 'transparent';
-        });
-
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            projectTitle.dom.style.color = '#aaa';
-            projectTitle.dom.addEventListener('mouseover', function () {
-                this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-            });
+    async function createSimulationAndRun() {
+        if (isOperationInProgress) return;
+        
+        const projectInfo = getCurrentProjectInfo();
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!projectInfo || !userEmail) {
+            notification.show('Project information not available', 'error');
+            return;
         }
 
-        projectTitle.onClick(function () {
-            console.log('Project selected:', title);
+        isOperationInProgress = true;
+        updateProjectDisplay();
+
+        const progressModal = new UIProgressModal('Preparing simulation...');
+        
+        try {
+            progressModal.show();
+            progressModal.setProgress(10);
+
+            // Clean up all existing projects first
+            await cleanupAllProjects();
+            progressModal.setProgress(30);
+
+            const mac = await Factory.exportMacro(editor);
+            const tg = await Factory.exportTg(editor);
+
+            if (!mac || !tg) {
+                throw new Error('Failed to export scene data');
+            }
+
+            progressModal.setProgress(60);
+            
+            simulationExists = true;
+            currentSimulationProject = projectInfo.simulationName;
+
+            progressModal.setProgress(100);
+            await progressModal.hide();
+            
+            showSimulationModal(projectInfo, userEmail, mac, tg);
+
+        } catch (error) {
+            await progressModal.hide();
+            
+            let errorMessage = 'Failed to prepare simulation';
+            if (error.message) {
+                errorMessage += ': ' + error.message;
+            }
+            
+            notification.show(errorMessage, 'error');
+            
+            simulationExists = false;
+            currentSimulationProject = null;
+        } finally {
+            isOperationInProgress = false;
+            updateProjectDisplay();
+        }
+    }
+
+    function showSimulationModal(projectInfo, userEmail, macContent, tgContent) {
+        // Close any existing modal first
+        if (currentModal) {
+            currentModal.hide();
+            currentModal = null;
+        }
+
+        const modal = new UIModal(`Simulation Preview: ${projectInfo.name}`);
+        currentModal = modal; // Track the current modal
+
+        // Add custom close handler
+        const originalHide = modal.hide.bind(modal);
+        modal.hide = function() {
+            currentModal = null;
+            return originalHide();
+        };
+
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'simulation-preview-container';
+
+        // TG Container
+        const tgContainer = document.createElement('div');
+        tgContainer.className = 'simulation-file-container';
+
+        const tgHeader = document.createElement('div');
+        tgHeader.className = 'simulation-file-header';
+        tgHeader.textContent = 'Detector Configuration (detector.tg)';
+        tgContainer.appendChild(tgHeader);
+
+        const tgPreview = new UITextArea().dom;
+        tgPreview.className = 'simulation-textarea';
+        tgPreview.value = tgContent;
+        tgPreview.spellcheck = false;
+        tgPreview.setAttribute('wrap', 'off');
+        tgContainer.appendChild(tgPreview);
+
+        // MAC Container
+        const macContainer = document.createElement('div');
+        macContainer.className = 'simulation-file-container';
+
+        const macHeader = document.createElement('div');
+        macHeader.className = 'simulation-file-header';
+        macHeader.textContent = 'Run Configuration (run.mac)';
+        macContainer.appendChild(macHeader);
+
+        const macPreview = new UITextArea().dom;
+        macPreview.className = 'simulation-textarea';
+        macPreview.value = macContent;
+        macPreview.spellcheck = false;
+        macPreview.setAttribute('wrap', 'off');
+        macContainer.appendChild(macPreview);
+
+        // Track changes
+        let hasChanges = false;
+        const originalTgContent = tgContent;
+        const originalMacContent = macContent;
+
+        // Update Button
+        const updateButton = document.createElement('button');
+        updateButton.className = 'simulation-update-button';
+        updateButton.textContent = 'Update Changes';
+        updateButton.style.display = 'none';
+
+        updateButton.onclick = async () => {
+            try {
+                updateButton.disabled = true;
+                updateButton.textContent = 'Updating...';
+
+                const mac_blob = new Blob([macPreview.value], { type: 'text/plain' });
+                const tg_blob = new Blob([tgPreview.value], { type: 'text/plain' });
+
+                await ProjectAPI.updateProject(userEmail, projectInfo.simulationName, mac_blob, tg_blob);
+                notification.show('Changes saved successfully', 'success');
+                hasChanges = false;
+                updateButton.style.display = 'none';
+            } catch (error) {
+                notification.show('Failed to save changes', 'error');
+            } finally {
+                updateButton.disabled = false;
+                updateButton.textContent = 'Update Changes';
+            }
+        };
+
+        // Change listeners
+        [tgPreview, macPreview].forEach(textarea => {
+            textarea.addEventListener('input', () => {
+                hasChanges = tgPreview.value !== originalTgContent ||
+                    macPreview.value !== originalMacContent;
+                updateButton.style.display = hasChanges ? 'inline-block' : 'none';
+            });
         });
 
-        // Simulate Button
-        const simulateButton = new UIButton('▶');
-        simulateButton.setMarginLeft('8px');
-        simulateButton.dom.style.color = '#0a0';
-        simulateButton.dom.style.fontWeight = 'bold';
+        previewContainer.appendChild(tgContainer);
+        previewContainer.appendChild(macContainer);
 
-        simulateButton.onClick(async function () {
-            const userEmail = localStorage.getItem('userEmail');
-            const progressModal = new UIProgressModal('Simulating...');
+        // Simulate button
+        const simulateButtonModal = document.createElement('button');
+        simulateButtonModal.className = 'simulation-run-button';
+        simulateButtonModal.textContent = 'Start Simulation';
 
+        simulateButtonModal.onclick = async () => {
+            const progressModal = new UIProgressModal('Running simulation...');
+            
             try {
-                // Get project files from server
-                const files = await ProjectAPI.getProjectFiles(userEmail, title);
+                progressModal.show();
+                progressModal.setProgress(10);
 
-                if (!files.tgFile || !files.macFile) {
-                    throw new Error('Invalid file content received');
+                simulateButtonModal.disabled = true;
+                simulateButtonModal.textContent = 'Simulating...';
+
+                const tg_blob = new Blob([tgPreview.value], { type: 'text/plain' });
+                const mac_blob = new Blob([macPreview.value], { type: 'text/plain' });
+
+                progressModal.setProgress(20);
+
+                // Create the project
+                try {
+                    await ProjectAPI.createProject(userEmail, projectInfo.simulationName, mac_blob, tg_blob);
+                    console.log('Project created successfully');
+                } catch (createError) {
+                    console.warn('Project creation failed:', createError);
+                    throw createError;
                 }
 
-                const tgContent = files.tgFile;
-                const macContent = files.macFile;
+                progressModal.setProgress(40);
 
+                // Run simulation
+                const result = await retryApiCall(() => 
+                    ProjectAPI.simulateProject(userEmail, projectInfo.simulationName, tg_blob, mac_blob)
+                );
 
-                // preview modal
-                const modal = new UIModal(`Simulation Preview: ${title}`);
+                if (result.Status !== 'Success') {
+                    throw new Error(result.Message || result.message || 'Simulation failed');
+                }
 
-                const previewContainer = document.createElement('div');
-                previewContainer.style.display = 'flex';
-                previewContainer.style.gap = '20px';
+                progressModal.setProgress(60);
+                
+                // Get results
+                const wrlContent = await retryApiCall(() =>
+                    ProjectAPI.getFileContent(userEmail, projectInfo.simulationName, result.filename)
+                );
 
-                // TG Container
-                const tgContainer = document.createElement('div');
-                tgContainer.style.flex = '1';
+                progressModal.setProgress(100);
+                await progressModal.hide();
 
-                const tgHeader = document.createElement('div');
-                tgHeader.textContent = 'Detector Configuration (detector.tg)';
-                tgHeader.style.marginBottom = '8px';
-                tgHeader.style.fontWeight = 'bold';
-                tgContainer.appendChild(tgHeader);
-
-                const tgPreview = new UITextArea().dom;
-                tgPreview.value = tgContent;
-                tgPreview.style.width = '100%';
-                tgPreview.style.height = '300px';
-                tgPreview.style.fontFamily = 'monospace';
-                tgPreview.style.marginBottom = '10px';
-                tgPreview.style.resize = 'none';
-                tgPreview.spellcheck = false;
-                tgPreview.setAttribute('wrap', 'off')
-                tgContainer.appendChild(tgPreview);
-
-                // MAC Container
-                const macContainer = document.createElement('div');
-                macContainer.style.flex = '1';
-
-                const macHeader = document.createElement('div');
-                macHeader.textContent = 'Run Configuration (run.mac)';
-                macHeader.style.marginBottom = '8px';
-                macHeader.style.fontWeight = 'bold';
-                macContainer.appendChild(macHeader);
-
-                const macPreview = new UITextArea().dom;
-                macPreview.value = macContent;
-                macPreview.style.width = '100%';
-                macPreview.style.height = '300px';
-                macPreview.style.fontFamily = 'monospace';
-                macPreview.style.marginBottom = '10px';
-                macPreview.style.resize = 'none';
-                macPreview.spellcheck = false;
-                macPreview.setAttribute('wrap', 'off');
-                macContainer.appendChild(macPreview);
-
-                // Track changes
-                let hasChanges = false;
-                const originalTgContent = tgContent;
-                const originalMacContent = macContent;
-
-                // Update Button
-                const updateButton = document.createElement('button');
-                updateButton.textContent = 'Update Changes';
-                updateButton.style.padding = '8px 16px';
-                updateButton.style.marginRight = '10px';
+                // Show results
+                showSimulationResults(previewContainer, wrlContent, result.filename);
+                
+                simulateButtonModal.style.display = 'none';
                 updateButton.style.display = 'none';
-
-                updateButton.onclick = async () => {
-                    try {
-
-                        const mac_blob = new Blob([macPreview.value], { type: 'text/plain' });
-                        const tg_blob = new Blob([tgPreview.value], { type: 'text/plain' });
-
-                        const updated = await ProjectAPI.updateProject(userEmail, title, mac_blob, tg_blob);
-                        notification.show('Changes saved successfully', 'success');
-                    } catch (error) {
-                        notification.show('Failed to save changes', 'error');
-                    }
-                };
-
-                // Change listeners
-                [tgPreview, macPreview].forEach(textarea => {
-                    textarea.addEventListener('input', () => {
-                        hasChanges = tgPreview.value !== originalTgContent ||
-                            macPreview.value !== originalMacContent;
-                        updateButton.style.display = hasChanges ? 'inline-block' : 'none';
-                    });
-                });
-
-                previewContainer.appendChild(tgContainer);
-                previewContainer.appendChild(macContainer);
-
-                // Simulate button
-                const simulateButtonModal = document.createElement('button');
-                simulateButtonModal.textContent = 'Start Simulation';
-                simulateButtonModal.style.padding = '8px 16px';
-
-                simulateButtonModal.onclick = async () => {
-                    const progressModal = new UIProgressModal('Simulating...');
-                    try {
-                        progressModal.show();
-                        progressModal.setProgress(30);
-
-                        const tg_blob = new Blob([tgPreview.value], { type: 'text/plain' });
-                        const mac_blob = new Blob([macPreview.value], { type: 'text/plain' });
-
-                        const result = await ProjectAPI.simulateProject(
-                            userEmail,
-                            title,
-                            tg_blob,
-                            mac_blob
-                        );
-
-                        if (result.Status !== 'Success') {
-                            throw new Error(result.message || 'Simulation failed');
-                        }
-
-                        if (result.Status === 'Success') {
-                            progressModal.setProgress(60);
-
-                            try {
-                                const wrlContent = await ProjectAPI.getFileContent(
-                                    userEmail,
-                                    title,
-                                    result.filename
-                                );
-
-                                progressModal.setProgress(100);
-                                await progressModal.hide();
-
-                                const wrlContainer = document.createElement('div');
-                                wrlContainer.style.marginTop = '20px';
-
-                                const wrlHeader = document.createElement('div');
-                                wrlHeader.textContent = 'Simulation Result (.wrl)';
-                                wrlHeader.style.fontWeight = 'bold';
-                                wrlHeader.style.marginBottom = '8px';
-                                wrlContainer.appendChild(wrlHeader);
-
-                                const wrlPreview = document.createElement('textarea');
-                                wrlPreview.value = wrlContent;
-                                wrlPreview.readOnly = true;
-                                wrlPreview.style.width = '100%';
-                                wrlPreview.style.height = '250px';
-                                wrlPreview.style.fontFamily = 'monospace';
-                                wrlContainer.appendChild(wrlPreview);
-
-                                previewContainer.appendChild(wrlContainer);
-
-                                const downloadButton = document.createElement('button');
-                                downloadButton.textContent = 'Download Result';
-                                downloadButton.style.padding = '8px 16px';
-                                downloadButton.onclick = () => {
-                                    const blob = new Blob([wrlContent], { type: 'text/plain' });
-                                    const url = URL.createObjectURL(blob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = result.filename;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                    URL.revokeObjectURL(url);
-                                };
-
-                                simulateButtonModal.replaceWith(downloadButton);
-                                notification.show('Simulation completed successfully', 'success');
-
-                            } catch (fileError) {
-                                await progressModal.hide();
-                                notification.show(error.message || 'Failed to get simulation results', 'error');
-                            }
-                        }
-                    } catch (error) {
-                        notification.show(error.message || 'Failed to prepare simulation', 'error');
-                        await progressModal.hide();
-                    }
-                };
-
-                // Button container
-                const buttonContainer = document.createElement('div');
-                buttonContainer.style.marginTop = '20px';
-                buttonContainer.style.textAlign = 'right';
-                buttonContainer.style.position = 'sticky';
-                buttonContainer.style.bottom = '0';
-                buttonContainer.style.backgroundColor = 'inherit';
-                buttonContainer.style.padding = '10px 0';
-                buttonContainer.appendChild(updateButton);
-                buttonContainer.appendChild(simulateButtonModal);
-
-                // previewContainer.appendChild(buttonContainer);
-                modal.footer.appendChild(buttonContainer);
-                modal.setContent(previewContainer);
-                modal.show();
+                notification.show('Simulation completed successfully!', 'success');
 
             } catch (error) {
-                notification.show('Failed to prepare simulation', 'error');
-            }
-        });
-
-        // Delete Button
-        const deleteButton = new UIButton('×');
-        deleteButton.setMarginLeft('8px');
-        deleteButton.dom.style.color = '#f00';
-        deleteButton.dom.style.fontWeight = 'bold';
-
-        deleteButton.onClick(async function () {
-            const userEmail = localStorage.getItem('userEmail');
-            if (confirm(`Are you sure you want to delete project "${title}"? This action cannot be undone.`)) {
-                try {
-                    await ProjectAPI.deleteProject(userEmail, title);
-                    projectsList.remove(projectRow);
-                    notification.show('Project deleted successfully', 'success');
-                } catch (error) {
-                    notification.show('Failed to delete project', 'error');
+                await progressModal.hide();
+                
+                let errorMsg = 'Simulation failed';
+                if (error.message) {
+                    errorMsg += ': ' + error.message;
                 }
+                notification.show(errorMsg, 'error');
+                
+                simulateButtonModal.disabled = false;
+                simulateButtonModal.textContent = 'Start Simulation';
             }
-        });
+        };
 
-        projectRow.add(projectTitle);
-        projectRow.add(simulateButton);
-        projectRow.add(deleteButton);
-        projectsList.add(projectRow);
+        // Button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'simulation-button-container';
+        buttonContainer.appendChild(updateButton);
+        buttonContainer.appendChild(simulateButtonModal);
 
-        saveProjectOrder();
+        modal.footer.appendChild(buttonContainer);
+        modal.setContent(previewContainer);
+        modal.show();
     }
 
+    function showSimulationResults(container, wrlContent, filename) {
+        // Add WRL container to the side
+        const wrlContainer = document.createElement('div');
+        wrlContainer.className = 'simulation-wrl-container';
 
-    // Event Listeners
-    signals.userLoggedIn.add(function (userEmail) {
-        loadUserProjects();
-    });
+        const wrlHeader = document.createElement('div');
+        wrlHeader.className = 'simulation-wrl-header';
+        wrlHeader.textContent = `Simulation Result (${filename})`;
+        wrlContainer.appendChild(wrlHeader);
 
-    signals.userLoggedOut.add(function () {
-        clearProjectsList();
-    });
+        const wrlPreview = document.createElement('textarea');
+        wrlPreview.className = 'simulation-wrl-textarea';
+        wrlPreview.value = wrlContent;
+        wrlPreview.readOnly = true;
+        wrlContainer.appendChild(wrlPreview);
 
-    signals.projectCreated.add(function (projectName) {
-        loadUserProjects();
-    });
+        const downloadButton = document.createElement('button');
+        downloadButton.className = 'simulation-download-button';
+        downloadButton.textContent = 'Download Result';
+        
+        downloadButton.onclick = () => {
+            const blob = new Blob([wrlContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        wrlContainer.appendChild(downloadButton);
+        container.appendChild(wrlContainer);
+    }
+
+    function handleProjectChange() {
+        const projectInfo = getCurrentProjectInfo();
+        const newProjectId = projectInfo?.id;
+        
+        if (newProjectId !== currentDashboardProjectId) {
+            currentDashboardProjectId = newProjectId;
+            simulationExists = false;
+            currentSimulationProject = null;
+            
+            // Close any open modal when project changes
+            if (currentModal) {
+                currentModal.hide();
+                currentModal = null;
+            }
+        }
+        
+        updateProjectNameOnly();
+    }
+
+    function initialize() {
+        setupAutoCleanup();
+        
+        if (editor.signals && editor.signals.sceneGraphChanged) {
+            editor.signals.sceneGraphChanged.add(() => {
+                updateProjectNameOnly();
+            });
+        }
+        
+        setTimeout(() => {
+            if (!isDestroyed) {
+                handleProjectChange();
+            }
+        }, 500);
+        
+        projectChangeInterval = setInterval(() => {
+            if (!isDestroyed) {
+                handleProjectChange();
+            }
+        }, 5000);
+    }
+
+    async function destroy() {
+        isDestroyed = true;
+        
+        // Close any open modal
+        if (currentModal) {
+            currentModal.hide();
+            currentModal = null;
+        }
+        
+        if (projectChangeInterval) {
+            clearInterval(projectChangeInterval);
+            projectChangeInterval = null;
+        }
+        
+        // Cleanup projects on destroy
+        await cleanupAllProjects();
+        
+        currentSimulationProject = null;
+        currentDashboardProjectId = null;
+        simulationExists = false;
+        isOperationInProgress = false;
+    }
+
+    function setupAutoCleanup() {
+        const cleanup = async () => {
+            // Close modal if open
+            if (currentModal) {
+                currentModal.hide();
+                currentModal = null;
+            }
+            
+            // Cleanup all projects
+            try {
+                const userEmail = localStorage.getItem('userEmail');
+                if (userEmail) {
+                    // Use sendBeacon for immediate cleanup, fallback to regular cleanup
+                    if (navigator.sendBeacon) {
+                        const response = await ProjectAPI.getUserProjects(userEmail);
+                        const projects = response.projects || [];
+                        
+                        for (const project of projects) {
+                            const formData = new FormData();
+                            formData.append('username', userEmail);
+                            formData.append('project_name', project['project-name']);
+                            navigator.sendBeacon('https://aws.physino.xyz/delete-project', formData);
+                        }
+                    } else {
+                        await cleanupAllProjects();
+                    }
+                }
+            } catch (error) {
+                console.warn('Failed to cleanup on unload:', error);
+            }
+        };
+
+        // Handle page navigation/close
+        window.addEventListener('beforeunload', cleanup);
+        window.addEventListener('pagehide', cleanup);
+        
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', () => {
+            if (currentModal) {
+                currentModal.hide();
+                currentModal = null;
+            }
+        });
+        
+        // Handle editor cleanup
+        if (editor.signals && editor.signals.editorCleared) {
+            editor.signals.editorCleared.add(() => {
+                destroy();
+            });
+        }
+    }
+
+    // Setup UI
+    simulateButton.onClick(createSimulationAndRun);
+    projectDisplay.add(projectNameSpan);
+    buttonsContainer.add(simulateButton);
+    projectRow.add(projectDisplay);
+    projectRow.add(buttonsContainer);
 
     const headerRow = new UIRow();
-    headerRow.add(new UIText(strings.getKey('sidebar/project/projectlist')));
+    headerRow.add(new UIText('Project').setWidth('100px'));
     container.add(headerRow);
-    container.add(projectsList);
+    container.add(projectRow);
 
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-        loadUserProjects();
-    }
+    // Initialize
+    initialize();
+    container.destroy = destroy;
 
     return container;
 }

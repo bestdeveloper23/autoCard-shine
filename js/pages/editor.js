@@ -22,271 +22,226 @@ export class EditorPage {
     this.autoSaveTimeout = null;
     this.onWindowResize = null;
     this.isDemo = false;
+    this.isReadOnly = false;
+    this.isPublicProject = false;
+    this.projectData = null;
+    this.detectedOwnerId = null;
   }
 
   async render() {
-    console.log('=== EDITOR PAGE RENDER START ===');
-    console.log('Current URL:', window.location.href);
-    console.log('Current hash:', window.location.hash);
-  
     try {
+      // Clear any dashboard nstance reference when entering editor
+      window.dashboardPageInstance = null;
+      
       // Check if this is demo mode first
       const path = window.router.getCurrentPath();
-      if (path === '/shine/demo') {
-        console.log('Demo mode detected');
+      if (path === '/demo') {
         this.isDemo = true;
         await this.initializeDemoEditor();
         return;
       }
-  
-      if (this.isDemo) {
-        // Skip auth checks and project loading for demo
-        await this.initializeDemoEditor();
-        return;
-      }
-  
-      // Get project ID from hash path
+
       const pathParts = path.split('/');
-      console.log('Hash path parts:', pathParts);
-  
-      if (path.startsWith('/shine/editor/') && pathParts[3]) {
-        this.projectId = pathParts[3];
-        console.log('Editor URL detected, projectId:', this.projectId);
+
+      if (path.startsWith('/editor/') && pathParts[2]) {
+        this.projectId = pathParts[2]; 
       } else {
-        console.error('Invalid editor URL format');
-        window.router.navigate('/shine/dashboard');
+        window.router.navigate('/dashboard');
         return;
       }
-  
+
       // Validate project ID format
       if (!this.projectId || this.projectId === 'undefined' || this.projectId === 'null') {
-        console.error('Invalid project ID:', this.projectId);
         alert('Invalid project ID. Redirecting to dashboard.');
-        window.router.navigate('/shine/dashboard');
+        window.router.navigate('/dashboard');
         return;
       }
-  
-      // Wait for user authentication (with better error handling)
-      const user = await this.waitForUser();
-      if (!user) {
-        console.error('No authenticated user found');
-        window.router.navigate('/shine/auth');
+
+      // Check project access and determine mode
+      const accessInfo = await this.checkProjectAccess(this.projectId);
+      
+      if (!accessInfo.accessible) {
+        alert('Project not found or access denied.');
+        window.router.navigate('/');
         return;
       }
-  
-      // Validate project exists and get project info
-      const isValid = await this.validateAndLoadProjectInfo(this.projectId);
-      if (!isValid) {
-        console.error('Project validation failed for ID:', this.projectId);
-        alert('Project not found or access denied. Redirecting to dashboard.');
-        window.router.navigate('/shine/dashboard');
-        return;
+
+      // Set project data first
+      this.projectData = accessInfo.projectInfo;
+      this.projectName = this.projectData.projectName || this.projectData.name || 'Untitled Project';
+      this.isPublicProject = accessInfo.isPublic;
+      
+      // Enhanced ownership detection
+      const user = window.router.getCurrentUser();
+      let projectOwnerId = this.projectData?.ownerId || this.projectData?.ownerUid || this.projectData?.userId;
+      
+      // Check global index for public projects if no owner ID found
+      if (!projectOwnerId && accessInfo.isPublic) {
+        try {
+          const globalProjectRef = ref(window.firebaseDB, `projectsIndex/${this.projectId}`);
+          const globalSnapshot = await get(globalProjectRef);
+          if (globalSnapshot.exists()) {
+            const globalData = globalSnapshot.val();
+            projectOwnerId = globalData.ownerId || globalData.ownerUid || globalData.userId;
+          }
+        } catch (error) {
+          console.warn('Could not check global index:', error);
+        }
       }
-  
-      console.log('Final project info:', { projectId: this.projectId, projectName: this.projectName });
-  
+      
+      // For private projects, assume folder owner is project owner
+      if (!projectOwnerId && !accessInfo.isPublic) {
+        projectOwnerId = user?.uid;
+      }
+      
+      // Store detected owner ID for use by other components
+      this.detectedOwnerId = projectOwnerId;
+      
+      const isOwner = user && projectOwnerId && user.uid === projectOwnerId;
+      
+      // Determine read-only status
+      if (this.isPublicProject) {
+        this.isReadOnly = !isOwner;
+      } else {
+        this.isReadOnly = false;
+      }
+
       const appContainer = document.getElementById('app');
       if (!appContainer) {
-        console.error('App container not found');
         throw new Error('App container not found');
       }
-  
+
       // Clear existing content
       appContainer.innerHTML = '';
-  
+
       // Create editor container
       this.container = new UIPanel();
       this.container.setClass('editor-container');
       this.container.setId('editor-root');
-  
+
+      // Add read-only class if needed
+      if (this.isReadOnly) {
+        this.container.addClass('read-only-mode');
+      }
+
       appContainer.appendChild(this.container.dom);
-  
+
       // Load dependencies and initialize Three.js editor
       await this.loadDependenciesAndInitialize();
-  
-      console.log('=== EDITOR PAGE RENDER COMPLETE ===');
-  
+
     } catch (error) {
-      console.error('=== EDITOR PAGE RENDER ERROR ===');
-      console.error('Error:', error);
-      console.error('Error stack:', error.stack);
-  
-      if (!this.isDemo) {
-        window.router.navigate('/shine/dashboard');
-      }
-      // Clean up on error
-      if (this.container && this.container.dom && this.container.dom.parentNode) {
-        this.container.dom.parentNode.removeChild(this.container.dom);
-      }
-  
+      console.error('Editor initialization error:', error);
       alert('Failed to load editor. Redirecting to dashboard.');
-      window.router.navigate('/shine/dashboard');
+      window.router.navigate('/dashboard');
     }
   }
 
-  async waitForUser(timeout = 5000) {
-    console.log('Waiting for authenticated user...');
-
-    // If we already have a user, return immediately
-    if (window.router && window.router.getCurrentUser()) {
-      console.log('User already available');
-      return window.router.getCurrentUser();
+  // Check project access
+  async checkProjectAccess(projectId) {
+    try {
+      // First check global index for public projects
+      const globalProjectRef = ref(window.firebaseDB, `projectsIndex/${projectId}`);
+      const globalSnapshot = await get(globalProjectRef);
+      
+      if (globalSnapshot.exists()) {
+        const projectInfo = globalSnapshot.val();
+        
+        if (projectInfo.isPublic && !projectInfo.deleted && !projectInfo.archived) {
+          // Public project - get full data from owner
+          const ownerProjectRef = ref(window.firebaseDB, `users/${projectInfo.ownerId}/projects/${projectId}`);
+          const ownerSnapshot = await get(ownerProjectRef);
+          
+          if (ownerSnapshot.exists()) {
+            return {
+              accessible: true,
+              isPublic: true,
+              projectInfo: ownerSnapshot.val()
+            };
+          }
+        }
+      }
+      
+      // Check if user owns the project
+      const user = window.router.getCurrentUser();
+      if (user) {
+        const userProjectRef = ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}`);
+        const userSnapshot = await get(userProjectRef);
+        
+        if (userSnapshot.exists()) {
+          const projectData = userSnapshot.val();
+          if (!projectData.deleted && !projectData.archived) {
+            return {
+              accessible: true,
+              isPublic: projectData.isPublic || false,
+              projectInfo: projectData
+            };
+          }
+        }
+      }
+      
+      return { accessible: false, isPublic: false, projectInfo: null };
+      
+    } catch (error) {
+      console.error('Error checking project access:', error);
+      return { accessible: false, isPublic: false, projectInfo: null };
     }
-
-    // Wait for router and auth to be ready
-    let attempts = 0;
-    const maxAttempts = timeout / 100;
-
-    return new Promise((resolve, reject) => {
-      const checkForUser = () => {
-        attempts++;
-
-        if (window.router && window.router.getCurrentUser()) {
-          console.log('User found:', window.router.getCurrentUser().email);
-          resolve(window.router.getCurrentUser());
-          return;
-        }
-
-        if (attempts >= maxAttempts) {
-          console.error('Timeout waiting for user');
-          reject(new Error('User timeout'));
-          return;
-        }
-
-        setTimeout(checkForUser, 100);
-      };
-
-      checkForUser();
-    });
   }
 
-  async validateAndLoadProjectInfo(projectId) {
+  async saveProject() {
+    // Don't save if read-only or demo mode
+    if (this.isReadOnly || this.isDemo) {
+      return;
+    }
+
+    if (!this.projectId) {
+      return;
+    }
+
     const user = window.router.getCurrentUser();
     if (!user) {
-      console.error('No user available for project validation');
-      return false;
+      return;
     }
 
     try {
-      console.log('Validating project:', projectId);
-      const projectRef = ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}`);
-      const snapshot = await get(projectRef);
+      let projectData = this.editor.toJSON();
 
-      if (snapshot.exists()) {
-        const projectData = snapshot.val();
-        this.projectName = projectData.name || 'Untitled Project';
-        console.log('Project validated successfully:', {
-          id: projectId,
-          name: this.projectName
-        });
-        return true;
-      } else {
-        console.error('Project does not exist:', projectId);
-        return false;
+      // Fix undefined values that Firebase doesn't accept
+      if (projectData.scripts === undefined) {
+        projectData.scripts = {};
       }
-    } catch (error) {
-      console.error('Error validating project:', error);
-      return false;
-    }
-  }
 
-  async initializeDemoEditor() {
-    // Initialize editor without project loading
-    const appContainer = document.getElementById('app');
-    appContainer.innerHTML = '';
-  
-    this.container = new UIPanel();
-    this.container.setClass('editor-container demo-mode');
-    this.container.setId('editor-root');
-    appContainer.appendChild(this.container.dom);
-  
-    // Initialize editor with demo notice
-    await this.loadDependenciesAndInitialize();
-  
-    // Add demo notice
-    const demoNotice = new UIPanel();
-    demoNotice.setClass('demo-notice');
-    demoNotice.dom.innerHTML = `
-            <div class="demo-message">
-                <i class="ri-information-line"></i>
-                You're in demo mode. 
-                <a href="#/shine/auth" class="demo-link">Sign up</a> 
-                to save your work.
-            </div>
-        `;
-    this.container.dom.appendChild(demoNotice.dom);
-  
-    // Disable save functionality in demo mode
-    this.editor.signals.savingStarted.add(() => {
-      if (this.isDemo) {
-        alert('Saving is not available in demo mode. Sign up to save your work!');
-        return false;
+      projectData = this.cleanFirebaseIncompatibleValues(projectData);
+
+      // Save to Firebase
+      const dataRef = ref(window.firebaseDB, `users/${user.uid}/projects/${this.projectId}/data`);
+      await set(dataRef, projectData);
+
+      // Update timestamp
+      const timestampRef = ref(window.firebaseDB, `users/${user.uid}/projects/${this.projectId}/lastModified`);
+      await set(timestampRef, Date.now());
+
+      // Update project index if it's public
+      if (this.isPublicProject) {
+        const indexRef = ref(window.firebaseDB, `projectsIndex/${this.projectId}/lastModified`);
+        await set(indexRef, Date.now());
       }
-    });
-  }
 
-  async loadDependenciesAndInitialize() {
-    console.log('Loading dependencies and initializing editor...');
-
-    try {
-      // Load critical dependencies first
-      await this.loadCriticalDependencies();
-
-      // Initialize the editor
-      await this.initializeEditor();
+      // Signal save completion
+      if (this.editor.signals) {
+        this.editor.signals.savingStarted.dispatch();
+        setTimeout(() => {
+          this.editor.signals.savingFinished.dispatch();
+        }, 500);
+      }
 
     } catch (error) {
-      console.error('Error in loadDependenciesAndInitialize:', error);
-      throw error;
+      console.error('Save failed:', error);
     }
-  }
-
-  async loadCriticalDependencies() {
-    console.log('Loading critical dependencies...');
-
-    // Load signals if not already loaded
-    if (!window.signals) {
-      console.log('Loading signals library...');
-      await this.loadScript('/js/libs/signals.min.js');
-    }
-
-    // Ensure other critical globals are available
-    if (!window.signals) {
-      console.error('Failed to load signals library');
-      throw new Error('Failed to load required dependencies');
-    }
-
-    console.log('Critical dependencies loaded successfully');
-  }
-
-  loadScript(src) {
-    return new Promise((resolve, reject) => {
-      // Check if script is already loaded
-      const existingScript = document.querySelector(`script[src="${src}"]`);
-      if (existingScript) {
-        resolve();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = () => {
-        console.log('Loaded script:', src);
-        resolve();
-      };
-      script.onerror = () => {
-        console.error('Failed to load script:', src);
-        reject(new Error(`Failed to load script: ${src}`));
-      };
-      document.head.appendChild(script);
-    });
   }
 
   async initializeEditor() {
-    console.log('Initializing Three.js editor...');
-
     try {
-      // Expose globals exactly like original
+      // Expose globals
       window.URL = window.URL || window.webkitURL;
       window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
       window.VRButton = VRButton;
@@ -299,14 +254,16 @@ export class EditorPage {
 
       // Initialize editor
       this.editor = new Editor();
-      window.editor = this.editor; // Expose editor to Console
-      window.THREE = THREE; // Expose THREE to APP Scripts and Console
+      window.editor = this.editor;
+      window.THREE = THREE;
+      window.editorPageInstance = this;
 
-      // Add export functions to editor for menu access
-      this.editor.exportProject = () => this.exportProject();
-      this.editor.exportJSON = () => this.exportJSON();
+      // Set read-only mode on editor if needed
+      if (this.isReadOnly) {
+        this.editor.config.setKey('readOnly', true);
+      }
 
-      // Create editor components in the correct order
+      // Create editor components
       const toolbar = new Toolbar(this.editor);
       this.container.dom.appendChild(toolbar.container.dom);
 
@@ -334,15 +291,12 @@ export class EditorPage {
       const resizer = new Resizer(this.editor);
       this.container.dom.appendChild(resizer.dom);
 
-      // Add back to dashboard button
-      const backButton = this.createBackButton();
-      this.container.dom.appendChild(backButton.dom);
+
 
       // Initialize storage
       await new Promise((resolve, reject) => {
         try {
           this.editor.storage.init(() => {
-            console.log('Editor storage initialized');
             resolve();
           });
         } catch (error) {
@@ -351,20 +305,21 @@ export class EditorPage {
         }
       });
 
-      // Load project data after editor is initialized
+      // Load project data
       if (this.projectId) {
         setTimeout(() => {
           this.loadProject();
         }, 100);
       }
 
-      // Set up features
-      this.setupAutoSave();
+      // Set up auto-save ONLY if not read-only and not demo
+      if (!this.isReadOnly && !this.isDemo) {
+        this.setupAutoSave();
+      }
+
       this.setupDragAndDrop();
       this.setupWindowResize();
       this.setupKeyboardShortcuts();
-
-      console.log('Three.js editor initialized successfully');
 
     } catch (error) {
       console.error('Error initializing editor:', error);
@@ -372,104 +327,123 @@ export class EditorPage {
     }
   }
 
-  async loadProject() {
-    if (!this.projectId) {
-      console.error('No project ID to load');
+
+
+  setupAutoSave() {
+    const saveState = () => {
+      if (this.editor.config.getKey('autosave') === false) return;
+
+      clearTimeout(this.autoSaveTimeout);
+      this.autoSaveTimeout = setTimeout(() => {
+        this.saveProject();
+      }, 1000);
+    };
+
+    // Listen to editor signals
+    const signals = this.editor.signals;
+    signals.objectAdded.add(saveState);
+    signals.objectChanged.add(saveState);
+    signals.objectRemoved.add(saveState);
+    signals.materialChanged.add(saveState);
+    signals.geometryChanged.add(saveState);
+    signals.sceneGraphChanged.add(saveState);
+    signals.scriptChanged.add(saveState);
+    signals.historyChanged.add(saveState);
+  }
+
+  setupDragAndDrop() {
+    // Disable drag and drop in read-only mode
+    if (this.isReadOnly) {
       return;
     }
 
-    const user = window.router.getCurrentUser();
-    if (!user) {
-      console.error('No user available for loading project');
-      window.router.navigate('/shine/auth');
-      return;
-    }
+    document.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+    });
 
-    try {
-      console.log('Loading project data:', this.projectId);
+    document.addEventListener('drop', (event) => {
+      event.preventDefault();
+      if (event.dataTransfer.types[0] === 'text/plain') return; // Outliner drop
 
-      const projectRef = ref(window.firebaseDB, `users/${user.uid}/projects/${this.projectId}`);
-      const snapshot = await get(projectRef);
-
-      if (snapshot.exists()) {
-        const projectData = snapshot.val();
-
-        if (projectData.data) {
-          console.log('Loading project data into editor...');
-
-          // Clear existing editor state
-          this.editor.clear();
-
-          // Ensure scripts object exists
-          if (!projectData.data.scripts) {
-            projectData.data.scripts = {};
-          }
-
-          // Load new data
-          this.editor.fromJSON(projectData.data);
-
-          // Update page title
-          document.title = `${projectData.name || 'Untitled'} - Shine Editor`;
-          this.projectName = projectData.name;
-
-          // Signal that scene has changed
-          this.editor.signals.sceneGraphChanged.dispatch();
-          console.log('Project loaded successfully');
-        } else {
-          console.log('Project has no data, starting with empty scene');
-          // Initialize empty scene
-          this.editor.clear();
-        }
-
+      if (event.dataTransfer.items) {
+        this.editor.loader.loadItemList(event.dataTransfer.items);
       } else {
-        console.error('Project not found during load', this.projectId);
-        alert('Project not found');
-        window.router.navigate('/shine/dashboard');
+        this.editor.loader.loadFiles(event.dataTransfer.files);
       }
+    });
+  }
+
+  setupWindowResize() {
+    this.onWindowResize = () => {
+      this.editor.signals.windowResize.dispatch();
+    };
+    window.addEventListener('resize', this.onWindowResize);
+    this.onWindowResize();
+  }
+
+  setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (event) => {
+      if (!this.editor) return;
+
+      // Ctrl+S or Cmd+S - Save project (only if not read-only)
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        if (!this.isReadOnly) {
+          this.saveProject();
+        }
+      }
+    });
+  }
+
+  async loadDependenciesAndInitialize() {
+    try {
+      await this.loadCriticalDependencies();
+      await this.initializeEditor();
     } catch (error) {
-      console.error('Error loading project:', error);
-      alert('Failed to load project: ' + error.message);
-      window.router.navigate('/shine/dashboard');
+      console.error('Error in loadDependenciesAndInitialize:', error);
+      throw error;
     }
   }
 
-  async saveProject() {
-    if (!this.projectId) {
-      console.warn('No project ID to save');
-      return;
+  async loadCriticalDependencies() {
+    if (!window.signals) {
+      await this.loadScript('/js/libs/signals.min.js');
     }
 
-    const user = window.router.getCurrentUser();
-    if (!user) {
-      console.warn('No user available for saving');
-      return;
+    if (!window.signals) {
+      throw new Error('Failed to load required dependencies');
     }
+  }
 
-    try {
-      console.log('Saving project...');
-      let projectData = this.editor.toJSON();
-
-      // Fix undefined values that Firebase doesn't accept
-      if (projectData.scripts === undefined) {
-        projectData.scripts = {};
+  loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existingScript = document.querySelector(`script[src="${src}"]`);
+      if (existingScript) {
+        resolve();
+        return;
       }
 
-      projectData = this.cleanFirebaseIncompatibleValues(projectData);
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.head.appendChild(script);
+    });
+  }
 
-      await set(ref(window.firebaseDB, `users/${user.uid}/projects/${this.projectId}/data`), projectData);
-      await set(ref(window.firebaseDB, `users/${user.uid}/projects/${this.projectId}/lastModified`), Date.now());
-
-      if (this.editor.signals) {
-        this.editor.signals.savingStarted.dispatch();
-        setTimeout(() => {
-          this.editor.signals.savingFinished.dispatch();
-        }, 500);
+  async loadProject() {
+    if (this.projectData && this.projectData.data) {
+      this.editor.clear();
+      if (!this.projectData.data.scripts) {
+        this.projectData.data.scripts = {};
       }
-
-      console.log('Project saved successfully');
-
-    } catch (error) {
-      console.error('Error saving project:', error);
+      this.editor.fromJSON(this.projectData.data);
+      
+      // Update page title
+      document.title = `${this.projectName} - Shine Editor${this.isReadOnly ? ' (Read-Only)' : ''}`;
+      
+      this.editor.signals.sceneGraphChanged.dispatch();
     }
   }
 
@@ -495,268 +469,45 @@ export class EditorPage {
     return cleaned;
   }
 
-  async exportJSON() {
-    if (!this.editor) return;
-
-    try {
-      console.log('Exporting project as JSON...');
-
-      let output = this.editor.toJSON();
-      output.metadata.type = 'App';
-      delete output.history;
-
-      const jsonString = JSON.stringify(output, null, '\t');
-      const formattedJson = jsonString.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
-
-      const blob = new Blob([formattedJson], { type: 'application/json' });
-
-      const title = this.editor.config.getKey('project/title') || this.projectName || 'untitled';
-      this.downloadBlob(blob, title + '.json');
-
-      console.log('Project exported as JSON successfully');
-
-    } catch (error) {
-      console.error('Error exporting JSON:', error);
-      alert('Failed to export JSON');
-    }
-  }
-
-  async exportProject() {
-    if (!this.editor) return;
-
-    try {
-      console.log('Exporting project as ZIP...');
-
-      const { zipSync, strToU8 } = await import('https://cdn.skypack.dev/fflate');
-
-      const toZip = {};
-
-      let output = this.editor.toJSON();
-      output.metadata.type = 'App';
-      delete output.history;
-      output = JSON.stringify(output, null, '\t');
-      output = output.replace(/[\n\t]+([\d\.e\-\[\]]+)/g, '$1');
-      toZip['app.json'] = strToU8(output);
-
-      const title = this.editor.config.getKey('project/title') || this.projectName || 'untitled';
-
-      const manager = new THREE.LoadingManager(() => {
-        try {
-          const zipped = zipSync(toZip, { level: 9 });
-          const blob = new Blob([zipped.buffer], { type: 'application/zip' });
-          this.downloadBlob(blob, title + '.zip');
-          console.log('Project exported as ZIP successfully');
-        } catch (error) {
-          console.error('Error creating ZIP:', error);
-          alert('Failed to export project');
-        }
-      });
-
-      const loader = new THREE.FileLoader(manager);
-
-      loader.load('/js/libs/app/index.html', (content) => {
-        content = content.replace('<!-- title -->', title);
-
-        const includes = [];
-        content = content.replace('<!-- includes -->', includes.join('\n\t\t'));
-
-        let editButton = '';
-        if (this.editor.config.getKey('project/editable')) {
-          editButton = [
-            '			let button = document.createElement( \'a\' );',
-            '			button.href = \'https://threejs.org/editor/#file=\' + location.href.split( \'/\' ).slice( 0, - 1 ).join( \'/\' ) + \'/app.json\';',
-            '			button.style.cssText = \'position: absolute; bottom: 20px; right: 20px; padding: 10px 16px; color: #fff; border: 1px solid #fff; border-radius: 20px; text-decoration: none;\';',
-            '			button.target = \'_blank\';',
-            '			button.textContent = \'EDIT\';',
-            '			document.body.appendChild( button );',
-          ].join('\n');
-        }
-
-        content = content.replace('\t\t\t/* edit button */', editButton);
-        toZip['index.html'] = strToU8(content);
-      });
-
-      loader.load('/js/libs/app.js', (content) => {
-        toZip['js/app.js'] = strToU8(content);
-      });
-
-      loader.load('/build/three.module.js', (content) => {
-        toZip['js/three.module.js'] = strToU8(content);
-      });
-
-      loader.load('/examples/jsm/webxr/VRButton.js', (content) => {
-        toZip['js/VRButton.js'] = strToU8(content);
-      });
-
-    } catch (error) {
-      console.error('Error exporting project:', error);
-      alert('Failed to export project: ' + error.message);
-    }
-  }
-
-  downloadBlob(blob, filename) {
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-  }
-
-  setupAutoSave() {
-    const saveState = () => {
-      if (this.editor.config.getKey('autosave') === false) return;
-
-      clearTimeout(this.autoSaveTimeout);
-
-      this.autoSaveTimeout = setTimeout(() => {
-        console.log('Auto-saving project due to changes...');
-        this.saveProject();
-      }, 1000);
-    };
-
-    // Listen to editor signals for auto-save
-    const signals = this.editor.signals;
-
-    // Add debug logging for object operations with error handling
-    const originalObjectAdded = signals.objectAdded.dispatch;
-    signals.objectAdded.dispatch = function (object) {
-      console.log('=== OBJECT ADDED ===');
-      console.log('Object:', object);
-      console.log('Object name:', object.name);
-      console.log('Object type:', object.type);
-      console.log('Scene children count:', window.editor.scene.children.length);
-
-      // Call original dispatch with error handling
-      try {
-        originalObjectAdded.call(this, object);
-      } catch (error) {
-        console.warn('Error in original objectAdded dispatch:', error);
-      }
-
-      // Force outliner refresh with error handling
-      setTimeout(() => {
-        try {
-          console.log('Forcing outliner refresh after object add...');
-          signals.sceneGraphChanged.dispatch();
-        } catch (error) {
-          console.warn('Error refreshing outliner:', error);
-        }
-      }, 100);
-    };
-
-    signals.geometryChanged.add(saveState);
-    signals.objectAdded.add(saveState);
-    signals.objectChanged.add(saveState);
-    signals.objectRemoved.add(saveState);
-    signals.materialChanged.add(saveState);
-    signals.sceneBackgroundChanged.add(saveState);
-    signals.sceneEnvironmentChanged.add(saveState);
-    signals.sceneFogChanged.add(saveState);
-    signals.sceneGraphChanged.add(saveState);
-    signals.scriptChanged.add(saveState);
-    signals.historyChanged.add(saveState);
-
-    console.log('Auto-save setup complete');
-  }
-
-  setupDragAndDrop() {
-    document.addEventListener('dragover', (event) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = 'copy';
-    });
-
-    document.addEventListener('drop', (event) => {
-      event.preventDefault();
-      if (event.dataTransfer.types[0] === 'text/plain') return; // Outliner drop
-
-      if (event.dataTransfer.items) {
-        // DataTransferItemList supports folders
-        this.editor.loader.loadItemList(event.dataTransfer.items);
-      } else {
-        this.editor.loader.loadFiles(event.dataTransfer.files);
-      }
-    });
-  }
-
-  setupWindowResize() {
-    this.onWindowResize = () => {
-      this.editor.signals.windowResize.dispatch();
-    };
-
-    window.addEventListener('resize', this.onWindowResize);
-    this.onWindowResize();
-  }
-
-  setupKeyboardShortcuts() {
-    document.addEventListener('keydown', (event) => {
-      // Only handle shortcuts when editor is active
-      if (!this.editor) return;
-
-      // Ctrl+S or Cmd+S - Save project
-      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-        event.preventDefault();
-        this.saveProject();
-      }
-
-      // Ctrl+E or Cmd+E - Export as ZIP
-      if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
-        event.preventDefault();
-        this.exportProject();
-      }
-
-      // Ctrl+Shift+E or Cmd+Shift+E - Export as JSON
-      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'E') {
-        event.preventDefault();
-        this.exportJSON();
-      }
-    });
-  }
-
-  createBackButton() {
-    const backBtn = new UIButton('← Dashboard');
-    backBtn.setClass('back-to-dashboard');
-    backBtn.onClick(() => {
-      if (confirm('Do you want to save your changes before leaving?')) {
-        this.saveProject();
-      }
-      window.router.navigate('/shine/dashboard');
-    });
+  async initializeDemoEditor() {
+    const appContainer = document.getElementById('app');
+    appContainer.innerHTML = '';
   
-    return backBtn;
+    this.container = new UIPanel();
+    this.container.setClass('editor-container demo-mode');
+    this.container.setId('editor-root');
+    appContainer.appendChild(this.container.dom);
+  
+    await this.loadDependenciesAndInitialize();
+  
+    // Add demo notice
+    const demoNotice = new UIPanel();
+    demoNotice.setClass('demo-notice');
+    demoNotice.dom.innerHTML = `
+      <div class="demo-message">
+        <i class="ri-information-line"></i>
+        You're in demo mode. 
+        <a href="#/auth" class="demo-link">Sign up</a> 
+        to save your work.
+      </div>
+    `;
+    this.container.dom.appendChild(demoNotice.dom);
   }
 
   destroy() {
-    console.log('Destroying editor page');
-
-    // Clear auto-save timeout
     if (this.autoSaveTimeout) {
       clearTimeout(this.autoSaveTimeout);
     }
-
-    // Remove window resize listener
     if (this.onWindowResize) {
       window.removeEventListener('resize', this.onWindowResize);
     }
-
-    // Save before destroying
-    if (this.projectId && this.editor) {
+    if (this.projectId && this.editor && !this.isReadOnly) {
       this.saveProject();
     }
-
-    // Clean up editor
-    if (this.editor) {
-      // The editor cleanup will be handled by the individual components
-    }
-
-    // Remove container
     if (this.container && this.container.dom && this.container.dom.parentNode) {
       this.container.dom.parentNode.removeChild(this.container.dom);
     }
-
-    // Clear globals
     window.editor = null;
+    window.editorPageInstance = null;
   }
 }

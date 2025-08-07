@@ -4,9 +4,7 @@ import { DashboardActionModals } from '/js/DashboardComponents/Dashboard.ActionM
 function DashboardActions() {
 
   async function openProject(projectId, project) {
-    console.log('Opening project:', projectId);
 
-    // Don't open archived or deleted projects
     if (project.archived) {
       alert('Cannot open archived projects. Please restore it first.');
       return;
@@ -17,8 +15,7 @@ function DashboardActions() {
       return;
     }
 
-    // Navigate to editor
-    window.router.navigate(`/shine/editor/${projectId}`);
+    window.router.navigate(`/editor/${projectId}`);
   }
 
   async function createProject(projectData) {
@@ -27,15 +24,11 @@ function DashboardActions() {
       throw new Error('No authenticated user');
     }
 
-    console.log('Creating project:', projectData);
-
     try {
-      // Generate project ID
       const projectsRef = ref(window.firebaseDB, `users/${user.uid}/projects`);
       const newProjectRef = push(projectsRef);
       const projectId = newProjectRef.key;
 
-      // Prepare project data
       const project = {
         name: projectData.name,
         owner: user.uid,
@@ -49,18 +42,22 @@ function DashboardActions() {
         data: null
       };
 
-      // Handle file upload if provided
       if (projectData.file && projectData.type === 'upload') {
         const fileContent = await readFile(projectData.file);
         try {
           const parsedData = JSON.parse(fileContent);
           project.data = parsedData;
         } catch (error) {
-          console.error('Error parsing uploaded file:', error);
           throw new Error('Invalid JSON file format');
         }
+      } else if (projectData.data) {
+        console.log('Using provided project data:', {
+          size: JSON.stringify(projectData.data).length,
+          hasScene: !!projectData.data.scene,
+          objectCount: projectData.data.scene?.children?.length || 0
+        });
+        project.data = projectData.data;
       } else {
-        // Create empty scene data for blank projects
         project.data = {
           metadata: {
             version: "1.0",
@@ -83,10 +80,15 @@ function DashboardActions() {
         };
       }
 
-      // Save to user's projects
+      console.log('Saving project with data:', {
+        name: project.name,
+        dataSize: JSON.stringify(project.data).length,
+        hasScene: !!project.data.scene,
+        objectCount: project.data.scene?.children?.length || 0
+      });
+
       await set(newProjectRef, project);
 
-      // ALSO save to global projects index for easier querying
       const globalProjectRef = ref(window.firebaseDB, `projectsIndex/${projectId}`);
       const globalProjectData = {
         projectId: projectId,
@@ -103,13 +105,16 @@ function DashboardActions() {
 
       await set(globalProjectRef, globalProjectData);
 
-      console.log('Project created successfully:', projectId);
-      console.log('Global project index updated');
+      console.log('Project created successfully:', {
+        projectId,
+        name: project.name,
+        dataPreserved: !!projectData.data
+      });
 
       return { projectId, project };
 
     } catch (error) {
-      console.error('Error creating project:', error);
+      console.error(' Error in createProject:', error);
       throw error;
     }
   }
@@ -127,18 +132,14 @@ function DashboardActions() {
               throw new Error('No authenticated user');
             }
 
-            // Update project name in user's projects
             await set(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}/name`), newName);
             await set(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}/lastModified`), Date.now());
 
-            // ALSO update global projects index
             await update(ref(window.firebaseDB, `projectsIndex/${projectId}`), {
               projectName: newName,
               lastModified: Date.now()
             });
 
-            console.log('Project renamed successfully');
-            console.log('Global project index updated for rename');
 
             resolve(newName);
           } catch (error) {
@@ -166,27 +167,24 @@ function DashboardActions() {
               throw new Error('No authenticated user');
             }
 
-            // Create new project with copied data
             const projectsRef = ref(window.firebaseDB, `users/${user.uid}/projects`);
             const newProjectRef = push(projectsRef);
             const newProjectId = newProjectRef.key;
 
-            // Create a clean copy with proper ownership and flags
             const newProject = {
               name: newName,
-              owner: user.uid,  // Ensure current user is owner
+              owner: user.uid, 
               ownerName: user.displayName || user.email,
-              ownerEmail: user.email, // Add email to project data
+              ownerEmail: user.email,
               createdAt: Date.now(),
               lastModified: Date.now(),
               isPublic: project.isPublic || false,
-              archived: false,  // Ensure new copy is not archived
-              deleted: false,   // Ensure new copy is not deleted
-              isFavorite: false, // Reset favorite status for copy
-              data: project.data ? JSON.parse(JSON.stringify(project.data)) : null // Deep copy of data
+              archived: false,  
+              deleted: false,   
+              isFavorite: false, 
+              data: project.data ? JSON.parse(JSON.stringify(project.data)) : null 
             };
 
-            console.log('Creating copied project with data:', newProject);
 
             // Save to user's projects
             await set(newProjectRef, newProject);
@@ -208,12 +206,9 @@ function DashboardActions() {
 
             await set(globalProjectRef, globalProjectData);
 
-            console.log('Project copied successfully:', newProjectId);
-            console.log('Global project index updated for copy');
 
             resolve({ projectId: newProjectId, project: newProject });
           } catch (error) {
-            console.error('Error copying project:', error);
             reject(error);
           }
         },
@@ -238,37 +233,24 @@ function DashboardActions() {
               throw new Error('No authenticated user');
             }
 
-            console.log('Archiving project:', projectId, 'for user:', user.uid);
-            console.log('Project owner:', project.owner);
-
-            // Verify user owns this project
             if (project.owner !== user.uid) {
               throw new Error('You can only archive your own projects');
             }
 
             const projectRef = ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}`);
 
-            // Update multiple fields atomically
             const updates = {
               archived: true,
               lastModified: Date.now()
             };
 
-            console.log('Updating Firebase with:', updates);
-            console.log('Firebase path:', `users/${user.uid}/projects/${projectId}`);
-
-            // Use update instead of set for partial updates
             await update(projectRef, updates);
 
-            console.log('Firebase update completed successfully');
-
-            // ALSO update global projects index
             await update(ref(window.firebaseDB, `projectsIndex/${projectId}`), {
               archived: true,
               lastModified: Date.now()
             });
 
-            // Verify the update worked by reading back
             const snapshot = await get(projectRef);
             const updatedProject = snapshot.val();
             console.log('Verification - project after update:', {
@@ -278,11 +260,8 @@ function DashboardActions() {
               deleted: updatedProject?.deleted
             });
 
-            console.log('Global project index updated for archive');
             resolve(true);
           } catch (error) {
-            console.error('Archive error:', error);
-            console.error('Error details:', error.message);
             reject(error);
           }
         },
@@ -307,17 +286,12 @@ function DashboardActions() {
               throw new Error('No authenticated user');
             }
 
-            console.log('Deleting project:', projectId, 'for user:', user.uid);
-            console.log('Project owner:', project.owner);
-
-            // Verify user owns this project
             if (project.owner !== user.uid) {
               throw new Error('You can only delete your own projects');
             }
 
             const projectRef = ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}`);
 
-            // Update multiple fields atomically
             const updates = {
               deleted: true,
               lastModified: Date.now()
@@ -326,18 +300,14 @@ function DashboardActions() {
             console.log('Updating Firebase with:', updates);
             console.log('Firebase path:', `users/${user.uid}/projects/${projectId}`);
 
-            // Use update instead of set for partial updates
             await update(projectRef, updates);
 
-            console.log('Firebase update completed successfully');
 
-            // ALSO update global projects index
             await update(ref(window.firebaseDB, `projectsIndex/${projectId}`), {
               deleted: true,
               lastModified: Date.now()
             });
 
-            // Verify the update worked by reading back
             const snapshot = await get(projectRef);
             const updatedProject = snapshot.val();
             console.log('Verification - project after update:', {
@@ -347,7 +317,6 @@ function DashboardActions() {
               deleted: updatedProject?.deleted
             });
 
-            console.log('Global project index updated for delete');
             resolve(true);
           } catch (error) {
             console.error('Delete error:', error);
@@ -363,7 +332,6 @@ function DashboardActions() {
     });
   }
 
-  // NEW: Restore project from archive or trash
   async function restoreProject(projectId, project) {
     try {
       const user = window.router.getCurrentUser();
@@ -371,33 +339,25 @@ function DashboardActions() {
         throw new Error('No authenticated user');
       }
 
-      console.log('Restoring project:', projectId);
 
-      // Remove archived and deleted flags
       await set(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}/archived`), false);
       await set(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}/deleted`), false);
       await set(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}/lastModified`), Date.now());
 
-      // ALSO update global projects index
       await update(ref(window.firebaseDB, `projectsIndex/${projectId}`), {
         archived: false,
         deleted: false,
         lastModified: Date.now()
       });
 
-      console.log('Project restored successfully');
-      console.log('Global project index updated for restore');
       return true;
     } catch (error) {
-      console.error('Error restoring project:', error);
       throw error;
     }
   }
 
-  // NEW: Permanently delete project from database
   async function permanentDeleteProject(projectId, project) {
     try {
-      // Single confirmation
       const confirmDelete = confirm(
         `Are you sure you want to permanently delete "${project.name}"?\n\n` +
         'This action cannot be undone and will remove the project from the database completely.'
@@ -412,28 +372,20 @@ function DashboardActions() {
         throw new Error('No authenticated user');
       }
 
-      console.log('Permanently deleting project:', projectId);
 
-      // Remove project completely from Firebase
       await remove(ref(window.firebaseDB, `users/${user.uid}/projects/${projectId}`));
 
-      // ALSO remove from global projects index
       await remove(ref(window.firebaseDB, `projectsIndex/${projectId}`));
 
-      console.log('Project permanently deleted from database');
-      console.log('Project removed from global index');
       return true;
     } catch (error) {
-      console.error('Error permanently deleting project:', error);
       throw error;
     }
   }
 
   async function downloadProject(projectId, project) {
     try {
-      console.log('Downloading project:', projectId);
 
-      // Prepare project data for download
       let projectData = {
         metadata: {
           name: project.name,
@@ -462,9 +414,7 @@ function DashboardActions() {
 
       URL.revokeObjectURL(url);
 
-      console.log('Project downloaded successfully');
     } catch (error) {
-      console.error('Error downloading project:', error);
       throw error;
     }
   }
@@ -495,8 +445,8 @@ function DashboardActions() {
     copyProject,
     archiveProject,
     deleteProject,
-    restoreProject,        // NEW
-    permanentDeleteProject, // NEW
+    restoreProject,        
+    permanentDeleteProject, 
     downloadProject
   };
 }

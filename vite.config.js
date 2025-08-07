@@ -11,5 +11,13 @@ export default defineConfig({
       "^.+\\.glb$": "url-loader",
     },
   },
-  // ... other configuration options
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: 'index.html'
+      }
+    }
+  }
 });

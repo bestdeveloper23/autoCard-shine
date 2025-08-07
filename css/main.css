@@ -632,6 +632,18 @@ select:hover {
   line-height: 16px;
 }
 
+#menubar .menu.right .fork-button {
+  padding: 8px;
+  text-transform: none;
+  font-size: 14px;
+}
+
+#menubar .menu.right .nav-button {
+  padding: 8px;
+  text-transform: none;
+  font-size: 14px;
+}
+
 #menubar .menu .options {
   position: fixed;
   display: none;
@@ -1568,5 +1580,300 @@ h1 {
     font-size: 1.3rem;
     transform: translateY(15%);
     letter-spacing: 2px;
+  }
+}
+* {
+  border-radius: 0 !important;
+}
+
+.simulation-project-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  margin: 6px 0;
+}
+
+.project-display {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #ccc;
+  transition: all 0.3s ease;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+.project-display.has-simulation {
+  border: 2px solid #0a0;
+  background-color: rgba(0, 170, 0, 0.08);
+  box-shadow: 0 2px 4px rgba(0, 170, 0, 0.2);
+}
+
+.project-display.no-simulation {
+  border: 2px solid #ccc;
+}
+
+.project-buttons {
+  display: flex;
+  gap: 10px;
+  margin-left: 16px;
+}
+
+.project-name-display {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.simulate-btn {
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #0a0;
+  transition: all 0.2s ease;
+}
+
+.simulate-btn:hover:not(:disabled) {
+  background-color: rgba(0, 170, 0, 0.1);
+  border-color: #0a0;
+  transform: scale(1.05);
+}
+
+.simulate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.simulation-preview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  font-family: Arial, sans-serif;
+  min-height: 400px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.simulation-preview-container:has(.simulation-wrl-container) {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+}
+
+.simulation-file-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.simulation-file-header {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.simulation-textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 300px;
+  font-family: monospace;
+  font-size: 13px;
+  margin-bottom: 10px;
+  resize: none;
+  border: 1px solid #ccc;
+  padding: 8px;
+  background-color: #fff;
+  color: #333;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.simulation-textarea:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 3px rgba(0, 122, 204, 0.3);
+}
+
+.simulation-wrl-container {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  border: 2px solid #0a0;
+  padding: 8px;
+  background-color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.simulation-wrl-header {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #0a0;
+}
+
+.simulation-wrl-textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 250px;
+  font-family: monospace;
+  font-size: 13px;
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #0a0;
+  padding: 8px;
+  resize: none;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.simulation-update-button {
+  padding: 8px 16px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  color: #333;
+  margin-right: 10px;
+}
+
+.simulation-update-button:hover:not(:disabled) {
+  background-color: #28a745;
+  color: white;
+}
+
+.simulation-update-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.simulation-run-button {
+  padding: 8px 16px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.simulation-run-button:hover:not(:disabled) {
+  background-color: #28a745;
+  color: white;
+}
+
+.simulation-run-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.simulation-download-button {
+  padding: 8px 16px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.simulation-download-button:hover {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.simulation-button-container {
+  margin-top: 20px;
+  text-align: right;
+  position: sticky;
+  bottom: 0;
+  background-color: inherit;
+  padding: 10px 0;
+  border-top: 1px solid #ccc;
+}
+
+/* --- Dark Mode --- */
+@media (prefers-color-scheme: dark) {
+  .project-name-display {
+    color: #aaa;
+  }
+
+  .project-display {
+    background-color: #1f1f1f;
+    border-color: #555;
+  }
+
+  .project-display.has-simulation {
+    background-color: rgba(0, 170, 0, 0.08);
+    border-color: #0a0;
+  }
+
+  .simulate-btn {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .simulation-file-header {
+    color: #aaa;
+  }
+
+  .simulation-textarea {
+    background-color: #2d2d2d;
+    color: #ccc;
+    border-color: #555;
+  }
+
+  .simulation-textarea:focus {
+    border-color: #007acc;
+    box-shadow: 0 0 3px rgba(0, 122, 204, 0.5);
+  }
+
+  .simulation-wrl-container {
+    border: 2px solid #0a0 !important;
+    background-color: #1f1f1f;
+  }
+
+  .simulation-wrl-header {
+    color: #0a0;
+  }
+
+  .simulation-wrl-textarea {
+    background-color: #2d2d2d;
+    color: #ccc;
+    border: 2px solid #0a0 !important;
+  }
+
+  .simulation-update-button,
+  .simulation-run-button,
+  .simulation-download-button {
+    background-color: #2d2d2d !important;
+    color: #ccc !important;
+    border: 1px solid #555 !important;
+  }
+
+  .simulation-update-button:hover:not(:disabled),
+  .simulation-run-button:hover:not(:disabled),
+  .simulation-download-button:hover {
+    background-color: #28a745 !important;
+    color: white !important;
+    border-color: #28a745 !important;
+  }
+
+  .simulation-button-container {
+    border-top-color: #555;
+    background-color: #1f1f1f;
   }
 }

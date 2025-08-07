@@ -86,7 +86,7 @@ function HomeHero() {
         const currentUser = window.router?.getCurrentUser();
         if (currentUser) {
             // User is logged in, go to dashboard
-            window.router.navigate('/shine/dashboard');
+            window.router.navigate('/dashboard');
             return;
         }
 
@@ -100,7 +100,7 @@ function HomeHero() {
         sessionStorage.setItem('heroEmail', email);
 
         // Navigate to auth page without parameters
-        window.router.navigate('/shine/auth');
+        window.router.navigate('/auth');
     });
 
     // Error message container for email validation
@@ -150,7 +150,7 @@ function HomeHero() {
         // Check if user is already logged in
         const currentUser = window.router?.getCurrentUser();
         if (currentUser) {
-            window.router.navigate('/shine/dashboard');
+            window.router.navigate('/dashboard');
             return;
         }
 
@@ -168,7 +168,7 @@ function HomeHero() {
 
             // Success - user will be redirected by auth state listener
             // The auth.js updateAuthState method will handle localStorage updates
-            window.router.navigate('/shine/dashboard');
+            window.router.navigate('/dashboard');
 
         } catch (error) {
             console.error('Google sign-in error:', error);

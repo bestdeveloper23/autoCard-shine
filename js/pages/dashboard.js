@@ -30,14 +30,13 @@ export class DashboardPage {
     // Add Firebase listener tracking
     this.firebaseListeners = [];
     this.projectsRef = null;
+    
+    this.projectCards = new Map();
   }
 
   async render() {
-    console.log('Rendering dashboard page...');
-
     const appContainer = document.getElementById('app');
     if (!appContainer) {
-      console.error('App container not found');
       return;
     }
 
@@ -74,8 +73,6 @@ export class DashboardPage {
 
     // Load user projects
     await this.loadProjects();
-
-    console.log('Dashboard rendered successfully');
   }
 
   async loadProjects() {
@@ -84,8 +81,6 @@ export class DashboardPage {
       console.error('No user found');
       return;
     }
-
-    console.log('Loading projects for user:', user.uid);
 
     try {
       this.projectsRef = ref(window.firebaseDB, `users/${user.uid}/projects`);
@@ -105,13 +100,9 @@ export class DashboardPage {
         }
       });
 
-      // Store the unsubscribe function for cleanup
       this.firebaseListeners.push(unsubscribe);
 
     } catch (error) {
-      console.error('=== LOAD PROJECTS ERROR ===');
-      console.error('Error:', error);
-
       this.isLoading = false;
       if (this.components && this.components.mainContent) {
         this.updateProjectsDisplay();
@@ -122,33 +113,24 @@ export class DashboardPage {
   }
 
   updateProjectsDisplay() {
-    // Safety check - ensure components still exist
     if (!this.components || !this.components.mainContent) {
-      console.warn('Dashboard components are destroyed, skipping update');
       return;
     }
-
-    console.log('=== UPDATING PROJECTS DISPLAY ===');
-    console.log('Current filter:', this.currentFilter);
-    console.log('Raw projects:', Object.keys(this.projects).length);
 
     // Filter and sort projects
     const user = window.router.getCurrentUser();
     this.filteredProjects = this.utils.filterProjects(this.projects, this.currentFilter, user?.uid);
 
-    console.log('After filtering:', this.filteredProjects.length);
-    console.log('Filtered projects details:', this.filteredProjects.map(p => ({
-      id: p.id.substring(0, 8) + '...',
-      name: p.name,
-      archived: !!p.archived,
-      deleted: !!p.deleted,
-      owner: p.owner === user?.uid ? 'MINE' : 'OTHER'
-    })));
+    // console.log('Filtered projects details:', this.filteredProjects.map(p => ({
+    //   id: p.id.substring(0, 8) + '...',
+    //   name: p.name,
+    //   archived: !!p.archived,
+    //   deleted: !!p.deleted,
+    //   owner: p.owner === user?.uid ? 'MINE' : 'OTHER'
+    // })));
 
     this.filteredProjects = this.utils.searchProjects(this.filteredProjects, this.currentSearchTerm);
     this.filteredProjects = this.utils.sortProjects(this.filteredProjects, this.currentSortBy);
-
-    console.log('Final filtered projects:', this.filteredProjects.length);
 
     // Update filter info
     const filterLabels = {
@@ -173,8 +155,6 @@ export class DashboardPage {
       isFirstTime,
       () => this.showCreateModal()
     );
-
-    console.log('=== PROJECTS DISPLAY UPDATED ===');
   }
 
   createProjectCard(projectId, project) {
@@ -189,15 +169,24 @@ export class DashboardPage {
       permanentDelete: (id, proj) => this.handlePermanentDeleteProject(id, proj)
     };
 
-    // Add project ID as data attribute for easier management
+    const existingCard = this.projectCards.get(projectId);
+    if (existingCard && existingCard.destroy) {
+      try {
+        existingCard.destroy();
+      } catch (error) {
+        console.warn(`Error destroying card ${projectId}:`, error);
+      }
+    }
+
     const card = DashboardProjectCard(projectId, project, actionHandlers, this.utils);
     card.dom.dataset.projectId = projectId;
+    
+    this.projectCards.set(projectId, card);
 
     return card;
   }
 
   handleNavigation(category) {
-    console.log('Navigation to:', category);
     this.currentFilter = category;
     this.currentSearchTerm = '';
 
@@ -256,15 +245,13 @@ export class DashboardPage {
 
       const result = await this.actions.createProject(projectData);
 
-      console.log('Project created successfully:', result.projectId);
-
       // Navigate to editor with hash routing
-      window.router.navigate(`/shine/editor/${result.projectId}`);
+      window.router.navigate(`/editor/${result.projectId}`);
 
     } catch (error) {
       console.error('Error creating project:', error);
       alert('Failed to create project: ' + error.message);
-      this.updateProjectsDisplay(); // Restore previous state
+      this.updateProjectsDisplay(); 
     }
   }
 
@@ -272,8 +259,6 @@ export class DashboardPage {
     try {
       const newName = await this.actions.renameProject(projectId, project);
       if (newName) {
-        console.log('Project renamed successfully');
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error renaming project:', error);
@@ -285,8 +270,6 @@ export class DashboardPage {
     try {
       const result = await this.actions.copyProject(projectId, project);
       if (result) {
-        console.log('Project copied successfully:', result.projectId);
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error copying project:', error);
@@ -298,8 +281,6 @@ export class DashboardPage {
     try {
       const success = await this.actions.archiveProject(projectId, project);
       if (success) {
-        console.log('Project archived successfully');
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error archiving project:', error);
@@ -311,8 +292,6 @@ export class DashboardPage {
     try {
       const success = await this.actions.deleteProject(projectId, project);
       if (success) {
-        console.log('Project deleted successfully');
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error deleting project:', error);
@@ -324,8 +303,6 @@ export class DashboardPage {
     try {
       const success = await this.actions.restoreProject(projectId, project);
       if (success) {
-        console.log('Project restored successfully');
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error restoring project:', error);
@@ -337,8 +314,6 @@ export class DashboardPage {
     try {
       const success = await this.actions.permanentDeleteProject(projectId, project);
       if (success) {
-        console.log('Project permanently deleted successfully');
-        // Projects will update automatically via Firebase listener
       }
     } catch (error) {
       console.error('Error permanently deleting project:', error);
@@ -353,9 +328,7 @@ export class DashboardPage {
 
     try {
       await signOut(window.firebaseAuth);
-      console.log('User logged out');
-      // Navigate to home with hash routing
-      window.router.navigate('/shine/');
+      window.router.navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
       alert('Failed to logout. Please try again.');
@@ -376,14 +349,23 @@ export class DashboardPage {
   }
 
   destroy() {
-    console.log('Destroying dashboard page');
 
-    // Clean up Firebase listeners FIRST
+    for (const [projectId, card] of this.projectCards.entries()) {
+      if (card && card.destroy) {
+        try {
+          card.destroy();
+        } catch (error) {
+          console.warn(`Error destroying card ${projectId}:`, error);
+        }
+      }
+    }
+    this.projectCards.clear();
+
     this.firebaseListeners.forEach(unsubscribe => {
       try {
         unsubscribe();
       } catch (error) {
-        console.warn('Error unsubscribing from Firebase listener:', error);
+        console.warn('Error unsubscribing listener:', error);
       }
     });
     this.firebaseListeners = [];
@@ -404,6 +386,5 @@ export class DashboardPage {
     this.projects = {};
     this.filteredProjects = [];
 
-    console.log('Dashboard page destroyed with Firebase listeners cleaned up');
   }
 }
