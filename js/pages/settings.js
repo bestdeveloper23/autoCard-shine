@@ -727,161 +727,6 @@ export class SettingsPage {
     }
 
 
-
-    // createSecuritySection() {
-    //     const section = new UIPanel();
-    //     section.setClass('settings-section');
-
-    //     const sectionHeader = new UIText('Security & Password');
-    //     sectionHeader.setClass('section-header');
-
-    //     const sectionContent = new UIPanel();
-    //     sectionContent.setClass('section-content');
-
-    //     // Password change form
-    //     const passwordSection = new UIPanel();
-    //     passwordSection.setClass('password-change-section');
-
-    //     const passwordLabel = new UIText('Change Password');
-    //     passwordLabel.setClass('action-label');
-
-    //     const passwordDesc = new UIText('Enter your current password and choose a new secure password to update your account.');
-    //     passwordDesc.setClass('action-description');
-
-    //     const passwordForm = new UIPanel();
-    //     passwordForm.setClass('password-form');
-
-    //     // Current password field
-    //     const currentPasswordGroup = new UIPanel();
-    //     currentPasswordGroup.setClass('input-group');
-
-    //     const currentPasswordLabel = new UIText('Current Password');
-    //     currentPasswordLabel.setClass('input-label');
-
-    //     const currentPasswordInput = new UIInput('');
-    //     currentPasswordInput.setClass('settings-input');
-    //     currentPasswordInput.setId('current-password-input');
-    //     currentPasswordInput.dom.type = 'password';
-    //     currentPasswordInput.dom.placeholder = 'Enter your current password';
-
-    //     currentPasswordGroup.add(currentPasswordLabel);
-    //     currentPasswordGroup.add(currentPasswordInput);
-
-    //     // New password fields row
-    //     const passwordRow = new UIPanel();
-    //     passwordRow.setClass('password-row');
-
-    //     // New password field
-    //     const newPasswordGroup = new UIPanel();
-    //     newPasswordGroup.setClass('input-group');
-
-    //     const newPasswordLabel = new UIText('New Password');
-    //     newPasswordLabel.setClass('input-label');
-
-    //     const newPasswordInput = new UIInput('');
-    //     newPasswordInput.setClass('settings-input');
-    //     newPasswordInput.setId('new-password-input');
-    //     newPasswordInput.dom.type = 'password';
-    //     newPasswordInput.dom.placeholder = 'Enter new password';
-
-    //     newPasswordGroup.add(newPasswordLabel);
-    //     newPasswordGroup.add(newPasswordInput);
-
-    //     // Confirm password field
-    //     const confirmPasswordGroup = new UIPanel();
-    //     confirmPasswordGroup.setClass('input-group');
-
-    //     const confirmPasswordLabel = new UIText('Confirm New Password');
-    //     confirmPasswordLabel.setClass('input-label');
-
-    //     const confirmPasswordInput = new UIInput('');
-    //     confirmPasswordInput.setClass('settings-input');
-    //     confirmPasswordInput.setId('confirm-password-input');
-    //     confirmPasswordInput.dom.type = 'password';
-    //     confirmPasswordInput.dom.placeholder = 'Confirm new password';
-
-    //     confirmPasswordGroup.add(confirmPasswordLabel);
-    //     confirmPasswordGroup.add(confirmPasswordInput);
-
-    //     passwordRow.add(newPasswordGroup);
-    //     passwordRow.add(confirmPasswordGroup);
-
-    //     // Password actions
-    //     const passwordActions = new UIPanel();
-    //     passwordActions.setClass('password-actions');
-
-    //     const forgotPasswordBtn = new UIButton('Forgot Password?');
-    //     forgotPasswordBtn.setClass('text-button');
-    //     forgotPasswordBtn.onClick(() => this.handleForgotPassword());
-
-    //     const changePasswordBtn = new UIButton('Update Password');
-    //     changePasswordBtn.setClass('action-button secondary-button');
-    //     changePasswordBtn.setId('change-password-btn');
-    //     changePasswordBtn.onClick(() => this.handlePasswordChangeInline());
-
-    //     passwordActions.add(forgotPasswordBtn);
-    //     passwordActions.add(changePasswordBtn);
-
-    //     passwordForm.add(currentPasswordGroup);
-    //     passwordForm.add(passwordRow);
-    //     passwordForm.add(passwordActions);
-
-    //     passwordSection.add(passwordLabel);
-    //     passwordSection.add(passwordDesc);
-    //     passwordSection.add(passwordForm);
-
-    //     sectionContent.add(passwordSection);
-
-    //     section.add(sectionHeader);
-    //     section.add(sectionContent);
-
-    //     return section;
-    // }
-
-    // // Add this new method to handle inline password change:
-    // async handlePasswordChangeInline() {
-    //     const currentPasswordInput = document.getElementById('current-password-input');
-    //     const newPasswordInput = document.getElementById('new-password-input');
-    //     const confirmPasswordInput = document.getElementById('confirm-password-input');
-
-    //     const currentPassword = currentPasswordInput?.value;
-    //     const newPassword = newPasswordInput?.value;
-    //     const confirmPassword = confirmPasswordInput?.value;
-
-    //     if (!currentPassword || !newPassword || !confirmPassword) {
-    //         this.showError('Please fill in all password fields');
-    //         return;
-    //     }
-
-    //     if (newPassword !== confirmPassword) {
-    //         this.showError('New passwords do not match');
-    //         return;
-    //     }
-
-    //     if (!this.validatePasswordStrength(newPassword)) {
-    //         this.showError('Password must be at least 8 characters with uppercase, lowercase, number, and special character');
-    //         return;
-    //     }
-
-    //     try {
-    //         // Re-authenticate user
-    //         const credential = EmailAuthProvider.credential(this.currentUser.email, currentPassword);
-    //         await reauthenticateWithCredential(this.currentUser, credential);
-
-    //         // Update password
-    //         await updatePassword(this.currentUser, newPassword);
-
-    //         // Clear form
-    //         currentPasswordInput.value = '';
-    //         newPasswordInput.value = '';
-    //         confirmPasswordInput.value = '';
-
-    //         this.showSuccess('Password updated successfully!');
-    //     } catch (error) {
-    //         this.showError(this.getErrorMessage(error.code));
-    //     }
-    // }
-
     createDangerSection() {
         const section = new UIPanel();
         section.setClass('settings-section danger-section');
@@ -892,39 +737,36 @@ export class SettingsPage {
         const sectionContent = new UIPanel();
         sectionContent.setClass('section-content');
 
-        // Warning text
-        const warningText = new UIText('⚠️ Actions in this section are permanent and cannot be undone!');
-        warningText.setClass('warning-text');
 
-        // Delete account
+        // Delete account group
         const deleteGroup = new UIPanel();
-        deleteGroup.setClass('action-group danger-group');
+        deleteGroup.setClass('danger-action-group');
 
         const deleteInfo = new UIPanel();
-        deleteInfo.setClass('action-info');
+        deleteInfo.setClass('danger-info');
 
-        const deleteLabel = new UIText('Delete Account');
-        deleteLabel.setClass('action-label danger-label');
+        const deleteLabel = new UIText('Delete this account');
+        deleteLabel.setClass('danger-action-label');
 
-        const deleteDesc = new UIText('Permanently delete your account and all associated data. This will remove all your projects, settings, and personal information.');
-        deleteDesc.setClass('action-description danger-description');
+        const deleteDesc = new UIText('⚠️ Once you delete your account, you will lose access to all your projects and data. This action cannot be undone.');
+        deleteDesc.setClass('danger-action-description');
 
         deleteInfo.add(deleteLabel);
         deleteInfo.add(deleteDesc);
 
-        const deleteActions = new UIPanel();
-        deleteActions.setClass('action-buttons');
+        const deleteButtonContainer = new UIPanel();
+        deleteButtonContainer.setClass('danger-button-container');
 
-        const deleteBtn = new UIButton('Delete My Account');
-        deleteBtn.setClass('action-button danger-button');
-        deleteBtn.onClick(() => this.showDeleteAccountModal());
+        const deleteBtn = new UIButton('Delete your account');
+        deleteBtn.setClass('danger-delete-button');
+        deleteBtn.setId('delete-account-btn');
+        deleteBtn.onClick(() => this.showDeleteConfirmationModal());
 
-        deleteActions.add(deleteBtn);
+        deleteButtonContainer.add(deleteBtn);
 
         deleteGroup.add(deleteInfo);
-        deleteGroup.add(deleteActions);
+        deleteGroup.add(deleteButtonContainer);
 
-        sectionContent.add(warningText);
         sectionContent.add(deleteGroup);
 
         section.add(sectionHeader);
@@ -1130,123 +972,397 @@ export class SettingsPage {
         return modalOverlay;
     }
 
-    // MISSING METHOD: Show delete account modal
-    showDeleteAccountModal() {
-        const modal = this.createDeleteAccountModal();
+    // Show delete account modal
+    showDeleteConfirmationModal() {
+        const modal = this.createDeleteConfirmationModal();
         document.body.appendChild(modal);
     }
 
-    // MISSING METHOD: Create delete account modal
-    createDeleteAccountModal() {
+    // delete account modal
+    createDeleteConfirmationModal() {
         const modalOverlay = document.createElement('div');
-        modalOverlay.className = 'modal-overlay';
+        modalOverlay.className = 'modal-overlay danger-modal-overlay';
 
         const modal = new UIPanel();
-        modal.setClass('delete-modal');
+        modal.setClass('delete-confirmation-modal');
 
-        const modalHeader = new UIText('Delete Account');
-        modalHeader.setClass('modal-header danger-header');
+        // Header with warning icon
+        const modalHeader = new UIPanel();
+        modalHeader.setClass('danger-modal-header');
 
-        const warningText = new UIText('⚠️ This action is permanent and cannot be undone!');
-        warningText.setClass('warning-text');
+        const warningIcon = new UIText('⚠️');
+        warningIcon.setClass('danger-modal-icon');
 
-        const modalDesc = new UIText('Deleting your account will permanently remove all your projects, data, and settings. Please enter your password to confirm.');
-        modalDesc.setClass('modal-description');
+        const headerText = new UIText('Delete your account');
+        headerText.setClass('danger-modal-title');
 
-        const passwordGroup = new UIPanel();
-        passwordGroup.setClass('input-group');
+        modalHeader.add(warningIcon);
+        modalHeader.add(headerText);
 
-        const passwordLabel = new UIText('Password');
-        passwordLabel.setClass('input-label');
+        // Warning message
+        const warningSection = new UIPanel();
+        warningSection.setClass('danger-modal-warning');
 
-        const passwordInput = new UIInput('');
-        passwordInput.setClass('modal-input');
-        passwordInput.dom.type = 'password';
-        passwordInput.dom.placeholder = 'Enter your password to confirm';
+        const warningTitle = new UIText('This action cannot be undone');
+        warningTitle.setClass('danger-warning-title');
 
-        passwordGroup.add(passwordLabel);
-        passwordGroup.add(passwordInput);
+        const warningList = new UIPanel();
+        warningList.setClass('danger-warning-list');
 
-        const confirmGroup = new UIPanel();
-        confirmGroup.setClass('input-group');
+        const warningItems = [
+            'All your projects and their data will be permanently deleted',
+            'Your account settings and preferences will be lost',
+            'You will lose access to all shared projects',
+            'This action cannot be reversed'
+        ];
 
-        const confirmLabel = new UIText('Type "DELETE" to confirm');
-        confirmLabel.setClass('input-label');
+        warningItems.forEach(item => {
+            const listItem = new UIPanel();
+            listItem.setClass('danger-warning-item');
 
-        const confirmInput = new UIInput('');
-        confirmInput.setClass('modal-input');
-        confirmInput.dom.placeholder = 'Type DELETE in capital letters';
+            const bullet = new UIText('•');
+            bullet.setClass('danger-warning-bullet');
 
-        confirmGroup.add(confirmLabel);
-        confirmGroup.add(confirmInput);
+            const text = new UIText(item);
+            text.setClass('danger-warning-text');
 
+            listItem.add(bullet);
+            listItem.add(text);
+            warningList.add(listItem);
+        });
+
+        warningSection.add(warningTitle);
+        warningSection.add(warningList);
+
+        // Verification steps
+        const verificationSection = new UIPanel();
+        verificationSection.setClass('danger-verification-section');
+
+        // Check if user has password (not Google auth)
+        const hasPassword = this.userHasPassword();
+
+        // Step 1: Email verification
+        const emailStep = new UIPanel();
+        emailStep.setClass('verification-step');
+
+        const emailLabel = new UIText(`To confirm, type your email address: ${this.currentUser?.email}`);
+        emailLabel.setClass('verification-label');
+
+        const emailInput = new UIInput('');
+        emailInput.setClass('verification-input');
+        emailInput.setId('delete-email-verification');
+        emailInput.dom.placeholder = 'Enter your email address';
+
+        const emailError = new UIText('');
+        emailError.setClass('verification-error');
+        emailError.setId('email-verification-error');
+        emailError.dom.style.display = 'none';
+
+        emailStep.add(emailLabel);
+        emailStep.add(emailInput);
+        emailStep.add(emailError);
+
+        verificationSection.add(emailStep);
+
+        // Step 2: Password verification (only for email/password accounts)
+        let passwordStep = null;
+        let passwordInput = null;
+
+        if (hasPassword) {
+            passwordStep = new UIPanel();
+            passwordStep.setClass('verification-step');
+
+            const passwordLabel = new UIText('Enter your password to confirm:');
+            passwordLabel.setClass('verification-label');
+
+            passwordInput = new UIInput('');
+            passwordInput.setClass('verification-input');
+            passwordInput.setId('delete-password-verification');
+            passwordInput.dom.type = 'password';
+            passwordInput.dom.placeholder = 'Enter your password';
+
+            const passwordError = new UIText('');
+            passwordError.setClass('verification-error');
+            passwordError.setId('password-verification-error');
+            passwordError.dom.style.display = 'none';
+
+            passwordStep.add(passwordLabel);
+            passwordStep.add(passwordInput);
+            passwordStep.add(passwordError);
+
+            verificationSection.add(passwordStep);
+        } else {
+            // Show info message for Google auth users
+            const authInfoStep = new UIPanel();
+            authInfoStep.setClass('verification-step auth-info-step');
+
+            const authInfoIcon = new UIText('ℹ️');
+            authInfoIcon.setClass('auth-info-icon');
+
+            const authInfoText = new UIText('You signed in with Google, so no password verification is required.');
+            authInfoText.setClass('auth-info-text');
+
+            const authInfoContainer = new UIPanel();
+            authInfoContainer.setClass('auth-info-container');
+
+            authInfoContainer.add(authInfoIcon);
+            authInfoContainer.add(authInfoText);
+            authInfoStep.add(authInfoContainer);
+
+            verificationSection.add(authInfoStep);
+        }
+
+        // Step 3: Confirmation text
+        const confirmationStep = new UIPanel();
+        confirmationStep.setClass('verification-step');
+
+        const confirmationLabel = new UIText('Type "delete my account" to confirm:');
+        confirmationLabel.setClass('verification-label');
+
+        const confirmationInput = new UIInput('');
+        confirmationInput.setClass('verification-input');
+        confirmationInput.setId('delete-confirmation-text');
+        confirmationInput.dom.placeholder = 'Type "delete my account"';
+
+        const confirmationError = new UIText('');
+        confirmationError.setClass('verification-error');
+        confirmationError.setId('confirmation-text-error');
+        confirmationError.dom.style.display = 'none';
+
+        confirmationStep.add(confirmationLabel);
+        confirmationStep.add(confirmationInput);
+        confirmationStep.add(confirmationError);
+
+        verificationSection.add(confirmationStep);
+
+        // Buttons
         const buttonGroup = new UIPanel();
-        buttonGroup.setClass('modal-buttons');
+        buttonGroup.setClass('danger-modal-buttons');
 
         const cancelBtn = new UIButton('Cancel');
-        cancelBtn.setClass('modal-button secondary-button');
+        cancelBtn.setClass('modal-button cancel-button');
         cancelBtn.onClick(() => {
             document.body.removeChild(modalOverlay);
         });
 
-        const deleteBtn = new UIButton('Delete Account');
-        deleteBtn.setClass('modal-button danger-button');
-        deleteBtn.onClick(async () => {
-            const password = passwordInput.getValue();
-            const confirmation = confirmInput.getValue();
+        const deleteBtn = new UIButton('Delete my account');
+        deleteBtn.setClass('modal-button danger-button-final');
+        deleteBtn.setId('final-delete-button');
+        deleteBtn.dom.disabled = true;
+        deleteBtn.onClick(() => this.executeAccountDeletion(modalOverlay, hasPassword));
 
-            if (!password) {
-                this.showModalError('Please enter your password');
-                return;
+        // Real-time validation to enable/disable delete button
+        const validateInputs = () => {
+            const emailValid = emailInput.getValue().toLowerCase() === this.currentUser?.email?.toLowerCase();
+            const passwordValid = hasPassword ? (passwordInput?.getValue().length > 0) : true; // Skip password check for Google auth
+            const confirmationValid = confirmationInput.getValue().toLowerCase() === 'delete my account';
+
+            deleteBtn.dom.disabled = !(emailValid && passwordValid && confirmationValid);
+
+            // Update button appearance
+            if (deleteBtn.dom.disabled) {
+                deleteBtn.dom.classList.add('disabled');
+            } else {
+                deleteBtn.dom.classList.remove('disabled');
             }
+        };
 
-            if (confirmation !== 'DELETE') {
-                this.showModalError('Please type DELETE to confirm');
-                return;
-            }
-
-            try {
-                // Re-authenticate user
-                const credential = EmailAuthProvider.credential(this.currentUser.email, password);
-                await reauthenticateWithCredential(this.currentUser, credential);
-
-                // Delete user data from Firestore (if you're storing user data)
-                if (window.firebaseFirestore) {
-                    const userDocRef = doc(window.firebaseFirestore, 'users', this.currentUser.uid);
-                    await deleteDoc(userDocRef);
-                }
-
-                // Delete user account
-                await deleteUser(this.currentUser);
-
-                // Redirect to home page
-                window.router.navigate('/shine/');
-
-            } catch (error) {
-                this.showModalError(this.getErrorMessage(error.code));
-            }
-        });
+        emailInput.dom.addEventListener('input', validateInputs);
+        if (passwordInput) {
+            passwordInput.dom.addEventListener('input', validateInputs);
+        }
+        confirmationInput.dom.addEventListener('input', validateInputs);
 
         buttonGroup.add(cancelBtn);
         buttonGroup.add(deleteBtn);
 
+
         modal.add(modalHeader);
-        modal.add(warningText);
-        modal.add(modalDesc);
-        modal.add(passwordGroup);
-        modal.add(confirmGroup);
+        modal.add(warningSection);
+        modal.add(verificationSection);
         modal.add(buttonGroup);
 
         modalOverlay.appendChild(modal.dom);
 
-        // Close on overlay click
+        // Close on overlay click (but not on modal click)
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 document.body.removeChild(modalOverlay);
             }
         });
 
+        // Prevent modal content clicks from closing modal
+        modal.dom.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
         return modalOverlay;
+    }
+
+    // Check if user has password (determine auth method)
+    userHasPassword() {
+        // Check the provider data to determine if user signed up with email/password
+        const providerData = this.currentUser?.providerData || [];
+
+        // If user has email provider, they have a password
+        const hasEmailProvider = providerData.some(provider => provider.providerId === 'password');
+
+        // Check if user has only Google provider
+        const hasOnlyGoogleProvider = providerData.length === 1 &&
+            providerData[0].providerId === 'google.com';
+
+        return hasEmailProvider && !hasOnlyGoogleProvider;
+    }
+
+    // Updated executeAccountDeletion method
+    async executeAccountDeletion(modalOverlay, hasPassword) {
+        const emailInput = document.getElementById('delete-email-verification');
+        const passwordInput = hasPassword ? document.getElementById('delete-password-verification') : null;
+        const confirmationInput = document.getElementById('delete-confirmation-text');
+        const deleteButton = document.getElementById('final-delete-button');
+
+        // Clear previous errors
+        this.hideVerificationError('email-verification-error');
+        if (hasPassword) {
+            this.hideVerificationError('password-verification-error');
+        }
+        this.hideVerificationError('confirmation-text-error');
+
+        const email = emailInput.value.trim();
+        const password = hasPassword ? passwordInput?.value : null;
+        const confirmation = confirmationInput.value.trim();
+
+        // Final validation
+        if (email.toLowerCase() !== this.currentUser.email.toLowerCase()) {
+            this.showVerificationError('email-verification-error', 'Email address does not match your account email');
+            return;
+        }
+
+        if (hasPassword && !password) {
+            this.showVerificationError('password-verification-error', 'Password is required');
+            return;
+        }
+
+        if (confirmation.toLowerCase() !== 'delete my account') {
+            this.showVerificationError('confirmation-text-error', 'Please type "delete my account" exactly');
+            return;
+        }
+
+        // Show loading state
+        deleteButton.disabled = true;
+        deleteButton.textContent = 'Deleting account...';
+        deleteButton.classList.add('loading');
+
+        try {
+            // Step 1: Re-authenticate user (only if they have a password)
+            if (hasPassword) {
+                const credential = EmailAuthProvider.credential(this.currentUser.email, password);
+                await reauthenticateWithCredential(this.currentUser, credential);
+            } else {
+                // For Google auth users, we can skip re-authentication in many cases
+                // or use Google re-authentication if needed
+                console.log('Skipping password re-authentication for Google auth user');
+            }
+
+            // Step 2: Delete user data from Firestore
+            if (window.firebaseFirestore) {
+                try {
+                    const userDocRef = doc(window.firebaseFirestore, 'users', this.currentUser.uid);
+                    await deleteDoc(userDocRef);
+                } catch (firestoreError) {
+                    console.warn('Error deleting user data from Firestore:', firestoreError);
+                    // Continue with account deletion even if Firestore deletion fails
+                }
+            }
+
+            // Step 3: Delete user projects from Realtime Database
+            if (window.firebaseDB) {
+                try {
+                    const { remove, ref: dbRef } = await import("https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js");
+                    const userProjectsRef = dbRef(window.firebaseDB, `users/${this.currentUser.uid}`);
+                    await remove(userProjectsRef);
+                } catch (dbError) {
+                    console.warn('Error deleting user projects:', dbError);
+                    // Continue with account deletion
+                }
+            }
+
+            // Step 4: Delete user account
+            await deleteUser(this.currentUser);
+
+            // Step 5: Close modal and show success
+            document.body.removeChild(modalOverlay);
+
+            // Step 6: Show success message and redirect
+            this.showAccountDeletedSuccess();
+
+        } catch (error) {
+            console.error('Account deletion error:', error);
+
+            // Reset button state
+            deleteButton.disabled = false;
+            deleteButton.textContent = 'Delete my account';
+            deleteButton.classList.remove('loading');
+
+            // Show specific error messages
+            if (error.code === 'auth/wrong-password' && hasPassword) {
+                this.showVerificationError('password-verification-error', 'Incorrect password');
+            } else if (error.code === 'auth/requires-recent-login') {
+                if (hasPassword) {
+                    this.showVerificationError('password-verification-error', 'Please log out and log back in, then try again');
+                } else {
+                    this.showVerificationError('email-verification-error', 'Please log out and log back in, then try again');
+                }
+            } else if (error.code === 'auth/too-many-requests') {
+                const errorTarget = hasPassword ? 'password-verification-error' : 'email-verification-error';
+                this.showVerificationError(errorTarget, 'Too many attempts. Please try again later');
+            } else {
+                const errorTarget = hasPassword ? 'password-verification-error' : 'email-verification-error';
+                this.showVerificationError(errorTarget, 'Failed to delete account. Please try again');
+            }
+        }
+    }
+
+    showVerificationError(errorId, message) {
+        const errorElement = document.getElementById(errorId);
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    }
+
+    hideVerificationError(errorId) {
+        const errorElement = document.getElementById(errorId);
+        if (errorElement) {
+            errorElement.style.display = 'none';
+            errorElement.textContent = '';
+        }
+    }
+
+    // Success message and redirect
+    showAccountDeletedSuccess() {
+        // success overlay
+        const successOverlay = document.createElement('div');
+        successOverlay.className = 'success-overlay';
+        successOverlay.innerHTML = `
+        <div class="success-modal">
+            <div class="success-icon">✅</div>
+            <h2 class="success-title">Account Successfully Deleted</h2>
+            <p class="success-message">Your account and all associated data have been permanently deleted.</p>
+            <p class="success-redirect">Redirecting you to the login page...</p>
+        </div>
+    `;
+
+        document.body.appendChild(successOverlay);
+
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            if (successOverlay.parentNode) {
+                document.body.removeChild(successOverlay);
+            }
+            // Navigate to auth page
+            window.router.navigate('/auth');
+        }, 3000);
     }
 
     // Show modal error
